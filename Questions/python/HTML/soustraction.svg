@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.44"
+   sodipodi:docbase="/home/exco/QUENLIG/Questions/python/HTML"
+   sodipodi:docname="soustraction.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.87589878"
+     inkscape:cx="513.40768"
+     inkscape:cy="739.56427"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1082"
+     inkscape:window-height="752"
+     inkscape:window-x="84"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="opacity:1;fill:#f78dff;fill-opacity:0.95530725;fill-rule:evenodd;stroke:black;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 287.875 231.6875 C 243.72096 239.2103 210.06249 277.68167 210.0625 323.96875 C 210.0625 375.64596 252.0103 417.59376 303.6875 417.59375 C 351.70454 417.59375 391.31726 381.36666 396.6875 334.78125 C 393.14211 335.16956 389.52323 335.375 385.875 335.375 C 331.67695 335.37501 287.71875 291.38554 287.71875 237.1875 C 287.71875 235.33499 287.77357 233.51481 287.875 231.6875 z "
+       id="path2881" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path2810"
+       sodipodi:cx="210.06993"
+       sodipodi:cy="335.38437"
+       sodipodi:rx="93.618126"
+       sodipodi:ry="93.618126"
+       d="M 303.68806 335.38437 A 93.618126 93.618126 0 1 1  116.45181,335.38437 A 93.618126 93.618126 0 1 1  303.68806 335.38437 z"
+       transform="translate(93.61818,-11.41685)" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path2812"
+       sodipodi:cx="342.50534"
+       sodipodi:cy="431.28586"
+       sodipodi:rx="98.18486"
+       sodipodi:ry="98.18486"
+       d="M 440.6902 431.28586 A 98.18486 98.18486 0 1 1  244.32048,431.28586 A 98.18486 98.18486 0 1 1  440.6902 431.28586 z"
+       transform="translate(43.384,-194.0864)" />
+    <text
+       xml:space="preserve"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans"
+       x="294.55457"
+       y="367.35153"
+       id="text2814"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         x="294.55457"
+         y="367.35153"
+         id="tspan2816">Jean</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans"
+       x="331.08847"
+       y="212.08244"
+       id="text2818"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan2820"
+         x="331.08847"
+         y="212.08244">Jacques</tspan></text>
+  </g>
+</svg>

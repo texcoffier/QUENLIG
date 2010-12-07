@@ -1,0 +1,222 @@
+Remarque :
+   * ne travailler jamais sous l'utilisateur 'root' c'est trop dangereux.
+   * Vérifiez votre orthographe et grammaire.
+
+
+--
+
+Indiquez le contenu de la variable d'environnement nommée PATH et comment vous avez fait pour afficher ce contenu ?
+
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+Obtenu en tapant : echo $PATH
+
+--
+
+Quand vous modifiez une variable d'environnement dans un terminal, sa valeur change-t-elle dans les autres ? Pourquoi ?
+
+Non car les variables d'environnement sont liées au processus.
+Dans les autres fenêtres ce sont d'autres processus.
+
+--
+
+Vous avez écrit votre propre programme en langage C, vous le compilez et l'exécutez, le processus peut-il accéder au contenu des variables d'environnement ? Pourquoi ?
+
+Oui puisque les variables d'environnement sont liées au processus et non
+au fait d'utiliser le shell.
+Il peut donc les lire et les modifier (pour lui et ses futurs descendants).
+En aucun cas la modification d'une variable dans un processus ne pourra
+la modifier dans un autre processus déjà en fonctionnement.
+En aucun cas on pourra lire les variables d'un autre processus.
+
+--
+
+Comment modifiez-vous une variable d'environnement ?
+
+Exemples :
+
+TOTO='Une valeur'
+TITI=5
+TUTU="Autre valeur"
+read TATA
+export TONTON=xxx
+
+Le 'export' permet de la faire connaître au processus fils
+dans le cas ou c'est un shell.
+
+--
+
+À quoi servent les guillemets et les cotes (apostrophes) ? Expliquez les différences.
+
+À éliminer la signification des caractères spéciaux (*, ?, [, >, <, |...).
+Les guillemets n'annulent pas la signification de $ et \ les cotes si.
+
+--
+
+À quoi servent les fildes 0, 1 et 2 ?
+
+Ce sont les fichiers ouverts généralement par défaut :
+  0 : l'entrée standard
+  1 : la sortie standard
+  2 : la sortie d'erreur
+
+Quand vous êtes dans un terminal l'entrée standard
+c'est le clavier et les deux sorties sont l'écran.
+
+--
+
+Comment lancez-vous une commande pour qu'elle lise son entrée standard à partir d'un fichier et que ce qu'elle écrit sur sa sortie standard soit écrit dans un autre fichier ?
+
+
+Voici la syntaxe :
+
+nom_commande options_commande <fichier_en_entree >fichier_en_sortie
+
+Attention la commande suivante ne lit pas son entrée standard : cat toto >titi
+
+--
+
+Comment lancez-vous les commandes C1 et C2 pour que ce qui est écrit sur la sortie standard de la commande C1 soit lu par la commande C2 sur son entrée standard sans passer par un fichier disque intermédiaire ?
+
+Simplement :   C1 | C2
+
+--
+
+Citez une commande qui est un filtre et qui est indiquée dans le début du cours.
+
+cat, grep, elles listent leur entrée standard si elles n'ont
+pas de fichier à traiter.
+
+--
+
+Pourquoi la boucle for du shell ne travaille par sur des nombres ?
+
+Parce qu'on manipule plus souvent des listes de fichiers que des nombres
+quand on travaille avec le shell.
+
+D'autre part, le shell standard ne sait pas manipuler les nombres.
+
+--
+
+Donnez la ligne de commande utilisant for copiant tous les fichiers se terminant par .c dans le répertoire courant en ajoutant .bak à la fin.
+Par exemple toto.c est copié sous le nom toto.c.bak
+
+Le plus simple :
+
+	for I in *.c ; do cp "$I" "$I.bak" ; done
+
+N'oubliez pas les guillemets pour que cela fonctionne
+avec les noms de fichier contenant des espaces.
+
+Attention '/*.c' indique les fichiers se terminant par '.c'
+qui sont à la racine du système de fichier, pas dans le répertoire courant.
+
+--
+
+Expliquez comment fonctionne le premier exemple donné dans le cours pour la boucle while.
+
+Tant que la commande read peut lire une ligne de l'entrée standard,
+c'est-à-dire le fichier /etc/aliases,
+alors la ligne est stockée dans la variable TOTO.
+Le corps de boucle affiche le contenu de la variable TOTO (ligne du fichier)
+en l'encadrant avec < et >
+
+--
+
+Expliquez comment fonctionne le deuxième exemple donné dans le cours pour la boucle while.
+
+On initialise la variable I à 0
+Tant que la condition du 'while' est vrai on fait la boucle.
+La condition est calculée par la commande 'test' qui retournera
+'vrai' si le contenu de la variable I est différent de 3.
+Le corps de boucle :
+	- affiche le contenu de la variable I entre <>
+	- affecte à la variable I ce que la commande 'expr' affiche.
+	  Celle-ci affiche la valeur de I + 1
+
+On peut remplacer 'test $I != 4' par '[ $I != 3 ]'
+Le symbole '[' étant un autre nom pour la commande 'test'.
+Pensez à faire 'man test' pour voir toutes les possibilités.
+
+Merci aux 3 (sur 38) qui ont réellement essayé la commande
+et vu qu'il manquait un point-virgule avant le 'do' dans l'exemple du cours.
+
+--
+
+Expliquez comment fonctionne l'exemple donné dans le cours pour la commande case.
+
+On met la valeur B and A.
+Ensuite le 'case' parcourt tous les cas pour exécuter le premier
+qu'il trouve et qui correspond.
+Dans ce cas c'est le pattern 'v1|[A-Z]*' qui correspond
+car la valeur de A commence par une majuscule ([A-Z]*).
+
+Le troisième cas dans cet exemple sera toujours exécuté si
+les deux premiers ne correspondent pas car le pattern '*'
+correspond à toutes les valeurs possibles.
+
+Attention, ce sont des patterns et non des expressions régulières.
+
+--
+
+Expliquez comment fonctionne l'exemple donné dans le cours pour la commande if.
+
+Le 'if' exécute la commande, si celle-ci fonctionne sans erreur
+cela affiche 'lisible' sinon 'illisible'
+
+Cela peut afficher 'illisible' si vous n'avez pas le droit
+de lire le fichier ou bien que celui-ci n'existe pas ou bien si
+ce n'est pas un fichier.
+
+Petite remarque, la valeur 'vrai' correspond à l'entier '0' (pas d'erreur)
+c'est donc l'inverse de la convention du C.
+
+--
+
+Comment taper deux commandes sur la même ligne en les faisant s'exécuter l'une après l'autre ?
+
+En les séparant par un point virgule.
+
+Si on les sépare par '&&' alors la deuxième s'exécute seulement
+si la première c'est passé correctement.
+
+Si on les sépare par '&' ou '|' alors la première s'exécute en arrière plan
+et la seconde est immédiatement lancée.
+Elles ne s'exécutent donc pas l'une après l'autre.
+
+--
+
+Que se passe-t-il quand vous lancez une commande en la terminant par un caractère & ?
+
+Le programme est lancé en arrière plan et vous pouvez taper
+d'autres commandes pendant qu'il s'exécute.
+
+Dans ce cas, le programme lancé en arrière plan n'a pas le droit
+de lire le clavier.
+
+Par contre elle n'est pas détachée du terminal car :
+	- Elle peut afficher dessus.
+	- Si vous fermez le terminal elle est généralement stoppée.
+
+--
+
+Que fait la commande cat $(cat toto) en supposant que toto contienne f1 f2 f3 ?
+
+Elle affiche le contenu des fichiers 'f1' 'f2' et 'f3' s'ils existent.
+
+--
+
+Comment créer un fichier texte sous Unix ?
+
+C'était une question piège.
+La seule commande qui peut être considérée comme une commande
+de création de fichier est la commande 'touch'.
+
+Mais on peut le faire de plusieurs façons.
+
+touch toto
+>toto
+editeur_de_texte toto # Puis vous sauvegardez
+
+Attention avec 'echo >toto' le fichier 'toto' contient une ligne vide
+au lieu de ne rien contenir.
+

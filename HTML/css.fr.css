@@ -1,0 +1,310 @@
+@import "css.css";
+
+/*
+ * Guest login page
+ */
+
+P.ok:before, GUEST.toto:before { content: "OK"; }
+
+/******************************************************************************
+ * Menu on the left
+ *****************************************************************************/
+
+/*
+ * Question Table
+ */
+
+                A.next:before{content:"Question suivante";}
+           A.next SPAN:before{content:"Descend d'une question dans la liste";}
+
+/*
+ * Actions Table
+ */
+
+TABLE.actions TH.top:before{content:"Actions"                 ;}
+
+           A.stat_see:before{content:"Statistiques"            ;}
+       A.answered_see:before{content:"Regarder"                ;}
+            A.acl_see:before{content:"Droits d'accès"          ;}
+    A.action_help_see:before{content:"Aide/Explications"       ;}
+ A.action_server_stop:before{content:"ARRETE SERVEUR"          ;}
+A.action_server_start:before{content:"DEMARRE SERVEUR"         ;}
+A.action_deconnection:before{content:"Déconnexion"             ;}
+A.role_teacher_i_have:before{content:"Mode Enseignant"         ;}
+A.role_student_i_have:before{content:"Mode Étudiant"           ;}
+  A.role_admin_i_have:before{content:"Mode Administrateur"     ;}
+ A.role_author_i_have:before{content:"Mode Auteur"             ;}
+   A.destroy_students:before{content:"Détruire Étudiants"      ;}
+
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *****************************************************************************
+ * Heart of the page
+ *****************************************************************************
+ *****************************************************************************
+ *****************************************************************************
+ *****************************************************************************
+ */
+
+/*
+ * Title
+ */
+      P.stopped:before {content:"Le TP n'a pas commencé ou est terminé";}
+ A.answers_reload:before{content:"Recharge"                ;}
+ A.answers_reload SPAN:before{content:"Réinterprete le fichier source Python contenant la définition de cette question";}
+/*
+ * Choose Table
+ */
+P.choose:before
+{content:"Choisissez une question parmis celles de gauche";}
+/*
+ * Answer Table
+ */
+TABLE.evaluated_answer TH.top:before{content:"Ce qui est obtenu";}
+/*
+ * Bad Answer Table
+ */
+P.int_required:before { content: "La réponse à cette question doit être un nombre entier écrit en décimal." ; }
+/*
+ * Your answer was Table
+ */
+
+/*
+ *****************************************************************************
+ *****************************************************************************
+ * See/Look submenu
+ *****************************************************************************
+ *****************************************************************************
+ */
+TABLE.see_submenu TH.top:before { content:"Regarder"; }
+
+TABLE.see_submenu          A.answered_see:before{content:"Vos réponses"            ;}
+TABLE.see_submenu      A.answers_html_see:before{content:"Bonnes réponses"         ;}
+TABLE.see_submenu A.answered_comments_see:before{content:"Commentaires"            ;}
+TABLE.see_submenu      A.answered_bad_see:before{content:"Mauvaises réponses"      ;}
+TABLE.see_submenu         A.answers_graph:before{content:"Graphe de dépendance"    ;}
+TABLE.see_submenu         A.stat_plot_see:before{content:"Courbes statistiques"    ;}
+
+A.answers_html_see      SPAN:before {content:"Affiche graphiquement la définition de la question"                     ;}
+A.answered_comments_see SPAN:before {content:"Voir les commentaires faits par les étudiants"                          ;}
+A.answered_bad_see      SPAN:before {content:"Voir les mauvaises réponses faites par les étudiants"                   ;}
+A.answers_graph         SPAN:before {content:"Affiche un graphe avec des arcs montrant les prérequis"                 ;}
+A.stat_plot_see         SPAN:before {content:"Affiche en SVG, l'état du groupe par rapport à l'ensemble des questions";}
+
+/*
+ * One question statistics Table
+ */
+TABLE.one_question_stat TH.top:before
+{content:"Comment les étudiants ont répondu à cette question";}
+TABLE.one_question_stat P.question_given:before
+{content:"Nb étudiants ayant vu la question : ";}
+TABLE.one_question_stat P.question_view:before
+{content:"Nb affichage question : ";}
+TABLE.one_question_stat P.question_good:before
+{content:"Nb bonnes réponses : ";}
+TABLE.one_question_stat P.question_bad:before 
+{content:"Nb mauvaise réponses : ";}
+TABLE.one_question_stat P.question_indice:before
+{content:"Nb indices donnés : ";}
+TABLE.one_question_stat P.question_time:before
+{content:"Temps total de réflexion : ";}
+TABLE.one_question_stat P.question_comment:before
+{content:"Nb de commentaires fait : ";}
+/*
+ * An answer Table
+ */
+TABLE.dumb_replace CAPTION:before
+{content:"Remplacement avant analyse";}
+TABLE.strings_required CAPTION:before
+{content:"Chaines requises après analyse";}
+TABLE.strings_rejected CAPTION:before
+{content:"Chaines rejetées après analyse";}
+TR.test_unknown > TD.a:before, TR.test_unknown > TD.b:before
+{content:"?";}
+TR.test_require       > TD.a:before{content:"Req"  ;}
+TR.test_startswith    > TD.a:before{content:"<-"   ;}
+TR.test_endswith      > TD.a:before{content:"->"   ;}
+TR.test_notstartswith > TD.a:before{content:"!<-"  ;}
+TR.test_notendswith   > TD.a:before{content:"!->"  ;}
+TR.test_reject        > TD.a:before{content:"Rej"  ;}
+TR.test_string        > TD.b:before{content:"Str"  ;}
+TR.test_python        > TD.b:before{content:"Pyt"  ;}
+TR.test_shell         > TD.b:before{content:"Sh"   ;}
+TR.test_length        > TD.b:before{content:"Len"  ;}
+TR.test_number_of     > TD.b:before{content:"#of"  ;}
+TR.test_is            > TD.a:before{content:"="    ;}
+TR.test_is_in         > TD.a:before{content:"\2282";} /* inclusion */
+TR.test_header TH.c2:before{content:"Chaine(s)";}
+TR.test_header TH.c3:before{content:"Commentaire";}
+TR.test_header TH.c4:before{content:"Rep.";}
+TR.test_header TH.c5:before{content:"Dumb.Rep";}
+P.strings_req:before{content:"Chaines requises : ";}
+P.strings_rej:before{content:"Chaines rejetées : ";}
+/*
+ * Bad answers Table
+ */
+TABLE.bad_answers_stat CAPTION:before{content:"Les mauvaises réponses";}
+TABLE.bad_answers_stat A.c0:before{content:"Question"        ;}
+TABLE.bad_answers_stat A.c1:before{content:"Mauvaise Réponse";}
+TABLE.bad_answers_stat A.c2:before{content:"Étudiant"        ;}
+
+TABLE.bad_answers_stat A.c0 SPAN:before{content:"Nom de la question (lien vers la question                                )"  ;}
+TABLE.bad_answers_stat A.c1 SPAN:before{content:"Mauvaise réponse (si en rouge l'étudiant n'a pas eu d'explication        )"  ;}
+TABLE.bad_answers_stat A.c2 SPAN:before{content:"Étudiants ayant donné cette réponse (gras : l'étudiant n'ayant pas trouvé)"  ;}
+
+/*
+ *****************************************************************************
+ *****************************************************************************
+ * ACL submenu
+ *****************************************************************************
+ *****************************************************************************
+ */
+TABLE.acl_submenu TH.top:before { content:"ACLs"; }
+
+TABLE.acl_submenu  A.acl_default_see:before{content:"Par défaut" ;}
+TABLE.acl_submenu A.role_student_see:before{content:"Étudiants"  ;}
+TABLE.acl_submenu A.role_teacher_see:before{content:"Enseignant" ;}
+TABLE.acl_submenu  A.role_author_see:before{content:"Auteur"     ;}
+TABLE.acl_submenu   A.role_admin_see:before{content:"Admin"      ;}
+TABLE.acl_submenu          A.acl_see:before{content:"Les votres" ;}
+
+
+A.acl_default_see  SPAN:before {content: "Affiche les droits d'accès attribués à tous le monde"       ;}
+A.role_student_see SPAN:before {content: "Affiche les droits d'accès attribués aux étudiants"         ;}
+A.role_teacher_see SPAN:before {content: "Affiche les droits d'accès attribués aux enseignants"       ;}
+A.role_author_see  SPAN:before {content: "Affiche les droits d'accès attribués aux auteurs de contenu";}
+A.role_admin_see   SPAN:before {content: "Affiche les droits d'accès attribués aux admistrateurs"     ;}
+A.acl_see          SPAN:before {content: "Affiche vos propres droits d'accès"                         ;}
+
+/*
+ *
+ */
+        .help_question_answerable:before{ content:"Répondre aux questions"                         ; }
+       .help_question_display_any:before{ content:"Affiche la liste de toutes les questions"       ; }
+    .help_question_answerable_any:before{ content:"Répondre à n'importe quelle question"           ; }
+                 .help_acl_change:before{ content:"Changer ses propres droits"                     ; }
+           .help_acl_change_other:before{ content:"Changer les droits d'un individu quelconque"    ; }
+         .help_acl_default_change:before{ content:"Changer les droits par défaut"                  ; }
+        .help_role_student_change:before{ content:"Changer les droits du groupe étudiant"          ; }
+         .help_role_author_change:before{ content:"Changer les droits des auteurs de contenu"      ; }
+          .help_role_admin_change:before{ content:"Changer les droits des administrateurs"         ; }
+        .help_role_teacher_change:before{ content:"Changer les droits des enseignants"             ; }
+           .help_destroy_students:before{ content:"De détruire les faux étudiants (sans réponses)" ; }
+        .help_action_comment_make:before{ content:"Laisser des commentaires"                       ; }
+        .help_action_deconnection:before{ content:"Voir le lien 'Déconnexion'"                     ; }
+            .help_acl_default_see:before{ content:"Voir les droits par défaut"                     ; }
+          .help_question_time_see:before{ content:"Voir le temps de réflexion moyen dans le titre" ; }
+           .help_role_student_see:before{ content:"Voir les droits du groupe étudiant"             ; }
+            .help_role_author_see:before{ content:"Voir les droits des auteurs de contenu"         ; }
+             .help_role_admin_see:before{ content:"Voir les droits des administrateurs"            ; }
+           .help_role_teacher_see:before{ content:"Voir les droits des enseignants"                ; }
+        .help_question_indice_see:before{ content:"Voir les indices"                               ; }
+   .help_question_max_descendants:before{ content:"Met en évidence les questions débloquantes"     ; }
+              .help_question_next:before{ content:"Voir le lien 'Question suivante'"               ; }
+     .help_question_pixel_map_see:before{ content:"Affiche la carte en pixel des questions"        ; }
+  .help_question_pixel_map_circle:before{ content:"Si pixel_map, alors elle s'affiche en disque"   ; }
+.help_question_pixel_map_see_other:before{ content:"Affiche la carte en pixel des questions des autres (dans les stats)"        ; }
+               .help_question_see:before{ content:"Voir les questions"                             ; }
+             .help_answers_reload:before{ content:"Demander le rechargement du module courant"     ; }
+             .help_answered_reset:before{ content:"Remettre les statistiques à zéro"               ; }
+       .help_answered_reset_other:before{ content:"Remettre les statistiques d'un autre à zéro"    ; }
+                    .help_acl_see:before{ content:"Voir ses droits"                                ; }
+              .help_acl_see_other:before{ content:"Voir les droits des autres"                     ; }
+               .help_answered_see:before{ content:"Voir le travail que l'on a fait"                ; }
+         .help_answered_see_other:before{ content:"Voir le travail qu'un autre a fait"             ; }
+           .help_answers_html_see:before{ content:"Voir toutes les bonnes réponses"                ; }
+         .help_answers_source_see:before{ content:"Voir le source python de la question"           ; }
+           .help_answered_bad_see:before{ content:"Voir les mauvaises réponses des autres"         ; }
+             .help_gui_classement:before{ content:"Voir son classement"                            ; }
+      .help_answered_comments_see:before{ content:"Voir les commentaires des autres"               ; }
+              .help_answers_graph:before{ content:"Voir le graphe de dépendance des question"      ; }
+            .help_action_help_see:before{ content:"Voir la page d'aide"                            ; }
+    .help_stat_histogram_good_see:before{ content:"Voir l'histogramme du nombre de bonnes réponses"; }
+   .help_stat_histogram_level_see:before{ content:"Voir l'histogramme de profondeur des questions" ; }
+             .help_stat_see_other:before{ content:"Voir les statistiques des autres étudiants"     ; }
+              .help_stat_plot_see:before{ content:"A FAIRE"                                        ; }
+         .help_stat_questions_see:before{ content:"Voir les statistiques par question"             ; }
+      .help_question_required_see:before{ content:"Voir les prérequis quand on répond"             ; }
+         .help_stat_same_time_see:before{ content:"Recherche des étudiants travaillant en groupe"  ; }
+                   .help_stat_see:before{ content:"Voir les statistiques sur son travail"          ; }
+        .help_stat_others_csv_see:before{ content:"Voir le fichier CSV de notation"                ; }
+            .help_stat_others_see:before{ content:"Voir les statistiques par étudiant"             ; }
+           .help_question_shuffle:before{ content:"Mélanger les questions"                         ; }
+                 .help_gui_smiley:before{ content:"Voir les smileys"                               ; }
+              .help_gui_autofocus:before{ content:"Met automatiquement le focus ou il le faut"     ; }
+        .help_action_server_start:before{ content:"Démarrer le serveur"                            ; }
+         .help_action_server_stop:before{ content:"Arréter le serveur"                             ; }
+                  .help_gui_times:before{ content:"Voir le temps restant"                          ; }
+.help_question_answerable_anytime:before{ content:"Pouvoir continuer lorsque le serveur est arrêté"; }
+        .help_role_student_i_have:before{ content:"Prendre la personnalité étudiant"               ; }
+        .help_role_teacher_i_have:before{ content:"Prendre la personnalité enseignants"            ; }
+         .help_role_author_i_have:before{ content:"Prendre la personnalité auteur de contenu"      ; }
+          .help_role_admin_i_have:before{ content:"Prendre la personnalité administrateur"         ; }
+
+/*
+ * ACLS Table
+ */
+TABLE.acls_acl_see          CAPTION:before{content:"Vos droits d'accès"                   ;}
+TABLE.acls_acl_other_see    CAPTION:before{content:"Droits d'accès de l'étudiant"         ;}
+TABLE.acls_acl_default_see  CAPTION:before{content:"Droits d'accès par défaut"            ;}
+TABLE.acls_role_student_see CAPTION:before{content:"Droits d'accès des étudiants"         ;}
+TABLE.acls_role_teacher_see CAPTION:before{content:"Droits d'accès des enseignants"       ;}
+TABLE.acls_role_admin_see   CAPTION:before{content:"Droits d'accès des administrateurs"   ;}
+TABLE.acls_role_author_see  CAPTION:before{content:"Droits d'accès des auteurs de contenu";}
+
+TABLE.acls    A.c0:before{content:"Droits d'accès"     ;}
+TABLE.acls    A.c1:before{content:"Droit de ..."       ;}
+TABLE.acls    A.c2:before{content:"Prendre ou perdre"  ;}
+TABLE.acls    P.r0:before{content:"-"           ;}
+TABLE.acls    P.r1:before{content:"Défaut" ;}
+TABLE.acls    P.r2:before{content:"+" ;}
+
+TABLE.acls A.c0 SPAN:before{content:"Nom du droit d'accès"                ;}
+TABLE.acls A.c1 SPAN:before{content:"Explication (colonne non triable))"  ;}
+TABLE.acls A.c2 SPAN:before{content:"Voir ou choisir le droit d'accès"    ;}
+
+/*
+ *****************************************************************************
+ *****************************************************************************
+ * Shell Syntax Parsed
+ *****************************************************************************
+ *****************************************************************************
+ */
+SEQUENCE:before
+{content:"Séquence de commandes";}
+OR:before
+{content:"Exécute LA commande qui suit seulement si l'on est en erreur";}
+AND:before
+{content:"Exécute LA commande qui suit seulement s'il n'y a pas d'erreur";}
+IF:before
+{content:"IF : la valeur testée est la valeur de retour de la commande";
+}
+IF > COMMAND:first-child:before
+{content:"Cette commande retourne vrai si elle s'est bien passée";}
+PIPELINE:before
+{content:"Pipeline";}
+PIPELINE[background="1"] > COMMAND:before, OR[background="1"] > PIPELINE > COMMAND:before
+{content:"Commande en arrière plan";}
+PIPELINE[background="1"] > SUBSHELL:before
+{content:"Regroupement de commandes en arrière plan";}
+
+COMMAND:before{content:"Commande";}
+COMMAND > ARGUMENT:before{content:"Argument : ";}
+
+FOR:before                        {content:"Boucle FOR"               ;}
+FOR > ARGUMENT:first-child:before {content:" sur la variable "        ;}
+FOR > COMMAND:before              {content:"Corps de la boucle FOR"   ;}
+FOR > SEQUENCE:before             {content:"Corps de la boucle FOR"   ;}
+WHILE:before                      {content:"Boucle WHILE"             ;}
+WHILE > COMMAND:first-child:before{content:"La commande testée"       ;}
+WHILE > COMMAND:before            {content:"Corps de la boucle WHILE" ;}
+WHILE > SEQUENCE:before           {content:"Corps de la boucle WHILE" ;}
+FILDES:before                     {content:"Redirection :"            ;}
+SUBSHELL:before                   {content:"Regroupement de commandes";}
+CASE:before                       {content:"case :"                   ;}
+SELECTOR:before                   {content:"Sélecteur(s) :"           ;}
+AFFECTATION:before                {content:"Affectation temporaire :" ;}
+REPLACEMENT:before                {content:"Remplace la commande par sa sortie standard" }
+
+

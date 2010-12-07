@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+# -*- coding: latin1 -*-
+#    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
+#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
+
+import configuration
+import cgi
+import utilities
+
+priority_execute = '-questions' # To update question list before
+priority_display = 'question'
+boxed = True
+css_attributes = (
+    "INPUT { width: 100% ; font-family: times; font-size:120%}",
+    "TEXTAREA { width: 100% ; }",
+    )
+acls = { 'Default': ('executable',) }
+
+def execute(state, plugin, argument):
+    if state.question == None:
+        return
+    if state.question.tests == ():
+        return
+    if argument:
+        number, message = state.student.check_answer(state.question,
+                                                     argument,
+                                                     state)
+        if number:
+            state.student.good_answer(state.question.name,argument)
+        else:
+            state.student.bad_answer(state.question.name,argument)
+
+
+    if state.student.answered_question(state.question.name):
+        if state.student.current_role != 'Teacher':
+            s = state.student.last_answer(state.question.name)
+            return utilities.answer_format(s)
+
+    s = '<FORM CLASS="questionanswer" METHOD="GET" ACTION="#">'
+
+    last_answer = state.student.last_answer(state.question.name)
+    if last_answer == "":
+        last_answer = cgi.escape(state.question.default_answer)
+        style = ''
+    else:
+        if state.student.current_role != 'Teacher':
+            style = 'background:#FAA'
+        else:
+            style = ''
+
+    last_answer = last_answer.replace("%","&#37").replace("'", "&#39;"). \
+                  replace('"', '&#34;')
+
+    if state.question.nr_lines == 1:
+        s += '<INPUT TYPE="text" ID="2" NAME="%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (
+            plugin.plugin.css_name, state.question.name,
+            configuration.nr_columns, last_answer,
+            last_answer, style)
+    else:
+        s += '<TEXTAREA NAME="%s" ID="2" COLS="%d" ROWS="%d">%s</TEXTAREA>' % (
+            plugin.plugin.css_name,
+            configuration.nr_columns,
+            state.question.nr_lines,
+            last_answer)
+        s += '<br><button type="submit"><p class="answer_button"></p></button>'
+        
+    s += '<script type="text/javascript">document.getElementById(2).focus();</script>'
+    s += '</FORM>'
+    return s
+
+
+
+    
+
+
+
+
+    
+

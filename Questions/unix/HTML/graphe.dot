@@ -1,0 +1,82 @@
+digraph "fichiers" {
+node[shape=circle, label="",style="filled", fillcolor="white"];
+edge[splines="false",style="bold",fontname="courier"];
+graph[charset="Latin1", orientation="P"];
+
+root     ;
+etc      ;
+usr      ;
+tmp      ;
+home     ;
+dev      ;
+bin      ;
+usr_bin  ;
+include  ;
+p0123456 ;
+Toto     ;
+
+fstab    [fillcolor="green" ] ;
+passwd   [fillcolor="green" ] ;
+xemacs   [fillcolor="green" ] ;
+toto     [fillcolor="green" ] ;
+pprofile [fillcolor="green" ] ;
+ls       [fillcolor="green" ] ;
+
+null     [fillcolor="yellow" ] ;
+tty      [fillcolor="yellow" ] ;
+cdrom    [fillcolor="yellow" ] ;
+
+root -> etc  [ label="etc" ,fontsize="20" ] ;
+root -> usr  [ label="usr" ,fontsize="20" ] ;
+root -> tmp  [ label="tmp" ,fontsize="20" ] ;
+root -> home [ label="home",fontsize="20" ] ;
+root -> dev  [ label="dev" ,fontsize="20" ] ;
+root -> bin  [ label="bin" ,fontsize="20" ] ;
+
+root     -> root     [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+usr      -> usr      [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+etc      -> etc      [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+tmp      -> tmp      [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+home     -> home     [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+dev      -> dev      [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+bin      -> bin      [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+include  -> include  [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+usr_bin  -> usr_bin  [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+p0123456 -> p0123456 [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+Toto     -> Toto     [ label=".",color="#DDDDDD",fontcolor="#DDDDDD" ] ;
+
+root     -> root     [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+usr      -> root     [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+etc      -> root     [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+tmp      -> root     [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+home     -> root     [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+dev      -> root     [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+bin      -> root     [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+include  -> usr      [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+usr_bin  -> usr      [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+p0123456 -> home     [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+Toto     -> p0123456 [ label="..",color="#BBBBBB",fontcolor="#BBBBBB" ] ;
+
+
+etc      -> passwd   [ label="passwd"  ,fontsize="16" ] ;
+etc      -> fstab    [ label="fstab"   ,fontsize="16" ] ;
+usr      -> include  [ label="include" ,fontsize="16" ] ;
+usr      -> usr_bin  [ label="bin"     ,fontsize="16" ] ;
+dev      -> null     [ label="null"    ,fontsize="16" ] ;
+dev      -> tty      [ label="tty"     ,fontsize="16" ] ;
+dev      -> cdrom    [ label="cdrom"   ,fontsize="16" ] ;
+home     -> p0123456 [ label="p0123456",fontsize="16" ] ;
+
+usr_bin  -> xemacs   [ label="xemacs"  ,fontsize="14" ] ;
+p0123456 -> toto     [ label="toto"    ,fontsize="14" ] ;
+p0123456 -> pprofile [ label=".profile",fontsize="14" ] ;
+p0123456 -> Toto     [ label="Toto"    ,fontsize="14" ] ;
+bin      -> ls       [ label="ls"      ,fontsize="14" ] ;
+
+
+
+
+
+}
+
+

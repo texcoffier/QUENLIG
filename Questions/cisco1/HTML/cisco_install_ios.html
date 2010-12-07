@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Installation de l'IOS sur un routeur CISCO</title>
+  </head>
+
+  <body>
+    <h1>Installation de l'IOS sur un routeur CISCO</h1>
+
+    <p>
+      Cette procédure est nécessaire quand on ne peut plus démarrer
+      l'IOS.
+    <p>
+      Votre invite de commande doit être <tt>rommon...</tt>
+    <p>
+      Choisissez le bon IOS en fonction du modèle de votre routeur
+    <p>
+      N'oubliez pas de brancher le câble réseau.
+
+<pre>IP_ADDRESS=10.0.0.2
+IP_SUBNET_MASK=255.0.0.0
+TFTP_FILE=c1700-y-mz.122-11.T11.bin
+TFTP_FILE=c1841-ipbase-mz.124-1c.bin
+TFTP_SERVER=10.0.0.1
+DEFAULT_GATEWAY=10.0.0.1
+confreg 0x2142
+tftpdnld
+boot
+        </pre>
+
+    <p>
+      Si la carte flash n'est pas utilisable, faites <tt>tftpdnld -r</tt>
+
+
+    <hr>
+    <address><a href="mailto:exco@@liris.univ-lyon1.fr">Thierry EXCOFFIER</a></address>
+<!-- Created: Thu Oct 25 13:43:55 CEST 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Nov 14 09:35:24 CET 2007
+<!-- hhmts end -->
+  </body>
+</html>

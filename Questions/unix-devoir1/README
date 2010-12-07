@@ -1,0 +1,240 @@
+Remarque :
+	* Un terminal est quelque chose qui permet d'afficher et
+	  de saisir du texte.
+	* Le shell, analyse des commandes et affiche le résultat.
+Généralement le terminal "contient" un shell mais ce n'est pas obligatoire.
+
+
+
+---------------
+
+Quelles sont les deux grandes classes d'entités présentes dans le système de fichier.
+
+Répertoires et fichiers.
+
+--
+
+Pourquoi traiter les fichiers textes et les périphériques de la même façon ?
+
+Pour écrire les logiciels et fonctions seulement une seule fois.
+Pour ne pas avoir un espace de nommage séparé pour les périphériques.
+
+--
+
+Qu'est-ce qu'un chemin ?
+
+C'est une suite de répertoires dans lesquel on doit entrer
+pour finalement arriver au fichier désiré.
+Les noms des répertoires sont séparés par des '/'
+
+--
+
+Dans quel cas utiliser des chemins relatifs ou absolus ?
+
+Quand on travaille interactivement, on utilise le chemin
+qui est le plus court. La plupart du temps il est relatif.
+
+On règle générale : chemin relatif pour vos fichiers
+et absolu pour les fichiers systèmes.
+
+--
+
+Comment le système trouve l'entité indiquée par un chemin relatif ?
+
+En partant du répertoire courant, pour chaque morceau du chemin,
+il se déplace dans l'entité indiqué (si possible).
+Au final, on obtiendra l'entité indiquée par le chemin.
+L'accès relatif est très rapide car il ne repart pas de la racine.
+
+--
+
+Donnez des noms de fichiers interdits.
+
+* Le nom vide
+* Les caractères '/' ou le code NUL dans le nom : 11/9/2001 ou a\000b
+
+Noms autorisés : * > < @ # $ % ^ & ( ) à espace ... \ | :
+'.' et '..' sont autorisés, mais il sont déjà utilisés !
+
+^@ veut dire "controle @" est c'est le code NUL (\000).
+^C veut dire "controle C" est c'est le code ETX (\003).
+Ces 2 caractères sont codés sur un seul octet évidemment.
+
+--
+
+Quel est votre «login» ?
+
+Par exemple 'p0700000'
+Un login ne peut pas commencer par un nombre.
+C'est que vous taper dans le champ 'login' quand vous vous connectez.
+
+--
+
+À quoi sert l'invite de commande ?
+
+A vous prévenir que la machine a finit de travailler
+et quelle attend une intervention de votre part.
+
+L'invite de commande n'est pas un terminal ni un shell,
+c'est un signal graphique.
+
+--
+
+Comment faites-vous pour arrêter une commande lancée dans le terminal (donnez plusieurs façons) ?
+
+1) Souvent il suffit de taper 'q' si la commande est intéractive (more)
+2) Control-C : ^C au clavier
+3) kill le numéro du processus si on le connait
+4) Fermer la fenêtre, mais pour beaucoup de commande cela ne les arrête pas.
+   (que cela soit en utilisant l'interface graphique ou en tapant ^D)
+
+Attention ^Z SUSPEND le processus, il ne l'arrête pas.
+Et ^D indique à la commande que la lecture clavier est terminée,
+la commande se termine normalement, elle n'est donc pas stoppée.
+
+--
+
+Indiquez plusieurs moyens de quitter un terminal :
+
+1) Taper ^D
+2) Taper 'exit'
+3) Fermer graphiquement la fenêtre.
+4) Faire un kill
+
+Attention :
+	* ^C ne tue pas le shell
+	* 'reset' ne fait pas ce que vous croyez (Qui vous a dit cela ?)
+	* Alt-F4 ne fonctionne pas sur tous les interfaces graphique.
+
+--
+
+Quelle commande tapez-vous dans le terminal pour afficher le chemin du répertoire courant ?
+
+C'est 'pwd'
+
+'ls' affiche le contenu du répertoire courant, pas son nom.
+
+--
+
+Comment faites-vous pour lister les entités (fichiers/répertoires) présentes dans le répertoire courant ?
+
+C'est 'ls'
+'dir' n'est pas standard, c'est sous DOS.
+
+--
+
+Quel est le chemin absolu de votre répertoire de connexion ?
+
+/home/x/p0700000 par exemple
+
+Le mien c'est /home/exco
+
+En tout cas, ce n'est pas :
+	* /home
+	* /p0700000
+
+
+--
+
+Quels sont les droits d'accès de votre répertoire de connexion ?
+
+Généralement c'est rwxr-xr-x (mode 755)
+Ou si les administrateurs sont protecteurs c'est rwx------ (mode 700)
+
+Lecture/Écriture/Exécution(Affichage) pour vous.
+Pour les autre cela dépend de l'administrateur.
+
+La moitié d'entre vous n'ont pas compris la question, ils ont
+imaginé qu'on leur demandait LEURS droit d'accès à LEUR répertoire.
+
+
+--
+
+Combien de processus apparaissent quand vous tapez la commande «ps» dans un terminal ?
+
+La réponse est 2 !
+Il y la le shell qui tourne dans le terminal et
+la commande 'ps' elle même car se voit en train de tourner.
+
+J'ai accepté 3 car nombreux d'entre vous ont lancé la commande 'su'
+pour une raison que je ne m'explique pas. Un live CD peut-être... ????
+
+--
+
+À quoi servent les espaces dans les commandes shell ?
+
+Ils permettent de séparer les paramètres et la commande entre eux.
+Plusieurs espaces comptent comme un seul.
+
+--
+
+Quelle ligne de commande utilisez-vous pour créer un répertoire «TOTO» dans le répertoire courant ?
+
+mkdir TOTO
+
+--
+
+Quelle ligne de commande utilisez-vous pour détruire le fichier «truc» qui est dans le répertoire «/tmp» ?
+
+Simplement : rm /tmp/truc
+
+--
+
+Comment reconnaît-on les options dans les commandes shell ?
+
+L'option est un argument commençant par le caractère tiret '-'
+
+--
+
+Qu'est-ce qu'une commande builtin ?
+
+C'est une commande du shell et non une commande UNIX.
+L'exécution d'une builtin ne lance pas de processus, c'est donc rapide.
+
+--
+
+Que se passe-t-il dans le terminal quand vous appuyez 2 fois de suite sur la touche «Tabulation» ?
+
+Cela liste toutes les commandes exécutables qui sont dans les
+répertoires indiqués dans le PATH.
+
+--
+
+Qu'est ce que la commande «echo /etc/a*» fait ?
+
+Elle affiche tous les noms d'entité commençant par 'a' et contenues dans '/etc'
+
+--
+
+Qu'est ce que la commande «ls -lR» fait ?
+
+Elle affiche récusivement le contenu du répertoire courant en
+indiquant les droits d'accès, la taille, la date de modification...
+
+--
+
+Qu'est ce que la commande «cat /etc» fait ?
+
+Une erreur cat '/etc/ est un répertoire et que la commande
+'cat' affiche le contenu de fichiers.
+
+--
+
+Qu'est ce que «/dev/cdrom» ?
+
+Le fichier "périphérique" représentant le contenu du lecteur de CDROM
+ou bien un lien symbolique vers ce fichier.
+
+--
+
+Qu'est ce que fait la touche clavier «flèche vers le haut» dans un terminal ?
+
+Avec le shell nommé 'bash' elle remonte en arrière dans l'historique
+des commandes.
+
+--
+
+Que fait la commande «cd ..» ?
+
+Le repertoire courant change afin de remonter d'un niveau.
+En effet, '..' est le répertoire père du répertoire qui le contient.

@@ -1,0 +1,46 @@
+p.shell_syntax_error:before{content:"Ce que vous avez tapé ne respecte pas la syntaxe du shell : Un ';' complètement inutile à la fin de la ligne. Des guillemets ou apostrophes ne se fermant pas. Des parenthèses mals équilibrées. Des parenthèses non protégées dans les paramètres. Une redirection de fichier dans un endroit non spécifié...";}
+
+/*
+ *****************************************************************************
+ *****************************************************************************
+ * Shell Syntax Parsed
+ *****************************************************************************
+ *****************************************************************************
+ */
+SEQUENCE:before
+{content:"Séquence de commandes";}
+OR:before
+{content:"Exécute LA commande qui suit seulement si l'on est en erreur";}
+AND:before
+{content:"Exécute LA commande qui suit seulement s'il n'y a pas d'erreur";}
+IF:before
+{content:"IF : la valeur testée est la valeur de retour de la commande";
+}
+IF > COMMAND:first-child:before
+{content:"Cette commande retourne vrai si elle s'est bien passée";}
+PIPELINE:before
+{content:"Pipeline";}
+PIPELINE[background="1"] > COMMAND:before, OR[background="1"] > PIPELINE > COMMAND:before
+{content:"Commande en arrière plan";}
+PIPELINE[background="1"] > SUBSHELL:before
+{content:"Regroupement de commandes en arrière plan";}
+
+COMMAND:before{content:"Commande";}
+COMMAND > ARGUMENT:before{content:"Argument : ";}
+
+FOR:before                        {content:"Boucle FOR"               ;}
+FOR > ARGUMENT:first-child:before {content:" sur la variable "        ;}
+FOR > COMMAND:before              {content:"Corps de la boucle FOR"   ;}
+FOR > SEQUENCE:before             {content:"Corps de la boucle FOR"   ;}
+WHILE:before                      {content:"Boucle WHILE"             ;}
+WHILE > COMMAND:first-child:before{content:"La commande testée"       ;}
+WHILE > COMMAND:before            {content:"Corps de la boucle WHILE" ;}
+WHILE > SEQUENCE:before           {content:"Corps de la boucle WHILE" ;}
+FILDES:before                     {content:"Redirection :"            ;}
+SUBSHELL:before                   {content:"Regroupement de commandes";}
+CASE:before                       {content:"case :"                   ;}
+SELECTOR:before                   {content:"Sélecteur(s) :"           ;}
+AFFECTATION:before                {content:"Affectation temporaire :" ;}
+REPLACEMENT:before                {content:"Remplace la commande par sa sortie standard" }
+
+

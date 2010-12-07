@@ -1,0 +1,10 @@
+# -*- coding: latin1 -*-
+
+title = "Donnez votre réponse ici"
+
+tip = "Pensez à tester votre réponse dans la réalité avant de la saisir ici, sinon vous risquez de donnez une mauvaise réponse bêtement"
+
+translations = {
+    'answer_button' : 'Envoyer la réponse',
+}
+

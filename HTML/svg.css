@@ -1,0 +1,23 @@
+
+rect, text {  shape-rendering:  optimizeSpeed; }
+
+text {  text-rendering: optimizeSpeed ; }
+
+.nr_comments { fill: #0000FF; }
+
+.m { text-anchor: middle; }
+.s { text-anchor: start; }
+.e { text-anchor: end; }
+
+.back    { fill: #FFFFFF;  stroke:#000000; }
+.good    { fill: #00FF00; }
+.bad     { fill: #FF0000; }
+.indice0 { fill: #00FFFF; }
+.indice1 { fill: #00E0E0; }
+.indice2 { fill: #00FFFF; }
+.indice3 { fill: #00E0E0; }
+.indice4 { fill: #00FFFF; }
+.time    { fill: #808080; }
+text     { fill: #000000; }
+text.bar { fill: #000000; }
+

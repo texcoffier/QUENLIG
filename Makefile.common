@@ -1,0 +1,30 @@
+.SUFFIXES: .dot .png .fig .ps .svg .epsf
+
+.fig.png:
+	fig2dev -L png -S 4 $*.fig >$*.png
+
+.dot.ps:
+	dot -o$*.ps -Tps $*.dot
+
+.png.epsf:
+	convert $*.png $*.epsf
+
+# The trivial line doesn't work as expected :
+#	convert -resize '50%x50%'
+# I think it is because image are trimmed before and the page size
+# is not updated.
+IMAGE_RESIZE = xxx() { convert -resize "$$(expr $$(identify -format '%w' $$1) / 2)x$$(expr $$(identify -format '%h' $$1) / 2)!" $$1 $$2 ; } ; xxx
+
+.dot.png:
+	dot -o$*.png -Tpng $*.dot
+	$(IMAGE_RESIZE) $*.png $*_small.png
+	twopi -o$*_cercle.png -Tpng $*.dot
+	$(IMAGE_RESIZE) $*_cercle.png $*_cercle_small.png
+
+.svg.png:
+	inkscape --export-png=xxx.png $*.svg
+	convert -trim xxx.png $*.png
+	rm xxx.png
+	$(IMAGE_RESIZE) $*.png $*_small.png
+	# inkscape --export-plain-svg=$*_plain.svg $*.svg
+

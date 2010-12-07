@@ -1,0 +1,9 @@
+@import "css.fr.css";
+
+TABLE.identity     TH.top:before{content:"Ton nom"             ;}
+TABLE.answer       TH.top:before{content:"Donne ta réponse ici";}
+TABLE.answer_given TH.top:before{content:"Ta réponse"          ;}
+TABLE.do_you_know  TH.top:before{content:"Le sais-tu ?"        ;}
+TABLE.requireds > TBODY > TR > TH:before{
+  content:"Questions auxquelles tu as déjà répondu et qui peuvent peut-être te servir ";
+}

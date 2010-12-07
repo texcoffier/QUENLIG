@@ -1,0 +1,56 @@
+<style>
+SPAN.input {
+  background:white ;
+  color:black ;
+  width:100%% ;
+}
+INPUT { width: 40em ; }
+</style>
+
+<pre id='pre' style="background:black ; color: white;"></pre>
+
+<div id="div">
+<input OnKeyPress="send_key(event);">
+Saisissez ce qu'il faut envoyer au programme puis tapez 'return'.
+</div>
+
+<script><!--
+var div = document.getElementById('div') ;
+var pre = document.getElementById('pre') ;
+
+function safe(txt)
+{
+   return txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') ;
+}
+
+function the_event(event)
+{
+  if ( event == undefined )
+    event = window.event ;
+
+  if ( event.target == undefined )
+    event.target = event.srcElement ;
+
+  return event ;
+}
+
+function send_key(event)
+{
+  event = the_event(event) ;
+  if ( event.keyCode != 13 )
+      {
+      return ;
+      }
+  pre.innerHTML += '<span class="input">' + safe(event.target.value) +
+                   '&nbsp;</span>\n' ;
+  var img = document.createElement('img') ;
+  img.src = '%s' + encodeURIComponent(event.target.value) ;
+  event.target.value = '' ;
+}
+
+function char(value)
+{
+  pre.innerHTML += safe(value) ;
+  window.scrollTo(0,10000000);
+}
+--></script>

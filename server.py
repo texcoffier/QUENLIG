@@ -1,0 +1,210 @@
+#!/usr/bin/env python
+
+#    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
+#    Copyright (C) 2005-2007 Thierry EXCOFFIER, Universite Claude Bernard
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
+
+import socket
+import BaseHTTPServer
+import time
+import cgi
+import state
+import os
+import configuration
+import utilities
+
+cache = {}   # Allow file caching
+
+def html_time(t):
+    weekdayname = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    monthname = [None,
+                 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    year, month, day, hh, mm, ss, wd, y, z = time.gmtime(t)
+    s = "%s, %02d %3s %4d %02d:%02d:%02d GMT" % (
+        weekdayname[wd],
+        day, monthname[month], year,
+        hh, mm, ss)
+    return s
+
+class CachedFile:
+    def __init__(self, filename):
+        self.mime_type = None
+        self.content_length = 0
+        self.content = ''
+        self.modification_time = ''
+        # Is this secure (UTF8) ?
+        if (
+            filename.find('..') == -1
+            and filename.find('/') == -1
+            and filename.find('?') == -1
+            ):
+            if filename.endswith(".css"):
+                self.mime_type = 'text/css'
+            elif filename.endswith(".html"):
+                self.mime_type = 'text/html'
+            elif filename.endswith(".png"):
+                self.mime_type = 'image/png'
+            elif filename.endswith(".jpg"):
+                self.mime_type = 'image/jpeg'
+            elif filename.endswith(".ps"):
+                self.mime_type = 'application/postscript'
+            elif filename.endswith(".gif"):
+                self.mime_type = 'image/gif'
+            elif filename.endswith(".svg"):
+                self.mime_type = 'image/svg+xml'
+            elif filename.endswith(".ico"):
+                self.mime_type = 'image/x-icon'
+            elif filename.endswith(".csv"):
+                self.mime_type = 'text/comma-separated-values'
+            elif filename.endswith(".js"):
+                self.mime_type = 'application/x-javascript'
+            for directory in (
+                configuration.root + '/' + configuration.questions + "/HTML",
+                "HTML",       # Generated HTML and data
+                configuration.root + "/HTML", # Generic HTML data
+                ):
+                try:
+                    full_name = directory + "/" + filename
+                    f = open(full_name, "r")
+                    self.content = f.read()
+                    f.close()
+                    self.content_length = len(self.content)                    
+                    self.modification_time = html_time(
+                        os.path.getmtime(full_name))
+                    break
+                except IOError:
+                    pass
+
+def get_file(filename):
+    if cache == None:
+        return CachedFile(filename)
+    
+    if not cache.has_key(filename):
+        cache[filename] = CachedFile(filename)
+        
+    return cache[filename]
+    
+class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
+    def send_head(self, type, modif_time=None,content_length=None,cached=True):
+        if modif_time == None:
+            modif_time = self.date_time_string()
+        self.send_response(200)
+        self.send_header('Content-Type', type)
+        if cached and cache != None:
+            self.send_header('Cache-Control', 'max-age=3600')            
+        else:
+            self.send_header('Cache-Control', 'max-age=1')
+            self.send_header('Cache-Control', 'private')
+            self.send_header('Cache-Control', 'no-store')
+        self.send_header('Last-Modified', modif_time)
+        if content_length != None:
+            self.send_header('Content-Length', content_length)
+        self.end_headers()
+
+    def do_GET(self):
+        # The 'path' is in the form :
+        #                               /prefix/Ticket/number/?action=qu
+        #                                         0        1       2
+        path = self.path.strip('/')
+            
+        if path.startswith(configuration.prefix):
+            path = path.replace(configuration.prefix, "", 1)
+
+        path = path.split('/')
+
+        # Try to get the last path component has a file name
+        if path[-1] and path[-1][0] != '?':
+            c = get_file( path[-1] )
+            if c.mime_type != None:
+                self.send_head(c.mime_type,
+                               modif_time = c.modification_time,
+                               content_length = c.content_length)
+                self.wfile.write(c.content)
+                return
+
+        # Get the FORM values
+        f = cgi.parse_qs(path[-1].split('?')[-1])
+        form = {}
+        for i in f:
+            form[i] = f[i][0] # Only ONE value per parameter
+
+        if form.has_key('guest'):
+            path[0] = 'guest' + form['guest']
+
+        if not form.has_key('ticket'):
+            form['ticket'] = cgi.urllib.unquote(path[0])
+
+        # Get the number
+        try:
+            number = int(path[1])
+        except:
+            try:
+                number = int(path[0])
+            except:
+                number = None
+        form["number"] = number
+
+        # Get the session state
+        session = state.get_state(self, form['ticket'].translate(utilities.safe_ascii))
+        if session == None:
+            return
+
+        # Execute and return page
+        # import sys
+        # print path, os.system('grep VmSize </proc/self/status')
+        mime, content = session.execute(form)
+        self.send_head(mime, cached=False, content_length=len(content))
+        self.wfile.write(content)
+
+server = None
+
+def function_to_profile(nr_requests):
+    global server
+    for i in xrange(nr_requests):
+        server.handle_request()
+
+
+def run(nr_requests, the_cache):
+    f = open("pid", "w")
+    f.write(str(os.getpid()))
+    f.close()
+
+    global cache
+    cache = the_cache
+
+    global server
+    server = BaseHTTPServer.HTTPServer(("0.0.0.0", configuration.port)
+                                       , MyRequestBroker)
+
+    print "\nServer Ready on\n\thttp://%s:%d/guest.html\n\t%s/guest.html" % (
+        socket.getfqdn(), configuration.port, configuration.url)
+    print "Remove 'guest.html' if you want to use CAS authentication service"
+
+    if nr_requests:
+        import hotshot
+        p = hotshot.Profile('xxx.hotshot', lineevents=1)
+        try:
+            p.runcall(function_to_profile,  nr_requests)
+        finally:
+            p.close()
+        # Post-process the hotshot output so it can be read by kcachegrind
+        os.system('hotshot2calltree -o xxx.cgr xxx.hotshot')
+        os.system('kcachegrind xxx.cgr &')
+    else:
+        server.serve_forever()

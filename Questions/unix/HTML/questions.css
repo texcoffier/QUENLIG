@@ -1,0 +1,85 @@
+
+SELECTOR, SEQUENCE, PIPELINE, COMMAND, COMMAND>ARGUMENT, SUBSHELL, CASE, IF, FOR, WHILE{
+  margin-left:2em;
+  display:block;
+  border:1px solid black;
+  padding:0.1em;
+  margin-top:1px;
+  margin-bottom:1px;
+}
+SEQUENCE[nrchild="1"]{
+  display:block;
+  margin-left:0em;
+  border:0pt solid black;
+  padding:0.1em;
+  margin-top:0em;
+  margin-bottom:0em;
+}
+SEQUENCE[nrchild="1"]:before{
+  content:"";
+  margin-left:0em;
+}
+IF > COMMAND:first-child{
+  background:white;
+}
+PIPELINE[nrchild="1"]{
+  display:block;
+  margin-left:0em;
+  border:0pt solid black;
+  padding:0.1em;
+  margin-top:0em;
+  margin-bottom:0em;
+}
+PIPELINE[nrchild="1"]:before{
+  content:"";
+  margin-left:0em;
+}
+COMMAND > ARGUMENT:first-child:before{
+  content:"";
+}
+COMMAND > ARGUMENT:first-child{
+  margin-left:1em;
+}
+COMMAND > ARGUMENT{
+  display:block;
+  white-space:pre;
+}
+FOR > ARGUMENT:first-child{
+  border:0px;
+  display:inline;
+  margin-left:1em;
+}
+FOR > ARGUMENT{
+  display:list-item;
+  margin-left:3em;
+}
+
+FILDES{
+  display:block;
+  margin-left:2em;
+}
+
+*[double_quoted="1"]{
+  background:white;
+}
+*[double_quoted="0"]{
+  background:#FBB;
+}
+VARIABLE:before{
+  content:'$';
+}
+REPLACEMENT{
+  display:block;
+}
+SELECTOR > PATTERN > ARGUMENT{
+  margin-left:1em;
+  display:block;
+}
+PATTERN_CHAR{
+  display:inline;
+  background:yellow;
+}
+AFFECTATION{
+  display:block;
+  margin-left:2em;
+}
