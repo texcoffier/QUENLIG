@@ -30,10 +30,20 @@ def histogram_good(state):
     stats = statistics.question_stats()
 
     div = int(state.form.get("value", "10"))
+
     histo = [0] * (1 + stats.max_good_answers/div)
     for s in stats.all_students:
         histo[ s.the_number_of_good_answers/div ] += 1
     t = "<pre>"
+    for h in range(len(histo)):
+        t += ("%3d-%3d : " % (h*div, (h+1)*div-1))  +  "*" * histo[h] + "\n"
+    t += '</pre>'
+
+    t += '<p class="histobad"></p>'
+    histo = [0] * (1 + stats.max_bad_answers/div)
+    for s in stats.all_students:
+        histo[ s.the_number_of_bad_answers/div ] += 1
+    t += "<pre>"
     for h in range(len(histo)):
         t += ("%3d-%3d : " % (h*div, (h+1)*div-1))  +  "*" * histo[h] + "\n"
     t += '</pre>'
