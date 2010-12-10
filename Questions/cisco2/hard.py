@@ -60,8 +60,9 @@ add(name="cable ethernet",
     bad('RJ45', "C'est le nom du connecteur, pas du cable", uppercase=True),
     answer_length_is(3, "La réponse est en 3 lettres"),
     good('UTP', uppercase=True),
+    good('FTP', uppercase=True),
     ),
-    indices = ("Unshielded Twisted ...", ),
+    indices = ("<tt>Unshielded Twisted...</tt> ou bien <tt>Foiled Twisted...</tt>", ),
     )
 
 add(name="cable croisé",
