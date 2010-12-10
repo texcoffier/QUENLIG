@@ -66,7 +66,7 @@ def execute(state, plugin, argument):
     t = [header[6]]
     t.append(','.join(header[1:6]))
     for c in content:
-        t.append("%s, %4.2f, %4.2f, %4.2f, %4.1f, %4.1f" % c)
+        t.append("%s, %5.3f, %5.3f, %5.3f, %5.2f, %5.2f" % c)
         
     return 'text/comma-separated-values', '\n'.join(t)
 
