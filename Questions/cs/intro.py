@@ -42,19 +42,28 @@ Creation des sessions and launch them
 #####################################
 
 create() {
+if [ ! -d Students/$1/Logs/Default ]
+        then
+        mkdir Students/$1/Logs/Default
+        fi
+
 ./main.py $1 create Questions/$1 $2 url "http://10.0.0.1:$2/"
-echo "
-question_shuffle
-!answered_see
-!gui_smiley
-" >Students/$1/acls.student
+echo "{
+'session_deconnection':('!executable',),
+'session_start': ('!executable',),
+'session_stop': ('!executable',),
+'session_duration':('!executable',),
+'action_help':('!executable',),
+'statmenu_bad':('!executable',),
+'statmenu_smiley':('!executable',),
+'statmenu_rank':('!executable',)}" >Students/$1/Logs/Default/acls
 ./main.py $1 admin thierry.excoffier admin olivier.gluck start &
 }
 
 create cs-nfs  4001
 create cs-nis  4002
 create cs-dns  4003
-create cs-ldap 4004
+create cs-ldap 4004 
 
 for I in nfs nis dns ldap ; do ./main.py cs-$I plot ; done
 sleep 10
