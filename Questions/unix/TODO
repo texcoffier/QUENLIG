@@ -1,4 +1,12 @@
 
+Réécrire complètement le parser shell sans faire d'analyse lexicale/syntaxique
+car le shell n'est pas facilement parsable.
+
+Faire en sorte que la canonisation shell fonctionne réellement,
+des substitution de chaines de caractères ne sont pas suffisantes.
+C'est shellSyntax qui doit réécrire les options longues en courtes.
+
+
 Faire une question : echo $SDFSFD | sed   et la mettre en prérequis
 
 Faire plus d'exercices avec les guillemets autour des variables.

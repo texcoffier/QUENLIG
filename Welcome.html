@@ -833,6 +833,9 @@ class UpperCase(TestUnary):
 
     <h3><a name="acl">Les ACLs</a></h3>
 
+      <p>
+	Ceci est en développement et instable...
+
     <p>
       Chaque fonctionnalité du système a son ACL.
       Si une ACL est préfixée par <tt>!</tt> alors
@@ -840,24 +843,12 @@ class UpperCase(TestUnary):
       pour tout le monde (<tt>question_shuffle</tt> pour les profs par exemple).
       Ou interdir à un étudiant de répondre aux questions, ...</p>
     <p>
-      Toute les descriptions des ACL sont visibles
-      sur la page web permettant de modifier leur valeur.
-    </p>
-    <p>
-      Il est compliqué de modifier les ACLs une par une pour faire
-      ce que l'on veut, c'est pour cela qu'il est préférable
-      d'utiliser des 'rôles'.
-      Quand on endosse un rôle, on prend les droits correspondant
-      sans avoir besoin de modifier ses ACL.
-      Les ACL personnelles sont prioritaires par rapport
-      à celle du rôle.
-      Les rôles existants&nbsp;:</p>
-    <ul>
-      <li> role_teacher_i_have</li>
-      <li> role_author_i_have</li>
-      <li> role_admin_i_have (peut modifier les ACLs de tout le monde)</li>
-      <li> role_student_i_have (rôle par défaut)</li>
-    </ul>
+	Les ACLS sont définies dans
+	<tt>Students/???/Logs/Default/acls</tt> pour les étudiants
+	et 
+	<tt>Students/???/Logs/Teacher/acls</tt> pour les enseignants.
+      <p>
+	Les roles sont définis dans 	<tt>Students/???/Logs/???/roles</tt>
 
     <p>
       Le premier administrateur doit être créé avant
@@ -965,68 +956,14 @@ class UpperCase(TestUnary):
       Sur le système lui-même&nbsp;:</p>
     <ul>
 	<li> Afficher erreur si le nom de la question contient des () </li>
-	<li>
-	  Décomposer le système en plugins pour simplifier la programmation
-	  en regroupant ce qui est nécessaire pour faire une fonctionnalité
-	  au même endroit.
-	  À chaque plugin correspond&nbsp;:
-	  <ul>
-	    <li> un nom,
-	    <li> une ACL (voir, modifier, cacher, ...),
-	    <li> un style CSS,
-	    <li> un style JavaScript,
-	    <li> une priorité d'appel,
-	    <li> une fonction qui mettra à jour la page à afficher
-	      avec des ajouts ou des modifications.
-	    <li> une fonction modificatrice d'état,
-	  </ul>
-	  </li>
-	<li> Votre réponse contient des retours à la ligne : être
-	  plus explicatif ou effacer la réponse...
-
 	<li> Faire un éditeur interactif de question.</li>
-
-	<li>
-	  Ajouter la possibilité d'afficher l'historique des mauvaises
-	  réponses et des commentaires affichés donnés par un étudiant.
-	  Comme cela l'étudiant voit directement toutes ses mauvaises
-	  réponses et les indices qui ont été donnés.
-	</li>
-
-	<li> Les attributs 'question', 'before', 'required', 'good_answer',
-	  'indices', ...
-	  doivent être définissables avec les même filtres
-	  que les tests. Ce sont eux qui feront les substitutions
-	  en fonction de l'état du système total et donc de l'étudiant.
-	Cela permet aussi d'enlever les substitutions faites implicitements.
-	  <p>
-	    En profiter pour essayer de mieux séparer la logique
-	    du test de la langue utilisée pour les messages aux
-	    étudiants (require_ip par exemple).
-
-</li>
-
-	<li> Liste des questions </li>
       <li> Passer les noms d'invité en minuscules pour éviter les doublons,
 	ajouter un anti-SPAMMER, limiter la tailler des noms</li>
-	<li> Après une mauvaise réponse, afficher le fond de la zone
-	  réponse en rouge pastel tant que l'étudiant n'a pas modifié
-	  le texte de celle-ci&nbsp;?
-      <li> Réécrire complètement le parser shell sans faire
-	d'analyse lexicale/syntaxique car le shell n'est pas facilement
-	parsable. </li>
-      <li> Association id/vrai nom / photo / ... dynamique</li>
-      <li> Faire en sorte que la canonisation shell fonctionne réellement,
-	des substitution de chaines de caractères ne sont pas
-	suffisantes.
-	C'est shellSyntax qui doit réécrire les options longues en courtes.
-      </li>
       <li> Indiquer pour chaque question les cheminements d'étudiant
            les plus long jusqu'à la bonne réponse (ou sans réponse)
 	en affichant les indices donnés par le système.
       </li>
       <li> Indiquer l'adresse IP / machine de derniere connexion </li>
-      <li> Faire en sorte que le SVG soit imprimable </li>
       <li> Afficher le mail de l'étudiant sur sa page de stat </li>
       <li> Tester le cas des noms d'utilisateur avec des '?'</li>
       <li> BUG: Le graphique des questions n'est pas affiché à la première
@@ -1037,16 +974,11 @@ class UpperCase(TestUnary):
       <li> Liste des bonnes réponses COURTE pour diffuser aux étudiants</li>
       <li> Indiquer le nombre de caractères différents, la longueur,
 	le nombre de mots par rapport à la bonne réponse la plus proche</li>
-      <li> Mettre des classes de réponse pour le champs de saisie
-	pour que le navigateur ne sorte pas toutes les réponses
-	déjà données aux autres questions&nbsp;? </li>
       <li> Faire une question_map pour l'enseignant qui met
 	en évidence les questions affichées sur les écrans des étudiants.</li>
-      <li> Problème du background du SVG pour l'impression.
-      <li> Changer les marges du SVG pour l'impression.
+      <li> Faire en sorte que le SVG soit imprimable :
+	problème du background,	changer les marges.
       <li> Pointeur SVG sur la carte des questions en pixels.</li>
-      <li> Pouvoir cacher des mauvaises réponses et des commentaires.
-	Pour soit-même ou pour tous le monde&nbsp;?
       <li> Problème langue sur la durée si elle est supérieur à 24 heures.</li>
       <li> Choix de la langue dans la configuration ?</li>
       <li> Amélioration vitesse : statistiques incrémentales.
@@ -1061,14 +993,6 @@ class UpperCase(TestUnary):
     <p>
       Pour les différents questionnaires,
       il faut regarder dans <tt>Questions/.../TODO</tt>
-<p>
-	Nouvelle syntaxe de définition de test&nbsp;:
-<ul>
-<li> On utilise les opérateurs du langage : or and not </li>
-<li> Une fonction 'good' ou 'bad' obligatoire
-<li> Une fonction 'comment' qui ajoute un commentaire
-<li> Des fonctions de test : 'Is', 'IsNumber', 'Contain', 'LengthIs', 'ShellIs'
-</ul>
     
 
     <h2><a name="nottodo">Not Todo</a></h2>
@@ -1094,163 +1018,12 @@ class UpperCase(TestUnary):
 
     </ul>
 
-    <h2><a name="changements">Changements</a></h2>
-    <p>
-      Changements faits lors du passage d'une version à l'autre.
-    </p>
-
-
-    <h3>0.5 ==&gt; 0.6</h3>
-    
-    <ul>
-      <li> N'utilise plus de '..' dans les noms de fichiers.</li>
-      <li> Ajout de 'css.fr.enfant.css', utilisation de CSS en cascade.</li>
-      <li> Ajout tips sur 'recharge' et 'question suivante'.</li>
-      <li> Les '/' dans les noms de fichier ont été enlevés.</li>
-      <li> Ajoute l'affichage de la variance du temps de réflexion
-	dans les statistiques étudiants</li>
-      <li> On stocke le nom de la machine faisant tourner
-	le serveur dans le répertoire session.</li>
-      <li> Lancer 'main.py' sans paramètre affiche la liste des sessions.</li>
-      <li> Le bouton 'déconnexion' n'apparaît plus si
-	l'on se connecte avec <em>guest</em></li>
-      <li> Le script 'move_question.py' a été créé pour déplacer/renommer
-	des questions d'un fichier à un autre en mettant à jour
-	les fichiers de log étudiant.</li>
-      <li> Le questionnaire python a été découpé en plusieurs fichiers.</li>
-      <li> Sur l'état du système,
-	les questions les plus requises sont le plus à gauche.</li>
-      <li> L'ACL 'question_pixel_map_see' permet d'afficher
-	une carte des questions en pixel dans le menu de gauche.
-	La couleur du pixel indique l'état de la question
-	vis-à-vis de l'utilisateur.</li>
-      <li> Bulle d'aide sur la carte des questions en pixels.</li>
-      <li> L'ACL 'question_pixel_map_see_other' permet d'afficher
-	la carte pixels des autres étudiants dans la liste des étudiants
-	et leurs statistiques.</li>
-      <li> La version Quenlig utilisée par le serveur est affichée.</li>
-      <li> Dans la liste des questions pour un étudiant,
-	n'affiche pas les questions pas vues.</li>
-      <li> La date de première connexion est maintenant correcte.</li>
-      <li> Les erreurs HTML ont été corrigées avec 'weblint 1.9.3</li>
-      <li> On est plus obligé de donner les dates de TP lors
-	de la création de session</li>
-    </ul>
-
-    <h3>0.6 ==&gt; 0.7</h3>
-    
-    <ul>
-      <li> L'affichage du graphe des questions fonctionne
-	maintenant avec des caractères accentués dans les noms
-	de fichiers.</li>
-      <li> Pour améliorer les exercices ou l'on doit systématiquement
-	afficher le résultat d'une évaluation quelle soit
-	juste ou non&nbsp;:
-	La variable <tt>current_evaluate_answer</tt> a été ajoutée
-	dans <tt>question.py</tt>.
-      </li>
-      <li> Les questions débloquant un maximum de questions suivantes
-	sont mises en gras si on possède l'ACL 'question_max_descendants'
-      </li>
-      <li> L'ACL 'question_pixel_map_circle' permet de basculer
-	l'ensemble des utilisateurs vers une carte ayant plus
-	une forme de disque.</li>
-      <li> La sortie SVG marche mieux avec InkScape (pour imprimer).</li>
-      <li> Corrige de parser shell pour qu'il accepte les apostrophes
-	entre guillemets.</li>
-      <li> Corrige l'affichage du champs de saisie pour
-	qu'il affiche correctement les guillemets.</li>
-      <li> Réécriture de la vérification du ticket car c'était
-	encore faux.</li>
-      <li> L'envoit d'un commentaire vide n'affiche plus de message d'erreur.</li>
-      <li> Meilleur traitement de \\ et du ^ dans le parser shell,
-      ainsi que des séparateurs dans les syntaxes de remplacement</li>
-      <li> Ajoute l'ACL 'question_time_see' permettant de voir dans
-	le titre de la question le temps moyen de réflexion du groupe.</li>
-      <li> Il est maintenant possible de se reconnecter si l'on
-	s'est déconnecté.</li>
-      <li> Dans les tests Python la quantité de mémoire et de CPU
-	utilisée est limitée pour ne pas surcharger le serveur.</li>
-      <li> Ajoute l'ACL 'gui_autofocus' car l'auto focus est pénible
-	pour l'auteur du contenu (page down marche pas...).</li>
-      <li> Ajoute tests : require_startswith, require_endswith,
-	reject_startswith, reject_endswith</li>
-      <li> Le nom public du serveur peut être indiqué en paramètre. </li>
-    </ul>
-
-    <h3>0.7 ==&gt; 0.8</h3>
-    
-    <ul>
-      <li> Débuggage du simulateur de charge qui ne fonctionnait plus.</li>
-      <li> Le CPU profiling est affiché avec kcachegrind.</li>
-      <li> Bouche un gros trou de sécurité.</li>
-    </ul>
-
-    <h3>0.8 ==&gt; 0.9</h3>
-    <ul>
-      <li> Débuggage du simulateur de charge : cas des réponses contenant /.</li>
-      <li> Création d'une animation temps réel de l'histogramme des bonnes réponses (but dans le Makefile).</li>
-      <li> Quand on regarde les mauvaises réponses données par les étudiants,
-	une bulle d'aide apparaît avec le message d'aide donné
-	aux étudiants.</li>
-      <li> Quand on regarde les mauvaises réponses données par les étudiants,
-	le nom de l'étudiant apparaît en italique s'il a regardé
-      un indice.</li>
-      <li> Amélioration de la canonisation des options quand il y
-	a plusieurs commandes sur la ligne.
-	Il reste des bugs <tt>-n $(x)</tt> ne devient pas
-	    <tt>-n$(x)</tt>.
-      </li>
-      <li> On ne perd plus les réponses et l'état courant
-	au moment du renouvellement de ticket trop ancien.</li>
-      <li> L'action 'détruire étudiants' à été ajoutée,
-      elle enlève les étudiants avec 0 bonnes réponses.</li>
-    </ul>
-
-    <h3>0.9 ==&gt; 1.0</h3>
-
-    <ul>
-      <li> La vérification des questions est maintenant faite par un
-	objet au lieu d'une fonction.
-	On peut quand même faire une fonction mais cela n'est
-	pas recommandé.
-      </li>
-	<li>
-	  Les fonctions générant les textes 'question' et 'before'
-	  peuvent prendre maintenant 'state' en paramètre
-	  afin d'avoir des textes contextuel.
-	  Les variables aléatoires et les substitions de texte
-	  seront amenés à disparaitre du coeur du système.
-	  </li>
-      <li>
-	Création automatique de <tt>__init__.py</tt> dans les répertoires
-	de question.</li>
-      <li> 'replace', 'dumb_replace' sont fait dans la classe Test
-	au lieu d'être fait dans la fonction test.
-	Cela s'applique à tous les tests.
-	D'autres modificateurs ont été ajoutés, ils ne sont
-	pas encore documentés.
-      </li>
-      <li> Et de très nombreux bugs ont été corrigés.</li>
-	<li> Les questions ont un attribut 'highlight' permettant
-	de les mettre en évidences (blanc sur noir) dans le menu
-	des questions </li>
-	<li> Le questionnaire Unix a subit 36 étudiants supplémentaires
-	  et a été mis à jour en conséquence.</li>
-	<li> Un questionnaire CISCO a été créé, il est expérimental
-	  et ne peut fonctionner que si les équippements de la salle
-	  de TP sont modélisés dans le système.</li>
-	<li> La commande <tt>make</tt> est automatiquement lancée
-	  dans le répertoire <tt>HTML</tt> des questions au lancement
-	  du questionnaire.</li>
-    </ul>
-      </div>
 
     <hr>
     <address><a href="mailto:exco@@liris.univ-lyon1.fr">Thierry EXCOFFIER</a></address>
     <!-- Created: Sun Jul 24 15:23:19 CEST 2005 -->
     <!-- hhmts start -->
-Last modified: Fri May 23 10:06:02 CEST 2008
+Last modified: Thu Jan  6 11:40:01 CET 2011
 <!-- hhmts end -->
   </body>
 </html>
