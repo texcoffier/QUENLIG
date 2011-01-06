@@ -175,19 +175,13 @@ class Session:
             os.remove(self.dir + 'pid')
 
     def plot(self):
-        import pages
-
         self.init()
         os.chdir(self.dir)
-        utilities.write(os.path.join(configuration.html, 'simple.html'),
+        utilities.write(os.path.join('HTML', 'simple.html'),
                         statistics.html_simple(None))
-        statistics.update_stats()
-        utilities.write(os.path.join(configuration.html, 'state.svg'),
-                        statistics.plot_svg(''))
         statistics.update_stats()
         statistics.graph_dot()
         statistics.graph2_dot()
-        pages.page_plot(None)
         sys.exit(0)
 
     def display_no_more_valid_answers(self):
