@@ -24,7 +24,9 @@ import configuration
 import questions
 
 def filter_student_answer(answer, state):
-    return answer.replace('  ',' ').replace('  ',' ')
+    answer = answer.replace('   ',' ').replace('  \n','\n')
+    answer = answer.replace('  ',' ').replace(' \n','\n')
+    return answer
 
 questions.current_evaluate_answer = filter_student_answer
 

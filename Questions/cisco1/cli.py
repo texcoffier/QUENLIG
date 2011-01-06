@@ -147,6 +147,9 @@ add(name="allumer CISCO",
     Si le routeur pose la question <em>«Do you want to enter the inital configuration dialog&nbsp;?»</em>
     répondez «no» pour qu'il s'initialise tout seul sans poser de questions.
     <p>
+    Si le routeur pose la question <em>«Terminate auto-install&nbsp;?»</em>
+    répondez «yes» pour qu'il s'initialise tout seul sans poser de questions.
+    <p>
     Quand la procédure de démarrage semble terminée, tapez plusieurs
     fois sur <tt>return</tt> pour voir ce que le routeur CISCO répond.
     <p>
@@ -367,7 +370,7 @@ add(name="fin édition",
     de l'écran&nbsp;?""",
     tests = (
     require(('SHIFT', 'SHFT', 'MAJ'), uppercase=True, all_agree=True),
-    require(('PAGE', 'PG'), uppercase=True, all_agree=True),
+    require(('PAGE', 'PG', 'CTRL'), uppercase=True, all_agree=True),
     require(('UP', 'HAUT'), uppercase=True, all_agree=True),
     # Fait planter
     # require(('B', 'U'), "Ceci ne fonctionne que dans <tt>minicom</tt>", uppercase=True),

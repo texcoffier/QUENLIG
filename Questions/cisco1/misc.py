@@ -26,7 +26,7 @@ import random
 add(name="ip",
 #    required = [],
     required=["tp1_route:machine>routeur s1",
-              "tp1_serie:routeur>remote s1 OK",],
+              "tp1_serie:routeur>local s1",],
     question = "Que veux dire IP&nbsp;?",
     tests = (
         Good(UpperCase(Contain('INTERNET') & Contain('PROTOCOL'))),

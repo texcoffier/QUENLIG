@@ -27,7 +27,7 @@ add(name="intro",
     required=['root:sortir'],
     question = """Quand vous êtes en mode privilégié.
     Quelle commande permet de passer en mode de configuration
-    du routeur&nbsp;?""",
+    du routeur <small>(en tapant une seule fois sur <tt>return</tt>)</small>&nbsp;?""",
     tests = (
     require('configure', "La commande est <tt>configure</tt> + un paramètre"),
     bad("configure", """Vous pouvez en effet taper <tt>configure</tt>
@@ -113,6 +113,9 @@ add(name="password enable",
     require('cisco', "Je ne vois pas le mot de passe"),
     reject('password',
         "Command obsolète car insécure, utilisez <tt>enable secret</tt>"),
+    reject(('<','>'),
+           """Attention, vous avez mis <tt>&lt;cisco&gt;</tt>
+           comme mot de passe au lieu de <tt>cisco</tt>"""),
     good('enable secret cisco'),
     good('enable secret 0 cisco'),
     good('enable secret 5 cisco'),

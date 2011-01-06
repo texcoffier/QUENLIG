@@ -235,7 +235,7 @@ add(name="table routage",
     tests = (
     good("route",
          "Vous pouvez aussi taper <tt>ip route</tt> (moins standard)"),
-    good("ip route",
+    good(("ip route", "netstat -r"),
          "Vous pouvez aussi utiliser la commande standard : <tt>route</tt>"),
     ),
     )
@@ -262,7 +262,7 @@ add(name="vitesse",
 
     <pre>for I in 0.1 0.3 1.5 1.7 2.9 2.11 .....
 do
-    ping -c 1 -s 60000 -W 1 192.168.$I |
+    ping -c 1 -s 1000 -W 1 192.168.$I |
     tail -n 1 |
     sed -e 's/.* = //' -e 's/\// /' |
     (read A B ; echo "$A millisecondes pour transmettre 60Ko à 192.168.$I")

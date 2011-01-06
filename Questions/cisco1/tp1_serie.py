@@ -35,7 +35,9 @@ add(name="genre",
     tests = (
     answer_length_is(1, "Vous devez répondre avec M ou F"),
     good("{C0.remote_port.host.S0.port.type}", uppercase=True,
-         replace=(('F','DCE'), ('M', 'DTE')), parse_strings=host),
+         replace=(('F','DCE'), ('M', 'DTE'),
+                  ('FEMELLE','DCE'),('MALE', 'DTE')),
+         parse_strings=host),
     ),
     )
 
@@ -158,7 +160,7 @@ for i in range(2):
     add(name="série %d OK" % i,
         required=["configure série %d" % i, "serie:affiche"],
         question="""Répondez OUI à cette question seulement si
-        la ligne est <tt>administratively up, line protocol is up</tt>.
+        la ligne série %d est <tt>up, line protocol is up</tt>.
         <p>
         Si ce n'est pas le cas&nbsp;:
         <ul>
@@ -166,7 +168,7 @@ for i in range(2):
         <li> Vérifiez si les paramètres de la ligne sont correctes.
         <li> Vérifiez si le cable n'a pas été débranché.
         </ul>
-        """,
+        """ % i,
         tests = ( yes('Tapez OUI'), ),
         )
     add(name="routeur>remote s%d" % i,
