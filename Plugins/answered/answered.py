@@ -29,10 +29,10 @@ acls = { 'Default': ('executable',) }
 
 css_attributes = (
 #    'TABLE        { border: 1px solid black ; }',
-    'TABLE.good_answer TT.an_answer { background: #DFD ; }',
-    'TABLE.bad_answer  TT.an_answer { background: #FDD ; }',
+    'TABLE.good_answer .an_answer { background: #DFD ; }',
+    'TABLE.bad_answer  .an_answer { background: #FDD ; }',
     '.comment     { background: #DDD ; }',
-    'TT.an_answer { font-weight: bold ; }',
+    'TT.an_answer, PRE.an_answer { font-weight: bold ; }',
     )
 
 def execute(state, plugin, argument):

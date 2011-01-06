@@ -98,6 +98,7 @@ A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {
 
 P.int_required:before { content: "La réponse à cette question doit être un nombre entier écrit en décimal." ; }
 
+PRE { background-color: #FF0 ; border: 1px solid black ; }
 
 """ + '\n'.join(s)
 
