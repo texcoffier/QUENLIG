@@ -41,26 +41,9 @@ def search_command(command, comment):
         sys.stderr.write('WARNING: "%s" not found. %s\n' % (command, comment))
     f.close()
 
-search_command('ppmtogif',
-               'So no the graphical question map for the student (netpbm)')
-search_command('highlight',
-               'So no Python source highlighting for the author')
-search_command('weblint',
-               'So no HTML testing in the regression tests')
-search_command('xvcg',
-               'So some picture of the question graph are not computed')
-search_command('dot',
-               'So some picture of the question graph are not computed')
-search_command('hotshot2calltree',
-               'No graphic profiling (needs package kcachegrind-converters)')
-search_command('kcachegrind',
-               'No graphic profiling')
-
-
 def mkdir(name):
     if not os.path.exists(name):
         os.mkdir(name)
-
 
 def date_to_seconds(date):
     return time.mktime( time.strptime(date.strip(), "%H:%M %d/%m/%Y") )
@@ -190,6 +173,22 @@ class Session:
         statistics.display_no_more_valid_answers()
         sys.exit(0)
 
+
+search_command('ppmtogif',
+               'So no the graphical question map for the student (netpbm)')
+search_command('highlight',
+               'So no Python source highlighting for the author')
+search_command('weblint',
+               'So no HTML testing in the regression tests')
+search_command('xvcg',
+               'So some picture of the question graph are not computed')
+search_command('dot',
+               'So some picture of the question graph are not computed')
+search_command('hotshot2calltree',
+               'No graphic profiling (needs package kcachegrind-converters)')
+search_command('kcachegrind',
+               'No graphic profiling')
+
 # Analyse command line options
 
 name = sys.argv[0]
@@ -276,56 +275,58 @@ configuration.root = os.getcwd()
 
 configuration.version = os.path.basename(os.getcwd())
 
-if len(args) == 0:
-    sys.stderr.write("""
-You indicate no action to do about your session named '%s'
-
-Run without parameters to see the help.
-
-Or create and run session, for example :
-
-main.py unix2007 create Questions/unix 55555
-main.py unix2007 admin  guestadmin
-main.py unix2007 start
-""" % session.name )
-    sys.exit(1)
-
 import plugins
 plugins.init()
 
-while args:
-    action = args.pop()
-    if action == 'start':
-        session.start()
-    elif action == 'stop':
-        session.stop()
-    elif action == 'nocache':
-        session.cache = None
-    elif action == 'plot':
-        session.plot()
-    elif action == 'problems':
-        session.display_no_more_valid_answers()
-    elif action == 'nr-requests-served':
-        session.nr_requests = int(args.pop())
-    elif action == 'percentage-time-for-stat':
-        session.percentage_time_for_stat = int(args.pop())
-    elif action == 'begin-date':
-        session.set_begin_date(args.pop())        
-    elif action == 'end-date':
-        session.set_end_date(args.pop())        
-    elif action == 'url':
-        session.set_url(args.pop())        
-    elif action == 'create':
-        session.set_questions_directory(args.pop())
-        session.set_port(args.pop())
-    elif action == 'admin':
-        user = os.path.join(session.dir, 'Logs', args.pop())
-        mkdir(user)
-        user = os.path.join(user, 'roles')
-        utilities.write(user, "['Default','Teacher']\n")
-    elif action == 'question-stats':
-        session.question_stats()
-    else:
-        sys.stderr.write("""Unknown action : %s\n""" % action)
-        sys.exit(2)
+if __name__ == "__main__":
+    if len(args) == 0:
+        sys.stderr.write("""
+    You indicate no action to do about your session named '%s'
+
+    Run without parameters to see the help.
+
+    Or create and run session, for example :
+
+    main.py unix2007 create Questions/unix 55555
+    main.py unix2007 admin  guestadmin
+    main.py unix2007 start
+    """ % session.name )
+        sys.exit(1)
+
+
+    while args:
+        action = args.pop()
+        if action == 'start':
+            session.start()
+        elif action == 'stop':
+            session.stop()
+        elif action == 'nocache':
+            session.cache = None
+        elif action == 'plot':
+            session.plot()
+        elif action == 'problems':
+            session.display_no_more_valid_answers()
+        elif action == 'nr-requests-served':
+            session.nr_requests = int(args.pop())
+        elif action == 'percentage-time-for-stat':
+            session.percentage_time_for_stat = int(args.pop())
+        elif action == 'begin-date':
+            session.set_begin_date(args.pop())
+        elif action == 'end-date':
+            session.set_end_date(args.pop())
+        elif action == 'url':
+            session.set_url(args.pop())
+        elif action == 'create':
+            session.set_questions_directory(args.pop())
+            session.set_port(args.pop())
+        elif action == 'admin':
+            user = os.path.join(session.dir, 'Logs', args.pop())
+            mkdir(user)
+            user = os.path.join(user, 'roles')
+            utilities.write(user, "['Default','Teacher']\n")
+        elif action == 'question-stats':
+            session.question_stats()
+        else:
+            sys.stderr.write("""Unknown action : %s\n""" % action)
+            sys.exit(2)
 
