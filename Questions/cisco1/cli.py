@@ -111,13 +111,13 @@ add(name="minicom parameters",
     de configurer la vitesse de la ligne, la parité,
     le nombre de bits de données, ...""",
     tests = (
-    require('P', """C'est dans le menu <em>Comm parameters</em> de la
-    page d'aide de <tt>minicom</tt>""",
-            uppercase=True),
     reject('O',
            """Ce menu est un menu général de configuration,
            ce n'est pas le menu <tt>Comm parameters</tt>""",
            uppercase=True),
+    require('P', """C'est dans le menu <em>Comm parameters</em> de la
+    page d'aide de <tt>minicom</tt>""",
+            uppercase=True),
     
     good_if_contains( '' ),
     ),
@@ -185,10 +185,36 @@ suivez la procédure indiquée dans la page d'aide/explication du menu de gauche."
 
     )
 
+add(name="initialiser",
+    required=['allumer CISCO'],
+    before="""Ce sujet de TP suppose que votre routeur est vierge
+    de toute configuration.
+    Pour être certain de ce fait nous allons effacer sa configuration""",
+    question="""
+      Si durant la procédure on vous demande un mot de passe,
+      essayez 'cisco', 'class', 'classe', 'cisco2', '&lt;cisco&gt;'...
+    <p>
+      Voici la liste de choses à taper (ne faites pas un copier/coller
+      de l'ensemble des lignes).
+      Faites néanmoins attention aux questions
+      que le routeur vous pose.
 
+    <pre>enable
+erase startup-config
+y
+reload
+                        <em>Tapez return pour confirmer</em>
+no
+y
+</pre>
+
+     Quand la procédure est terminée, répondez OUI à cette question.
+    """,
+    tests = ( yes("Répondez OUI s'il vous plait"), ),
+    )
 
 add(name="aide commande",
-    required=['allumer CISCO'],
+    required=['initialiser'],
     before = """Quand vous tapez une commande, vous pouvez à n'importe
     quel moment taper un point d'interrogation pour obtenir&nbsp;:
     <ul>
@@ -239,6 +265,9 @@ add(name="voir",
     d'informations que l'on désire voir&nbsp;?""",
     tests = (
     reject(" ", "Le nom de la commande sans paramètres s'il vous plais."),
+    Bad(Comment(Equal('systat'),
+                """Utilisez la commande, vous verrez que cela ne permet
+                pas de faire grand chose""")),
     bad(('s','sh','sho'), "Aucune abréviation n'est autorisée."),
     good("show"),
     ),
@@ -261,7 +290,7 @@ add(name="show",
 
 add(name="copié collé",
     required=['show'],
-    before="""Faites un copié/collé des 3 commandes suivantes sur le routeur&nbsp;:
+    before="""Faites un copié/collé des 3 commandes suivantes sur le routeur (sans oublier d'exécuter la dernière commande)&nbsp;:
     <pre>show clock
 show hardware
 show history</pre>""",
@@ -342,6 +371,12 @@ add(name="mauvaise commande",
     question="""Sans éteindre le routeur, arrivez-vous à arrêter
     le processus de recherche&nbsp;?
     <p>
+    Répondez :
+    <ul>
+    <li> NON si vous n'y arrivez pas.
+    <li> comment vous avez fait si vous y arrivez.
+    </ul>
+    <p>
     <small>
     Si jamais la recherche est instantanée et que
     le <em>prompt</em> revient tout de suite alors répondez NON
@@ -349,7 +384,18 @@ add(name="mauvaise commande",
     pas la configuration par défaut.
 
     """,
-    tests = ( no("Montrez comment vous avez fait à un enseignant"), ),
+    tests = (
+        Good(Comment(UpperCase(Contain('CTRL') &
+                               ( Contain('SHFT') | Contain('SHIFT') ) &
+                               Contain('6')),
+                     """En fait vous venez d'envoyer le caractère Contrôle-^
+                     de code ASCII 0x5E""" 
+                     )
+             ),
+        Good(UpperCase(Contain('^^')
+                       | (Contain('CTRL') & Contain('^')))),
+        no("Montrez comment vous avez fait à un enseignant"),
+        ),
     )
 
 add(name="historique",
@@ -369,6 +415,11 @@ add(name="fin édition",
     que tapez-vous au clavier pour voir ce qui a défilé au dessus
     de l'écran&nbsp;?""",
     tests = (
+    Bad(Comment(Equal('history'),
+                """On ne vous demande pas de faire afficher quelque chose
+                de nouveau sur l'écran.
+                On veut voir ce qui a déjà été affiché et qui est
+                sortie par le haut...""")),
     require(('SHIFT', 'SHFT', 'MAJ'), uppercase=True, all_agree=True),
     require(('PAGE', 'PG', 'CTRL'), uppercase=True, all_agree=True),
     require(('UP', 'HAUT'), uppercase=True, all_agree=True),

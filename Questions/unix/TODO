@@ -19,6 +19,8 @@ Faire des exercices niveau console : edition ligne par exemple.
 
 Faire exercices script.
 
+Enlver les tag HTML vides
+
 Commandes :
     * dirname
     * dirname/basename

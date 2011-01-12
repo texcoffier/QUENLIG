@@ -74,7 +74,7 @@ add(name="sauve configuration",
 
 add(name="relance routeur",
     required=["sauve configuration"],
-    question="Quelle commande tapez-vous pour relancer le routeur&nbsp;?",
+    question="Quelle commande tapez-vous pour relancer le routeur&nbsp;? (Ne la lancez pas)",
     tests = (
     good("reload"),
     bad('restart', """Cela réinitialise certaines chose mais cela ne

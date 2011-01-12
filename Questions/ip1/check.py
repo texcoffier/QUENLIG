@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007-2010 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -821,6 +821,24 @@ class HostTest(Test):
         return self.test_host(student_answer, string, state, host)
 
 
+# NEW STYLE TEST : THIS ONE MUST BE USED.
+# The order is important : UpperCase(HostReplace(
+class HostReplace(TestUnary):
+    def __call__(self, student_answer, state=None, parser=no_parse):
+        if state is None:
+            return False, ""
+        if state.client_ip in Network.hosts:
+            return self.children[0](
+                student_answer, state,
+                lambda string, state, test: parser(
+                    host_substitute(string, Network.hosts[state.client_ip]),
+                    state, test))
+        else:
+            return False, """Cet ordinateur (%s) ne fait pas parti du TP
+            changez de poste ou prévenez l'enseignant si c'est un bug.""" % \
+        state.client_ip
+
+
 def host_substitute(string, host):
     items = string.split('{')
     new = items[0]
@@ -975,7 +993,6 @@ import socket
 
 if socket.gethostname() == 'lirispaj':
     postes[0][0] = "134.214.142.30"
-    postes[0][0] = "127.0.1.1"
 elif socket.gethostname() == 'pundit':
     postes[0][0] = "127.0.1.1"
 

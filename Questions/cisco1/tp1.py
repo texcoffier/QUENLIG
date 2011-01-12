@@ -54,7 +54,7 @@ add(name="intro",
     
     """,
     question="Êtes-vous prêt pour l'aventure&nbsp;? Répondez OUI s'il vous plais.",
-    tests = ( yes("Répondez OUI s'il vous plais"), ),
+    tests = ( yes("Répondez OUI s'il vous plait"), ),
     good_answer = """Vous pouvez directement taper <tt>return</tt> pour
     voir la prochaine question.
     <p>
