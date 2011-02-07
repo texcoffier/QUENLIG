@@ -247,7 +247,7 @@ add(name="arp",
 
 add(name="arp nombre",
     required=["arp"],
-    question="Combien la table ARP contient de lignes (hors titre)&nbsp;?",
+    question="Combien la table ARP du routeur contient de lignes (hors titre)&nbsp;?",
     tests = (
     require_int(),
     good("2"),

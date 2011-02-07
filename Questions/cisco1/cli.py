@@ -169,6 +169,7 @@ add(name="allumer CISCO",
         "Vous avez mal lu... vous l'avez traduit en français"),
     bad(('Routeur', 'Routeur'),
         "Vous avez traduit et en plus vous avez oublié un caractère&nbsp;!"),
+    reject('UPDOWN', "Cela ne ressemble pas à un <em>prompt</em>"),
     
     reject('rommon', """Votre routeur a perdu son système&nbsp;?
 Faites un arrêt marche et si le prompt est le même
@@ -297,6 +298,8 @@ show history</pre>""",
     question="""Qu'elle est la dernière ligne affichée par le routeur
     (à part l'invite de commande)&nbsp;?""",
     tests = (
+    reject('Configuration register',
+           "Vous avez oublié d'exécuter la dernière commande"),
     good("show history"),
     good("how history",
         """Il y a actuellement un bug avec le copié/collé.

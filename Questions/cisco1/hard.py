@@ -94,10 +94,10 @@ add(name="console eth",
 add(name="show",
     required=['modèle cisco', 'cli:show liste', 'cli:commande incomplète'],
     question="""Quelle commande tapez-vous pour voir la configuration
-    matérielle du routeur CISCO&nbsp;?
+    <b>matérielle</b> du routeur CISCO&nbsp;?
     <p>
     Attention, pour des raisons mystérieuses il est possible
-    que <tt>show h?</tt> n'affiche pas la bonne réponse...
+    que <tt>show ha?</tt> n'affiche pas la bonne réponse...
     """,
     tests=(
     expect('show'),

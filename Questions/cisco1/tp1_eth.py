@@ -105,7 +105,8 @@ add(name="routeur>local eth",
 add(name="routeur>local eth OK",
     required=["routeur>local eth"],
     question = """Répondez OUI à cette question seulement
-    si le ping local sur le port ethernet a fonctionné correctement""",
+    si le ping local sur le port ethernet a fonctionné correctement.
+    Sinon vous attendez.""",
     tests = ( yes('Tapez OUI'), ),
     )
 
@@ -113,7 +114,7 @@ add(name="eth OK",
     required=["routeur>local eth OK", "serie:affiche"],
     question="""Répondez OUI à cette question seulement si
     la ligne ethernet
-    est <tt>up, line protocol is up</tt>.
+    est : <tt>up, line protocol is up</tt>.
     <p>
     Si ce n'est pas le cas, vérifiez ou est branché le cable ethernet.
     """,
@@ -218,8 +219,8 @@ add(name="machine>routeur OK",
 add(name="machine>routeur 2",
     required=["machine>routeur OK"],
         before="""Puisque le ping sur le port ethernet du routeur fonctionne
-        nous allons faire un ping sur l'interface série 0 du routeur
-        à partir de votre ordinateur.""",
+        nous allons essayer de faire un <em>ping</em> sur l'interface
+        série 0 du routeur à partir de votre ordinateur.""",
     question="""Donnez la ligne commande que vous tapez sur votre ordinateur
     pour <em>pinguer</em> le port série 0 de votre routeur.""",
     tests = (

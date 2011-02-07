@@ -22,10 +22,11 @@
 from questions import *
 import configuration
 import questions
+import re
 
-def filter_student_answer(answer, state):
-    answer = answer.replace('   ',' ').replace('  \n','\n')
-    answer = answer.replace('  ',' ').replace(' \n','\n')
+def filter_student_answer(answer, state=None):
+    answer = re.sub(' +', ' ', answer)
+    answer = re.sub(' \n', '\n', answer)
     return answer
 
 questions.current_evaluate_answer = filter_student_answer
@@ -910,11 +911,7 @@ class HostInterfaces(HostTest):
 class HostCiscoModele(HostTest):
     uppercase = True
     def test_host(self, student_answer, string, state, host):
-        student_answer.replace(' ','')
-        for i in ('SERIES', 'SERIE', 'CISCO'):
-            student_answer = student_answer.strip(i)
-            student_answer = student_answer.strip()
-
+        student_answer = student_answer.upper().strip(' CISCOSERIE')
         if student_answer in host.C0.remote_port.host.names :
             return True
 

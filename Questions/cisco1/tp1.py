@@ -37,6 +37,10 @@ add(name="intro",
     <p>
     L'ensemble des réponses que vous allez donner seront analysées
     afin de définir votre note de TP.
+    <b>Il faut répondre correctement à environ 4/5 des questions
+    avec un nombre raisonnable d'erreurs pour avoir la moyenne</b>.
+    Les pénalités pour les mauvaises réponses sont proportionnelles
+    à la note finale.
     <p>
     En dehors des séances vous ne pourrez plus continuer ce TP,
     vous avez donc tout intérêt à vous dépêcher.
@@ -104,8 +108,11 @@ add(name="nom routeur",
     <b>Respectez la casse.</b>
     """,
     tests = (
-    good("{C0.remote_port.host.name}", parse_strings=host),
-    ),
+        good("{C0.remote_port.host.name}", parse_strings=host),
+        Bad(Comment(UpperCase(HostReplace(Equal('{C0.remote_port.host.name}'))),
+                    """Dans la question en <b>gras</b> on vous dit de
+                    respecter la casse (différence majuscule/minuscule)""")),
+        ),
     good_answer = """Vérifiez bien que le routeur posé à gauche
     de votre ordinateur porte bien ce nom.
     Si ce n'est pas le cas, trouvez le bon routeur et mettez le
@@ -149,7 +156,8 @@ add(name="arrêt marche",
     dans le dialogue de configuration initial.
     </ul>
     <p>
-    Attendez qu'il redémarre puis faites apparaître le prompt.
+    Attendez qu'il redémarre puis faites apparaître le <em>prompt</em>
+    en tapant plusieurs fois sur la touche <tt>Return</tt>.
     """,
     question="Quel est le <em>prompt</em>&nbsp;?",
     tests = (
@@ -219,6 +227,8 @@ add(name="routeur nomme machine",
     required=["tp1_eth:config pc eth", "votre poste", "tp1_route:les routes"],
     question="""Quelle commande tapez-vous dans le routeur pour associer
     le bon nom à l'adresse IP de votre ordinateur&nbsp;?
+    <p>
+    <b>Respectez la casse pour le nom de la machine.</b>
     """,
     tests=(
     require_startswith("ip ", "On utilise la commande <tt>ip</tt>"),

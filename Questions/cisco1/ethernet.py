@@ -41,9 +41,9 @@ add(name="protocole",
     question="""Quelle est l'encapsulation utilisée
     sur les liaisons ethernet&nbsp;?""",
     tests=(
-    good("ARPA", uppercase=True),
-    bad("HDLC", "Non, ça c'est l'encapsulation de l'interface série",
-        uppercase=True),
+        good("ARPA", uppercase=True),
+        bad("HDLC", "Non, ça c'est l'encapsulation de l'interface série",
+            uppercase=True),
     ),
     )
 
@@ -61,7 +61,8 @@ add(name="paquet",
     question="""Quelle est la taille maximale en octet des paquets
     passant sur la liaison ethernet&nbsp;?""",
     tests=(
-    good("1500"),
+        good("1500"),
+        good("1500 bytes"),
     ),
     )
 
@@ -96,8 +97,8 @@ add(name="configure",
     good("interface {C0.remote_port.host.E0.port.name_without_space}", parse_strings=host, uppercase=True),
     expect('interface'),
     Bad(UpperCase(HostReplace(Comment(
-            ~(Contain('{C0.remote_port.host.E0.port.name}')
-              | Contain('{C0.remote_port.host.E0.port.name_without_space}')),
+            ~(End('{C0.remote_port.host.E0.port.name}')
+              | End('{C0.remote_port.host.E0.port.name_without_space}')),
             """Vous avez déjà indiqué le nom de l'interface
             dans une des questions précédentes"""),              
         ))),

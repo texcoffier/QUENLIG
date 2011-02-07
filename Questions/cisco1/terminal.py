@@ -48,6 +48,8 @@ add(name="prompt",
     Quelle est l'invite de commande&nbsp;?""",
     tests = (
     good("Router(config)#"),
+    bad("Router (config)#",
+        "Ne recopiez pas à la main, vous faites des erreurs..."),
     expect('#'),
     expect('Router'),
     expect('(config)'),
@@ -191,11 +193,13 @@ add(name="config telnet",
     question="""Quelle commande tapez-vous pour passer en mode configuration
     de la console d'administration à distance numéro 0 (zéro)&nbsp;?""",
     tests = (
+    good(('line vty 0', 'line VTY 0')),
+    bad('line vty 0 4',
+        'On veut seulement mettre un mot de passe pour le vty 0, pas le 4'),
     require_startswith("line",
                        "Il faut utiliser la commande <tt>line</tt>"),
     require('vty', """La console d'administration à distance utilise
     un <em><b>V</b>irtual <b>T</b>elet<b>Y</b>pe</em> (TTY virtuel)"""),
-    good('line vty 0'),
     ),
     )
 

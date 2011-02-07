@@ -38,15 +38,20 @@ add(name="adresses",
     question = "Quel est le nom des adresses Ethernet&nbsp;?",
     tests = (
         Good(UpperCase(Contain('MAC'))),
+        Bad(Comment(UpperCase(Contain('IP')),
+                    "<b>ETHERNET</b> pas Internet !"))
         ),
     )
 
+# XXX Accepte CSMA ?
 add(name="protocol",
     required=["ip"],
     question = """Quel est l'acronyme du protocole bas niveau utilisé pour
     communiquer sur Ethernet&nbsp;?""",
     tests = (
         Good(UpperCase(Contain('CSMA') & Contain('CD'))),
+        Bad(Comment(Contain('802'),
+                    "Pas le nom du standard, le nom du protocole")),
         ),
     )
 
@@ -64,12 +69,15 @@ add(name="loop",
     avec la machine locale&nbsp;?""",
     tests = (
         Good(Equal('127.0.0.1')),
+        Bad(Comment(Equal('127.0.0.0'),
+                    "C'est un adresse de réseau, pas une adresse de machine")),
         ),
     )
 
 add(name="mini",
     required=["ip"],
-    question = """Quel est le <em>netmask</em> (IPV4) du plus petit réseaux
+    question = """Quel est le <em>netmask</em> (IPV4) du plus petit réseau
+    (celui qui contient le moins d'adresse)
     qui puisse servir à quelque chose&nbsp;?""",
     tests = (
         Good(Equal('255.255.255.252')),
@@ -179,9 +187,10 @@ add(name="sous",
     )
 
 add(name="ping",
-    before = "Vous avez le droit d'utiliser <tt>wireshark</tt>",
+    before = "Vous devez utiliser <tt>wireshark</tt>",
     required=["ip"],
-    question = "Quelle est en hexa la valeur du 13<sup>ème</sup> octet d'une trame <tt>ping</tt>",
+    question = """Quelle est la valeur en hexa du 13<sup>ème</sup> octet
+    que <tt>wireshark</tt> récupère sur le réseaux lors d'un <tt>ping</tt>""",
     tests = (
         Good(Equal('08') | Equal('8')),
     ),
@@ -202,7 +211,10 @@ add(name="bigone",
     question = """Quelle est l'adresse du réseau à usage privé dont
     le <em>netmask</em> est 255.0.0.0&nbsp;?""",
     tests = (
-        Good(Equal('10.0.0.0')),
+        Good(Equal('10.0.0.0') | Equal('10.0.0.0/8')),
+        Bad(Comment(Start('127'),
+                    """Ce réseau est le <em>loopback</em>, il ne permet
+                    pas de communiquer entre deux machines""")),
     ),
     )
 
@@ -212,6 +224,9 @@ add(name="smallone",
     dont le <em>netmask</em> est 255.255.255.0&nbsp;?""",
     tests = (
         Good(Equal('192.168.0.0')),
+        Bad(Comment(Start('172'),
+                    """Le <em>netmask</em> de <tt>172.16.0.0</tt> est
+                    <tt>255.240.0.0</tt>""")),
     ),
     )
 
@@ -228,7 +243,7 @@ add(name="broadcast",
     required=["adresses"],
     question="""Quelle est l'adresse MAC de broadcast&nbsp;?""",
     tests = (
-        Good(UpperCase(Replace(((':',''),('-',''),(' ','')),
+        Good(UpperCase(Replace(((':',''),('-',''),(' ',''),('.', '')),
                                Equal('FFFFFFFFFFFF')))),
     ),
     )
@@ -238,13 +253,17 @@ add(name="switch",
     question="Un <em>switch</em> filtre les paquets en fonction de leur...",
     tests = (
         Good(UpperCase(Contain('mac'))),
+        Bad(Comment(UpperCase(Contain('IP')),
+                    "Ce sont les routeurs qui regardent les adresses IP.")),
+        Bad(Comment(UpperCase(Contain('DESTI')),
+                    "Qu'est-ce qui défini la destination ?")),
     ),
     )
 
 add(name="logique",
     required=["ip"],
     before="""Sur un même <em>switch</em> (sans VLAN) il y a des
-    machines configurés comme suit&nbsp;:
+    machines configurées comme suit&nbsp;:
     <ul>
     <li> A: 192.168.0.1/24
     <li> B: 192.168.0.2/16 
