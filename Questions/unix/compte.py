@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2006 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -97,5 +97,71 @@ add(name="echo",
                      la commande."""),
     ),
     )
+
+add(name="compte C",
+    required = ["intro", "chercher:exécuter"],
+    question = """Donnez la commande qui affiche le nombre de
+    lignes/mots/caractères contenu dans chacun des fichiers dont
+    le nom se termine par <tt>.c</tt> à partir du répertoire courant.
+    <p>
+    Elle n'a pas besoin de faire la somme pour tous les fichiers.
+    <p>
+    Elle n'a pas besoin de vérifier que c'est bien un fichier.
+    """,
+    tests = (
+        Reject('wc -', "Pas besoin d'option pour <tt>wc</tt>"),
+        Expect('find'),
+        Expect('-name'),
+        Expect('*.c'),
+        Bad(Comment(~(Contain('"*.c"') | Contain("'*.c'") | Contain("\\*.c")),
+                    "Auriez-vous oublié de protéger l'étoile ?")),
+        Good(Shell(Equal('wc $(find . -name "*.c")'))),
+        Good(Shell(Equal('find . -name "*.c" -exec wc {} \\;'))),
+        Good(Shell(Equal('find . -name "*.c" | xargs wc'))),
+        Good(Shell(Equal('find . -name "*.c" -print0 | xargs -0 wc'))),
+        ),
+    good_answer = """La version la plus efficace et fiable est la suivante :
+    <pre>find . -name "*.c" -print0  |  xargs -0 wc</pre>
+    La plus courte (mais qui ne marche pas en cas d'espace est :
+    <pre>wc $( find . -name "*.c" )</pre>
+    """,
+    )
+
+add(name="compte tout C",
+    required = ["compte C", "concatener:concat C", "ligne"],
+    question="""Quelle est la ligne de commande la
+    <tt>plus fiable et efficace</tt>
+    permettant d'afficher le nombre de ligne de tous le fichiers dont
+    le nom se termine par <tt>.c</tt> à partir du répertoire courant.
+    """,
+    tests = (
+        Reject('total', """Ce n'est pas une bonne idée de filtrer le mot
+        <tt>total</tt> car il est lié à la langue de l'utilisateur"""),
+        Good(Shell(Equal('find . -name "*.c" -print0|xargs -0 cat|wc -l'))),
+        ),
+    )
+
+
+
+##add(name="Compte tout C",
+##    required = ["Compte C", "ligne"],
+##    question = """Donnez la commande qui affiche le nombre <b>TOTAL</b> de
+##    lignes contenu dans chacun des fichiers se terminant
+##    par <tt>.c</tt> à partir du répertoire courant.""",
+##    tests = (
+##        Reject('wc -', "Pas besoin d'option pour <tt>wc</tt>"),
+##        Expect('find'),
+##        Expect('-name'),
+##        Expect('*.c'),
+##        Bad(Comment(Shell(~ Contain('"*.c"')),
+##                    "Auriez-vous oublié de protéger l'étoile")),
+##        Good(Shell(Equal('wc $(find . -name "*.c"'))),
+##        Good(Shell(Equal('find . -name "*.c" -exec wc {} \\;'))),
+##        Good(Shell(Equal('find . -name "*.c" | xargs wc'))),
+##        Good(Shell(Equal('find . -name "*.c" -print0 | xargs -0 wc'))),
+##        ),
+##    )
+
+
 
 

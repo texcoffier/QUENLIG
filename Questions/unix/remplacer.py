@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2006 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -212,6 +212,27 @@ add(name="enlever dernier",
     reject('"', "Le guillemet n'annule pas la signification du dollar"),
     shell_display,
     ),
+    )
+
+add(name="TAG XML vides",
+    required=["expreg:ligne de A", "enlever dernier"],
+    before="""Les fichiers XML contiennent des marqueurs (balises) de la forme :
+    <pre>Du &lt;NOM_DU_TAG&gt;texte &lt;b&gt;pouvant&lt;/b&gt; contenir&lt;/NOM_DU_TAG&gt; d'autres &lt;x&gt;&lt;/x&gt; marqueurs.</pre>
+    Dans le texte précédent il y a 3 marqueurs.
+    Le marqueur <tt>x</tt> ne contient rien.""",
+    question="""Donnez la commande réécrivant sur sa sortie standard
+    le fichier XML lu sur son entrée standard en éliminant
+    les marqueurs ne contenant rien.""",
+    tests = (
+        Expect('sed'),
+        Good(Replace(dumb_replace, Shell(
+            Equal("sed -r 's/<([^>]*)></\\1>//g'")))),
+        Bad(Comment(Replace(dumb_replace, Shell(
+            Equal("sed -r 's/<(.*)></\\1>//g'"))),
+                    "Le <tt>.*</tt> va <em>avaler</em> le symbole &lt;"),
+            ),
+        shell_display,
+        ),
     )
 
 add(name="ajouter fin",
@@ -571,8 +592,34 @@ add(name="remplacer hiérarchie",
     ),
     )
 
+add(name="traduit PATH",
+    required=["intro", "pipeline:intro", "variable:intro",
+              "sh:affiche paramètres spéciaux" ],
+    question="""Quelle est la commande affichant sur la sortie standard
+    le contenu de la variable <tt>PATH</tt> en remplaçant chacun
+    de deux points '<tt>:</tt>' par un espace.
+    <p>
+    ATTENTION : pour cette question on n'acceptera pas que des espaces
+    multiples disparaissent de la variable <tt>PATH</tt>.
+    """,
+    tests = (
+        Expect('PATH'),
+        Expect('$PATH', "On accède au contenu d'une variable avec le..."),
+        Expect('"$PATH"',
+               "Il faut protéger les espaces existants dans la variable"),
+        Expect('sed'),
+        Expect("/ /", "Vous n'indiquez pas que vous remplacez par un espace"),
+        Expect("/g",
+               """Indiquez que vous voulez remplacer toutes les occurrences
+               et pas seulement la première de la ligne"""),
+        Good(Replace(dumb_replace,Shell(Equal(
+            'echo "$PATH" | sed "s/:/ /g"')))),
+        shell_display,
+        ),
+    )
+
 add(name="cherche PATH",
-    required=["intro", "variable:intro", "sh:boucle", "sh:remplacement",
+    required=["intro", "traduit PATH", "sh:boucle", "sh:remplacement",
               "lister:affichage long"],
     before="""Quand on lance la commande <tt>sed</tt>,
     le shell recherche la commande dans tous les répertoires
@@ -595,10 +642,6 @@ add(name="cherche PATH",
     </ul>
     Vous utiliserez <tt>I</tt> comme indice de boucle.
     """,
-    indices=("""On utilise <tt>sed</tt> pour remplacer les ':' par des ' '""",
-    """On utilise <tt>echo</tt> pour remplir
-    l'entrée standard de <tt>sed</tt>""",
-    ),
     tests=(
     require("I", "Vous n'avez pas utilisé la variable <tt>I</tt>"),
     require("PATH", "Vous n'avez pas utilisé la variable <tt>PATH</tt>"),
@@ -860,7 +903,133 @@ add(name="basename",
     correctement avec tous les interpréteurs shells.
     Il y a en effet une imbrication de guillemets dans cette commande.""",
     )
-    
+
+add(name="enlève sans point",
+    required=['intro', 'expreg:un spécial'],
+    question="""Quelle ligne de commande filtre l'entrée standard en remplaçant
+    sur chacune des lignes le dernier '.' et ce qui est à sa gauche par rien.
+    S'il n'y a pas de point rien n'est fait.
+    <p>
+    Par exemple :
+    <table><tr><th>Entrée<th>Sortie</tr>
+    <tr><td><pre>toto
+toto.c
+truc
+truc.tar
+truc.tar.gz</pre>
+<td><pre>toto
+c
+truc
+tar
+gz</pre></tr></table>""",
+    tests = (
+        Expect('sed'),
+        Expect('*', """Le remplacement ce fait avec des suites de plusieurs
+        caractères. Votre réponse ne contient rien dans ce sens..."""),
+        Reject('/g', "Une seule substitution est nécessaire"),
+        
+        Good(Replace(dumb_replace,Shell(
+            Equal("sed 's/.*\\.//'") | Equal("sed 's/.*[.]//'") ))),
+        shell_display,
+        ),
+    )
+
+add(name="enlève point gauche",
+    required=['intro','expreg:négation', 'expreg:ligne de A'],
+    question="""Quelle ligne de commande filtre l'entrée standard en remplaçant
+    les lignes ne contenant pas le caractère '.' par une ligne vide.
+    <p>
+    Par exemple :
+    <table><tr><th>Entrée<th>Sortie</tr>
+    <tr><td><pre>toto
+toto.c
+truc
+truc.tar
+truc.tar.gz</pre>
+<td><pre>&nbsp;
+toto.c
+
+truc.tar
+truc.tar.gz</pre></tr></table>""",
+    tests = (
+        Expect('sed'),
+        Bad(Comment(Replace(dumb_replace + (('/g','/'),),Shell(
+            Equal("sed 's/[^.]//'") | Equal("sed 's/[^.]*//'")
+            )),
+                    """Vous enlevez les caractères qui ne sont pas
+                    des points dans la ligne !""")),
+        Expect('^',
+               """Vous n'avez pas indiqué que l'expression commençait en début
+               de ligne"""),
+        Expect('$',
+               """Vous n'avez pas indiqué que l'expression finissait en fin
+               de ligne"""),
+        Expect('*', """Le remplacement ce fait avec des suites de plusieurs
+        caractères. Votre réponse ne contient rien dans ce sens..."""),
+        
+        Bad(Comment(Replace(dumb_replace,Shell(Equal("sed 's/^[^.]*$//g'"))),
+                    "Une seule substitution est nécessaire")),
+        Good(Replace(dumb_replace,Shell(Equal("sed 's/^[^.]*$//'")))),
+        shell_display,
+        ),
+    )
+
+add(name="extensions",
+    required=["enlève sans point", "enlève point gauche", "séquencielle"],
+    question="""Combiner CORRECTEMENT les questions auquelles vous avez
+    déjà répondu pour obtenir le résultat suivant :
+<table><tr><th>Entrée<th>Sortie</tr>
+    <tr><td><pre>toto
+toto.c
+truc
+truc.tar
+truc.tar.gz</pre>
+<td><pre>&nbsp;
+c
+
+tar
+gz</pre></tr></table>""",
+    tests = (
+        Good(Shell(Equal("sed -e 's/^[^.]*$//' -e 's/.*\\.//'"))),
+        shell_display,
+        ),
+    )
+
+add(name="liste extensions",
+    required=["extensions", "trier:unique"],
+    question="""Donnez la ligne de commande listant les extensions de fichiers
+    utilisées dans le répertoire courant.
+    Ne répétez pas les mêmes extensions plusieurs fois.
+    <p>
+    Ce n'est pas grave si une ligne vide est affichée.""",
+    tests = (
+        Good(Shell(
+            Equal("ls | sed -e 's/^[^.]*$//' -e 's/.*\\.//' | sort -u")
+            | Equal("ls | sed -e 's/^[^.]*$//' -e 's/.*[.]//' | sort -u")
+            )),
+        ),
+    default_answer = "ls | ",
+    )
+
+from awk import awk_compte
+
+add(name="compter extensions",
+    required=["extensions", "awk:compte"],
+    question="""Donnez la commande qui pour chaque extension de fichier
+    trouvée dans le répertoire courant,
+    indique pour combien de fichiers elle s'applique.
+    <p>
+    Recopiez exactement les différents morceaux de commande sinon
+    la réponse ne sera pas acceptée.
+    """,
+    default_answer = "ls | ",
+    tests = (
+        Good(Shell(
+            Equal("ls | sed -e 's/^[^.]*$//' -e 's/.*\\.//' | %s" % awk_compte)
+            | Equal("ls | sed -e 's/^[^.]*$//' -e 's/.*[.]//' | %s"%awk_compte)
+            )),
+        ),
+    )
 
 
 

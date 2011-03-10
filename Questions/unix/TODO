@@ -13,13 +13,11 @@ Faire plus d'exercices avec les guillemets autour des variables.
 
 Faire des exercices sur /etc/passwd ? Ou les fichiers tabulés en général
 
-Faire des exercices sur les suffixes.
-
 Faire des exercices niveau console : edition ligne par exemple.
 
 Faire exercices script.
 
-Enlver les tag HTML vides
+Nombre de , dans une ligne
 
 Commandes :
     * dirname
@@ -27,5 +25,4 @@ Commandes :
     * xargs
     * awk
     * tr
-    * tee
     * printf

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2006 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -71,31 +70,30 @@ def real_parse(answer, replacement=(), dumb_replace=()):
         c = canonise_option(c, short_option, long_option, take_option)
     c = c.split('<command>')
     for short_option, long_option, take_option, command in (
-        ("-l", "--lines"             , 0, "wc"  ),
-        ("-n", "--lines"             , 1, "tail"),
-        ("-n", "--lines"             , 1, "head"),
-        ("-r", "--recursive"         , 0, "cp"  ),
-        ("-t", "--sort=time"         , 0, "ls"  ),
-        ("-S", "--sort=size"         , 0, "ls"  ),
-        ("-e", "-A"                  , 0, "ps"  ),
-        ("-l", "--files-with-matches", 0, "grep"),
-        ("-n", "--numeric-sort"      , 0, "sort"),
+        ("-l", "--lines"             , 0, "wc"   ),
+        ("-n", "--lines"             , 1, "tail" ),
+        ("-n", "--lines"             , 1, "head" ),
+        ("-r", "--recursive"         , 0, "cp"   ),
+        ("-t", "--sort=time"         , 0, "ls"   ),
+        ("-S", "--sort=size"         , 0, "ls"   ),
+        ("-e", "-A"                  , 0, "ps"   ),
+        ("-l", "--files-with-matches", 0, "grep" ),
+        ("-n", "--numeric-sort"      , 0, "sort" ),
         ("-t", "--field-separator"   , 1, "sort" ),
-        ("-k", "--apropos"           , 0, "man" ),
-        ("-k", "--key"               , 1, "sort"),
-#        ("-e", "--regexp"            , 1, "grep" ),
+        ("-k", "--apropos"           , 0, "man"  ),
+        ("-k", "--key"               , 1, "sort" ),
         ("-d", "--delimiter"         , 1, "cut"  ),
-        ("-d", "--uncompress"        , 0, "gzip"  ),
-        ("-d", "--decompress"        , 0, "gzip"  ),
-        ("-c", "--bytes"             , 0, "wc"  ),
+        ("-d", "--uncompress"        , 0, "gzip" ),
+        ("-d", "--decompress"        , 0, "gzip" ),
+        ("-c", "--bytes"             , 0, "wc"   ),
         ("-f", "--fields"            , 1, "cut"  ),
-        ("-f", "--force"             , 0, "rm"  ),
-        ("-h", "--no-filename"       , 0, "grep"  ),
-        ("-i", "--ignore-case"       , 0, "grep"  ),
-        ("-u", "--unique"            , 0, "sort"  ),
-        ("-R", "--recursive"         , 0, "chmod"  ),
-        
-        ("-m", "--chars"             , 0, "wc"  ),
+        ("-f", "--force"             , 0, "rm"   ),
+        ("-h", "--no-filename"       , 0, "grep" ),
+        ("-i", "--ignore-case"       , 0, "grep" ),
+        ("-u", "--unique"            , 0, "sort" ),
+        ("-R", "--recursive"         , 0, "chmod"),
+        ("-r", "--regexp-extended"   , 0, "sed"  ),
+        ("-m", "--chars"             , 0, "wc"   ),
         ):
         for i,cc in enumerate(c):
             if command==None \

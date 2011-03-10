@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -908,7 +908,8 @@ class Comment(TestUnary):
             a = (args[0], )
             comment = args[1]
         else:
-            raise ValueError("Comment can have only 2 or 1 arguments")
+            raise ValueError("%s can have only 2 or 1 arguments" %
+                             self.__class__.__name__)
         TestExpression.__init__(self, *a)
         self.comment = comment
 
@@ -928,6 +929,34 @@ class Comment(TestUnary):
         if bool == True:
             comment += self.comment
         return bool, comment
+
+class Expect(TestString):
+    def __init__(self, *args):
+        if len(args) == 1:
+            self.comment = None
+        else:
+            self.comment = args[1]
+        TestString.__init__(self, args[0])
+
+    def __call__(self, student_answer, state=None, parser=no_parse):
+        if parser(self.string, state, self) in student_answer:
+            return None, ''
+        else:
+            if self.comment:
+                return False, self.comment
+            else:
+                return False, "Je devrais trouver '<tt>%s</tt>' dans la réponse" % self.string
+
+class Reject(Expect):
+    def __call__(self, student_answer, state=None, parser=no_parse):
+        if parser(self.string, state, self) not in student_answer:
+            return None, ''
+        else:
+            if self.comment:
+                return False, self.comment
+            else:
+                return False, "Je devrais pas trouver '<tt>%s</tt>' dans la réponse" % self.string
+    
 
 
 # Set a 'replace' attribute on all the children

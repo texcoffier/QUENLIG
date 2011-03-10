@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2006 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -72,6 +72,39 @@ add(name="concatener",
     indices=(cat_once_indices,
              ),
     )
+
+
+add(name="concat C",
+    required = ["concatener", "chercher:exécuter"],
+    question="""Donner la commande affichant sur la sortie standard
+    le contenu de chacun des fichiers dont le nom se termine
+    par <tt>.c</tt> à partir du répertoire courant.
+    <p>
+    Elle n'a pas besoin de vérifier que c'est bien un fichier.
+    """,
+    tests = (
+        Expect('cat'),
+        Expect('find'),
+        Expect('-name'),
+        Expect('*.c'),
+        Bad(Comment(~(Contain('"*.c"') | Contain("'*.c'") | Contain("\\*.c")),
+                    "Auriez-vous oublié de protéger l'étoile ?")),
+        Good(Comment(Shell(Equal('cat $(find . -name "*.c")')),
+                     """Votre commande ne fonctionne pas si des noms de
+                     fichiers contiennent des espaces.""")),
+        Good(Comment(Shell(Equal('find . -name "*.c" | xargs cat')),
+                     """Votre commande ne fonctionne pas si des noms de
+                     fichiers contiennent des retours à la ligne.
+                     Il faut utiliser les options <tt>-print0</tt>
+                     de <tt>find</tt> et <tt>-0</tt> de <tt>xargs</tt>""")),
+        Good(Comment(Shell(Equal('find . -name "*.c" -exec cat {} \\;')),
+                     """Votre commande est lente car elle relance
+                     trop souvent la commande <tt>cat</tt>.
+                     Il faut utilisez <tt>xargs</tt>""")),
+        Good(Shell(Equal('find . -name "*.c" -print0 | xargs -0 cat'))),
+        ),
+    )
+
 
 add(name="concatener dans",
     required=["concatener", "sh:redirection sortie"],

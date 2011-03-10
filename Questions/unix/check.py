@@ -1,5 +1,5 @@
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 import utilities
 from shellParser import parse, parse_only_not_commented, parse_error
-from questions import Test
+from questions import Test, TestUnary, no_parse
 
 
 class TestShell(Test):
@@ -49,6 +49,13 @@ class TestShellParsed(TestShell):
         b['parse_strings'] = shellparse
         TestShell.__init__(self, *a, **b)
 
+
+class Shell(TestUnary):
+    def __call__(self, student_answer, state=None, parser=no_parse):
+        parsed, comment = parse(student_answer)
+        return self.children[0](
+            parsed, state,
+            lambda string, state, test: parser(parse_only_not_commented(string), state, test))[0], ''
 
 class shell_good(TestShellParsed):
     html_class = "test_shell test_good test_is"
