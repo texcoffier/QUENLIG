@@ -8,6 +8,6 @@ plan_dot.png plan_neato.png plan_circo.png:
 
 
 clean:
-	-rm plan*
+	-rm -f plan*
 
 include ../../../Makefile.common

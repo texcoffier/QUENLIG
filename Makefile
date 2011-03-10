@@ -1,3 +1,5 @@
+V=2.0
+
 help:
 	@echo "Goals:"
 	@echo " - plots          : Generate all questions graphs"
@@ -70,43 +72,37 @@ histogram_animation:xxx.histogram
 
 
 clean:
-	find . -name 'xxx*' -o -name '*~' -o -name '*.pyc' -o -name '#*#' \
+	@echo "Cleaning"
+	@find . -name 'xxx*' -o -name '*~' -o -name '*.pyc' -o -name '#*#' \
 		-o -name 'nohup.out' -o -name 'output.ps' -o -name '*.bak' | xargs rm -f
-	for I in Questions/*/HTML ; do ( cd $$I ; $(MAKE) clean ); done
-	-rm -r Students/profiling Students/regtest
+	@-rm -rf Students/profiling Students/regtest
+	@for I in Questions/*/HTML ; do ( cd $$I ; if [ -f Makefile ] ; then if grep --silent 'clean:' Makefile ; then echo "Clean $$I" ; $(MAKE) -s clean ; fi ; fi ); done
 
 figures:
 	for I in HTML Questions/*/HTML ; do ( cd $$I ; $(MAKE) ) ; done
 
 stat:
-	@echo 'Python lines Quenlig : ' `cat *.py | wc -l`
+	@echo 'Python lines Quenlig : ' `cat *.py Plugins/*/*.py | wc -l`
 	@echo 'Python lines Unix    : ' `cat Questions/unix/*.py | wc -l`
 	@echo 'Python lines Python  : ' `cat Questions/python/*.py | wc -l`
 	@echo 'Python lines Cisco   : ' `cat Questions/cisco*/*.py | wc -l`
-	@echo 'Python lines regtest : ' `cat Scripts/regtest.py | wc -l`
 	@echo 'CSS lines            : ' `cat HTML/*.css | wc -l`
 	@echo 'Doc HTML             : ' `wc -l <Welcome.html`
 
 tags:
 	etags $$(find . -name '*.py')
 
-
-MEDIA=/usbmem
-tar:clean
-	A=$$(basename $$(pwd -P)) ; \
-	echo '# See "Scripts//nom_prenom" for help' >real_names.py ; \
-	echo 'real_names = {"loginName": ("Surname","Firstname", "admin@mail"),}' >>real_names.py ; \
-	cd -P .. ; \
-	tar --exclude='Students' \
-	    --exclude='*.pyc' \
-	    --exclude='PyChart*' \
-	    --exclude='Questions/*/*.log' \
-            -cvf - $$A | \
-	gzip >~/public_html/QUENLIG/$$A.tar.gz ; \
-	cd ~/public_html/QUENLIG ; ls -lsh ; \
-	mkdir /tmp/XXX-$$A ; cd /tmp/XXX-$$A ; \
-	zcat ~/public_html/QUENLIG/$$A.tar.gz | tar -xvf - ; \
-	cd $$A ; \
-	make regtest ; \
-	cd ; \
-	rm -r /tmp/XXX-$$A
+tar:clean tags
+	rm /tmp/QUENLIG-$(V)
+	ln -s $$(pwd) /tmp/QUENLIG-$(V)
+	cd /tmp ; tar --exclude='Students' \
+		    	--exclude='*.pyc' \
+		    	--exclude='PyChart*' \
+		    	--exclude='.git' \
+		    	--exclude='HTML/*.ps' \
+		    	--exclude='HTML/sujet_14.svg' \
+		    	--exclude='HTML/sujet_16.svg' \
+	    		--exclude='Questions/*/*.log' \
+		            -cvf - QUENLIG-$(V)/. | \
+		gzip >~/public_html/QUENLIG/QUENLIG-$(V).tar.gz
+	ls -ls ~/public_html/QUENLIG

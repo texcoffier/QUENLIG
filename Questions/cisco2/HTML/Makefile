@@ -6,7 +6,7 @@ plan.png:plan.svg
 
 
 clean:
-	-rm xxx* *.epsf plan.*
+	-rm -f xxx* *.epsf plan.*
 
 
 include ../../../Makefile.common

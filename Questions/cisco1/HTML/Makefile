@@ -24,7 +24,7 @@ plan4.png:plan4.svg
 
 
 clean:
-	-rm xxx* *.epsf *.eps plan*.dot plan*.png modes.png modes_small.png
+	-rm -f xxx* *.epsf *.eps plan*.dot plan*.png modes.png modes_small.png
 
 
 include ../../../Makefile.common
