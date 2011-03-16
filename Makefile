@@ -93,16 +93,12 @@ tags:
 	etags $$(find . -name '*.py')
 
 tar:clean tags
-	rm -f /tmp/QUENLIG-$(V)
-	ln -s $$(pwd) /tmp/QUENLIG-$(V)
-	cd /tmp ; tar --exclude='Students' \
-		    	--exclude='*.pyc' \
-		    	--exclude='PyChart*' \
-		    	--exclude='.git' \
-		    	--exclude='HTML/*.ps' \
-		    	--exclude='HTML/sujet_14.svg' \
-		    	--exclude='HTML/sujet_16.svg' \
-	    		--exclude='Questions/*/*.log' \
-		            -cvf - QUENLIG-$(V)/. | \
+	ln -s . QUENLIG-$(V)
+	git ls-files | \
+		sed 's/^/QUENLIG-$(V)\//' | \
+		grep -v 'HTML/sujet' \
+		>xxx.to_be_tarred
+	tar -T xxx.to_be_tarred -cvf - | \
 		gzip >~/public_html/QUENLIG/QUENLIG-$(V).tar.gz
+	rm QUENLIG-$(V) xxx.to_be_tarred
 	ls -ls ~/public_html/QUENLIG
