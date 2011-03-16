@@ -42,7 +42,7 @@ add(name="intro",
     )
 
 add(name="simple",
-    question="""Donnez la commande permettant de copier le fichier
+    question="""Donnez la ligne de commande permettant de copier le fichier
     texte <tt>A</tt> dans le fichier texte <tt>B</tt>""",
     tests=(
     shell_good("cp A B"),

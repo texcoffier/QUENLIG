@@ -41,7 +41,7 @@ add(name="intro",
     Si c'est le cas, vous avez le droit de déplacer des fichiers
     sur lesquels vous n'avez aucun droit.
     """,
-    question="""Quelle est la commande permettant de renommer
+    question="""Quelle est la ligne de commande permettant de renommer
     le fichier <tt>a</tt> en <tt>b</tt> dans le répertoire courant&nbsp;?""",
     indices=("La commande pour déplacer est <tt>mv</tt>",),
     tests=(

@@ -119,6 +119,7 @@ add(name="compte C",
         Good(Shell(Equal('find . -name "*.c" -exec wc {} \\;'))),
         Good(Shell(Equal('find . -name "*.c" | xargs wc'))),
         Good(Shell(Equal('find . -name "*.c" -print0 | xargs -0 wc'))),
+        shell_display,
         ),
     good_answer = """La version la plus efficace et fiable est la suivante :
     <pre>find . -name "*.c" -print0  |  xargs -0 wc</pre>
@@ -133,11 +134,20 @@ add(name="compte tout C",
     <tt>plus fiable et efficace</tt>
     permettant d'afficher le nombre de ligne de tous le fichiers dont
     le nom se termine par <tt>.c</tt> à partir du répertoire courant.
+    <p>
+    Quand votre réponse s'exécute il faut que la commande <tt>wc</tt>
+    ne soit exécutée qu'une seule fois.
+    Regardez bien les questions qui peuvent vous servir.
     """,
     tests = (
         Reject('total', """Ce n'est pas une bonne idée de filtrer le mot
         <tt>total</tt> car il est lié à la langue de l'utilisateur"""),
         Good(Shell(Equal('find . -name "*.c" -print0|xargs -0 cat|wc -l'))),
+        Bad(Comment(
+            Shell(Equal('find . -name "*.c" -exec cat {} \\; | wc -l')),
+            """La commande <tt>cat</tt> est lancée très souvent.
+            Ce n'est donc pas efficace""")),
+        shell_display,
         ),
     )
 

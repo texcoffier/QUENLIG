@@ -168,7 +168,7 @@ add(name="copie distante",
             "On utilise <tt>ssh</tt> pour exécuter une commande à distance."),
     require('.', """Il faut donner au <tt>tar</tt> qui crée l'archive
     le nom du répertoire à sauvegarder"""),
-    require('tar -cf . -',
+    require('tar -cf - .',
             """Je ne vois pas le <tt>tar</tt> qui crée l'archive,
             ou bien il est faux.""",
             replace=dumb_replace),

@@ -1,4 +1,6 @@
 
+PRE SPAN.boxed { border: 1px solid black ;background: white ; }
+
 SELECTOR, SEQUENCE, PIPELINE, COMMAND, COMMAND>ARGUMENT, SUBSHELL, CASE, IF, FOR, WHILE{
   margin-left:2em;
   display:block;

@@ -26,3 +26,18 @@ Commandes :
     * awk
     * tr
     * printf
+
+
+make figures
+nohup ./main.py L2unix2010s2 \
+      create Questions/unix 9999 \
+      admin thierry.excoffier \
+      admin jacques.bonneville \
+      begin-date '14:15 15/3/2011' \
+      end-date   '17:30 15/3/2011' \
+      url 'http://demo710.univ-lyon1.fr/UNIX' \
+      start &
+
+
+
+
