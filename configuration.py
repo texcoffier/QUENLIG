@@ -5,8 +5,8 @@ CAS = 'https://cas.univ-lyon1.fr/cas'
 # then we do not count the time as thinking time.
 timeout_on_question = 1800 # In seconds
 
-# Once per 1 hour, a new ticket is asked to CAS
-timeout = 3600 # in secondes
+# Once per 10 hour, a new ticket is asked to CAS
+timeout = 36000 # in secondes
 
 # Statistics take some time to compute.
 # We don't want to compute them every time, so they are cached some time.
