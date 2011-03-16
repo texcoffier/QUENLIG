@@ -22,27 +22,6 @@ If the user do not have the access right to the plugin, it is not executed.
 A question directory can have its own 'Plugins' directory in order
 to have a specific display for the questionnary. NOT YET IMPLEMENTED
 
-TODO Absolute :
-	'deconnexion' ==> RECONNEXION marche pas
-	'session_start' pas affiché quand on fait 'Visibilité'
-	Pouvoir noter les mauvaises réponse automatiquement ou manuellement.
-	Le recharge question, n'est pas immédiat sur l'affichage,
-	enlever evaluate_answer et remplacer par plugin ? (pour cours Python)
-	finir answered_other
-	Probleme redirection UE constant ?
-	FINIR acls
-		ACL : hideable
-		Ajouter/Enlever une ACL	à quelqu'un.
-		Ajouter/Enlever un role	à quelqu'un.
-	Faire disparaitre 'configuration' au profit de 'session' ?
-	plugin : casauth
-	plugin : language
-
-TODO maybe :
-	Extract 'auto focus' from 'questions.py' ?
-	Split 'tips' from 'page.py' ?
-
-
 
 
 

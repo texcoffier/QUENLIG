@@ -1,4 +1,4 @@
-V=2.0
+V=2.1
 
 help:
 	@echo "Goals:"
@@ -93,7 +93,7 @@ tags:
 	etags $$(find . -name '*.py')
 
 tar:clean tags
-	rm /tmp/QUENLIG-$(V)
+	rm -f /tmp/QUENLIG-$(V)
 	ln -s $$(pwd) /tmp/QUENLIG-$(V)
 	cd /tmp ; tar --exclude='Students' \
 		    	--exclude='*.pyc' \
