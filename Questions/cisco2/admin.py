@@ -76,10 +76,13 @@ add(name="relance routeur",
     required=["sauve configuration"],
     question="Quelle commande tapez-vous pour relancer le routeur&nbsp;? (Ne la lancez pas)",
     tests = (
-    good("reload"),
-    bad('restart', """Cela réinitialise certaines chose mais cela ne
-    redémarre pas le routeur"""),
-    ),
+        good("reload"),
+        bad('restart', """Cela réinitialise certaines chose mais cela ne
+        redémarre pas le routeur"""),
+        bad('reboot',
+            """Montrez à l'enseignant l'endroit
+            où vous avez trouvé cette commande"""),
+        ),
     )
 
 add(name="AVANT DE PARTIR",
@@ -128,11 +131,12 @@ add(name="config telnet",
     pour passer en mode configuration
     de la console d'administration à distance numéro 0 (zéro)&nbsp;?""",
     tests = (
+    good('line vty 0'),
+    good('line VTY 0'),
     require_startswith("line",
                        "Il faut utiliser la commande <tt>line</tt>"),
     require('vty', """La console d'administration à distance utilise
     un <em><b>V</b>irtual <b>T</b>elet<b>Y</b>pe</em> (TTY virtuel)"""),
-    good('line vty 0'),
     ),
     )
 
@@ -144,10 +148,11 @@ add(name="password telnet",
     quelle commande tapez-vous pour mettre
     le mot de passe <tt>cisco</tt>&nbsp;?""",
     tests = (
-    good('password cisco'),
-    good('password 0 cisco'),
-    good('password 7 cisco'),
-    ),
+        good('password cisco'),
+        good('password 0 cisco'),
+        good('password 7 cisco'),
+        Expect('cisco', "Je ne vois pas le mot de passe..."),
+        ),
     good_answer="""On ne peut pas se connecter simultanément avec le même
     mot de passe.<p>
     On ne peut pas se connecter s'il n'y a pas de mot de passe.""",
@@ -161,10 +166,14 @@ add(name="config console",
     C'est celle sur laquelle vous êtes en train de taper les commandes.
     """,
     tests = (
-    require_startswith("line",
-                       "Il faut utiliser la commande <tt>line</tt>"),
-    good('line console 0'),
-    ),
+        require_startswith("line",
+                           "Il faut utiliser la commande <tt>line</tt>"),
+        Expect('console'),
+        bad('line console',
+            """Il peut y avoir plusieurs consoles branchée sur le même
+            routeur. Vous devez indiquer laquelle configurer"""),
+        good('line console 0'),
+        ),
     )
 
 add(name="password console",

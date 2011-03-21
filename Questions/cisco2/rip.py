@@ -56,7 +56,7 @@ network {C0.remote_port.host.E0.network}""", parse_strings=host,
 
 add(name="table de routage",
     required=["RIP"],
-    question="""Quelle commande tapez-vous pour afficher
+    question="""Quelle commande tapez-vous sur le routeur pour afficher
     la table de routage&nbsp;?""",
     tests = (
     require("show", "On utilise la commande <tt>show</tt> pour afficher..."),

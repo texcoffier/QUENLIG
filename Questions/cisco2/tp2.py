@@ -108,8 +108,8 @@ add(name="votre poste",
     vous allez tous configurer.""",
     question="Quel est le nom de votre poste sur le plan&nbsp;?",
     tests=(
-    answer_length_is(2, "La réponse est UNE lettre + UN chiffre"),
-    good("{name}", parse_strings=host, uppercase=True),
+    answer_length_is(2, "La réponse est UNE lettre majuscule + UN chiffre"),
+    good("{name}", parse_strings=host),
     ),
     )
 

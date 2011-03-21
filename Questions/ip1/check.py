@@ -27,6 +27,7 @@ import re
 def filter_student_answer(answer, state=None):
     answer = re.sub(' +', ' ', answer)
     answer = re.sub(' \n', '\n', answer)
+    answer = re.sub('\n\n*', '\n', answer)
     return answer
 
 questions.current_evaluate_answer = filter_student_answer
@@ -877,7 +878,7 @@ def host(test, state):
     except KeyError:
         return strings
     for string in strings:
-        string = string.replace('  ',' ')
+        string = filter_student_answer(string)
         new = host_substitute(string, host)
         if test.uppercase:
             new = new.upper()

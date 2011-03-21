@@ -29,8 +29,13 @@ add(name="connecteur série",
     qui est sur le PC et sur lequel vous branchez le cable console
     du routeur CISCO&nbsp;?""",
     tests = (
-    answer_length_is(3, "La réponse est en 3 caractères"),
-    good(('DB9','DE9'), uppercase=True, replace=((' ',''),('-',''))),
+        good(('DB9','DE9'), uppercase=True, replace=((' ',''),('-',''))),
+        bad(('DCE', 'DTE'),
+            "Le PC n'a pas de connexion série pour faire du réseau...",
+            uppercase=True),
+        bad('COM',
+            "C'est le nom logique sous Windows, pas le nom du connecteur"),
+        answer_length_is(3, "La réponse est en 3 caractères"),
     ),
     indices = ("""La réponse est sur <a href="http://www.google.com/search?q=serial+connector">Google</a>""", ),
     )
@@ -45,12 +50,14 @@ add(name="route par défaut",
              parse_strings=host),
     good("route add default gw {C0.remote_port.host.E0.port.ip}",
          parse_strings=host),
-    expect('gw'),
     good(("route add -net 0.0.0.0/0 gw {C0.remote_port.host.E0.port.ip}",
           "route add -net 0.0.0.0 netmask 0.0.0.0 gw {C0.remote_port.host.E0.port.ip}"),
          """Il est plus simple de faire <tt>add default</tt> au lieu
          de spécifier <tt>-net 0.0.0.0...</tt>.""",
          parse_strings=host),    
+    expect('route',
+           "Sous unix, on définit les routes avec la commande <tt>route</tt>"),
+    expect('gw'),
     ),
     good_answer = "N'oubliez pas de configurer la route !",
     )
@@ -62,7 +69,7 @@ add(name="si loin de moi",
     <p>
     On suppose que les paquets empruntent la route la plus courte.
     """,
-    question="""Combien d'équippements sont <b>traversés</b>
+    question="""Combien d'équipements sont <b>traversés</b>
     au maximum par les paquets qui partent de votre PC&nbsp;?""",
     tests = (
     require_int(),
@@ -70,12 +77,12 @@ add(name="si loin de moi",
     ),
     indices = ("""L'algorithme est simple, vous notez -1 sur votre PC.
     <p>
-    Tant qu'il y a des équippements sans numéro :
+    Tant qu'il y a des équipements sans numéro :
     <ul>
     <li> <em>n := n + 1</em>
-    <li> Numérotez n tous les équippements actifs non numérotés
+    <li> Numérotez n tous les équipements actifs non numérotés
     accessibles à partir
-    d'un équippement noté <em>n - 1</em>
+    d'un équipement noté <em>n - 1</em>
     </ul>
     <p>
     Le plus grand nombre que vous aurez noté sur un PC sera
@@ -237,6 +244,8 @@ add(name="table routage",
          "Vous pouvez aussi taper <tt>ip route</tt> (moins standard)"),
     good(("ip route", "netstat -r"),
          "Vous pouvez aussi utiliser la commande standard : <tt>route</tt>"),
+    reject('show', 'Sous UNIX, pas sur le CISCO'),
+    reject('netstat', 'Il y a une commande plus courte et plus logique'),
     ),
     )
 
@@ -272,8 +281,9 @@ Vous pouvez la lancer plusieurs fois et prendre le minimum.
     """,
     question="""Combien de ``classes´´ de temps trouvez-vous&nbsp;?
     <p>
-    On entend par classe des valeurs suffisemment différentes pour
+    On entend par classe des valeurs suffisamment différentes pour
     que la différence ne soit pas le fruit du hasard.
+    Un facteur 2 n'est pas significatif.
     """,
     tests = (
     require_int(),
