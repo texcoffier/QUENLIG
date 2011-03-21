@@ -28,7 +28,8 @@ boxed = True
 tip_preformated = True
 acls = { 'Teacher': ('executable',) }
 css_attributes = (
-    "SPAN.uncommented { background: #FAA }",
+    "SPAN.uncommented { background: #FAA; }",
+    "SPAN.uncommented PRE { background-color: #FAA ; }",
     )
 
 def execute(state, plugin, argument):
