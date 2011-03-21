@@ -226,11 +226,18 @@ add(name="TAG XML vides",
     tests = (
         Expect('sed'),
         Good(Replace(dumb_replace, Shell(
-            Equal("sed -r 's/<([^>]*)></\\1>//g'")))),
+            Equal("sed -r 's/<([^>]*)><\\/\\1>//g'")))),
         Bad(Comment(Replace(dumb_replace, Shell(
-            Equal("sed -r 's/<(.*)></\\1>//g'"))),
+            Equal("sed -r 's/<(.*)><\\/\\1>//g'"))),
                     "Le <tt>.*</tt> va <em>avaler</em> le symbole &lt;"),
             ),
+        Good(Replace(dumb_replace, Shell(
+            Equal("sed -r 's/<([^>]+)><\\/\\1>//g'")))),
+        Bad(Comment(Replace(dumb_replace, Shell(
+            Equal("sed -r 's/<(.+)><\\/\\1>//g'"))),
+                    "Le <tt>.+</tt> va <em>avaler</em> le symbole &lt;"),
+            ),
+        Expect('/g', 'Il peut y avoir plusieurs TAG sur la même ligne'),
         shell_display,
         ),
     )

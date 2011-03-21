@@ -70,7 +70,7 @@ no
 </pre>
 Remarques&nbsp;:
 <ul>
-<li> Faire un copié/collé de TOUTE les lignes ne fonctionnera pas.
+<li> Faire un copié/collé de TOUTES les lignes ne fonctionnera pas.
 <li> Un ligne vide veux dire que l'on répond Return à la question.
 <li> Le mot de passe sera <tt>cisco</tt>
 </ul>
@@ -108,7 +108,7 @@ no
 </pre>
 Remarques&nbsp;:
 <ul>
-<li> Faire un copié/collé de TOUTE les lignes ne fonctionnera pas.
+<li> Faire un copié/collé de TOUTES les lignes ne fonctionnera pas.
 <li> Un ligne vide veux dire que l'on répond Return à la question.
 </ul>
         """

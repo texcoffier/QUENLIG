@@ -190,7 +190,11 @@ add(name="initialiser",
     required=['allumer CISCO'],
     before="""Ce sujet de TP suppose que votre routeur est vierge
     de toute configuration.
-    Pour être certain de ce fait nous allons effacer sa configuration""",
+    Pour être certain de ce fait nous allons effacer sa configuration.
+    <p>
+    <b>Si vous avez déjà effacé la configuration alors
+    ne le refaites pas</b>.
+    """,
     question="""
       Si durant la procédure on vous demande un mot de passe,
       essayez 'cisco', 'class', 'classe', 'cisco2', '&lt;cisco&gt;'...
