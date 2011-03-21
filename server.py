@@ -28,6 +28,7 @@ import os
 import configuration
 import utilities
 
+cache = None # Do not cache files
 cache = {}   # Allow file caching
 
 def html_time(t):
@@ -49,47 +50,55 @@ class CachedFile:
         self.content = ''
         self.modification_time = ''
         # Is this secure (UTF8) ?
-        if (
-            filename.find('..') == -1
-            and filename.find('/') == -1
-            and filename.find('?') == -1
+        if '..' in filename or '/' in filename or '?' in filename:
+            return
+        self.filename = filename
+
+        if filename.endswith(".css"):
+            self.mime_type = 'text/css'
+        elif filename.endswith(".html"):
+            self.mime_type = 'text/html'
+        elif filename.endswith(".png"):
+            self.mime_type = 'image/png'
+        elif filename.endswith(".jpg"):
+            self.mime_type = 'image/jpeg'
+        elif filename.endswith(".ps"):
+            self.mime_type = 'application/postscript'
+        elif filename.endswith(".gif"):
+            self.mime_type = 'image/gif'
+        elif filename.endswith(".svg"):
+            self.mime_type = 'image/svg+xml'
+        elif filename.endswith(".ico"):
+            self.mime_type = 'image/x-icon'
+        elif filename.endswith(".csv"):
+            self.mime_type = 'text/comma-separated-values'
+        elif filename.endswith(".js"):
+            self.mime_type = 'application/x-javascript'
+
+        self.load()
+
+    def load(self):
+        for directory in (
+            os.path.join(configuration.root, configuration.questions, "HTML"),
+            "HTML",                                   # Generated HTML and data
+            os.path.join(configuration.root, "HTML"), # Generic HTML data
             ):
-            if filename.endswith(".css"):
-                self.mime_type = 'text/css'
-            elif filename.endswith(".html"):
-                self.mime_type = 'text/html'
-            elif filename.endswith(".png"):
-                self.mime_type = 'image/png'
-            elif filename.endswith(".jpg"):
-                self.mime_type = 'image/jpeg'
-            elif filename.endswith(".ps"):
-                self.mime_type = 'application/postscript'
-            elif filename.endswith(".gif"):
-                self.mime_type = 'image/gif'
-            elif filename.endswith(".svg"):
-                self.mime_type = 'image/svg+xml'
-            elif filename.endswith(".ico"):
-                self.mime_type = 'image/x-icon'
-            elif filename.endswith(".csv"):
-                self.mime_type = 'text/comma-separated-values'
-            elif filename.endswith(".js"):
-                self.mime_type = 'application/x-javascript'
-            for directory in (
-                configuration.root + '/' + configuration.questions + "/HTML",
-                "HTML",       # Generated HTML and data
-                configuration.root + "/HTML", # Generic HTML data
-                ):
-                try:
-                    full_name = directory + "/" + filename
-                    f = open(full_name, "r")
-                    self.content = f.read()
-                    f.close()
-                    self.content_length = len(self.content)                    
-                    self.modification_time = html_time(
-                        os.path.getmtime(full_name))
-                    break
-                except IOError:
-                    pass
+            try:
+                self.full_name = os.path.join(directory, self.filename)
+                f = open(self.full_name, "r")
+                self.content = f.read()
+                f.close()
+                self.content_length = len(self.content)
+                self.gmtime = os.path.getmtime(self.full_name)
+                self.modification_time = html_time(self.gmtime)
+                return
+            except IOError:
+                pass
+
+    def update(self):
+        if self.gmtime != os.path.getmtime(self.full_name):
+            self.load()
+
 
 def get_file(filename):
     if cache == None:
@@ -97,6 +106,8 @@ def get_file(filename):
     
     if not cache.has_key(filename):
         cache[filename] = CachedFile(filename)
+    else:
+        cache[filename].update()
         
     return cache[filename]
     
