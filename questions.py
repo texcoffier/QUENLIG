@@ -632,7 +632,7 @@ class require_int(TestWithoutStrings):
     comment = "<p class='int_required'></p>"
     def test(self, student_answer, string):
         try:
-            student_answer = int(student_answer)
+            student_answer = int(student_answer.rstrip('.'))
         except ValueError:
             return False
 
@@ -989,7 +989,7 @@ class TestInt(TestExpression):
 class Int(TestInt):
     def __call__(self, student_answer, state=None, parser=no_parse):
         try:
-            if self.integer == int(student_answer):
+            if self.integer == int(student_answer.rstrip('.')):
                 return True, ''
             return False, ''
         except ValueError:
