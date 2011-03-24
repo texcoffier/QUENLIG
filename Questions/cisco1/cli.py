@@ -203,17 +203,9 @@ add(name="initialiser",
       de l'ensemble des lignes).
       Faites néanmoins attention aux questions
       que le routeur vous pose.
-
-    <pre>enable
-erase startup-config
-y
-reload
-                        <em>Tapez return pour confirmer</em>
-no
-y
-</pre>
-
-     Quand la procédure est terminée, répondez OUI à cette question.
+      """ + procedure_effacement + """
+      <p>
+      Quand la procédure est terminée, répondez OUI à cette question.
     """,
     tests = ( yes("Répondez OUI s'il vous plait"), ),
     )

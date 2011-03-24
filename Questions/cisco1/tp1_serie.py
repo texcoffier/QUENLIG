@@ -89,7 +89,10 @@ for i in range(2):
         required=["horloge %d" % i, "branchement", "tp1:sauve config",
                   "serie:configure"],
         before=en_mode_serial,
-        question="""Voici la suite de commande pour configurer :
+        question="""
+        Vous devez configurer l'interface série %d de votre routeur.
+        <p>
+        Voici la suite de commande pour configurer :
         <pre>ip address IP_INTERFACE_SERIE MASK_INTERFACE_SERIE</pre>
         Si vous devez configurer l'horloge, faites&nbsp;:
         <pre>clock rate 56000</pre>
@@ -99,7 +102,9 @@ for i in range(2):
         <p>
         La réponse à cette question est la liste des commandes que
         vous avez tapée.
-        """,
+        <b>Evidemment vous remplacez IP_INTERFACE_SERIE et MASK_INTERFACE_SERIE
+        par les valeurs correctes pour votre interface série...</b>
+        """ % i,
         nr_lines=4,
         tests = (
         expect('ip address'),

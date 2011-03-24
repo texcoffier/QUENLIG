@@ -24,7 +24,7 @@ from check import *
 from configuration_salles import *
 
 add(name="premier",
-    required=["serie:prompt"],
+    required=["serie:premiere", "serie:prompt"],
     question="""Quelle commande tapez-vous pour avoir les informations
     sur le premier port éthernet de votre routeur&nbsp;?""",
     tests=(

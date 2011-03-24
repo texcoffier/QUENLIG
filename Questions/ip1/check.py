@@ -77,33 +77,38 @@ Remarques&nbsp;:
 </ul>
 """
 
+procedure_effacement = """<pre><b>enable</b> # S'il demande un mot de passe, essayez&nbsp;: """ +  mots_de_passe + """
+<b>erase startup-config</b>
+<b>y</b>       <em>LE 'y' N'APPARAÎT PAS ET L'ECRAN SE BLOQUE PENDANT 10 SECONDES</em>
+<b>reload</b>
+                        <em>Tapez return pour confirmer</em>
+<b>no</b>                      <em>Pas le dialogue de configuration initiale</em>
+<b>y</b>                       <em>Terminer l'auto install</em>
+</pre>
+"""
+
 reinit = """Les mots de passes possibles : """ + mots_de_passe + """
     <p>
     La procédure de réinitialisation du CISCO :
-    <pre>enable # S'il demande un mot de passe, essayez&nbsp;: """ + mots_de_passe + """    
-erase startup-config
-y
-reload
-no
-y
-</pre>
-Surtout ne pas entrer dans le dialogue pour faire la configuration initiale.
+    """ + procedure_effacement + """
 
-
-<h2>Si vous ne trouvez pas le mot de passe</h2>
+<h2>Si vous NE trouvez PAS le mot de passe :</h2>
 <p>
 Pour effacer le mot de passe.
 Il faut passer en mode ROMMON lors du démarrage et
 taper les commandes suivantes&nbsp;:
 <pre>
-confreg 0x2142
-reset
+confreg 0x2142         # On dit au routeur de ne pas lire sa configuration
+reset                  # Le routeur redémarre sans lire la configuration
 no
 
-enable
-copy running-config startup-config
+enable                 # On passe "root" sur le routeur vierge
+erase startup-config   # On efface la configuration
 
-reload
+configure terminal
+config-register 0x2102 # On dit au routeur de lire sa configuration
+exit
+reload                 # On redémarre proprement
 no
 
 </pre>
