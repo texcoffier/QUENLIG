@@ -101,7 +101,7 @@ add(name="echo",
 add(name="compte C",
     required = ["intro", "chercher:exécuter"],
     question = """Donnez la commande qui affiche le nombre de
-    lignes/mots/caractères contenu dans chacun des fichiers dont
+    lignes/mots/octets contenu dans chacun des fichiers dont
     le nom se termine par <tt>.c</tt> à partir du répertoire courant.
     <p>
     Elle n'a pas besoin de faire la somme pour tous les fichiers.
@@ -132,7 +132,8 @@ add(name="compte tout C",
     required = ["compte C", "concatener:concat C", "ligne"],
     question="""Quelle est la ligne de commande la
     <tt>plus fiable et efficace</tt>
-    permettant d'afficher le nombre de ligne de tous le fichiers dont
+    permettant d'afficher le nombre de lignes contenu dans la concaténation
+    de tous le fichiers dont
     le nom se termine par <tt>.c</tt> à partir du répertoire courant.
     <p>
     Quand votre réponse s'exécute il faut que la commande <tt>wc</tt>
@@ -147,11 +148,23 @@ add(name="compte tout C",
             Shell(Equal('find . -name "*.c" -exec cat {} \\; | wc -l')),
             """La commande <tt>cat</tt> est lancée très souvent.
             Ce n'est donc pas efficace""")),
+        Bad(Comment(
+            Shell(Equal('cat $(find . -name "*.c") | wc -l')),
+            """Cette ligne ne fonctionnera pas s'il y a trop de fichiers""")),
+        Bad(Comment(
+            Shell(Equal('find . -name "*.c" -print0 | xargs -0 wc -l')
+                  | Equal('wc -l $(find . -name "*.c")')
+                  ),
+            """Vous affichez le nombre de lignes de chacun des fichiers,
+            pas le nombre total pour l'ensemble des fichiers.""")),
+        Expect('find'),
+        Expect('xargs',"Pour être performant il faut utiliser <tt>xargs</tt>"),
+        Expect('-print0',
+               """Il faut utiliser <tt>-print0</tt> (problèmes des
+               retours à la ligne dans les noms de fichier)"""),
         shell_display,
         ),
     )
-
-
 
 ##add(name="Compte tout C",
 ##    required = ["Compte C", "ligne"],

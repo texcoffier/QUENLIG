@@ -7,6 +7,8 @@ des substitution de chaines de caractères ne sont pas suffisantes.
 C'est shellSyntax qui doit réécrire les options longues en courtes.
 
 
+Indenter les lignes contenant :
+
 Faire une question : echo $SDFSFD | sed   et la mettre en prérequis
 
 Faire plus d'exercices avec les guillemets autour des variables.

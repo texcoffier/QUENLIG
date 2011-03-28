@@ -250,6 +250,7 @@ add(name="sauve uid max",
     shell_good("A=$(cut -d: -f3 /etc/passwd | sort -n | tail -1)"),
     shell_good("A=\"$(cut -d: -f3 /etc/passwd | sort -n | tail -1)\""),
     shell_bad(("cut -d: -f3 /etc/passwd | sort -n | tail -1 | read A",
+               "cut -d: -f3 /etc/passwd | sort -n | tail -n 1 |read A",
                "cut -d: -f3 /etc/passwd | sort -n -r | read A",
                "cut -d: -f3 /etc/passwd | sort -r -n | read A",
                "cut -d: -f3 /etc/passwd | sort -rn | read A",
@@ -275,6 +276,8 @@ add(name="sauve uid max",
              ),
     )
 
+dumb_replace_sed = dumb_replace + ( ('sed -e ', 'sed '), )
+
 add(name="longueur",
     required=["sh:longueurs", "nombre", "remplacer:enlève mot"],
     question="""Triez les lignes lues sur l'entrée standard de la plus courte
@@ -288,9 +291,9 @@ add(name="longueur",
     </ul>
     """,
     tests=(
-    shell_good( 'while read A ; do echo "$(expr length "$A") $A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace),
-    shell_good( 'while read A ; do echo $(expr length "$A")" $A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace),
-    shell_good( 'while read A ; do echo $(expr length "$A") "$A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace),
+    shell_good( 'while read A ; do echo "$(expr length "$A") $A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace_sed),
+    shell_good( 'while read A ; do echo $(expr length "$A")" $A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace_sed),
+    shell_good( 'while read A ; do echo $(expr length "$A") "$A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace_sed),
     shell_display,
         ),
     )

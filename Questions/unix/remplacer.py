@@ -322,6 +322,10 @@ add(name="mot",
     shell_good( ("sed -r 's/[^ ]+/MOT/g'", "sed 's/[^ ][^ ]*/MOT/g'"),
                 dumb_replace=dumb_replace,
                 ),
+    shell_good( "sed 's/[^ ]*[^ ]/MOT/g'",
+                "Il est préférable de mettre l'étoile à la fin",
+                dumb_replace=dumb_replace,
+                ),
     reject("[^ ]*",
               """L'expression <tt>[^ ]*</tt> représente des chaines
               vide. Donc MOT risque d'être inserré entre chaque paire

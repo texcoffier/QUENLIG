@@ -1017,6 +1017,10 @@ class Length(TestInt):
     def __call__(self, student_answer, state=None, parser=no_parse):
         return len(student_answer) == self.integer, ''
 
+class LengthLT(TestInt):
+    def __call__(self, student_answer, state=None, parser=no_parse):
+        return len(student_answer) < self.integer, ''
+
 class NumberOfIs(TestExpression):
     def __init__(self, string, number):
         if not isinstance(number, int):
