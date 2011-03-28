@@ -27,7 +27,6 @@ import cgi
 
 container = 'analyse'
 link_to_self = True
-allow_out_of_sequence_execution = True
 priority_execute = '-question_answer'
 acls = { 'Teacher': ('executable',) }
 

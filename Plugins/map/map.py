@@ -22,8 +22,6 @@
 import questions
 import os
 
-allow_out_of_sequence_execution = True
-
 priority_display = 'comment'
 tip_preformated = True
 css_attributes = (

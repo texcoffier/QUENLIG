@@ -188,6 +188,9 @@ class Student:
                 q[a.question] = a.answered ;
         return q
 
+    def bad_answer_yet_given(self, question, answer):
+        return answer in self.answer(question).bad_answers
+
     def answered_question(self, question):
         return self.answer(question).answered
 
@@ -379,7 +382,8 @@ class Student:
 
     def add_a_comment(self, question, comment):
         """The student makes a comment."""
-        self.log(question, "comment", comment)
+        if comment not in self.answer(question).comments:
+            self.log(question, "comment", comment)
 
     ####################################################
     # All about the question contextual to the student.

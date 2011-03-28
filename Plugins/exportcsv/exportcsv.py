@@ -21,7 +21,6 @@
 
 import statistics
 
-allow_out_of_sequence_execution = True
 container = 'analyse'
 link_to_self = True
 tip_preformated = True

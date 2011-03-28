@@ -37,7 +37,8 @@ def execute(state, plugin, argument):
         return
     if state.question.tests == ():
         return
-    if argument:
+    if argument and not state.student.bad_answer_yet_given(state.question.name,
+                                                           argument):
         number, message = state.student.check_answer(state.question,
                                                      argument,
                                                      state)

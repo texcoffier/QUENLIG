@@ -112,12 +112,9 @@ class StatePlugin:
 class State(object):
     def __init__(self, server, ticket, student_name):
         self.student = student.student(student_name)
-        self.question = None
         self.ticket = ticket
-        self.number = 0
-        self.student_stat = None
         statistics.forget_stats()
-        self.display_history = []
+        self.history = []
         self.client_ip = None
         self.client_browser = None
         self.update(server)
@@ -174,8 +171,6 @@ class State(object):
                 a.append((p.plugin.css_name, str(p.current_acls)))
         a.sort()
         return repr(a)
-            
-            
 
     # The user call the service with a different name (via an apache proxy)
     # Must be called on each page loading to have no problems.
@@ -213,30 +208,29 @@ class State(object):
         for k, v in form.items():
             self.form[k.split('.')[0]] = v
 
-        form = self.form
-            
-        if form["number"] == None:
-            form["number"] = str(self.number - 1)
-        if form["number"] != self.number:
-            form["action"] = ''
-            try:
-                h = self.display_history[int(form["number"])]
-                self.question = h[1]
-            except IndexError:
-                pass
+        if self.form["number"] == None:
+            self.form["number"] = str(len(self.history) - 1)
+
+        try:
+            h = self.history[int(self.form["number"])]
+            self.question, self.student_stat = h
+        except IndexError:
+            self.question, self.student_stat = (None, None)
 
         if form.get("student", ""):
             try:
-                self.student_stat = student.students[form["student"]]
+                self.student_stat = student.students[self.form["student"]]
                 if self.student_stat == self.student:
                     self.student_stat = None
             except KeyError:
                 self.student_stat = None
 
         if form.get("question", ""):
-            self.question = questions.questions[form["question"]]
+            self.question = questions.questions[self.form["question"]]
 
-        return form
+        sort_column = form.get("sort_column", "").split(' ')
+        if len(sort_column) == 2:            
+            self.plugins_dict[sort_column[1]].sort_column = int(sort_column[0])
 
     def compute_stopped(self):
         self.system_stopped=self.stopped= self.start < configuration.dates[0] \
@@ -248,20 +242,12 @@ class State(object):
         self.start = time.time()
 
         self.compute_stopped()
-        form = self.analyse_form(form)
+        self.analyse_form(form)
         statistics.update_stats() # Update statistics
 
-        do_action = ( form["number"] == self.number )
-        increment_number = True
-
-        sort_column = form.get("sort_column", "").split(' ')
-        if len(sort_column) == 2:            
-            self.plugins_dict[sort_column[1]].sort_column = int(sort_column[0])
-
-                    
         self.url_base_full = "%s/%s/%d/" % (self.url_base,
                                             cgi.urllib.quote(self.ticket),
-                                            self.number+1)
+                                            len(self.history))
 
         self.full_page = "No presentation plugin"
         for plugin in self.plugins_list:
@@ -274,15 +260,10 @@ class State(object):
                 plugin.value = None
                 continue
 
-            if do_action or plugin.allow_out_of_sequence_execution:
-                plugin_argument = form.get(plugin.plugin.css_name, None)
-                if plugin.allow_out_of_sequence_execution and plugin_argument:
-                    increment_number = False
-            else:
-                plugin_argument = None
-
+            plugin_argument = self.form.get(plugin.plugin.css_name, None)
             try:
-                v = plugin.execute(self,plugin,plugin_argument)
+                v = plugin.execute(self, plugin, plugin_argument)
+                # print plugin, plugin_argument, v
             except:
                 import traceback
                 import sys
@@ -305,9 +286,7 @@ class State(object):
             if isinstance(plugin.value, tuple):
                 return plugin.value
 
-        if increment_number:
-            self.number += 1
-              
+        self.history.append((self.question, self.student_stat))
         return 'text/html', self.full_page
 
     def close(self):
