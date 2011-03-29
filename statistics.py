@@ -50,7 +50,6 @@ class Stats:
             return
         self.last_time = t
 
-        print student
         self.all_students = student.all_students()
 
         for question in questions.questions.values():

@@ -56,4 +56,4 @@ class Answer:
             raise ValueError("Unknown action %s in %s" % (command, self.student))
 
     def __str__(self):
-        return "%d %d %d %d %g %s" % (self.answered != False, self.nr_asked, self.nr_bad_answer, self.indice, self.time_searching+self.time_after, self.question)
+        return "%d %d %d %d %g %s %d" % (self.answered != False, self.nr_asked, self.nr_bad_answer, self.indice, self.time_searching+self.time_after, self.question, len(self.comments))

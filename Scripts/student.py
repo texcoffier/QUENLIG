@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2010 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -33,8 +33,12 @@ class Student:
             self.set_acls(acls)
         self.get('')
 
-    def get(self, url, trace=False):
-        page = self.server.get(self.base + url, trace)
+    def get(self, url, trace=False, base=None):
+        if base is None:
+            base = self.base
+        self.page = page = self.server.get(base + url, trace)
+        self.url = url
+        # print base + url
         if page.find('<base href='):
             self.base = page.split('<base href="')[1].split('"')[0]
         else:
@@ -59,9 +63,41 @@ class Student:
     def give_answer(self, answer):
         return self.get('?question_answer=' + urllib.quote(answer))
 
+    def give_comment(self, answer):
+        return self.get('?comment=' + urllib.quote(answer))
+
+    def get_answered(self):
+        return self.get('?answered=1')
+
     def see_all_questions(self):
         return self.get('?questions_all=all')
-        
+
+    def expect(self, *values):
+        for value in values:
+            if value in self.page:
+                continue
+            raise ValueError(self.page + "\nExpected: %s" % value)
+
+    def check_question_link(self, name, current=False, viewed=False,
+                            max_descendants=False, default=False,
+                            resigned=False, bad_answer_given=False):
+        s = '<A'
+        if default:
+            s += ' ID="1"'
+        s += ' HREF="?question=' + name.replace(':', '%3A') + '" CLASS="'
+        if current:
+            s += 'current_question '
+        if viewed:
+            s += 'question_given '
+        if bad_answer_given:
+            s += 'bad_answer_given '
+        if resigned:
+            s += 'resigned '
+        if max_descendants:
+            s += ' max_descendants'
+        s += '">' + name + '</A>'
+        self.expect(s)
+
 
 if __name__ == "__main__":
     try:

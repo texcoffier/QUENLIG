@@ -298,7 +298,6 @@ states = {}
     
 
 def get_state(server, ticket):
-
     service = cgi.urllib.quote(the_service(server))
 
     if ticket == "": # No ticket, so redirect to the CAS service
@@ -311,7 +310,7 @@ def get_state(server, ticket):
             if not states[ticket].ticket_valid(server):
                 states[ticket].update(server)
         else:
-            print 'New guest ticket'
+            print 'New guest ticket for', ticket
             student_name = ticket
             states[ticket] = State(server, ticket, student_name)
         return states[ticket]

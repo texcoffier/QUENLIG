@@ -382,8 +382,10 @@ class Student:
 
     def add_a_comment(self, question, comment):
         """The student makes a comment."""
-        if comment not in self.answer(question).comments:
-            self.log(question, "comment", comment)
+        for date_comment in self.answer(question).comments:
+            if date_comment[1] == comment:
+                return
+        self.log(question, "comment", comment)
 
     ####################################################
     # All about the question contextual to the student.

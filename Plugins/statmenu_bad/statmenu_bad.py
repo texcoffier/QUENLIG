@@ -20,6 +20,7 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 priority_display = 'statmenu_good'
+priority_execute = 'question_answer' # Verify answer before
 acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
 
 def execute(state, plugin, argument):

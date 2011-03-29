@@ -1,4 +1,4 @@
-V=2.1
+V=2.2
 
 help:
 	@echo "Goals:"
@@ -26,8 +26,8 @@ plots:
 		do echo ; echo $$I ;  main.py $$I plot ; \
 	done
 
-regtest: # Use port 34000
-	Scripts/regtest.py nowait
+regtest:
+	Scripts/regtest.py
 
 load_simulator: # Use port 34001
 	ulimit -s 512 ; \

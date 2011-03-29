@@ -22,6 +22,7 @@
 import utilities
 
 priority_display = 'statmenu_nr_questions'
+priority_execute = 'question_answer' # Verify answer before
 acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
 
 def execute(state, plugin, argument):

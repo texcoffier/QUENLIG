@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2006 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,17 +22,19 @@
 from questions import *
 
 add(name="a",
-    question="a",
+    question="question_a",
     tests=(
-    good("a"),
-    bad("a0"),
+    good("a", "good_answer__a"),
+    bad("a0", "bad_answer__a0"),
     bad("a1", "bad_a1"),
     bad(("a2", "a3"), "bad_a3"),
     ),
+    bad_answer = "bad_answer_comment",
+    good_answer = "good_answer_comment",
     )
 
 add(name="b",
-    question="b",
+    question="question_b",
     tests=(
     good("b", 'good_b'),
     ),
@@ -41,7 +43,7 @@ add(name="b",
 
 add(name="c",
     required = ['a'],
-    question="c",
+    question="question_c",
     tests=(
     good("c"),
     ),
