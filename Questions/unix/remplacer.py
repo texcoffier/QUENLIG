@@ -791,10 +791,8 @@ add(name="profondeur wc",
     pour calculer la longueur</b>""",
     tests=(
     reject('echo', "Pas besoin de <tt>echo</tt> pour cette question."),
-    shell_good(r'''pwd | sed -e 's/[^/]//g' -e 's/^\/$//'  | wc -c'''),
     shell_good(r'''pwd | sed -e 's/^\/$//' -e 's/[^/]//g' | wc -c'''),
     shell_good((r'''pwd | sed   's/^\/$//' -e 's/[^/]//g' | wc -c''',
-                r'''pwd | sed   's/[^/]//g' -e  's/^\/$//'  | wc -c'''
                 ),
                "Généralement on met l'option <tt>-e</tt> deux fois"),
     shell_bad(r'''pwd | sed -e 's/[^/]//g' | wc -c''',
