@@ -60,14 +60,17 @@ class Student:
     def goto_question(self, question):
         return self.get('?question=' + urllib.quote(question))
 
-    def give_answer(self, answer):
-        return self.get('?question_answer=' + urllib.quote(answer))
+    def give_answer(self, answer, base=None):
+        return self.get('?question_answer=' + urllib.quote(answer), base=base)
 
     def give_comment(self, answer):
         return self.get('?comment=' + urllib.quote(answer))
 
     def get_answered(self):
         return self.get('?answered=1')
+
+    def get_indice(self, n):
+        return self.get('?question_indices=%d' % n)
 
     def see_all_questions(self):
         return self.get('?questions_all=all')
@@ -77,6 +80,16 @@ class Student:
             if value in self.page:
                 continue
             raise ValueError(self.page + "\nExpected: %s" % value)
+
+    def reject(self, *values):
+        for value in values:
+            if value not in self.page:
+                continue
+            raise ValueError(self.page + "\nRejected: %s" % value)
+
+    def reject_questions(self, *names):
+        self.reject(*[' HREF="?question=' + name.replace(':', '%3A') + '"'
+                    for name in names])
 
     def check_question_link(self, name, current=False, viewed=False,
                             max_descendants=False, default=False,

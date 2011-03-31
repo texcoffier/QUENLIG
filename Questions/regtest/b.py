@@ -22,7 +22,7 @@
 from questions import *
 
 add(name="A",
-    required=["a:a", "a:b(c)"],
+    required=["a:a", "a:b(B)"],
     question="a",
     tests=(good("A"),),
     )

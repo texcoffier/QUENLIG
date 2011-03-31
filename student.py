@@ -285,10 +285,12 @@ class Student:
         t.sort(lambda x,y: cmp(x.last_time, y.last_time))
         
         s = ''
+        none = None
         for a in t:
-            if a.nr_asked == 0:
-                continue
             if a.question == "None":
+                none = a
+                continue
+            if a.nr_asked == 0:
                 continue
             try:
                 q = questions.questions[a.question]
@@ -319,6 +321,14 @@ class Student:
             for comment_time, comment_text in a.comments:
                 s += utilities.div('comment',"<PRE>" + \
                                    cgi.escape(comment_text) + "</PRE>")
+
+        if none and none.comments:
+            s += "<h3 class=\"short\">?</h3>"
+            for comment_time, comment_text in none.comments:
+                s += utilities.div('comment',"<PRE>" + \
+                                   cgi.escape(comment_text) + "</PRE>")
+            
+
 
         return s
 
@@ -376,9 +386,10 @@ class Student:
         """The student has wrongly answered the question."""
         self.log(question, "bad", text)
 
-    def tell_indice(self, question):
+    def tell_indice(self, question, indice):
         """Indice has been given to the student"""
-        self.log(question, "indice")
+        if indice > self.get_indice(question)+1:
+            self.log(question, "indice")
 
     def add_a_comment(self, question, comment):
         """The student makes a comment."""

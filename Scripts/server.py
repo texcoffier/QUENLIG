@@ -65,7 +65,7 @@ class Server:
     def stop(self):
         print 'Stop server'
         os.system('./main.py %s stop >>xxx.log 2>&1' % self.name)
-        print 'Server stoped'
+        print 'Server stopped'
 
     def get(self, url, trace=False):
         if trace:

@@ -31,12 +31,14 @@ add(name="a",
     ),
     bad_answer = "bad_answer_comment",
     good_answer = "good_answer_comment",
+    indices=("Indice X", "Indice Y"),
     )
 
 add(name="b",
     question="question_b",
     tests=(
     good("b", 'good_b'),
+    good(("B", 'xbx')),
     ),
     indices=("Indice A", "Indice B"),
     )

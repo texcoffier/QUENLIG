@@ -38,7 +38,7 @@ def execute(state, plugin, argument):
         return
 
     if argument:
-        state.student.tell_indice(state.question.name)
+        state.student.tell_indice(state.question.name, int(argument))
 
     indice = state.student.get_indice(state.question.name) + 1
     indice = min(indice, len(state.question.indices))
@@ -51,8 +51,9 @@ def execute(state, plugin, argument):
             html_class = 'first_indice'
         else:
             html_class = 'next_indice'
-        s += '<A CLASS="%s" HREF="?%s=1"></A>'% (html_class,
-                                                 plugin.plugin.css_name)
+        s += '<A CLASS="%s" HREF="?%s=%d"></A>'% (html_class,
+                                                  plugin.plugin.css_name,
+                                                  indice+1)
     return s
 
 
