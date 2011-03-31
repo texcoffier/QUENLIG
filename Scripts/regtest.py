@@ -363,7 +363,27 @@ def test_0280_require_test_regexp(student):
     student.check_question_link('b:B')
     student.check_question_link('b:A')
 
- 
+def test_0290_root_minimal(student):
+    student.check_question_link('a:a', default=True, max_descendants=True)
+    student.expect('<option >Teacher</option>',
+                   '<option selected>Default</option>',
+                   '?role=',
+                   )
+    student.reject('?questions_all=')
+    student.reject_questions('a:b', 'a:c')
+
+    student.select_role('Teacher')
+    student.expect('<option selected>Teacher</option>',
+                   '<option >Default</option>',
+                   '?questions_all=',
+                   )
+    
+    student.see_all_questions()
+    student.check_question_link('a:a', default=True, max_descendants=True)
+    student.check_question_link('a:b')
+    student.check_question_link('a:c')
+    student.check_question_link('b:B')
+    student.check_question_link('b:A')
 
     
 
@@ -385,7 +405,14 @@ try:
             continue
         print '%-45s' % test,
         sys.stdout.flush()
-        globals()[test](Student(the_server, test[len('test_'):]))
+        if '_root_' in test:
+            roles = "['Default','Teacher']"
+        else:
+            roles = None
+        globals()[test](Student(the_server,
+                                test[len('test_'):],
+                                roles=roles,
+                                ))
         print 'OK'
 finally:
     the_server.stop()

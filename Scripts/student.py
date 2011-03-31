@@ -25,12 +25,14 @@ import urllib
 import os
 
 class Student:
-    def __init__(self, server, name, acls=None):
+    def __init__(self, server, name, acls=None, roles=None):
         self.server = server
         self.base = server.base + '/?guest=' + name
         self.name = name
         if acls:
             self.set_acls(acls)
+        if roles:
+            self.set_roles(roles)
         self.get('')
 
     def get(self, url, trace=False, base=None):
@@ -57,6 +59,15 @@ class Student:
         f.write(acls)
         f.close()
 
+    def set_roles(self, roles):
+        try:
+            os.mkdir(self.logdir())
+        except OSError:
+            pass
+        f = open(self.logdir() + 'roles', 'w')
+        f.write(roles)
+        f.close()
+
     def goto_question(self, question):
         return self.get('?question=' + urllib.quote(question))
 
@@ -71,6 +82,9 @@ class Student:
 
     def get_indice(self, n):
         return self.get('?question_indices=%d' % n)
+
+    def select_role(self, n):
+        return self.get('?role=%s' % n)
 
     def see_all_questions(self):
         return self.get('?questions_all=all')
