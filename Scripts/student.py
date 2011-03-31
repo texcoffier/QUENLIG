@@ -41,10 +41,14 @@ class Student:
         self.page = page = self.server.get(base + url, trace)
         self.url = url
         # print base + url
-        if page.find('<base href='):
-            self.base = page.split('<base href="')[1].split('"')[0]
-        else:
-            sys.stderr.write("Problem in the page\n")
+        try:
+            if page.find('<base href='):
+                self.base = page.split('<base href="')[1].split('"')[0]
+            else:
+                sys.stderr.write("Problem in the page\n")
+        except IndexError:
+            # Pas une page HTML
+            pass
         return page
 
     def logdir(self):

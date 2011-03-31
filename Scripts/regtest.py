@@ -23,6 +23,9 @@
 from server import Server
 from student import Student
 import sys
+import os
+
+name = 'test'
 
 def minimal_tests(student, good=0, bad=0, indice=0, title=''):
     if title is None:
@@ -385,6 +388,19 @@ def test_0290_root_minimal(student):
     student.check_question_link('b:B')
     student.check_question_link('b:A')
 
+def test_0300_reload_static(student):
+    filename = os.path.join('Students', name, 'HTML', 'foobar.html')
+    f = open(filename, 'w')
+    f.write('===foobar===')
+    f.close()
+    student.get('/foobar.html', base=the_server.base)
+    assert(student.page == '===foobar===' )
+
+    f = open(filename, 'w')
+    f.write('===foo bar===')
+    f.close()
+    student.get('/foobar.html', base=the_server.base)
+    assert(student.page == '===foo bar===' )
     
 
 ############
@@ -392,7 +408,7 @@ def test_0290_root_minimal(student):
 ############
 
 try:
-    the_server = Server(questions='Questions/regtest')
+    the_server = Server(questions='Questions/regtest', name=name)
     if len(sys.argv) > 1:
         try:
             tests = sorted(globals())[int(sys.argv[1])-1:]
