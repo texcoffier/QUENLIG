@@ -23,6 +23,7 @@ import os
 import urllib2
 import time
 import stats
+import sys
 
 class Server:
     def __init__(self,
@@ -47,14 +48,18 @@ class Server:
             name, questions, port, self.base)
             )
         
-        # Wait server start
+        print 'Wait server start: ',
         while True:
             try:
-                urllib2.urlopen(self.base + '/').close()
+                urllib2.urlopen(self.base + '/fr.css').close()
                 break
             except urllib2.URLError:
+                sys.stdout.write('*')
+                sys.stdout.flush()
                 time.sleep(0.4)
-        print 'Server started'
+            except KeyboardInterrupt:
+                self.stop()
+        print
 
     def sessiondir(self):
         return 'Students/%s/' % self.name

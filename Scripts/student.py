@@ -129,6 +129,25 @@ class Student:
         s += '">' + name + '</A>'
         self.expect(s)
 
+    def check_table(self, nr, table, selected, direction):
+        for i in range(nr):
+            s = '<A CLASS="c%d tips" HREF="?sort_column=%d+%s&%s=1">' \
+                '<SPAN></SPAN>' % (i, (i,'',-1-i)[direction+1], table, table)
+            if i == selected:
+                s += {1: '&#8595;', -1: '&#8593;'}[direction]
+            self.expect(s)
+
+        col = []
+        for line in self.page.split('<td><A HREF="?answered_other=')[1:]:
+            col.append(line.split('<td')[selected].split('>')[1].split('<')[0])
+        if direction == 1:
+            assert( sorted(col) == col )
+        elif direction == -1:
+            reverse = sorted(col)
+            reverse.reverse()
+            assert( reverse == col )
+        else:
+            bug
 
 if __name__ == "__main__":
     try:

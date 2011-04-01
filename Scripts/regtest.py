@@ -24,6 +24,7 @@ from server import Server
 from student import Student
 import sys
 import os
+import time
 
 name = 'test'
 
@@ -309,7 +310,6 @@ def test_0240_work_done(student):
 def test_0250_threading(student):
     import threading
     import random
-    import time
     class User(threading.Thread):
         def run(self):
             student = Student(the_server, 'user%d' % id(self))
@@ -393,15 +393,30 @@ def test_0300_reload_static(student):
     f = open(filename, 'w')
     f.write('===foobar===')
     f.close()
+    t = int(time.time())
     student.get('/foobar.html', base=the_server.base)
     assert(student.page == '===foobar===' )
 
+    while True:
+        if t != int(time.time()):
+            break
     f = open(filename, 'w')
     f.write('===foo bar===')
     f.close()
     student.get('/foobar.html', base=the_server.base)
     assert(student.page == '===foo bar===' )
-    
+
+def test_0310_root_statmenu_students(student):
+    student.select_role('Teacher')
+    student.get('?statmenu_students=1')
+    student.check_table(12, 'statmenu_students', 1, 1)
+    student.get('?sort_column=-2+statmenu_students&statmenu_students=1')
+    student.check_table(12, 'statmenu_students', 1, -1)
+    student.get('?sort_column=1+statmenu_students&statmenu_students=1')
+    student.check_table(12, 'statmenu_students', 1, 1)
+    student.get('?sort_column=4+statmenu_students&statmenu_students=1')
+    student.check_table(12, 'statmenu_students', 4, 1)
+
 
 ############
 # TODO
@@ -432,6 +447,7 @@ try:
         print 'OK'
 finally:
     the_server.stop()
+    pass
 
     
 
