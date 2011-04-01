@@ -53,21 +53,6 @@ def question_color(q, state, answerables):
         ppp += pp
     return ppp
 
-def question_pixel_map_other(state):
-    student = state.student_stat
-    if student == None:
-        student = state.student
-    filename = os.path.join(student.file,'map.gif')
-
-    try:
-        f = open(filename,'r')
-        image = f.read()
-        f.close()
-        return 'image/gif', image
-    except IOError:
-        return 'text/plain', '?'
-
-
 def question_pixel_map_circle(state):
     answerables = [q.name for q in state.student.answerables(any=True)]
     width = max([questions.questions[q].coordinates[0]
@@ -82,7 +67,6 @@ def question_pixel_map_circle(state):
         q = questions.questions[q]
         picture[q.coordinates[1]][q.coordinates[0]] = question_color(q, state, answerables)
 
-    print width, height
     image = 'P6\n%d %d\n255\n' % (width, height)
     for line in picture:
         image += ''.join(line)

@@ -1,5 +1,5 @@
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2008 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -213,17 +213,9 @@ class State(object):
 
         try:
             h = self.history[int(self.form["number"])]
-            self.question, self.student_stat = h
+            self.question = h
         except IndexError:
-            self.question, self.student_stat = (None, None)
-
-        if form.get("student", ""):
-            try:
-                self.student_stat = student.students[self.form["student"]]
-                if self.student_stat == self.student:
-                    self.student_stat = None
-            except KeyError:
-                self.student_stat = None
+            self.question = None
 
         if form.get("question", ""):
             self.question = questions.questions[self.form["question"]]
@@ -286,7 +278,7 @@ class State(object):
             if isinstance(plugin.value, tuple):
                 return plugin.value
 
-        self.history.append((self.question, self.student_stat))
+        self.history.append(self.question)
         return 'text/html', self.full_page
 
     def close(self):
