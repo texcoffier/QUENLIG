@@ -417,6 +417,20 @@ def test_0310_root_statmenu_students(student):
     student.get('?sort_column=4+statmenu_students&statmenu_students=1')
     student.check_table(12, 'statmenu_students', 4, 1)
 
+def test_0320_root_statmenu_other_student(student):
+    other_student = Student(the_server, 'other_' + student.name)
+    other_student.goto_question('a:a')
+    other_student.give_answer('a')
+    other_student.give_comment('otherComment')
+
+    student.select_role('Teacher')
+    student.get('?statmenu_students=1')
+    student.expect('<A HREF="?answered_other=guest' + other_student.name)
+
+    student.get('?answered_other=guest' + other_student.name)
+    student.expect('otherComment',
+                   '<tt class="an_answer">a</tt><br>good_answer_comment')
+    
 
 ############
 # TODO
