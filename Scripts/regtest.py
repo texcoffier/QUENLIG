@@ -431,6 +431,20 @@ def test_0320_root_statmenu_other_student(student):
     student.expect('otherComment',
                    '<tt class="an_answer">a</tt><br>good_answer_comment')
     
+def test_0330_root_plugin_reload(student):
+    student.select_role('Teacher')
+    name = os.path.join('Plugins', 'question', 'question.py')
+    f = open(name, 'r')
+    g = open(name + '.new', 'w')
+    g.write(f.read())
+    g.close()
+    f.close()
+    os.rename(name + '.new', name)
+    student.get('?reload_plugins=1')
+    student.expect('<DIV class="reload_plugins">')
+    student.goto_question('a:a')
+    student.expect('<DIV class="reload_plugins">')
+    
 
 ############
 # TODO

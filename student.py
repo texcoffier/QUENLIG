@@ -435,3 +435,12 @@ def all_students():
     return [student(student_name)
             for student_name in os.listdir(log_directory())]
     
+def dump():
+    t = []
+    for s in all_students():
+        t.append(' '.join(['%s:%s' %(k, v)
+                           for k, v in s.__dict__.items()
+                           ]))
+    return '\n'.join(t)
+
+               

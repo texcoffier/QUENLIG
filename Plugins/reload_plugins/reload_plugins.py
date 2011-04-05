@@ -34,22 +34,17 @@ acls = { 'Teacher': ('executable',) }
 
 def execute(state, plugin, argument):
     if argument:
-        for plugin in plugins.Plugin.plugins_dict.values():
+        for plugin in tuple(plugins.Plugin.plugins_dict.values()):
             filename = plugin.plugin.__file__.replace('.pyc','.py')
             if os.path.getmtime(filename) == plugin.plugin.mtime:
                 continue
-            print 'RELOAD', plugin.plugin.name
             state.reload = True
-            plugin.plugin.mtime = os.path.getmtime(filename)
-            # reload(plugin.plugin) does not work
             del sys.modules[plugin.plugin.__name__]
-            plugin.plugin = utilities.load_module(plugin.plugin.name)
+            plugins.Plugin.plugins_dict[plugin.plugin.name] = plugins.Plugin(utilities.load_module(plugin.plugin.name))
     return ''
 
 def init():
     import state
-
-    print 'INIT', state.State, '(', state.State.__class__.__base__, ') ==>',
 
     old_state = state.State
 
@@ -58,18 +53,18 @@ def init():
             self.reload = False
             a = old_state.execute(self, form)
             if self.reload:
-                print 'RELOAD ' * 10
                 import Plugins.page.page
                 Plugins.page.page.css_cached.cache = {}
                 utilities.allow_one_more_call(Plugins.page.page.generate_javascript)
-
                 import server
                 server.cache = {}
+
+                for s in state.states.values():
+                    s.update_plugins()
 
                 import Plugins.acls
                 Plugins.acls.acls.reload()
 
-                self.update_plugins()
             return a
 
     state.State = State

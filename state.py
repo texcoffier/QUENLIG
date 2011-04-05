@@ -26,6 +26,7 @@ import statistics
 import configuration
 import re
 import plugins
+import sys
 
 ###############################################################################
 # Information filling 
@@ -101,7 +102,10 @@ class StatePlugin:
             yield c
 
     def __repr__(self):
-        return 'StatePlugin(%s)' % self.plugin.css_name
+        return 'StatePlugin(%s,%s,%s,%s,%s)' % (
+            self.plugin.css_name,
+            self.priority_display_int, self.priority_execute_int,
+            self.container, self.current_acls)
 
         
 
@@ -122,7 +126,6 @@ class State(object):
         self.update_plugins()
 
     def update_plugins(self):
-
         self.plugins_dict = {}
         for plugin in plugins.Plugin.plugins_dict.values():
             self.plugins_dict[plugin.css_name] = StatePlugin(plugin, self)
@@ -162,7 +165,9 @@ class State(object):
 
         for plugin in self.plugins_list:
             plugin.full_content.sort(key = lambda x:x.priority_display_int)
+
         self.roots.sort(key = lambda x:x.priority_display_int)
+
 
     def debug_acls(self):
         a = []
@@ -171,6 +176,14 @@ class State(object):
                 a.append((p.plugin.css_name, str(p.current_acls)))
         a.sort()
         return repr(a)
+
+    def dump(self):
+        t = [' DUMP'*10]
+        for plugin in self.plugins_dict.values():
+            t.append(repr(plugin))
+        t.sort()
+        t = '\n'.join(t)
+        sys.stderr.write(t + '\n%d\n' % hash(t) )
 
     # The user call the service with a different name (via an apache proxy)
     # Must be called on each page loading to have no problems.
@@ -232,7 +245,6 @@ class State(object):
 
     def execute(self, form):
         self.start = time.time()
-
         self.compute_stopped()
         self.analyse_form(form)
         statistics.update_stats() # Update statistics
@@ -243,7 +255,6 @@ class State(object):
 
         self.full_page = "No presentation plugin"
         for plugin in self.plugins_list:
-
             plugin.heart_content = None
             # Use this syntax because it is the 'role' and 'acls' plugins
             # that are initialising the good 'acls' value
@@ -252,13 +263,14 @@ class State(object):
                 plugin.value = None
                 continue
 
+
+            # Dans ACLS le plugin content est mis a jours
             plugin_argument = self.form.get(plugin.plugin.css_name, None)
             try:
                 v = plugin.execute(self, plugin, plugin_argument)
                 # print plugin, plugin_argument, v
             except:
                 import traceback
-                import sys
                 v = '<br>'.join([cgi.escape(str(i))
                                  for i in (
                                      traceback.format_tb(sys.exc_info()[2])
