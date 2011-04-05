@@ -457,7 +457,31 @@ def test_0350_logout(student):
     student = Student(the_server, student.name)
     student.expect('<A class="content tips" href="?session_deconnection=1">')
    
-    
+def test_0360_root_question_reload(student):
+    student.select_role('Teacher')
+    student.goto_question('a:a')
+    student.reject('a:d')
+    student.reject('question__a')
+    try:
+        name = os.path.join('Questions', 'regtest', 'a.py')
+        f = open(name, 'r')
+        g = open(name + '.new', 'w')
+        g.write(f.read().replace('question_a', 'question__a')
+                + '\nadd(name="d",required=[],question="d")\n')
+        g.close()
+        f.close()
+        os.rename(name, name + '.old')
+        os.rename(name + '.new', name)
+
+        student.expect('<DIV class="reload_questions">')
+        student.get('?reload_questions=1')
+        student.expect('question__a')
+        student.check_question_link('a:d')
+    finally:
+        os.rename(name + '.old', name)
+
+
+
 
 ############
 # TODO
