@@ -153,7 +153,7 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         f = cgi.parse_qs(path[-1].split('?')[-1])
         form = {}
         for i in f:
-            form[i] = f[i][0] # Only ONE value per parameter
+            form[i] = ''.join(f[i]) # concatenation of parameters
 
         if form.has_key('guest'):
             path[0] = 'guest' + form['guest']

@@ -65,20 +65,34 @@ def execute(state, plugin, argument):
         else:
             style = ''
 
-    last_answer = last_answer.replace("%","&#37").replace("'", "&#39;"). \
+    last_answer_html = last_answer.replace("%","&#37").replace("'", "&#39;"). \
                   replace('"', '&#34;')
 
-    if state.question.nr_lines == 1:
+    question = state.question.question(state)
+    if '{{{' in question:
+        t = question.split('{{{')[1:]
+        s += '<form>'
+        for i in t:
+            j = i.split('}}}')
+            if j[0] in last_answer:
+                checked = ' checked'
+            else:
+                checked = ''
+            s += '<input type="checkbox" name="%s" value="%s"%s>' % (
+                plugin.plugin.css_name, j[0], checked) + j[1] + '<br>'
+        s += '<br><button type="submit"><p class="answer_button"></p></button>'
+        s += '</form>'
+    elif state.question.nr_lines == 1:
         s += '<INPUT TYPE="text" ID="2" NAME="%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (
             plugin.plugin.css_name, state.question.name,
-            configuration.nr_columns, last_answer,
-            last_answer, style)
+            configuration.nr_columns, last_answer_html,
+            last_answer_html, style)
     else:
         s += '<TEXTAREA NAME="%s" ID="2" COLS="%d" ROWS="%d">%s</TEXTAREA>' % (
             plugin.plugin.css_name,
             configuration.nr_columns,
             state.question.nr_lines,
-            last_answer)
+            last_answer_html)
         s += '<br><button type="submit"><p class="answer_button"></p></button>'
         
     s += '<script type="text/javascript">document.getElementById(2).focus();</script>'

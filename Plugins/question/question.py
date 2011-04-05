@@ -32,7 +32,7 @@ def execute(state, plugin, argument):
     
     random.seed(state.student.seed)
     state.student.tell_question(state.question.name)
-    return state.question.question(state)
+    return state.question.question(state).split('{{{')[0]
 
 
 

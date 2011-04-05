@@ -39,3 +39,7 @@ add(name="C",
     tests=(good("A"),),
     )
 
+add(name="choice",
+    question="Choisir parmi {{{a}}} sdfsffsdf {{{b}}} sfsdfdsfds {{{c}}} safsdfsdfs",
+    tests=(good('a'),),
+    )

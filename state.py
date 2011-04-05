@@ -229,7 +229,8 @@ class State(object):
     def analyse_form(self, form):
         self.form = {}
         for k, v in form.items():
-            self.form[k.split('.')[0]] = v
+            k = k.split('.')[0]
+            self.form[k] = v
 
         if self.form["number"] == None:
             self.form["number"] = str(len(self.history) - 1)
