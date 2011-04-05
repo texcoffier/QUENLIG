@@ -445,6 +445,19 @@ def test_0330_root_plugin_reload(student):
     student.goto_question('a:a')
     student.expect('<DIV class="reload_plugins">')
     
+def test_0340_relog(student):
+    student.expect('<A class="content tips" href="?session_deconnection=1">')
+    student = Student(the_server, student.name)
+    student.expect('<A class="content tips" href="?session_deconnection=1">')
+   
+def test_0350_logout(student):
+    student.expect('<A class="content tips" href="?session_deconnection=1">')
+    student.get('?session_deconnection=1')
+    student.expect('<script>window.location=')
+    student = Student(the_server, student.name)
+    student.expect('<A class="content tips" href="?session_deconnection=1">')
+   
+    
 
 ############
 # TODO

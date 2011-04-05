@@ -102,10 +102,19 @@ class StatePlugin:
             yield c
 
     def __repr__(self):
-        return 'StatePlugin(%s,%s,%s,%s,%s)' % (
+        try:
+            full_content = ' '.join([p.plugin.css_name
+                                     for p in self.full_content])
+        except AttributeError:
+            full_content = '[NULL]'
+        try:
+            content = ' '.join([p.plugin.css_name for p in self.content])
+        except AttributeError:
+            content = '[NULL]'
+        return 'StatePlugin(%s,%s,%s,%s,%s,\n\t%s\n\t%s)' % (
             self.plugin.css_name,
             self.priority_display_int, self.priority_execute_int,
-            self.container, self.current_acls)
+            self.container, self.current_acls, full_content, content)
 
         
 
@@ -179,9 +188,10 @@ class State(object):
 
     def dump(self):
         t = [' DUMP'*10]
-        for plugin in self.plugins_dict.values():
+        for plugin in self.plugins_list:
             t.append(repr(plugin))
-        t.sort()
+        t.append('------------------------------')
+        t.append(student.dump())
         t = '\n'.join(t)
         sys.stderr.write(t + '\n%d\n' % hash(t) )
 
@@ -294,12 +304,11 @@ class State(object):
         return 'text/html', self.full_page
 
     def close(self):
+        self.student.old_role = None
         del states[self.ticket]
 
 
 states = {}
-
-    
 
 def get_state(server, ticket):
     service = cgi.urllib.quote(the_service(server))

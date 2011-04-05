@@ -438,7 +438,7 @@ def all_students():
 def dump():
     t = []
     for s in all_students():
-        t.append(' '.join(['%s:%s' %(k, v)
+        t.append(' '.join(['\t%s:%s\n' %(k, v)
                            for k, v in s.__dict__.items()
                            ]))
     return '\n'.join(t)

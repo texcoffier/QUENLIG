@@ -24,9 +24,7 @@ import casauth
 priority_display = 'session_duration'
 font_size = "70%"
 color = "red"
-# Once deconnected, reconnection is not possible.
-# So this Plugin is disabled
-acls = { 'Default': () } # { 'Default': ('executable',) }
+acls = { 'Default': ('executable',) }
 
 def execute(state, plugin, argument):
     if argument:
