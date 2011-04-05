@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ boxed = True
 css_attributes = (
     "INPUT { width: 100% ; font-family: times; font-size:120%}",
     "TEXTAREA { width: 100% ; }",
+    "FORM { margin: 0px }",
     )
 acls = { 'Default': ('executable',) }
 
@@ -71,7 +72,6 @@ def execute(state, plugin, argument):
     question = state.question.question(state)
     if '{{{' in question:
         t = question.split('{{{')[1:]
-        s += '<form>'
         for i in t:
             j = i.split('}}}')
             if j[0] in last_answer:
@@ -81,7 +81,6 @@ def execute(state, plugin, argument):
             s += '<input type="checkbox" name="%s" value="%s"%s>' % (
                 plugin.plugin.css_name, j[0], checked) + j[1] + '<br>'
         s += '<br><button type="submit"><p class="answer_button"></p></button>'
-        s += '</form>'
     elif state.question.nr_lines == 1:
         s += '<INPUT TYPE="text" ID="2" NAME="%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (
             plugin.plugin.css_name, state.question.name,
