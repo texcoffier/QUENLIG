@@ -185,7 +185,7 @@ class Student:
         q = {}
         for a in self.answers.values():
             if a.answered != False:
-                q[a.question] = a.answered ;
+                q[a.question] = a.answered
         return q
 
     def bad_answer_yet_given(self, question, answer):
@@ -211,9 +211,9 @@ class Student:
             return questions.questions.values()
 
         if self.answerables_cache:
-            return self.answerables_cache        
+            return self.answerables_cache
 
-        t = questions.answerable(self.answered_questions())
+        t = questions.answerable(self.answered_questions(), self)
         self.answerables_cache = t
         return t
 
@@ -384,6 +384,8 @@ class Student:
 
     def bad_answer(self, question, text):
         """The student has wrongly answered the question."""
+        if questions.questions[question]:
+            self.answerables_cache = None
         self.log(question, "bad", text)
 
     def tell_indice(self, question, indice):

@@ -129,6 +129,7 @@ class Question:
         self.default_answer = arg.get("default_answer", "")
         self.evaluate_answer = current_evaluate_answer
         self.highlight = arg.get("highlight", False)
+        self.maximum_bad_answer = int(arg.get("maximum_bad_answer", "0"))
 
     def answers_html(self, state):
         s = ""
@@ -266,6 +267,7 @@ def add(**arg):
     "nr_lines": "Nombre de lignes pour la reponse",
     "default_answer": "Reponse par defaut",
     "highlight": "Question à mettre en évidence",
+    "maximum_bad_answer": "Nombre maximum de mauvaises réponse",
     }
 
     sys.stdout.write("*")
@@ -291,7 +293,7 @@ def add(**arg):
                                       )
     previous_question = arg["name"]
 
-def answerable(answered={}):
+def answerable(answered, student):
     """Returns the authorized question list.
     The parameter is the names of the questions yet answered.
     The prequired are checked here.
@@ -299,7 +301,9 @@ def answerable(answered={}):
     answerable = []
     for q in questions.values():
         if not answered.get(q.name,False) and q.required.answered(answered):
-            answerable.append(q)
+            if (q.maximum_bad_answer == 0
+                or student.bad_answer_question(q.name) < q.maximum_bad_answer):
+                answerable.append(q)
 
     return answerable
 

@@ -6,5 +6,6 @@ tip = "Pensez à tester votre réponse dans la réalité avant de la saisir ici, sin
 
 translations = {
     'answer_button' : 'Envoyer la réponse',
+    'maximum_bad_answer' : "Vous ne pouvez plus répondre à cette question, choisissez en une autre",
 }
 

@@ -48,6 +48,10 @@ def execute(state, plugin, argument):
         else:
             state.student.bad_answer(state.question.name,argument)
 
+    if (state.question.maximum_bad_answer
+        and state.student.bad_answer_question(state.question.name) >= state.question.maximum_bad_answer):
+        state.question = None
+        return '<p class="maximum_bad_answer">'
 
     if state.student.answered_question(state.question.name):
         if state.student.current_role != 'Teacher':

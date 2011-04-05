@@ -40,6 +40,11 @@ add(name="C",
     )
 
 add(name="choice",
-    question="Choisir parmi {{{a}}} sdfsffsdf {{{b}}} sfsdfdsfds {{{c}}} safsdfsdfs",
+    required=["a:a", "a:b"],
+    question="""Choice :
+    {{{a}}} A
+    {{{b}}} B
+    {{{c}}} C""",
+    maximum_bad_answer = 3,
     tests=(good('a'),),
     )
