@@ -39,7 +39,8 @@ def execute(state, plugin, argument):
             if os.path.getmtime(filename) == plugin.plugin.mtime:
                 continue
             state.reload = True
-            del sys.modules[plugin.plugin.__name__]
+            if plugin.plugin.__name__ in sys.modules:
+                del sys.modules[plugin.plugin.__name__]
             plugins.Plugin.plugins_dict[plugin.plugin.name] = plugins.Plugin(utilities.load_module(plugin.plugin.name))
     return ''
 
