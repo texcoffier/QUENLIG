@@ -134,6 +134,7 @@ def display(plugin, s):
         
     
     if plugin.value == None and len(plugin.content) == 0:
+        s.append('<!-- EMPTY -->')
         return
 
     s.append('<DIV class="%s">' % plugin.plugin.css_name)
@@ -212,6 +213,7 @@ def execute(state, plugin, argument):
 
     s = [body]
     for a_plugin in state.roots:
+        s.append('<!-- ' + a_plugin.plugin.css_name + ' -->')
         display(a_plugin, s)
 
     try:

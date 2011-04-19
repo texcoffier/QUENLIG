@@ -26,13 +26,14 @@ boxed = True
 acls = { 'Default': ('executable',) }
 
 def execute(state, plugin, argument):
+    q = state.question
 
-    if state.question == None:
+    if q == None:
         return
-    
+
     random.seed(state.student.seed)
-    state.student.tell_question(state.question.name)
-    return state.question.question(state).split('{{{')[0]
+    state.student.tell_question(q.name)
+    return q.question(state).split('{{{')[0]
 
 
 
