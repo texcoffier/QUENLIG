@@ -49,7 +49,7 @@ class CachedFile:
         self.content_length = 0
         self.content = ''
         self.modification_time = ''
-        # Is this secure (UTF8) ?
+        # XXX Is this secure (UTF8) ?
         if '..' in filename or '/' in filename or '?' in filename:
             return
         self.filename = filename
@@ -94,6 +94,7 @@ class CachedFile:
                 return
             except IOError:
                 pass
+        self.gmtime = 0
 
     def update(self):
         if self.gmtime != os.path.getmtime(self.full_name):
