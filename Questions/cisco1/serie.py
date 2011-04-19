@@ -101,6 +101,9 @@ add(name="paquet",
     good("1500"),
     reject("byte", """En vous demande la taille en octet,
     c'est pas la peine d'écrire 'byte' dans la réponse"""),
+    reject('187',
+           """Un informaticien se doit de parler anglais.
+           Un <em>byte</em> c'est un octet."""),
     bad('MTU', "C'est ça, et il vaut combien&nbsp;?"),
     ),
     )

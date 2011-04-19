@@ -189,7 +189,7 @@ add(name="sauve config",
     utilisée au démarrage&nbsp;?""",
     tests = (
     good("copy running-config startup-config"),
-    bad('copy', "Le routeur vous dis que la commande est incomplète"),
+    bad('copy', "Le routeur vous dit que la commande est incomplète"),
     bad("copy running-config", "Il faut indiquez où vous sauvez"),
     reject("copy running-config ",
         """Si vous copiez ailleurs que dans <tt>startup-config</tt>

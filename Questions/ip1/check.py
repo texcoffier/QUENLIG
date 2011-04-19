@@ -81,7 +81,7 @@ procedure_effacement = """<pre><b>enable</b> # S'il demande un mot de passe, ess
 <b>erase startup-config</b>
 <b>y</b>       <em>LE 'y' N'APPARAÎT PAS ET L'ECRAN SE BLOQUE PENDANT 10 SECONDES</em>
 <b>reload</b>
-                        <em>Tapez return pour confirmer</em>
+                        <em>Tapez return pour confirmer le redémarrage du routeur</em>
 <b>no</b>                      <em>Pas le dialogue de configuration initiale</em>
 <b>y</b>                       <em>Terminer l'auto install</em>
 </pre>

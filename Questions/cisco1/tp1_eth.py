@@ -104,6 +104,7 @@ add(name="routeur>local eth",
 
 add(name="routeur>local eth OK",
     required=["routeur>local eth"],
+    before = "Normalement le cable ethernet est branché",
     question = """Répondez OUI à cette question seulement
     si le ping local sur le port ethernet a fonctionné correctement.
     Sinon vous attendez.""",
@@ -127,7 +128,7 @@ add(name="config pc eth",
     avec la commande <tt>su</tt> avant de configurer Unix.
     Le mot de passe est <tt>moi</tt>
     <p>
-    Si par hasard cela ne fonctionne pas&nbsp;:
+    Si par hasard la liaison ethernet <b>ne fonctionne PAS</b>&nbsp;:
     <ul>
     <li> Utilisez la commande <tt>dmesg</tt> pour savoir quel
     est le nom de la carte réseau qui est sur la carte mère.

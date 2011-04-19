@@ -24,7 +24,7 @@ from check import *
 from configuration_salles import *
 
 add(name="premier",
-    required=["serie:premiere", "serie:prompt"],
+    required=["serie:affiche", "serie:premiere", "serie:prompt"],
     question="""Quelle commande tapez-vous pour avoir les informations
     sur le premier port éthernet de votre routeur&nbsp;?""",
     tests=(
@@ -63,6 +63,9 @@ add(name="paquet",
     tests=(
         good("1500"),
         good("1500 bytes"),
+        reject('187',
+               """Un informaticien se doit de parler anglais.
+               Un <em>byte</em> c'est un octet."""),
     ),
     )
 

@@ -91,7 +91,7 @@ add(name="machine>routeur s1",
     tests = (
     require_ping,
     require("{E0.remote_port.host.S1.remote_port.ip}",
-            "Je ne vois pas l'adresse IP du port série 0 de votre routeur",
+            "Je ne vois pas l'adresse IP du port série 1 de votre routeur",
             parse_strings=host),
     good("ping {E0.remote_port.host.S1.remote_port.ip}",
          parse_strings=host),
@@ -203,6 +203,9 @@ add(name="les routes",
     expect('show'),
     good("show ip route"),
     ),
+    indices = (
+        'Cela commence par <tt>show ip</tt>',
+        ),
     )
 
 add(name="combien",
@@ -241,7 +244,9 @@ add(name="arp",
     question="""Quelle commande tapez-vous sur le routeur pour afficher
     le contenu de la table ARP&nbsp;?""",
     tests = (
-    good(("show arp", "show ARP")),
+        Good(UpperCase(Equal('show arp'))),
+        Good(Comment(UpperCase(Equal('show ip arp')),
+                     "<tt>show arp</tt> est plus court")),
     ),
     )
 

@@ -214,7 +214,8 @@ for i in range(2):
               S%d           Sx        Sy
 Votre routeur <------------> Routeur <----------
 
-Vous voulez pinguer Sy.
+Vous voulez pinguer Sy <small>(il est possible que cela soit impossible,
+répondez quand même à la question)</small>.
         </pre>""" % (i,i),
         tests = (
         require_ping,

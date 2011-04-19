@@ -62,7 +62,7 @@ add(name="pas de traduction",
               "tp1_serie:routeur>local s0 OK"],
     before = """En mode configuration du routeur,
     exécutez la commande <tt>no ip domain lookup</tt>""",
-    question = "Retapez la commande 'coucou'. Êtes-vous bloqué&nbsp;?",
+    question = "Retapez la commande 'coucou'. Pouvez-vous arrêter la commande en tapant <em>Control-C</em>&nbsp;?",
     tests = ( no("Vous avez du mal taper la commande."), ),
     good_answer = """
     <b>
@@ -129,9 +129,10 @@ add(name="config console",
     required=["password enable", "doc:intro"],
     before=en_mode_config,
     question="""Quelle commande tapez-vous pour passer en mode configuration
-    de la console de contrôle du routeur&nbsp;?
+    de la <b>console</b> de contrôle du routeur&nbsp;?
     <p>
-    C'est celle sur laquelle vous êtes en train de taper les commandes.
+    C'est celle sur laquelle vous êtes en train de taper les commandes
+    qui transitent par le cable bleu ciel.
     """,
     tests = (
     require_startswith("line",
@@ -142,6 +143,9 @@ add(name="config console",
     reject('tty', "C'est pas <tt>tty</tt>"),
     expect('console'),
     ),
+    indices = (
+        'La commande commence par <tt>line</tt>',
+        ),
     )
 
 add(name="password console",

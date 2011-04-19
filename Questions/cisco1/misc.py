@@ -47,9 +47,19 @@ add(name="adresses",
 add(name="protocol",
     required=["ip"],
     question = """Quel est l'acronyme du protocole bas niveau utilisé pour
-    communiquer sur Ethernet&nbsp;?""",
+    communiquer sur Ethernet (envoyer les paquets)&nbsp;?""",
     tests = (
         Good(UpperCase(Contain('CSMA') & Contain('CD'))),
+        Bad(Comment(UpperCase(Contain('HDLC')),
+                    "C'est le protocole utilisée pour la liaison série.")),
+        Bad(Comment(UpperCase(Contain('MAC')),
+                    "C'est la manière de définir les adresses ethernet.")),
+        Bad(Comment(UpperCase(Contain('IP')
+                              | Contain('TCP')
+                              | Contain('UDP')
+                              ),
+                    """La réponse est le protocole utilisé par IP
+                    pour envoyer les trames.""")),
         Bad(Comment(Contain('802'),
                     "Pas le nom du standard, le nom du protocole")),
         ),
@@ -65,8 +75,8 @@ add(name="longueur",
 
 add(name="loop",
     required=["ip"],
-    question = """Quelle adresse IP standard permet de communiquer
-    avec la machine locale&nbsp;?""",
+    question = """Quelle adresse IP standard (la même partout)
+    permettant de communiquer avec la machine locale&nbsp;?""",
     tests = (
         Good(Equal('127.0.0.1')),
         Bad(Comment(Equal('127.0.0.0'),
@@ -81,6 +91,16 @@ add(name="mini",
     qui puisse servir à quelque chose&nbsp;?""",
     tests = (
         Good(Equal('255.255.255.252')),
+        Bad(Comment(Equal('255.255.255.254'),
+                    """Ce réseau contient 2 adresse IP et donc
+                    une fois que l'on a enlevé l'adresse de réseau
+                    et l'adresse de <em>broadcast</em> on peut
+                    mettre ZERO machines dans le réseau.
+                    Ce réseau ne servira pas à grand chose..."""
+                    )),
+        Bad(Comment(Equal('255.255.255.255'),
+                    """Ce réseau contient ZERO adresse IP.
+                    Comment allez-vous l'utiliser&nbsp;?""")),
         Comment(~Contain('.'), "Donnez la notation x.y.z.t"),
     ),
     )

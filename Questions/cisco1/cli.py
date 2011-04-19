@@ -261,7 +261,7 @@ add(name="voir",
     d'avoir des informations sur le routeur quelque soit le type
     d'informations que l'on désire voir&nbsp;?""",
     tests = (
-    reject(" ", "Le nom de la commande sans paramètres s'il vous plais."),
+    reject(" ", "Le nom de la commande sans paramètres s'il vous plait."),
     Bad(Comment(Equal('systat'),
                 """Utilisez la commande, vous verrez que cela ne permet
                 pas de faire grand chose""")),
@@ -419,6 +419,8 @@ add(name="fin édition",
                 de nouveau sur l'écran.
                 On veut voir ce qui a déjà été affiché et qui est
                 sortie par le haut...""")),
+    reject('9', """Le chiffre 9 ne m'intéresse pas, ce qu'il faut
+    indiquer est la fonction associée à la touche."""),
     require(('SHIFT', 'SHFT', 'MAJ'), uppercase=True, all_agree=True),
     require(('PAGE', 'PG', 'CTRL'), uppercase=True, all_agree=True),
     require(('UP', 'HAUT'), uppercase=True, all_agree=True),

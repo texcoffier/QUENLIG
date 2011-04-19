@@ -131,7 +131,8 @@ add(name="ram",
     """,
     tests=(
     require_int(),
-    good("{C0.remote_port.host.ram}", parse_strings=host),
+    good("{C0.remote_port.host.ram}", parse_strings=host,
+         replace=((' ',''), ('k',''), ('o',''), ('K',''))),
     ),
     indices = (
     """Dans la ligne indiquant la quantité de mémoire,
