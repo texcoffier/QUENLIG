@@ -678,6 +678,11 @@ reject_endswith("/", "Le / final est inutile"),
 	    <li> <tt>SortLines(...)</tt> trie les lignes dans tous les traitements.
 	  </ul>
       </ul>
+      <p>
+	Par défaut, un étudiant a un seul commentaire pour une mauvaise
+	réponse. On peut concaténer les commentaires en écrivant le test
+	de la forme&nbsp;:
+	<tt>Bad(...) | Bad(...) | Bad(...)</tt>
 
     <h4>Ajouter un test</h4>
       <p>
@@ -1036,7 +1041,7 @@ class UpperCase(TestUnary):
     <address><a href="mailto:exco@@liris.univ-lyon1.fr">Thierry EXCOFFIER</a></address>
     <!-- Created: Sun Jul 24 15:23:19 CEST 2005 -->
     <!-- hhmts start -->
-Last modified: Tue Apr  5 15:01:04 CEST 2011
+Last modified: Wed Apr 20 13:22:36 CEST 2011
 <!-- hhmts end -->
   </body>
 </html>
