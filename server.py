@@ -94,6 +94,8 @@ class CachedFile:
                 return
             except IOError:
                 pass
+            except OSError:
+                pass
         self.gmtime = 0
 
     def update(self):
