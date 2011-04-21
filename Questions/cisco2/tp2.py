@@ -37,6 +37,12 @@ add(name="intro",
     <em>Aide/Explications</em>
     <p>
     Faites en priorité les questions en caractères <b>gras</b>.
+    <p>
+    <b>Soit les variables 'bonnes', 'mauvaises', 'indices' entre 0 et 1.
+    La note de TP est égale à : bonnes*bonnes*(20-6*mauvaises-2*indices).</b>
+    En répondant à toutes les questions vous avez donc 12/20 au minimum.
+    En répondant à la moitié des questions sans faire aucune erreur
+    et sans demander d'indice, vous avez au mieux 5/20.
     """,
     question="Êtes-vous prêt pour l'aventure&nbsp;?",
     tests = ( yes("Répondez OUI s'il vous plais"), ),
@@ -54,16 +60,13 @@ add(name="console",
     <li> Attendez la fin du démarrage.
     <b>N'entrez pas dans le dialogue de configuration initiale</b>.
     </ul>""",
-    question="""La réponse est le chiffre indiqué dans l'énumération
-    suivante&nbsp;:
-    <ol>
-    <li> Si le prompt <tt>Router&gt;</tt> apparaît.
-    <li> Si un prompt contenant <tt>rommon</tt> apparaît.
-    <li> Si un autre prompt se terminant par <tt>&gt;</tt> apparaît.
+    question="""Sélectionnez le cas dans lequel vous êtes&nbsp;:
+    {{{1}}} Le prompt <tt>Router&gt;</tt> apparaît.
+    {{{2}}} Un prompt contenant <tt>rommon</tt> apparaît.
+    {{{3}}} Si un autre prompt se terminant par <tt>&gt;</tt> apparaît.
        ou si on vous demande un mot de passe.
-    <li> Vous n'arrivez pas à réinitialiser le routeur.
-    <li> Si <tt>minicom</tt> ne se lance pas.
-    </ol>
+    {{{4}}} Vous n'arrivez pas à réinitialiser le routeur.
+    {{{5}}} <tt>minicom</tt> ne se lance pas.
     <p>
     Si vous êtes dans un autre cas, appelez un enseignant.
     """,

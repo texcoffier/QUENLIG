@@ -103,8 +103,7 @@ add(name="traceroute",
     réseau) fonctionnent,
     combien de lignes numérotées la commande vous affiche-t-elle
     quand vous tracez la route&nbsp;?
-<pre>    
-traceroute to ksup.univ-lyon1.fr (134.214.126.72), 30 hops max, 40 byte packets
+<pre>traceroute to ksup.univ-lyon1.fr (134.214.126.72), 30 hops max, 40 byte packets
  1  psrl142 (134.214.142.1)  0.347 ms  0.300 ms  0.283 ms
  2  crialteon (134.214.126.85)  0.691 ms  0.688 ms  0.636 ms
  3  crialteon (134.214.126.85)  0.736 ms  0.750 ms  0.639 ms
@@ -182,6 +181,10 @@ add(name="eth0",
     good("ifconfig {E0.port.name} {E0.port.ip}/{E0.nr_bits_netmask}",
          parse_strings=host),
     expect('ifconfig'),
+    Bad(Comment(~Contain('/') & ~Contain('netmask'),
+                """Vous devez ajouter le masque de réseaux soit
+                avec la syntaxe utilisant <tt>/</tt> soit avec
+                le mot clef <tt>netmask</tt>""")),
     require('{E0.port.name}',
             "Je ne vois pas le nom du port éthernet du PC",
              parse_strings=host),

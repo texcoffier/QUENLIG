@@ -24,7 +24,8 @@ from check import *
 from configuration_salles import *
 
 add(name="intro",
-    before="""Le sujet du premier TP est à faire sur deux séance (6 heures).
+    before="""Le sujet du premier TP est à faire sur <b>deux séances</b>
+    (6 heures).
     Vous devez impérativement rester sur le même poste pour la prochaine
     séance.
     En effet, <b>vos réponses dépendent du poste sur lequel vous êtes</b>.
@@ -36,11 +37,13 @@ add(name="intro",
     des routeurs ainsi que de votre PC.
     <p>
     L'ensemble des réponses que vous allez donner seront analysées
-    afin de définir votre note de TP.
-    <b>Il faut répondre correctement à environ 4/5 des questions
-    avec un nombre raisonnable d'erreurs pour avoir la moyenne</b>.
-    Les pénalités pour les mauvaises réponses sont proportionnelles
-    à la note finale.
+    afin de définir votre note de TP :
+    <b>Soit les variables 'bonnes', 'mauvaises', 'indices' entre 0 et 1.
+    La note de TP est égale à : bonnes*bonnes*(20-6*mauvaises-2*indices).</b>
+    En répondant à toutes les questions vous avez donc 12/20 au minimum.
+    En répondant à la moitié des questions sans faire aucune erreur
+    et sans demander d'indice, vous avez au mieux 5/20.
+
     <p>
     En dehors des séances vous ne pourrez plus continuer ce TP,
     vous avez donc tout intérêt à vous dépêcher.

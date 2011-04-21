@@ -115,7 +115,7 @@ add(name="telnet",
     <p>
     Il suffit de faire <tt>telnet une_ip_du_routeur</tt> à partir
     de votre ordinateur.""",
-    question="""Pouvez faire un <tt>telnet</tt> sur votre routeur
+    question="""Pouvez-vous faire un <tt>telnet</tt> sur votre routeur
     et travailler dessus&nbsp;?""",
     tests = (
     no("Montrez cela à l'enseignant, c'est impossible."),
@@ -206,14 +206,13 @@ add(name="password console",
 add(name="password enable",
     required=["password telnet"],
     question="""Quelle commande tapez-vous pour assigner le mot de passe
-    <tt>cisco</tt> au passage en mode privilégié
+    (stocké chiffré) <tt>cisco</tt> au passage en mode privilégié
     avec <tt>enable</tt>&nbsp;?""",
     tests = (
     require_startswith("enable",
                        "Il faut utiliser la commande <tt>enable</tt>"),
     require('cisco', "Je ne vois pas le mot de passe"),
-    bad('enable password cisco', "Command obsolète car insécure"),
-    bad('enable password 0 cisco', "Command obsolète car insécure"),
+    reject('enable password', "Command obsolète car insécure"),
     good('enable secret cisco'),
     ),
     )

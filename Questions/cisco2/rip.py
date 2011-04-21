@@ -44,7 +44,7 @@ add(name="RIP",
            """On ne vous demande pas d'ajouter de routes statiques avec
            la commande <tt>route</tt>"""),
     reject('/', """Pas la peine d'indiquer le masque réseau, le routeur
-    le connait déja"""),
+    le connaît déja"""),
     good("""configure terminal
 router rip
 network {C0.remote_port.host.S0.network}
