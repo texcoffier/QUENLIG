@@ -951,6 +951,12 @@ class Expect(TestString):
             else:
                 return False, "Je devrais trouver '<tt>%s</tt>' dans la réponse" % self.string
 
+def expects(expected, comment=None):
+    a = Expect(expected[0], comment)
+    for e in expected[1:]:
+        a = a & Expect(e, comment)
+    return a
+
 class Reject(Expect):
     def __call__(self, student_answer, state=None, parser=no_parse):
         if parser(self.string, state, self) not in student_answer:
