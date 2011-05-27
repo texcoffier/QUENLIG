@@ -32,10 +32,10 @@ add(name="mots-clefs",
     la fonction <tt>main</tt> 
     """,
     question="""<PRE>
-#include &lt;stdio.h&gt;
-int main(int argc, char **argv)
+#include <iostream>   // Cette ligne est du C++ et non du C 
+int main(void)
 {
-  printf("Bonjour");
+  cout << "Bonjour" << endl ;
   return 0 ;
 }</PRE>
 Parmi tous les termes utilisés dans le programme ci-dessus,
@@ -47,7 +47,7 @@ Parmi tous les termes utilisés dans le programme ci-dessus,
                     """<tt>include</tt> n'est pas un mot clef du langage
                     mais une directive du préprocesseur""")) |
         Bad(Comment(Contain("stdio"),
-                    """<p><tt>stdio.h</tt> n'est pas un mot clef du langage
+                    """<p><tt>iostream</tt> n'est pas un mot clef du langage
                     mais le nom d'un fichier""")) |
         Bad(Comment(Contain("main"),
                     """<p><tt>main</tt> n'est pas un mot clef du langage
@@ -56,10 +56,13 @@ Parmi tous les termes utilisés dans le programme ci-dessus,
                     """<p><tt>argc</tt> et <tt>argv</tt>
                     ne sont pas des mots clefs
                     du langage mais des noms de variables""")) |
-        Bad(Comment(Contain("printf"),
-                    """<p><tt>printf</tt> n'est pas un mot clef du langage
-                    mais le nom d'une fonction d'affichage""")) |
-        Bad(Comment(Contain("bonjour"),
+        Bad(Comment(Contain("cout"),
+                    """<p><tt>cout</tt> n'est pas un mot clef du langage
+                    mais le nom d'une variable""")) |
+        Bad(Comment(Contain("endl"),
+                    """<p><tt>endl</tt> n'est pas un mot clef du langage
+                    mais le nom d'une constante""")) |
+        Bad(Comment(UpperCase(Contain("BONJOUR")),
                     """<p><tt>bonjour</tt> n'est pas un mot clef du langage
                     mais une chaine de caractères""")),
         Bad(Comment(Contain(''), "<p>Il manque des mots clefs")),

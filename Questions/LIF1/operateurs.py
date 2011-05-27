@@ -42,7 +42,7 @@ add(name = "affectation",
     Dans le programme suivant, après avoir déclarées des variables,
     nous les avons <b>initialisées</b> en leur affectant une valeur
     ou une variable.   
-    <pre>int main(int argc, char **argv)
+    <pre>int main(void)
 {
   int toto, titi ;
   char caract ;
@@ -78,7 +78,7 @@ add(name = "affectation",
         ),
     )
 
-prog1 = r'''int main(int argc, char **argv)
+prog1 = r'''int main(void)
 {
   float titi ;
   int toto ;
@@ -100,7 +100,7 @@ add(name = "bon type",
     nr_lines = 13,
     default_answer = prog1,
     tests = (
-     Good(C(Equal(r'''int main(int argc, char **argv)
+     Good(C(Equal(r'''int main(void)
 {
   float titi ;
   float toto ;
@@ -129,7 +129,7 @@ add(name = "addition",
     <p>
     À la fin du programme,
     quelle est la valeur de la variable nommée <tt>titi</tt>&nbsp;?
-   <PRE>int main(int argc, char **argv)
+   <PRE>int main(void)
 {
   int toto, titi ;
   
@@ -179,7 +179,7 @@ add(name = "4 opérations",
     vous trouverez un exemple de calcul qui peut être effectué. <br>
     En fin de calcul, quelle est la valeur de la variable <tt>x</tt> ?
     <pre>
-int main(int argc, char **argv)
+int main(void)
 {
   float x, y ;
 
@@ -201,7 +201,7 @@ add(name = "division entière",
     Ce n'est pas l'entier le plus proche.""",
     question = """Que contiendra la variable <tt>a</tt>&nbsp;?
     <pre>
-int main(int argc, char **argv)
+int main(void)
 {
   float a ;
 

@@ -78,7 +78,7 @@ add(name="nom de variable",
     listez les noms de variables qui ne sont pas valides.
     <small>Vous pouvez le vérifier en copiant ce programme dans un fichier
     et en le compilant.</small>
-    <pre>int main(int argc, char **argv)
+    <pre>int main(void)
 {
   int a_2 ;
   int 2b, c@d ;
@@ -118,7 +118,7 @@ add(name="casse variable",
     les déclarations de variables sont-elles correctes&nbsp;?
     <small>Répondez par oui ou non</small>
     <pre>
-int main(int argc, char **argv)
+int main(void)
 {
   int INT;
   float FLOAT;

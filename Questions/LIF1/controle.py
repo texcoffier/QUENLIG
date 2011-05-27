@@ -36,7 +36,7 @@ add(name = "que fait while",
     required = ["tant que", "operateurs:division entière"],
     question = """Combien vaut la variable <tt>nombre</tt>
     à la fin de la boucle&nbsp;?
-    <pre>int main(int argc, char **argv) 
+    <pre>int main(void) 
 {
 int nombre = 0 ;
 int valeur = 10000 ;
@@ -52,7 +52,7 @@ return 0 ;
         ),
     )
 
-prog2 = r"""int main(int argc, char **argv) 
+prog2 = r"""int main(void) 
 {
 int s = 0 ;
 int i = 1 ;
@@ -76,7 +76,7 @@ add(name = "mon while",
                         ('i<=10', 'i!=11'),
                         ('i+s', 's+i')),
                        Equal('''
-                       int main(int argc, char **argv) 
+                       int main(void) 
                        {int s = 0 ;int i = 1 ;while( i != 11 )
                        { s = s + i ; } return 0 ; }''')))),
         )

@@ -26,18 +26,21 @@ Questions portant sur la syntaxe et la structuration d'un programme C
 from questions import *
 from check import C
 
-prog1 = r"""/* Ce programme affiche les entiers de 0 à 9.
+prog1 = r"""/*
+Ce programme affiche les entiers de 0 à 9 inclus.
 C'est mon premier programme.
 */
-      
-int main(int argc, char **argv)
+#include <iostream>   // Cette ligne est du C++ et non du C 
+#include <stdlib.h>   // Pour pouvoir utiliser EXIT_SUCCESS
+using namespace std ; // Pour pouvoir écrire 'cout' au lieu de 'std::cout'
+int main(void)
 {
   /* On déclare les variables avant les instructions
      Cela permet de séparer l'algorithme du reste */
   int i ;
-  for(i=0; i<10 /* ou bien <=9 */; i++)
-     printf("i=%d\n", i) ; // Affiche le compteur
-  return 0 ;
+  for(i=0; i<10; i++)
+     cout << "i=" << i << endl ; // Affiche le compteur sur une ligne
+  return EXIT_SUCCESS ; // Indique que tout c'est passé sans problème
 }"""
 
 add(name="commentaires",
@@ -67,15 +70,16 @@ add(name="commentaires",
     </ul>""",   
     question = """La réponse à cette question est le programme suivant
     sans ses commentaires&nbsp;:   
-    <pre>%s</pre>""" % prog1,
+    <pre>%s</pre>""" % cgi.escape(prog1),
     nr_lines = 13,
     default_answer = prog1,
     tests = (
-        Good(C(Equal(r'''int main(int argc,char**argv)
-        {int i;for(i=0;i<10;i++)printf("i=%d\n",i);return 0;}''')
+        Good(C(Equal(r'''#include <iostream>#include <stdlib.h>
+	using namespace std ;int main(void)
+        {int i;for(i=0;i<10;i++)cout <<"i="<<i<<endl;return EXIT_SUCCESS;}''')
                )),
         ),
-    bad_answer = """Il y a 4 commentaires à enlever.
+    bad_answer = """Il y a 7 commentaires à enlever.
     Si vous les avez tous enlevé, vous avez peut-être détruit
     des choses en trop.""",
     )
