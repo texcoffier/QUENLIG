@@ -187,7 +187,29 @@ add(name="def",
    Il faut bien penser à ce qui est en rouge.
    <p>
    Les lignes qui sont dans la fonction ne peuvent pas être plus
-   à gauche que la première ligne de la fonction.""",
+   à gauche que la première ligne de la fonction.
+   """,
+    question = """La réponse à cette question est la définition de la fonction
+   <tt>carre</tt> qui retourne le carré du nombre <tt>x</tt> passé en paramètre.
+   """,
+    tests = (
+        Good(P(Equal('def carre(x):\n return x*x'))),
+        Good(P(Equal('def carre(x):\n return x**2'))),
+        expects(('def ', 'carre', 'x', 'return')),
+        expects(('(', ')'),
+                "Les paramètres de la fonction sont entre parenthèses"),
+        Expect('*',
+               """Pour calculer le carré, vous multipliez le nombre
+   par lui-même"""),
+        ),
+    nr_lines = 3,
+    good_answer = """Cette fonction <tt>carre</tt> va donner le bon
+   résultat pour toutes les variables qui contiennent quelque chose
+    qui peut être multiplié (entier, flottant, imaginaires...)""",
+    )
+    
+add(name="len",
+    required = ["def", "for", "table:len"],
     question = """La réponse à cette question est la définition de la fonction
    <tt>longueur</tt> qui retourne la longueur du tableau passé en paramètre.
    <p>
@@ -196,12 +218,22 @@ add(name="def",
    <li>On déclare <tt>longueur</tt> comme une fonction avec un paramètre
         <tt>table</tt>
    <li>On met 0 dans la variable <tt>nb_elements</tt>.
-   <li>Pour chaque élément du tableau <tt>table</tt> :
+   <li>Pour chaque élément <tt>i</tt> du tableau <tt>table</tt> :
        <ul>
        <li> On ajoute 1 à la variable <tt>nb_elements</tt>
        </ul>
    <li> On retourne la valeur de <tt>nb_elements</tt>
    </ul>
    """,
+    nr_lines = 5,
+    tests = (
+        Good(P(Replace((('nb_elements=nb_elements+1', 'nb_elements+=1'),),
+                       Equal('def longueur(table):\n nb_elements = 0\n for i in table:\n  nb_elements += 1\n return nb_elements')))),
+        expects(('for', 'nb_elements', '1', 'return', '=', ' in ', 'def ',
+                 'longueur', ':')),
+        Expect(' i ', "L'indice de boucle doit être <tt>i</tt>"),
+        ),
+    good_answer = """La fonction <tt>len</tt> ne fait pas de boucle,
+    elle est donc beaucoup plus rapide que votre version.""",
     )
 
