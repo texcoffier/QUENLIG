@@ -132,6 +132,18 @@ add(name="len",
     good_answer = "Bien entendu, <tt>len(range(1000))</tt> affiche 1000",
     )
 
+add(name="sum",
+    required = ["création"],
+    question = "Qu'affiche la commande Python : <tt>sum([2000, 11, -1])</tt>",
+    tests = (
+        Good(Int(2010)),
+        ),
+    good_answer = """Bien entendu, <tt>sum(range(4))</tt> affiche 6.
+    <p>
+    Et <tt>sum([])</tt> donne <tt>0</tt>.
+    """,
+    )
+
     
     
     
