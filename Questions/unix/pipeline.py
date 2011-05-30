@@ -58,7 +58,7 @@ import remplacer
 
 add(name="extensions",
     required=["intro", "chercher:pattern", "remplacer:intro",
-              "trier:unique", "expreg:spécial, "remplacer:enlève sans point"],
+              "trier:unique", "expreg:spécial", "remplacer:enlève sans point"],
     question="""Donnez le pipeline permettant d'afficher la liste
     des extensions que vous utilisez dans votre répertoire de connexion
     et tous ses sous répertoires.
