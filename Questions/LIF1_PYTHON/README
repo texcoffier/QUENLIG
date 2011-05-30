@@ -1,0 +1,50 @@
+
+
+##########################################
+# Créer le questonnaire la première fois :
+##########################################
+
+scp -r Questions/LIF1_PYTHON thierry.excoffier@demo710:QUENLIG-2.1/Questions
+./main.py lif1_python create Questions/LIF1_PYTHON 2222 \
+	       admin thierry.excoffier \
+               admin eliane.perna \
+               admin elodie.desseree \
+               admin jacques.bonneville \
+	       url http://demo710.univ-lyon1.fr/LIF1_PYTHON
+
+(
+set +H
+echo "{"
+for I in session_start session_stop session_duration statmenu_smiley statmenu_rank action_help questions_shuffle
+do
+    echo "'$I': ('!executable',),"
+done
+echo '}'
+) >Students/lif1_python/Logs/Default/acls
+
+#####################################################################
+# Copier les questions sur le site et relancer le questionnaire :
+######################################################################
+
+scp -r Questions/LIF1_PYTHON thierry.excoffier@demo710:QUENLIG-2.1/Questions
+ssh thierry.excoffier@demo710 "
+cd QUENLIG-2.1
+./main.py lif1_python stop
+sleep 2
+nohup ./main.py lif1_python start >/dev/null 2>&1 &
+"
+
+######################################################################
+# Affiche le graphe des questions
+######################################################################
+
+./main.py lif1_python plot
+gv Students/lif1_python/HTML/xxx_graphe.ps
+
+
+
+./main.py lif1_python url http://lirispaj.univ-lyon1.fr:2222/ start
+ 
+
+
+
