@@ -51,10 +51,11 @@ def python_color(txt):
     if txt[-1] == ':':
         txt = txt[:-1] + '<span style="background:#F88">:</span>'
     txt = re.sub("^( *)", r'<span style="background:#F88">\1</span>', txt)
-    txt = re.sub(" in ", r' <span style="background:#F88">in</span> ', txt)
-    txt = re.sub("\\bfor ", r'<span style="background:#F88">for</span> ', txt)
-    txt = re.sub("\\bdef ", r'<span style="background:#F88">def</span> ', txt)
-    txt = re.sub(" return ", r' <span style="background:#F88">return</span> ', txt)
+    txt = re.sub(" in ", r' <span style="background:#FF8">in</span> ', txt)
+
+    txt = re.sub(r"\b(if|else|for|def|return)\b",
+                 r'<span style="background:#FF8">\1</span>',
+                 txt)
     return txt
 
 def python_html(txt):
@@ -69,9 +70,11 @@ def python_html(txt):
             else:
                 s.append('<em>' + cgi.escape(line) + '</em>')
     else:
-        for line in txt.split('\n'):
+        txt = txt.strip('\n').split('\n')
+        indent = len(txt[0]) - len(txt[0].lstrip(' '))
+        for line in txt:
             if line.strip():
-                s.append(python_color(line[4:]))
+                s.append(python_color(line[indent:]))
 
     return '<div style="font-family: monospace; background: #FFE;padding:2px;border: 1px solid black;white-space: pre">' + '\n'.join(s) + '</div>'
 

@@ -205,5 +205,44 @@ add(name="def",
     nr_lines = 3,
     good_answer = """Cette fonction <tt>carre</tt> va donner le bon
    résultat pour toutes les variables qui contiennent quelque chose
-    qui peut être multiplié (entier, flottant, imaginaires...)""",
+   qui peut être multiplié (entier, flottant, imaginaires...)""",
     )
+
+add(name="if",
+required = ["idem:inférieur", "idem:égalité", "def"],
+    before = "La syntaxe du « si » en Python est : " + python_html("""
+    if condition:
+       Les lignes de commande qui sont écrites ici
+       sont exécutées si la condition est vérifiée.
+       Ces lignes ne peuvent pas être à gauche de la première.
+    else:
+       Le bloc de « sinon » est optionnel.
+       Ces lignes doivent être indentées sur
+       la même colonne que le premier bloc."""),
+   question = """Donnez la définition de la fonction <tt>signe</tt>,
+   qui a comme paramètre <tt>a</tt> et qui retourne&nbsp;:
+   <ul>
+   <li> -1 si <tt>a</tt> est négatif
+   <li> 0 s'il est nul.
+   <li> 1 s'il est positif
+   </ul>
+   N'utilisez pas de <tt>else</tt> dans cette fonction, ce n'est
+   pas la peine car il y a des <tt>return</tt>.
+   <p>
+   Retournez les valeurs dans l'ordre indiqués sinon votre
+   réponse sera injustement refusée même si elle est correcte.
+   """,
+   nr_lines = 7,
+   tests = (
+   Good(P(Replace((('a<=-1', 'a<0'),
+                 ),
+                 Equal('def signe(a):\n if a<0:\n  return -1\n if a==0:\n  return 0\n return 1')))),
+   expects(('def', 'signe', 'a', 'if', 'return', '0', '1', '-1', ':')),
+   Bad(Comment(~NumberOfIs('if', 2),
+       """Il faut deux « si » (pas un ni trois).
+       Il y en a un pour savoir si c'est négatif et un pour savoir
+        si c'est nul.
+        Si un nombre n'est ni négatif, ni nul, on peut supposer
+        qu'il est positif.""")),
+        ),
+   )
