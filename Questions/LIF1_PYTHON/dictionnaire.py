@@ -63,3 +63,46 @@ nombres['deux'] = 2   # La valeur de la clef 'deux' est 2</pre>
     <li> D'autres choses, mais c'est rarement utile.
     </ul>""",
     )
+
+add(name="keys",
+    required = ["création", "control:for"],
+    before = """La boucle <tt>for</tt> de Python parcours les éléments
+    d'un ensemble.
+    Quand on parcourt un dictionnaire on obtient chacune des clefs
+    du dictionnaire.""",
+    question = """Quelle boucle d'indice <tt>key</tt> écrivez-vous pour
+    afficher les clefs du dictionnaire appelé <tt>dico</tt> les unes
+    après les autres&nbsp;?""",
+    nr_lines = 3,
+    tests = (
+        Good(P(Equal('for key in dico:\n print(key)'))),
+        P(expects(('for', 'key', 'in', 'dico', ':', 'print', '(', ')',
+                   'print(key)'))),
+        ),
+    good_answer = """ATTENTION : l'ordre de parcours des clefs du dictionnaire
+    n'est pas forcément celui dans lequel vous avez mis les éléments dans le
+    dictionnaire.
+    <p>
+    ATTENTION : Il ne faut pas changer le dictionnaire pendant qu'on
+    le parcourt, sinon le résultat est imprédictible.""",
+    )
+
+add(name="values",
+    required = ["keys"],
+    before = """Si <tt>d</tt> est un dictionnaire.
+    Alors <tt>d.keys()</tt> est un tableau contenant toutes
+    les clefs et <tt>d.values()</tt> est un tableau contenant
+    toutes les valeurs.""",
+    question = """Quelle boucle d'indice <tt>value</tt> écrivez-vous pour
+    afficher les valeurs contenues dans le dictionnaire
+    appelé <tt>dico</tt> les unes après les autres&nbsp;?""",
+    nr_lines = 3,
+    tests = (
+        Good(P(Equal('for value in dico.values():\n print(value)'))),
+        P(expects(('for', 'value', 'in', 'dico', ':', 'print', '(', ')',
+                 'values', 'values()', '.values()', 'dico.values()'))),
+        ),
+    good_answer = """Quand on fait cette boucle, il n'y a aucun moyen
+    facile pour trouver la/les clefs qui ont permis d'obtenir la valeur.""",
+    )
+
