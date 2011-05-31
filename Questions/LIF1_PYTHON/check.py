@@ -22,6 +22,7 @@
 from questions import *
 import re
 import cgi
+import compiler
 
 def P_clean(txt):
     if isinstance(txt, str):
@@ -41,6 +42,10 @@ class P(TestUnary):
         if re.match('.*;[ \t]*$', student_answer):
             return (False,
                     'On ne met pas de <tt>;</tt> en fin de ligne en Python')
+        try:
+            compiler.parse(student_answer)
+        except SyntaxError as e:
+            return False, 'Message de Python : <b>' + cgi.escape(str(e))+'</b>'
         return self.children[0](
             P_clean(student_answer), state,
             lambda string, state, test: parser(P_clean(string), state, test)
