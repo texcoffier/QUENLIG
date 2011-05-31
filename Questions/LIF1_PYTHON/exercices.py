@@ -45,7 +45,9 @@ add(name="len",
    """,
     nr_lines = 5,
     tests = (
-        Good(P(Replace((('nb_elements=nb_elements+1', 'nb_elements+=1'),),
+        Good(P(Replace((('nb_elements=nb_elements+1', 'nb_elements+=1'),
+                        ('nb_elements=1+nb_elements', 'nb_elements+=1'),
+                        ),
                        Equal('def longueur(table):\n nb_elements = 0\n for i in table:\n  nb_elements += 1\n return nb_elements')))),
         expects(('for', 'nb_elements', '1', 'return', '=', ' in ', 'def ',
                  'longueur', ':')),
@@ -53,5 +55,37 @@ add(name="len",
         ),
     good_answer = """La fonction <tt>len</tt> ne fait pas de boucle,
     elle est donc beaucoup plus rapide que votre version.""",
+    )
+
+add(name="sum",
+    required = ["control:def", "control:for", "table:sum"],
+    question = """La réponse à cette question est la définition de la fonction
+   <tt>somme</tt> qui retourne la somme des éléments d'un tableau
+   passé en paramètre.
+   <p>
+   La définition de la fonction est la suivante~:
+   <ul>
+   <li>On déclare <tt>somme</tt> comme une fonction avec un paramètre
+        <tt>table</tt>
+   <li>On met 0 dans la variable <tt>la_somme</tt>.
+   <li>Pour chaque élément <tt>i</tt> du tableau <tt>table</tt> :
+       <ul>
+       <li> On ajoute <tt>i</tt> à la variable <tt>la_somme</tt>
+       </ul>
+   <li> On retourne la valeur de <tt>la_somme</tt>
+   </ul>
+   """,
+    nr_lines = 5,
+    tests = (
+        Good(P(Replace((('la_somme=la_somme+i', 'la_somme+=i'),
+                        ('la_somme=i+la_somme', 'la_somme+=i'),
+                        ),
+                       Equal('def somme(table):\n la_somme = 0\n for i in table:\n  la_somme += i\n return la_somme')))),
+        expects(('for', 'la_somme', 'return', '=', ' in ', 'def ',
+                 'somme', ':')),
+        Expect(' i ', "L'indice de boucle doit être <tt>i</tt>"),
+        ),
+    good_answer = """Si vous ne l'avez pas fait : vérifier que votre
+    fonction donne le bon résultat dans l'interpréteur Python.""",
     )
 
