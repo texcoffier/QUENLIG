@@ -185,6 +185,49 @@ print(sum(a) + sum(b))"""),
     On appelle cela des <em>immutables</em>.
     """,
     )
+
+add(name="matrice",
+    required = ["création", "stocke élément"],
+    before = """Une table peut contenir des tables :
+    <tt>matrice = [ [1,2], [3,4] ]</tt>
+    <p>
+    Pour identifier une case de la matrice on va d'abord indiquer
+    un élement du premier tableau (c'est élément est un tableau)
+    et un élement de cet élément.
+    <p>
+    <tt>matrice[0][1]</tt> donne <tt>2</tt>
+    """,
+    question = """Que tapez-vous pour remplacer dans la matrice donnée
+    en exemple le <tt>3</tt> par <tt>5</tt>&nbsp;?""",
+    tests = (
+        Good(P(Equal('matrice[1][0] = 5'))),
+        P(expects(('matrice', '[', ']', '5', '=',
+                   'matrice[1]', 'matrice[1][0]'))),
+        ),
+    good_answer = """On peut bien sûr faire des matrices de matrices&nbsp;!""",
+    )
+
+add(name="multiplication",
+    required = ["concaténation", "idem:multiplication", "matrice"],
+    before = "<tt>3 * [5, 7]</tt> donne <tt>[5, 7, 5, 7, 5, 7]</tt>",
+    question = "Créez une table contenant 1000 zéros (l'entier 0)&nbsp;?",
+    tests = (
+        Good(P(Equal("1000*[0]") | Equal('[0]*1000'))),
+        P(expects(('1000', '*', '[', ']', '[0]'))),
+        ),
+    good_answer = """ATTENTION au piège : le contenu de la tableau
+    n'est pas recopié, les éléments sont tous les mêmes.
+    <p>
+    Regardez bien le programme suivant&nbsp;:""" + python_html(
+        """
+        t = [[1,2]] * 3
+        print(t)             # Cela affiche [[1, 2], [1, 2], [1, 2]]
+        t[0][0] = 5
+        print(t)             # Cela affiche [[5, 2], [5, 2], [5, 2]]
+        """),
+    )
+        
+    
     
     
     
