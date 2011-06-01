@@ -163,6 +163,29 @@ add(name="concaténation",
     good_answer = "À votre avis, que donne <tt>[5] + [] + [6]</tt>&nbsp;?",
     )
 
+add(name="affectation",
+    required = ["création", "sum"],
+    before = """Contrairement au langage C, l'affectation n'est pas une recopie
+    mais un nommage.
+    Vous pouvez donc donner plusieurs noms à la même chose.""",
+    question = "Que va afficher le programme suivant&nbsp;?" + python_html(
+        """a = [1, 2]
+b = a
+b[0] = 3
+print(sum(a) + sum(b))"""),
+    tests = (
+        Int(10),
+        ),
+    good_answer = """Cela donne ce résultat car la variable <tt>a</tt>
+    et <tt>b</tt> représentent le même tableau.
+    Si vous modifiez le tableau cela modifie les deux variables.
+    <p>
+    Vous n'avez pas ce problème avec les nombres et les chaines de caractères
+    car <b>on ne peut pas les modifier</b> une fois qu'ils ont été utilisés.
+    On appelle cela des <em>immutables</em>.
+    """,
+    )
+    
     
     
     
