@@ -55,7 +55,7 @@ def python_color(txt):
     txt = cgi.escape(txt)
     if txt[-1] == ':':
         txt = txt[:-1] + '<span style="background:#F88">:</span>'
-    txt = re.sub("^( *)", r'<span style="background:#F88">\1</span>', txt)
+    txt = re.sub("^( +)", r'<span style="background:#F88">\1</span>', txt)
     txt = re.sub(" in ", r' <span style="background:#FF8">in</span> ', txt)
 
     txt = re.sub(r"\b(if|else|for|def|return)\b",
@@ -81,7 +81,7 @@ def python_html(txt):
             if line.strip():
                 s.append(python_color(line[indent:]))
 
-    return '<div style="font-family: monospace; background: #FFE;padding:2px;border: 1px solid black;white-space: pre">' + '\n'.join(s) + '</div>'
+    return '<div style="font-family: monospace; background: #FFE;padding:2px;border: 1px solid black;white-space: pre">' + '<br>'.join(s) + '</div>'
 
 
 
