@@ -144,6 +144,25 @@ add(name="sum",
     """,
     )
 
+add(name="concaténation",
+    required = ["création", "range"],
+    before = """On peut concaténer des tables en utilisant
+    l'opérateur <tt>+</tt>, les tables utilisées ne sont pas modifiées,
+    une nouvelle table est créée.<p>
+    <tt>[1, 2] + ["x", "y"]</tt> donne <tt>[1, 2, "x", "y"]</tt>
+    """,
+    question = """Proposez une commande qui crée la table&nbsp;:<br>
+    <tt>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</tt>""",
+    tests = (
+        Good(P(Equal('range(10)+range(10)'))),
+        Good(P(Equal('range(10)*2')|Equal('2*range(10)'))),
+        Reject('3', """Vous devez utilisez <tt>range</tt> pour créer la table
+        des entiers de 0 à 9"""),
+        P(expects(('range', '+', 'range(10)'))),
+        ),
+    good_answer = "À votre avis, que donne <tt>[5] + [] + [6]</tt>&nbsp;?",
+    )
+
     
     
     
