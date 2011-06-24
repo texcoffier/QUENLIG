@@ -63,25 +63,26 @@ while( COMPLETER_ICI )
 return 0 ;
 }"""
 
+# A CORRIGER, manque l'incrémentation.
 
-add(name = "mon while",
-    required = ["que fait while"],
-    question = """Compléter le programme suivant afin de calculer la somme
-    des entiers entre 1 et 10 inclus dans la variable <tt>s</tt>
-    <pre>%s</pre>""" % prog2,
-    default_answer = prog2,
-    nr_lines = 10,
-    tests = (
-        Good(C(Replace((('i<11', 'i!=11'),
-                        ('i<=10', 'i!=11'),
-                        ('i+s', 's+i')),
-                       Equal('''
-                       int main(void) 
-                       {int s = 0 ;int i = 1 ;while( i != 11 )
-                       { s = s + i ; } return 0 ; }''')))),
-        )
-    )
-
+# add(name = "mon while",
+#     required = ["que fait while"],
+#     question = """Compléter le programme suivant afin de calculer la somme
+#     des entiers entre 1 et 10 inclus dans la variable <tt>s</tt>
+#     <pre>%s</pre>""" % prog2,
+#     default_answer = prog2,
+#     nr_lines = 10,
+#     tests = (
+#         Good(C(Replace((('i<11', 'i!=11'),
+#                         ('i<=10', 'i!=11'),
+#                         ('i+s', 's+i')),
+#                        Equal('''
+#                        int main(void) 
+#                        {int s = 0 ;int i = 1 ;while( i != 11 )
+#                        { s = s + i ; } return 0 ; }''')))),
+#         )
+#     )
+#  
 
 
 
