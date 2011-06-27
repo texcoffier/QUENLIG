@@ -112,12 +112,12 @@ add(name="range",
     required = ["création"],
     before = """La fonction <tt>range</tt> permet de créer des tableaux
     contenant des entiers successifs.""",
-    question = """Tapez <tt>range(10)</tt> dans votre interpréteur Python.
+    question = """Tapez <tt>range(10)[0]</tt> dans votre interpréteur Python.
     <p>
-    Quel est le dernier nombre affiché dans le tableau&nbsp;?
+    Quel est le nombre affiché&nbsp;?
     """,
     tests = (
-        Good(Int(9)),
+        Good(Int(0)),
         ),
     good_answer = """<tt>range</tt> permet aussi de générer un tableau
     contenant les entiers entre 2 bornes : <tt>range(100, 200)</tt>""",
@@ -145,20 +145,30 @@ add(name="sum",
     )
 
 add(name="concaténation",
-    required = ["création", "range"],
+    required = ["création", "idem:addition"],
     before = """On peut concaténer des tables en utilisant
     l'opérateur <tt>+</tt>, les tables utilisées ne sont pas modifiées,
     une nouvelle table est créée.<p>
     <tt>[1, 2] + ["x", "y"]</tt> donne <tt>[1, 2, "x", "y"]</tt>
     """,
     question = """Proposez une commande qui crée la table&nbsp;:<br>
-    <tt>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</tt>""",
+    <tt>[7, 3, 8, 9, 1]</tt><br>
+    En utilisant les variables suivantes :
+    <ul>
+    <li> <tt>a = [7, 3 ,8]</tt>
+    <li> <tt>b = [8, 9, 1]</tt>
+    <li> <tt>c = [9]</tt>
+    <li> <tt>d = [1]</tt>
+    </ul>
+    """,
     tests = (
-        Good(P(Equal('range(10)+range(10)'))),
-        Good(P(Equal('range(10)*2')|Equal('2*range(10)'))),
-        Reject('3', """Vous devez utilisez <tt>range</tt> pour créer la table
-        des entiers de 0 à 9"""),
-        P(expects(('range', '+', 'range(10)'))),
+        Good(P(Equal('a+c+d'))),
+        Bad(Comment(P(Equal('a+b')),
+                     """Vous obtenez <tt>[7, 3 ,8 ,8 ,9 ,1]</tt>,
+                     ce n'est pas la valeur attendue."""
+                     )),
+        Reject('1', "Vous devez utiliser les variables, pas les valeurs"),
+        P(expects(('+', 'a', 'c', 'd'))),
         ),
     good_answer = "À votre avis, que donne <tt>[5] + [] + [6]</tt>&nbsp;?",
     )
