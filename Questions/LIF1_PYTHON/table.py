@@ -87,6 +87,37 @@ add(name="accès",
     élements en dehors du tableau, il y a une erreur.""",
     )
 
+add(name="accès négatif",
+    required = ["accès", "control:for", "chaine"],
+    before = """Quand on indique une position dans un tableau à partir
+    de la fin on utilise un nombre négatif.
+    <tt>a[-1]</tt> est le dernier élément et
+    <tt>a[-2]</tt> est l'avant-dernier.""",
+    question = """Faites afficher les 10 derniers éléments
+    du tableau <tt>a</tt>
+    <p>
+    Vous utiliserez <tt>i</tt> comme variable de boucle.
+    """,
+    nr_lines = 3,
+    tests = (
+        Reject("len", "Sans utiliser <tt>len</tt> bien sûr"),
+        Reject("*", "Sans utiliser <tt>*</tt> s'il vous plaît."),
+        Good(P(Equal('for i in range(10):print(a[-i-1])'))),
+        Good(P(Equal('for i in range(10):print(a[-1-i])'))),
+        Good(P(Equal('for i in range(10):print(a[-(1+i)])'))),
+        Good(P(Equal('for i in range(10):print(a[-(i+1)])'))),
+        Good(P(Equal('for i in range(1,11):print(a[-i])'))),
+        Good(P(Equal('for i in range(-1,-11,-1):print(a[i])'))),        
+        ),
+    bad_answer = """Le plus simple est de compléter le code suivant&nbsp;:
+    <pre>for i in range(10):
+    print()</pre>""",
+    good_answer = """Cela marche aussi sur les chaines de caractères.
+    <p><tt>"QWERTY"[-1]</tt> c'est tout simplement <tt>Y</tt>""",
+    ),
+    
+    
+
 add(name="stocke élément",
     required = ["accès"],
     question = """Comment stocker la valeur <tt>10</tt> dans le centième
@@ -180,6 +211,7 @@ add(name="chaine",
     comme un tableau&nbsp;!""" + python_html("""
     for i in "coucou":
        print(i)          # Affiche chacune des lettres du texte sur une ligne
+    print('*'*10)        # Affiche **********
     a = "Le"
     b = "chat"
     c = a + " beau " + c # On peut les concaténer
