@@ -412,3 +412,20 @@ add(name="incrémenter",
         Expect('a'),
         ),
     )
+
+add(name="commentaire",
+    required = ["affectation", "chaine", "io:print"],
+    before = """Contrairement au C, en Python on ne peut pas mettre en
+    commentaire plusieurs lignes.
+    Le caractère <b><tt>#</tt></b> indique que tout ce qui suit jusqu'à la
+    fin de la ligne est un commentaire et ne doit pas être pris en compte.""",
+    question = 'Qu\'affiche&nbsp;: <tt>print("#") # Affiche dièze</tt>',
+    tests = (
+        Good(Equal('#')),
+        ),
+    bad_answer = """Quand il est entre guillemet, le caractère <tt>#</tt>
+    devient un simple caractère comme un autre.""",
+    good_answer = """Pour mettre un block de lignes en commentaire il faut
+    mettre un <tt>#</tt> devant chacune des lignes.
+    Un bon éditeur de texte doit permettre de le faire rapidement.""",
+    )

@@ -86,6 +86,8 @@ add(name="sum",
         Expect(' i ', "L'indice de boucle doit être <tt>i</tt>"),
         ),
     good_answer = """Si vous ne l'avez pas fait : vérifier que votre
-    fonction donne le bon résultat dans l'interpréteur Python.""",
+    fonction donne le bon résultat dans l'interpréteur Python.
+    <p>
+    Que donne <tt>somme([0.5, 1.3, 0.1])</tt>&nbsp;?""",
     )
 

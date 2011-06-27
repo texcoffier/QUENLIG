@@ -33,7 +33,12 @@ add(name="print",
     >>> a = 6
     >>> print("a=", a, "!")
     a= 6 !
-    >>> """),
+    >>> """) + """
+    <p>ATTENTION, il ne faut pas mettre les parenthèses quand on utilise
+    Python version 2.
+    <p>
+    Les réponses attendues par ce logiciel
+    doivent utiliser les parenthèses.""",
     question="""Par quoi faut-il remplacer <tt>VOTRE COMMANDE</tt>
     pour que le bout de programme qui suit affiche le bon résultat
     quelque soit les valeurs des variables <tt>a</tt> et <tt>b</tt>&nbsp;?
