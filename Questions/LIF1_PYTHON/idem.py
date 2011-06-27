@@ -373,6 +373,38 @@ add(name="backslash",
     Il suffit d'annuler sa propre signification&nbsp;: <tt>\\\\</tt>""",
     )
 
+add(name="multi-ligne",
+    required = ["backslash"],
+    before = """En langage C, on peut revenir à la ligne quand on le veut
+    en dehors des chaines de caractères.
+    <p>
+    En Python, on peut passer à la ligne seulement s'il manque des parenthèses
+    fermante dans la ligne précédente.
+    Par exemple&nbsp;:
+    <pre>a = (b +
+     c)</pre>
+     
+     Par contre il est interdit d'écrire :
+    <pre>a = b +
+    c</pre>""",
+    question = """Modifiez la commande suivante pour la rendre valide
+    en annulant la signification du retour à la ligne.""",
+    nr_lines = 3,
+    default_answer = "a = b +\n    c",
+    tests = (
+        Good(P(Equal('a=b+\\c'))),
+        expects(('a', 'b', 'c', '+', '=', '\\')),
+        Reject('(', "N'utilisez pas de parenthèses mais l'<em>backslash</em>"),
+        ),
+    good_answer = """Il est conseillé d'ajouter des parenthèses plutôt
+    que d'utiliser des <em>backslash</em>.
+    <p>
+    <b>Il est important pour pouvoir relire facilement vos programmes
+    de ne pas faire de lignes de plus de 75 caractères.</b>""",
+    )
+    
+    
+
 add(name="égalité",
     required = ["chaine"],
     before = """Le test d'égalité est le même en Python et en C.

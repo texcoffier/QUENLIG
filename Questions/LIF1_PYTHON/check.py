@@ -45,7 +45,9 @@ class P(TestUnary):
         try:
             compiler.parse(student_answer)
         except SyntaxError as e:
-            return False, 'Message de Python : <b>' + cgi.escape(str(e))+'</b>'
+            return (False,
+                    'Message de Python : <b>' + cgi.escape(str(e)) + '</b><br>'
+                    )
         return self.children[0](
             P_clean(student_answer), state,
             lambda string, state, test: parser(P_clean(string), state, test)
