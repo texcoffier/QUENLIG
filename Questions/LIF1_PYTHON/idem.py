@@ -348,6 +348,31 @@ add(name="chaine",
     """,
     )
 
+add(name="backslash",
+    required = ["chaine", "io:print"],
+    before = """Pour pouvoir mettre un guillemet dans un chaine de caractères
+    sans que cela la termine, il faut mettre un
+    <em>backslash</em> (<tt>\\</tt>) devant.
+    <p>
+    Le <em>backslash</em> annule la signification du caractère suivant.""",
+    question = """Faites afficher la chaine de caractères
+    <tt>"Bonjour"</tt> <b>avec les guillemets autour</b>""",
+    tests = (
+        Good(P(Equal('print("\\"Bonjour\\"")'))),
+        Bad(Comment(P(Equal('print(\'"Bonjour"\')')),
+                    "Cela fonctionne, mais ce n'est pas la réponse attendue")),
+        P(expects(('print', 'Bonjour', '(', ')', '\\'))),
+        Bad(Comment(~NumberOfIs('\\"', 2),
+                    """Il devrait y avoir deux fois <b><tt>\\\"</tt></b>
+                    dans votre réponse.""")),
+        ),
+    good_answer = """Mais si jamais on veut mettre un
+    <em>backslash</em> (<tt>\\</tt>) dans une chaine de caractères,
+    comment on fait&nbsp;!
+    <p>
+    Il suffit d'annuler sa propre signification&nbsp;: <tt>\\\\</tt>""",
+    )
+
 add(name="égalité",
     required = ["chaine"],
     before = """Le test d'égalité est le même en Python et en C.
