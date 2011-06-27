@@ -133,7 +133,7 @@ add(name="len",
     )
 
 add(name="sum",
-    required = ["création"],
+    required = ["création", "range"],
     question = "Qu'affiche la commande Python : <tt>sum([2000, 11, -1])</tt>",
     tests = (
         Good(Int(2010)),
@@ -171,6 +171,37 @@ add(name="concaténation",
         P(expects(('+', 'a', 'c', 'd'))),
         ),
     good_answer = "À votre avis, que donne <tt>[5] + [] + [6]</tt>&nbsp;?",
+    )
+
+add(name="chaine",
+    required = ["idem:chaine", "control:for", "concaténation", "accès",
+                "idem:affectation"],
+    before = """On peut utiliser une chaine de caractères exactement
+    comme un tableau&nbsp;!""" + python_html("""
+    for i in "coucou":
+       print(i)          # Affiche chacune des lettres du texte sur une ligne
+    a = "Le"
+    b = "chat"
+    c = a + " beau " + c # On peut les concaténer
+    print(a[1])          # Affiche la lettre 'e'"""),
+    question = """Stockez dans la variable <tt>a</tt> : la première
+    et la cinquième lettre de la valeur contenue dans <tt>b</tt>.
+    <p>
+    <tt>a</tt> contiendra donc une chaine de 2 lettres.""",
+    tests = (
+        Good(P(Equal('a=b[0]+b[4]'))),
+        Bad(Comment(P(Equal('a=b[1]+b[5]')),
+                    "Attention les indices commencent à 0 !")),
+        Expect('+', """On utilise <tt>+</tt> pour concaténer les chaines
+        de caractères"""),
+        P(expects(('a', 'b', '=', '0', '4', '[0]', '[4]'))),
+        ),
+    good_answer = """ATTENTION : contrairement aux tableaux, on ne peut
+    pas modifier une chaine de caractères.
+    Essayez de taper&nbsp;:
+    <pre>a = "coucou"
+a[0] = "C"</pre>
+    Cela déclenchera une erreur.""",
     )
 
 add(name="affectation",
