@@ -243,6 +243,32 @@ add(name="flottant",
     ),
     )
 
+add(name="imaginaire",
+    required = ["flottant"],
+    before = """Pour indiquer un nombre imaginaire,
+    on écrit un <tt><b>j</b></tt> après sa valeur.
+    Par exemple&nbsp;: <tt>3j</tt>""",
+    question = """Comment écrivez vous le complexe <tt>3+i</tt>&nbsp;?""",
+    tests = (
+        Good(P(Equal('3+1j'))),
+        Bad(Comment(P(Equal('3+i') | Equal('3+1i')),
+                    """En Python, le symbole des imaginaires est <tt>j</tt>
+                    et non <tt>i</tt>""")),
+        Bad(Comment(P(Equal('3+j')),
+                    """Cela ne fonctionne pas car Python pense que vous
+                    voulez utiliser la variable <tt>j</tt>.
+                    <p>
+                    La lettre <tt>j</tt> est indiquée après la valeur
+                    du nombre imaginaire.
+                    Dans ce cas très particulier,
+                    sa valeur est <tt>1</tt> (un)""")),
+        ),
+    good_answer = """Les opérations de base sur les flottants fonctionnent
+    aussi avec les complexes.""",
+    )
+        
+
+
 add(name="division",
     required = ["flottant"],
     question = """Que tapez-vous pour calculer le résultat de la
