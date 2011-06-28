@@ -94,3 +94,52 @@ add(name="print",
     """,
     )
 
+add(name="lire ligne",
+    required = ["control:def", "chaine:strip", "module:math", "print",
+                "structure:attributs", "idem:commentaire"],
+    before = """Le module nommé <tt>sys</tt> contient un attribut nommé
+    <tt>stdin</tt> qui représente le clavier.
+    <p>
+    Et <tt>stdin</tt> lui même contient un attribut nommé <tt>readline</tt>
+    qui est une fonction qui retourne une ligne saisie au clavier.
+    """ + python_html(
+        """
+        import sys
+        a = sys.stdin.readline() # Lit une ligne et la stocke dans 'a'
+        """),
+    question = """Définissez la fonction <tt>lire_ligne</tt>
+    sans paramètres qui retourne une ligne saisie au clavier en enlevant les
+    caractères inutiles en début et fin.
+    <p>
+    Vous n'avez pas besoin d'utiliser de variables ou d'affectation.
+    <p>
+    Ce n'est pas la peine d'indiquer le <tt>import sys</tt>
+    """,
+    nr_lines = 3,
+    tests = (
+        Good(P(Equal("def lire_ligne():return sys.stdin.readline().strip()"))),
+        expects(('def', 'lire_ligne', ':', 'return', 'sys', 'stdin',
+                 'readline', 'strip', '.')),
+        Bad(Comment(~NumberOfIs('(',3) | ~NumberOfIs(')',3),
+                    """Dans votre réponse il y a un appel à la fonction
+                    <tt>readline</tt>, un appel à <tt>strip</tt> et la
+                    déclaration des paramètres de <tt>lire_ligne</tt>.
+                    Il doit donc y avoir 3 fois <tt>()</tt> dans votre réponse.
+                    """)),
+        Bad(Comment(~NumberOfIs('.',3),
+                    """Dans <tt>sys.stdin.readline</tt> il y a deux fois
+                    le caractère '<tt>.</tt>', de plus vous avez besoin
+                    de l'attribut <tt>strip</tt> de la chaine de caractères
+                    retournée par la fonction <tt>readline</tt>.
+                    Il doit donc y avoir 3 '<tt>.</tt>' dans votre
+                    réponse""")),
+        ),
+    good_answer = """En Python, une fonction est aussi une valeur&nbsp;!
+    Vous pouvez donc écrire&nbsp;:""" + python_html("""
+    import sys
+    lit_ligne = sys.stdin.readline  # 'lit_ligne' est identique à 'sys.stdin.readline'
+    a = lit_ligne()                 # Lit une ligne et la stocke dans 'a'"""),
+    )
+
+    
+        
