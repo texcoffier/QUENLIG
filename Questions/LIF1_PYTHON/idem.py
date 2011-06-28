@@ -87,6 +87,9 @@ add(name="affectation",
     <p>
     <b>N'oubliez pas de taper sur la touche « Entrée » pour
     valider chaque ligne de commande et voir le résultat.</b>
+    <p>
+    ATTENTION : les variables <tt>a</tt> et <tt>A</tt> sont deux variables
+    différentes.
     """
     )
 
