@@ -97,3 +97,44 @@ add(name="strip",
     Il a en effet toujours la tendance à mettre des espaces en trop en début
     et fin de saisie""",
     )
+
+add(name="entier",
+    required = ["io:lire ligne", "conversion"],
+    before = """Pour convertir quelque chose en entier,
+    on utilise la fonction <tt>int</tt>.
+    Elle prend un paramètre de type quelconque et retourne,
+    si c'est possible, l'entier correspondant.
+    <p>
+    <tt>int(5.4)</tt> donne l'entier <tt>5</tt><br>
+    <tt>int(5)</tt> donne l'entier <tt>5</tt><br>
+    <tt>int("5")</tt> donne l'entier <tt>5</tt>
+    """,
+    question = """Écrivez la fonction <tt>lire_entier</tt>
+    qui lit une ligne au clavier et retourne un entier.
+    <p>
+    Ce n'est pas la peine d'indiquer le <tt>import sys</tt>
+    """,
+    nr_lines = 3,
+    tests = (
+        Good(P(Equal("def lire_entier():return int(sys.stdin.readline())"))),
+        expects(('def', 'lire_entier', ':', 'return', 'sys', 'stdin',
+                 'readline', 'int', '.')),
+        Bad(Comment(~NumberOfIs('(',3) | ~NumberOfIs(')',3),
+                    """Dans votre réponse il y a un appel à la fonction
+                    <tt>readline</tt>, un appel à <tt>int</tt> et la
+                    déclaration des paramètres de <tt>lire_entier</tt>.
+                    Il doit donc y avoir 3 fois <tt>()</tt> dans votre réponse.
+                    """)),
+        Bad(Comment(~NumberOfIs('.',2),
+                    """Dans <tt>sys.stdin.readline</tt> il y a deux fois
+                    le caractère '<tt>.</tt>'
+                    <p>
+                    Il doit donc y avoir 2 '<tt>.</tt>' dans votre
+                    réponse""")),
+        ),
+    good_answer = """Avec cette fonction on ne peut pas taper deux
+    entiers sur la même ligne...""",
+    )
+        
+
+
