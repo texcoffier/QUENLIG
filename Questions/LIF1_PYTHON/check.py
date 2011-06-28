@@ -44,7 +44,7 @@ class P(TestUnary):
                     'On ne met pas de <tt>;</tt> en fin de ligne en Python')
         try:
             compiler.parse(student_answer)
-        except SyntaxError as e:
+        except SyntaxError, e:
             return (False,
                     'Message de Python : <b>' + cgi.escape(str(e)) + '</b><br>'
                     )
