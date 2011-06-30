@@ -28,7 +28,6 @@ import cgi
 import re
 
 current_evaluate_answer = None
-
 class Required:
     def __init__(self, world, string):
         w = string.split(":")

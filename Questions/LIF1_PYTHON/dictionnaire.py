@@ -66,7 +66,7 @@ nombres["deux"] = 2   # La valeur de la clef 'deux' est 2</pre>
 
 add(name="keys",
     required = ["création", "control:for"],
-    before = """La boucle <tt>for</tt> de Python parcours les éléments
+    before = """La boucle <tt>for</tt> de Python parcourt les éléments
     d'un ensemble.
     Quand on parcourt un dictionnaire on obtient chacune des clefs
     du dictionnaire.""",

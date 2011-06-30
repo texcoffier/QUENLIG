@@ -382,7 +382,7 @@ add(name="multi-ligne",
     en dehors des chaines de caractères.
     <p>
     En Python, on peut passer à la ligne seulement s'il manque des parenthèses
-    fermante dans la ligne précédente.
+    fermantes dans la ligne précédente.
     Par exemple&nbsp;:
     <pre>a = (b +
      c)</pre>
@@ -505,7 +505,7 @@ add(name="commentaire",
     commentaire plusieurs lignes.
     Le caractère <b><tt>#</tt></b> indique que tout ce qui suit jusqu'à la
     fin de la ligne est un commentaire et ne doit pas être pris en compte.""",
-    question = 'Qu\'affiche&nbsp;: <tt>print("#") # Affiche dièze</tt>',
+    question = 'Qu\'affiche&nbsp;: <tt>print("#") # Affiche dièse</tt>',
     tests = (
         Good(Equal('#')),
         ),
