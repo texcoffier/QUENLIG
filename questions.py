@@ -161,7 +161,7 @@ class Question:
         if self.evaluate_answer:
             answer = self.evaluate_answer(answer, state)
 
-        full_comment = ''
+        full_comment = []
         for t in self.tests:
             if isinstance(t, types.FunctionType):
                 if 'state' in t.func_code.co_varnames:
@@ -170,10 +170,11 @@ class Question:
                     result, comment = t(answer)
             else:
                 result, comment = t(answer, state=state)
-            full_comment += comment
+            if comment not in full_comment:
+                full_comment.append(comment)
             if result != None:
-                return result, full_comment
-        return False, full_comment
+                return result, ''.join(full_comment)
+        return False, ''.join(full_comment)
 
     # Comments starting by a white space are not
     # considered as usefull for the student.
