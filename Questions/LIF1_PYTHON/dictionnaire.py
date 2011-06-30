@@ -33,11 +33,11 @@ add(name="création",
     Les indices des dictionnaires sont appelés des « clefs ».
     Généralement ce sont des chaines de caractères, mais pas seulement.
     <p>
-    Le dictionnaire <tt>nombres = {'un':1, 'deux': 2}</tt>
+    Le dictionnaire <tt>nombres = {"un":1, "deux": 2}</tt>
     peut-être créé de la manière suivante&nbsp;:<pre>
 nombres = {}          # Dictionnaire vide
-nombres['un'] = 1     # La valeur de la clef 'un' est 1
-nombres['deux'] = 2   # La valeur de la clef 'deux' est 2</pre>
+nombres["un"] = 1     # La valeur de la clef 'un' est 1
+nombres["deux"] = 2   # La valeur de la clef 'deux' est 2</pre>
     """,
     question="""Donnez l'écriture directe (avec les {clef: valeur...})
     du dictionnaire dont la valeur de la clef « nom » est
