@@ -189,6 +189,7 @@ class Student:
         return q
 
     def bad_answer_yet_given(self, question, answer):
+        self.answer(question).last_answer = answer
         return answer in self.answer(question).bad_answers
 
     def answered_question(self, question):
@@ -237,11 +238,13 @@ class Student:
         return [a.question for a in self.answers.values()]
 
     def last_answer(self, question):
+        q = self.answers[question]
+        if q.last_answer:
+            return q.last_answer
         if self.answered_question(question):
-            return self.answers[question].answered
-        bad_answers = self.answers[question].bad_answers
-        if bad_answers:
-            return bad_answers[-1]
+            return q.answered
+        if q.bad_answers:
+            return q.bad_answers[-1]
         else:
             return ""
         

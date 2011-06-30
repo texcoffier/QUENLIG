@@ -33,6 +33,7 @@ class Answer:
         self.bad_answers = []
         self.last_time = 0
         self.resign = False
+        self.last_answer = ''
 
     def eval_action(self, action_time, command, value):
         self.last_time = action_time
