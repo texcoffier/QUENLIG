@@ -213,7 +213,7 @@ add(name="chaine",
        print(i)          # Affiche chacune des lettres du texte sur une ligne
     print('*'*10)        # Affiche **********
     a = "Le"
-    b = "chat"
+    b = "chaton"
     c = a + " beau " + c # On peut les concaténer
     print(a[1])          # Affiche la lettre 'e'"""),
     question = """Stockez dans la variable <tt>a</tt> : la première

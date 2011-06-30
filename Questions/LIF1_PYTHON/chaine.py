@@ -29,7 +29,7 @@ from check import *
 add(name="conversion",
     required = ["table:chaine", "idem:flottant", "idem:chaine",
                 "idem:affectation"],
-    before = """En Python on ajoute pas des choux et des carottes.
+    before = """En Python on n'ajoute pas des choux et des carottes.
     Il faut que ce que l'on ajoute soit un minimum compatible,
     par exemple un entier et un nombre flottant.
     On ne peut pas ajouter une chaine de caractères et un nombre.
