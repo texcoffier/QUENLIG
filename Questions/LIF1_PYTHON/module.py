@@ -68,7 +68,7 @@ add(name="créer",
     se termine par <b><tt>.py</tt></b>
     <p>
     Écrivez dans le fichier <tt>exo.py</tt> la fonction
-    <tt>somme</tt> que vous aviez faites.
+    <tt>somme</tt> que vous aviez faite.
     """,
     question = """La réponse à cette question sont les deux lignes permettant
     d'utiliser votre fonction <tt>somme</tt> pour afficher

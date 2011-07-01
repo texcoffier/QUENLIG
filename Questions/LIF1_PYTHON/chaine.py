@@ -74,7 +74,7 @@ add(name="strip",
     required = ["idem:chaine", "structure:attributs"],
     before = """Toutes les chaines de caractères ont un attribut
     nommé <tt>strip</tt> qui est une fonction qui retourne la même
-    chaine de caractère mais en sans les espaces qui sont au début
+    chaine de caractère mais sans les espaces qui sont au début
     et à la fin de la chaine.
     <p>
     Si <tt>a</tt> contient <tt>" x "</tt> alors <tt>a.strip()</tt> est
