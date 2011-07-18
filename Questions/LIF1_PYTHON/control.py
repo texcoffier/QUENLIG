@@ -234,7 +234,7 @@ required = ["idem:inférieur", "idem:égalité", "def"],
    """,
    nr_lines = 7,
    tests = (
-   Good(P(Replace((('a<=-1', 'a<0'),
+   Good(P(Replace((('a<=-1', 'a<0'), ('return a', 'return 0'),
                  ),
                  Equal('def signe(a):\n if a<0:\n  return -1\n if a==0:\n  return 0\n return 1')))),
    expects(('def', 'signe', 'a', 'if', 'return', '0', '1', '-1', ':')),
