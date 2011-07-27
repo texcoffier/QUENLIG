@@ -117,7 +117,8 @@ add(name="lire ligne",
     """,
     nr_lines = 3,
     tests = (
-        Reject("=","Vous ne devez pas utiliser l'affectation pour cette fonction")
+        Reject("=",
+               "Vous ne devez pas utiliser l'affectation pour cette fonction"),
         Good(P(Equal("def lire_ligne():return sys.stdin.readline().strip()"))),
         expects(('def', 'lire_ligne', ':', 'return', 'sys', 'stdin',
                  'readline', 'strip', '.')),

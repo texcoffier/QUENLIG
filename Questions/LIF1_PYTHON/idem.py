@@ -277,6 +277,9 @@ add(name="division",
     question = """Que tapez-vous pour calculer le résultat de la
     division de 21 par 11&nbsp;?""",
     tests = (
+        reject('.',
+               """On vous demande de diviser des entiers, pas des nombres
+               flottants"""),
         Good(P(Equal('21 / 11'))),
         Expect('21'),
         Expect('11'),
@@ -286,8 +289,10 @@ add(name="division",
     good_answer = """ATTENTION : quand vous faites la division de deux
     entiers le résultat est&nbsp:;
     <ul>
-    <li> un nombre flottant si vous êtes en Python version 3
+    <li> un nombre flottant si vous êtes en Python version 3.
     <li> un entier pour les versions antérieures de Python.
+    Pour obtenir un nombre flottant il faut écrire <tt>21/11.</tt>
+    ou <tt>21./11</tt> ou <tt>21./11.</tt>
     </ul>
     """,
     )
