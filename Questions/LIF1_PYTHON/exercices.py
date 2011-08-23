@@ -91,6 +91,46 @@ add(name="sum",
     Que donne <tt>somme([0.5, 1.3, 0.1])</tt>&nbsp;?""",
     )
 
+add(name="ajoute complexe",
+    required = ["control:def", "structure:attributs"],
+    before = """En Python il n'y a pas de procédures, seulement des fonctions.
+    <p>
+    Si il n'y a pas de <tt>return<tt> dans une fonction alors
+    la valeur <tt>None</tt> est automatiquement retournée
+    <p>
+    On peut considérer qu'une procédure est une fonction sans <tt>return<tt>
+    """,
+    question = """Définissez la procédure <tt>ajoute_au_premier</tt>
+    qui a comme paramètres <tt>a</tt> et <tt>b</tt> qui sont des complexes
+    et qui ajoute <tt>a</tt> et <tt>b</tt> et stocke le
+    résultat dans <tt>a</tt>""",
+    default_answer = """def ajoute_au_premier(a, b):
+    """,
+    nr_lines = 4,
+    tests = (
+        Good(P(Replace((
+            ('b.imaginaire+a.imaginaire', 'a.imaginaire+b.imaginaire'),
+            ('b.reel+a.reel', 'a.reel+b.reel'),
+            ('a.reel=a.reel+', 'a.reel+='),
+            ('a.imaginaire=a.imaginaire+', 'a.imaginaire+='),
+            ),
+                       Equal('def ajoute_au_premier(a,b):\n a.reel+=b.reel\n a.imaginaire+=b.imaginaire')
+                        | Equal('def ajoute_au_premier(a,b):\n a.imaginaire+=b.imaginaire\n a.reel+=b.reel')
+                       ))),
+        Bad(Comment(~ NumberOfIs('\n', 2),
+                    """La réponse est en 3 lignes : le <tt>def</tt>
+                    et les deux affections (parties réel et imaginaire)""")),
+        expects(('def', ':', '=', '+', 'imaginaire', 'reel',
+                'a.imaginaire', 'a.reel', 'b.imaginaire', 'b.reel')),
+        ),
+    good_answer = """Il est tout à fait possible d'écrire
+    <tt>a += b</tt> au lieu de <tt>ajoute_au_premier(a, b)</tt>.
+    <p>
+    Mais pour cela on définit une <em>methode</em> et cela dépasse
+    l'objectif de ce cours.""",
+    )
+    
+
 # XXX a finir ? (structure:instance paramétrée n'est pas fini non plus)
 # add(name="ajoute complexe",
 #     required = ["control:def", "structure:instance paramétrée",
