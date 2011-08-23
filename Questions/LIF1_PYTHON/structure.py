@@ -105,8 +105,8 @@ add(name="attributs",
                   |Equal('a.imaginaire=4\na.reel=3')))),
     expects(('a', 'reel', 'imaginaire', '3', '4', '=', '.', 'a.',
             'a.reel', 'a.imaginaire')),
-    Reject('4i',
-           "Vous devez stocker un nombre réel dans la partie imaginaire"),
+    Reject('4i',"Vous devez stocker un nombre réel dans la partie imaginaire"),
+    Expect('\n', 'La réponse est en deux lignes'),
     
     Comment("""Vous devez mettre 3 dans l'attribut réel de <tt>a</tt>
             et 4 dans son attribut imaginaire"""),
@@ -115,10 +115,21 @@ add(name="attributs",
     un message d'erreur va vous dire que <tt>a</tt> ne contient pas d'attribut
     <tt>truc</tt>.
     <p>
-    Mais ATTENTION, si vous taper <tt>a.truc = 5</tt> cela va créer un
+    Mais ATTENTION, si vous tapez <tt>a.truc = 5</tt> cela va créer un
     attribut <tt>truc</tt> dans l'objet que <tt>a</tt> désigne,
     sans vous prévenir."""
     )
 
+# XXX A finir ?
+# add(name="instance paramétrée",
+#     required = ["créer classe", "attributs"],
+#     before = """On peut créer facilement une instance directement
+#     avec les bonnes valeurs.
+#     Pour cela on définit une fonction d'initialisation de l'instance.
+#     Cette fonction d'initialisation est un attribut de la classe,
+#     son nom est <tt>__init__</tt>.
+#     """,
+#     )
+# 
     
 

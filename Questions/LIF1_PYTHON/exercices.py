@@ -91,3 +91,24 @@ add(name="sum",
     Que donne <tt>somme([0.5, 1.3, 0.1])</tt>&nbsp;?""",
     )
 
+# XXX a finir ? (structure:instance paramétrée n'est pas fini non plus)
+# add(name="ajoute complexe",
+#     required = ["control:def", "structure:instance paramétrée",
+#                 "structure:attributs"],
+#     question = """Définissez la fonction <tt>sum_c</tt>
+#     qui a comme paramètres <tt>a</tt> et <tt>b</tt> qui sont des complexes
+#     et qui retourne le complexe égal à la somme des deux.
+#     <p>
+#     Cette fonction ne doit pas modifier ses paramètres.
+#     """,
+#     default_answer = """def sum_c(a, b):
+#     """,
+#     tests = (
+#         Good(P('def sum_c(a,b):return Complexe(a.reel+b.reel,a.imaginaire+b.imaginaire)')),
+#         ),
+#     good_answer = """On peut bien sûr faire en sorte d'utiliser <tt>+</tt>
+#     pour additionner les complexes.
+#     Mais pour cela on définit une <em>methode</em> mais cela dépasse
+#     l'objectif de ce cours.""",
+#     )
+#     
