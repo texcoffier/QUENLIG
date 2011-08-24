@@ -27,7 +27,8 @@ from questions import *
 from check import *
 
 add(name="len",
-    required = ["control:def", "control:for", "table:len"],
+    required = ["control:def", "control:for", "table:len",
+                "idem:incrémenter"],
     question = """La réponse à cette question est la définition de la fonction
    <tt>longueur</tt> qui retourne la longueur du tableau passé en paramètre.
    <p>
@@ -119,16 +120,82 @@ add(name="ajoute complexe",
                        ))),
         Bad(Comment(~ NumberOfIs('\n', 2),
                     """La réponse est en 3 lignes : le <tt>def</tt>
-                    et les deux affections (parties réel et imaginaire)""")),
+                    et les deux affections (parties réelle et imaginaire)""")),
         expects(('def', ':', '=', '+', 'imaginaire', 'reel',
                 'a.imaginaire', 'a.reel', 'b.imaginaire', 'b.reel')),
         ),
     good_answer = """Il est tout à fait possible d'écrire
     <tt>a += b</tt> au lieu de <tt>ajoute_au_premier(a, b)</tt>.
     <p>
-    Mais pour cela on définit une <em>methode</em> et cela dépasse
+    Mais pour cela on définit une <em>méthode</em> et cela dépasse
     l'objectif de ce cours.""",
     )
+
+'''
+nb = [0]*13
+for d1 in range(1, 7):
+  for d2 in range(1, 7) :
+    nb[d1+d2] += 1
+print(nb)
+'''
+
+add(name="somme 2 dés",
+    required=['table:range', 'control:for', 'table:multiplication',
+              'io:print'],
+    nr_lines = 6,
+    question = """La réponse à cette question est la suite de lignes Python
+    que vous devez taper pour calculer et afficher le nombre de tirage
+    de 2 dés qui donnent la même somme.
+    Votre programme devra donc afficher très exactement&nbsp;:
+    <pre>[0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1]</pre>
+    Ceci veut dire que pour obtenir la somme des deux dés égale à&nbsp;:
+    <ul>
+    <li> 0 : Il n'y a aucun tirage possible
+    <li> 1 : Il n'y a aucun tirage possible
+    <li> 2 : Il y a 1 seul tirage possible
+    <li> 3 : Il y a 2 tirages possible
+    <li> ...
+    <li> 7 : Il y a 6 tirages possible
+    <li> ...
+    <li> 12 : Il y a 1 seul tirage possible
+    </ul>
+    Pour que votre réponse soit acceptée :
+    <ul>
+    <li> Le premier dé tiré s'appelle <tt>a</tt>
+    <li> Le deuxième dé tiré s'appelle <tt>b</tt>
+    <li> Les valeurs prises par les 2 dés sont entre 1 et 6
+    <li> Le tableau qui est calculé et affiché s'appellera <tt>nb</tt>
+    <li> Vous utilisez un simple <tt>print</tt> pour afficher <tt>nb</tt>
+    </ul> """,
+    tests = (
+        Good(P(Replace((
+            ('b+a', 'a+b'),
+            ('nb[a+b]=nb[a+b]+1', 'nb[a+b]+=1'),
+            ('nb[a+b]=1+nb[a+b]', 'nb[a+b]+=1'),
+            ),
+                       Equal('''nb = [0]*13
+for a in range(1, 7):
+  for b in range(1, 7) :
+    nb[a+b] += 1
+print(nb)''')))),
+        Expect('13', """Vous devez initialiser <tt>nb</tt> avec un tableau
+        contenant 13 entiers nul en utilisant la multiplication de tableau"""),
+        Reject('range(6)', """Les variables représentant les dés doivent
+        prendre des valeurs entre 1 et 6 inclu (pas entre 0 et 5)"""),
+        Reject('range(1,6)', """Les variables représentant les dés doivent
+        prendre des valeurs entre 1 et 6 inclu (pas entre 1 et 5)"""),
+        P(Replace((('b+a', 'a+b'),),
+                  Expect('a+b',
+                         "Où additionnez-vous les valeurs des 2 dés&nbsp;?"),
+                  )),
+        Expect('nb[', """Je ne vois pas dans votre programme l'endroit
+        où vous modifiez un élement de <tt>nb</tt> pour lui ajouter un"""),
+        P(expects(('nb', ' a ', ' b ', 'nb', 'print', 'for', 'range',
+                 'range(1,7)', '[0]'
+                 ))),
+        ),
+    )
+    
     
 
 # XXX a finir ? (structure:instance paramétrée n'est pas fini non plus)
