@@ -21,7 +21,7 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-# TODO : $$ $1 $* # { } fonctions
+# TODO : # { } fonctions
 
 
 import tpg
@@ -319,7 +319,7 @@ class Sh(tpg.Parser):
 class Sh(tpg.VerboseParser):
     r"""
     set lexer = Lexer
-        token variable_name_char: '[A-Za-z0-9_?]' ;
+        token variable_name_char: '[A-Za-z0-9_?*]' ;
         token pattern: '[[^*?]' ;
         token redirect: '[0-9]*(>>|<<|[><])' escape ;
         token fildes: '&[0-9]' escape;
@@ -365,7 +365,7 @@ class Sh(tpg.VerboseParser):
 
         REPLACEMENT/x -> REPLACEMENT1/x | REPLACEMENT2/x ;
 
-        VARIABLE/$Variable(v)$ -> dollar (VARIABLE_NAME/v|diese/v) ;
+        VARIABLE/$Variable(v)$ -> dollar (VARIABLE_NAME/v|diese/v|'@'/v) ;
 
         KEYWORDS/x -> for/x | do/x | done/x | in/x | case/x | esac/x | if/x | fi/x | then/x | else/x | while/x ;
 
@@ -608,6 +608,9 @@ def test():
 (">a (b)", "<sequence nrchild='1'><pipeline nrchild='1'><subshell><sequence nrchild='1'><pipeline nrchild='1'><command><argument>b</argument></command></pipeline></sequence><fildes><direction>&gt;</direction><where><argument>a</argument></where></fildes></subshell></pipeline></sequence>"),
 ('echo $#', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>#</variable></argument></command></pipeline></sequence>"),
 ('echo $?', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>?</variable></argument></command></pipeline></sequence>"),
+('echo $@', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>@</variable></argument></command></pipeline></sequence>"),
+('echo $1', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>1</variable></argument></command></pipeline></sequence>"),
+('echo $*', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>*</variable></argument></command></pipeline></sequence>"),
 ]:
         print "="*50, a
         c = str(sh(a))
@@ -628,10 +631,3 @@ if __name__ == "__main__":
         test()
     except ImportError:
         test()
-
-
-
-
-
-
-
