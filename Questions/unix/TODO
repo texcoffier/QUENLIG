@@ -7,8 +7,6 @@ des substitution de chaines de caractères ne sont pas suffisantes.
 C'est shellSyntax qui doit réécrire les options longues en courtes.
 
 
-Indenter les lignes contenant :
-
 Faire une question : echo $SDFSFD | sed   et la mettre en prérequis
 
 Faire plus d'exercices avec les guillemets autour des variables.
@@ -17,18 +15,10 @@ Faire des exercices sur /etc/passwd ? Ou les fichiers tabulés en général
 
 Faire des exercices niveau console : edition ligne par exemple.
 
-Faire exercices script.
-
 Nombre de , dans une ligne
-
-Lister les noms de variables shell par ordre alphabétique
 
 Commandes :
     * dirname
-    * dirname/basename
-    * xargs
-    * awk
-    * tr
     * printf
 
 

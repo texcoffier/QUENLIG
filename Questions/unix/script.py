@@ -47,6 +47,7 @@ add(name="paramètre",
                           <pre>'a     b'</pre>
                           comme premier paramètre..."""
                           )),
+        shell_display,
         ),
     )
 
@@ -81,6 +82,7 @@ add(name="shift",
         Expect('$@'),
         Expect('"'),
         Good(Shell(Equal('shift ; echo "$@"'))),
+        shell_display,
         )
     )
 
@@ -117,6 +119,7 @@ add(name="ifrm",
                     )),
         Good(Shell(Equal('if [ -f "$1" ] ; then rm "$2" ; fi'))),
         Good(Shell(Equal('if test -f "$1" ; then rm "$2" ; fi'))),
+        shell_display,
         ),
     )
 
@@ -149,6 +152,7 @@ add(name="for tous",
                     """Cela ne fonctionnera pas dans tous les cas, s'il manque
                     les guillemets autour des deux variables utilisées.""")),
         Good(Shell(Equal('for I in "$@";do echo "$I" ; done'))),
+        shell_display,
         ),
     )
     
@@ -170,6 +174,9 @@ add(name="ifrm2",
     détruit tous les fichiers passés en paramètre.
     """,
     tests = (
+        Reject('$*', "<tt>$*</tt> est obsolette, ne l'utilisez pas."),
+        Reject("for", """Les meilleurs programmes sont les plus courts,
+        vous n'avez pas besoin de faire de boucle"""),
         Expect('$1', "Vous ne testez pas le premier paramètre ?"),
         Expect('$@', """Vous ne détruisez pas tous les fichiers dont
         les noms sont passés en paramètre ?"""),
@@ -183,11 +190,11 @@ add(name="ifrm2",
         Good(Shell(Equal('test -f "$1" && shift && rm "$@"'))),
         Good(Shell(Equal('if [ -f "$1" ];then shift;rm "$@";fi'))),
         Good(Shell(Equal('[ -f "$1" ] && shift && rm "$@"'))),
+        shell_display,
         ),
     )
     
-
-
+# find -name '*.pdf' -exec ifrm {}
 # détruire tous les PDF avec un SVG correspondant : nécessite basename
 
 

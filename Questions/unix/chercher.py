@@ -269,7 +269,55 @@ add(name="exécuter",
     shell_display,
     ),
     )
-    
+
+add(name="xargs",
+    required=["exécuter", "pipeline:intro"],
+    before="""Quand il y a beaucoup de fichiers à traiter, utiliser
+    l'option <tt>-exec</tt> est long car cela lance un processus à chaque fois.
+    <p>
+    Pour éviter ce problème, on utilise la commande <tt>xargs</tt>
+    qui lance la commande passée en argument en lui ajoutant les
+    valeurs lues sur l'entrée standard.
+    <p>
+    S'il y a beaucoup d'arguments, alors la commande sera lancées plusieurs
+    fois pour ne pas mettre trop d'arguments.
+    """,
+    question="""Qu'est-ce que la commande suivante affiche&nbsp;?
+    <pre>echo 'a
+*
+b     B
+c
+d' | xargs echo</pre>
+    """,
+    tests = (
+        Good(Equal('a * b B c d')),
+        )
+    )
+
+add(name="xargs rm",
+    required=["xargs", "detruire:simple"],
+    before = """Si vous avez des milliers de fichiers dans un répertoire,
+    la commande <tt>rm *</tt> ne va pas se lancer car il y en a trop.
+    Il faut alors procéder autrement.""",
+    question = """On supposera que les fichiers ne contiennent pas
+    de caractères spéciaux.
+    <p>
+    Donnez la ligne de commande détruisant tous les fichiers du répertoire
+    courant, même s'il y en a beaucoup&nbsp;:""",
+    tests = (
+        Good(Shell(Equal("echo * | xargs rm"))),
+        Good(Shell(Equal("ls | xargs rm"))),
+        Bad(Shell(Comment(Equal("rm *"),
+                          "On vous a dit que cela ne fonctionnait pas!"))),
+        Expect('rm'),
+        Expect('xargs',
+               """La commande <tt>xargs</tt> sert à découper en morceaux
+               plus petits"""),
+        Expect('|',
+               """On utilise un pipeline pour ne pas passer par un fichier
+               intermédiaire."""),
+        ),
+    )
     
 add(name="pattern",
     required=["simple", "sh:affiche étoile", "pattern:fini par tilde"],

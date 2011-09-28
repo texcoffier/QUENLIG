@@ -129,7 +129,7 @@ add(name="compte C",
     )
 
 add(name="compte tout C",
-    required = ["compte C", "concatener:concat C", "ligne"],
+    required = ["compte C", "concatener:concat C", "ligne", "chercher:xargs"],
     question="""Quelle est la ligne de commande la
     <tt>plus fiable et efficace</tt>
     permettant d'afficher le nombre de lignes contenu dans la concaténation

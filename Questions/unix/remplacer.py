@@ -1040,6 +1040,49 @@ add(name="compter extensions",
         ),
     )
 
+add(name="indent",
+    required=["ajouter fin", "expreg:identique"],
+    question="""Quel est le filtre qui ajoute un espace au début de chaque
+    ligne de texte contenant un caractère <tt>X</tt>
+    <p>
+    Exemple :
+    <table>
+    <tr><th>Entrée<th>Sortie attendue</tr>
+    <tr><td><pre>sdfafs
+sdfffs
+dsffsdXsdafsdf
+----X-----X----
+afsdfsf
+(XXX)</pre><td><pre>sdfafs
+sdfffs
+ dsffsdXsdafsdf
+ ----X-----X----
+afsdfsf
+ (XXX)</pre></tr></table>""",
+    tests = (
+        Expect('sed'),
+        Expect('X'),
+        Reject('+',"Vous n'avez pas besoin de <tt>+</tt> pour cette question"),
+        Expect(".*", """Pour insérer un espace en début de ligne il faut
+        que votre expression trouve tous les caractères qui sont à gauche
+        du <tt>X</tt>. Vous devez donc indiquer cette suite de caractères
+        quelconques dans votre expression régulière."""),        
+        Reject("^", """Vous n'avez pas besoin d'utiliser <tt>^</tt> pour
+        indiquer le début de ligne. En effet, la suite de caractères
+        quelconques étant la plus longue possible, elle arrivera forcément
+        jusqu'au début de ligne."""),
+        Bad(Comment(NumberOfIs(".*",2),
+                    """Cela n'a aucun intérêt d'indiquer la chaine de
+                    caractères quelconques à droite, cela ne fait
+                    que rallonger votre commande.""")),
+        
+        Good(Shell(Equal("sed 's/.*X/ &/'"))),
+        Good(Shell(Equal("sed 's/(.*X)/ \\1/'"))),
+        shell_display,
+        ),
+    )
+    
+
 
 
 # Pas possible
