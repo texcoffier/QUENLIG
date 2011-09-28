@@ -319,8 +319,7 @@ class Sh(tpg.Parser):
 class Sh(tpg.VerboseParser):
     r"""
     set lexer = Lexer
-        token variable_name_char: '[A-Za-z0-9_?*]' ;
-        token pattern: '[[^*?]' ;
+        token variable_name_char: '[A-Za-z0-9_?]' ;
         token redirect: '[0-9]*(>>|<<|[><])' escape ;
         token fildes: '&[0-9]' escape;
         token command_separator: '[ \t\n]*;[ \t\n]*';
@@ -350,6 +349,10 @@ class Sh(tpg.VerboseParser):
         token then: 'then';
         token else: 'else';
         token while: 'while';
+        token question_mark: '\?' ;
+        token star: '\*' ;
+
+        pattern/c -> '[[^]'/c | question_mark/c | star/c ;
     
 	START/c -> (line_separator|word_separator)?
                    SEQUENCE/c 
@@ -365,7 +368,7 @@ class Sh(tpg.VerboseParser):
 
         REPLACEMENT/x -> REPLACEMENT1/x | REPLACEMENT2/x ;
 
-        VARIABLE/$Variable(v)$ -> dollar (VARIABLE_NAME/v|diese/v|'@'/v) ;
+        VARIABLE/$Variable(v)$ -> dollar (VARIABLE_NAME/v|diese/v|'@'/v|star/v) ;
 
         KEYWORDS/x -> for/x | do/x | done/x | in/x | case/x | esac/x | if/x | fi/x | then/x | else/x | while/x ;
 
@@ -392,6 +395,8 @@ class Sh(tpg.VerboseParser):
             | '~'/x $ d+=x $
             | '^'/x $ d+=x $
             | '\''/x $ d+=x $
+            | star/x $ d+=x $
+            | question_mark/x $ d+=x $
             | other/x $ d+=x $
             | KEYWORDS/x $ d+=x $
             )* '"' ;
@@ -611,6 +616,8 @@ def test():
 ('echo $@', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>@</variable></argument></command></pipeline></sequence>"),
 ('echo $1', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>1</variable></argument></command></pipeline></sequence>"),
 ('echo $*', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>*</variable></argument></command></pipeline></sequence>"),
+# Do not work... it should
+# ('"\'" \'\'', ""),
 ]:
         print "="*50, a
         c = str(sh(a))

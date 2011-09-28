@@ -61,9 +61,9 @@ def real_parse(answer, replacement=(), dumb_replace=()):
     try:
         c = sh(answer)
     except tpg.LexicalError:
-        return parse_error, ""
+        return parse_error, parse_error
     except tpg.SyntacticError:
-        return parse_error, ""
+        return parse_error, parse_error
 
     c_student = c = str(c)
     for short_option, long_option, take_option in replacement:
