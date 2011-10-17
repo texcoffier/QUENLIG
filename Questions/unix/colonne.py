@@ -126,6 +126,10 @@ add(name="espaces multiples",
     
     shell_good("sed 's/  */ /g' | cut -d' ' -f5",
                dumb_replace=remplacer.dumb_replace),
+    shell_good("sed 's/ * / /g' | cut -d' ' -f5",
+		"""Il est conseillé d'écrire <tt>__*</tt>
+		plutôt que <tt>_*_</tt>""",
+               dumb_replace=remplacer.dumb_replace),
     shell_good("sed -r 's/ +/ /g' | cut -d' ' -f5",
                dumb_replace=remplacer.dumb_replace),
     shell_bad("sed 's/ +/ /g' | cut -d' ' -f5",

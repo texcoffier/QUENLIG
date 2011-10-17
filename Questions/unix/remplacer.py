@@ -297,6 +297,9 @@ add(name="enlève mot",
     """,
     tests=(
         shell_good( "sed 's/[^ ]* //'", dumb_replace=dumb_replace),
+        shell_bad( "sed 's/.* //'",
+		"Essayez avec une phrase contenant plusieurs mots",
+		 dumb_replace=dumb_replace),
         reject('g', "On veut faire la substitution qu'une seule fois"),
         reject('/^',"Pas besoin de préciser que c'est le premier de la ligne"),
         shell_display,
@@ -315,7 +318,7 @@ add(name="mot",
     <pre>MOT&#9251;MOT&#9251;MOT&#9251;&#9251;MOT</pre>
     """,
     question="""Donner la ligne de commande permettant de remplacer
-    tous les mots par le texte suivant&nbsp;: <tt>MOT</tt>.
+    tous les mots par le texte suivant&nbsp;: <tt>MOT</tt><br>
     On ne changera pas le nombre d'espaces entre les mots.
     """,
     tests=(
@@ -326,7 +329,7 @@ add(name="mot",
                 "Il est préférable de mettre l'étoile à la fin",
                 dumb_replace=dumb_replace,
                 ),
-    reject("[^ ]*",
+    reject("/[^ ]*",
               """L'expression <tt>[^ ]*</tt> représente des chaines
               vide. Donc MOT risque d'être inserré entre chaque paire
               d'espace."""),
@@ -614,6 +617,8 @@ add(name="traduit PATH",
     multiples disparaissent de la variable <tt>PATH</tt>.
     """,
     tests = (
+        Good(Replace(dumb_replace,Shell(Equal(
+            'echo "$PATH" | sed "s/:/ /g"')))),
         Expect('PATH'),
         Expect('$PATH', "On accède au contenu d'une variable avec le..."),
         Expect('"$PATH"',
@@ -623,8 +628,6 @@ add(name="traduit PATH",
         Expect("/g",
                """Indiquez que vous voulez remplacer toutes les occurrences
                et pas seulement la première de la ligne"""),
-        Good(Replace(dumb_replace,Shell(Equal(
-            'echo "$PATH" | sed "s/:/ /g"')))),
         shell_display,
         ),
     )

@@ -233,7 +233,7 @@ add(name="tuer un shell",
     trouvez le PID du shell en train de tourner dans
     ce terminal avec la commande <tt>ps</tt> (sans argument).
     <p>
-    Essayez de tuer le shell en faisant <tt>kill SON_PID</tt>
+    Essayez de tuer le shell (<tt>bash</tt>) en faisant <tt>kill SON_PID</tt>
 """,
     required=["tuer"],
     question="""Quel argument faut-il ajouter à la commande <tt>kill</tt>

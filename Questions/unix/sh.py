@@ -84,7 +84,7 @@ add(name="configurer",
     Si cela vous gêne pour d'autres TP, enlevez cette ligne
     de votre <tt>.bashrc</tt>.
     """,
-    question="""La réponse à cette question est ce que
+    question="""La réponse à cette question est : ce que
     la commande suivante affiche&nbsp;:
     <tt>echo -e 'a\\nB' | sort</tt>""",
     nr_lines = 3,
@@ -264,10 +264,10 @@ add(name="affiche paramètre",
     echo_simple_answer(),
     bad("echo",
         """Quand vous tapez <tt>echo</tt> tout seul cela n'affiche pas
-        la chaine de caractères demandée mais une ligne vide."""),    
+        la chaine de caractères demandée mais une ligne vide."""),
     shell_display,
     ),
-    required=["console"],
+    required=["intro:copier coller", "console"],
     indices=("C'est une commande ``builtin´´",
              "Quand vous criez et qu'un instant après ce cri revient, c'est un ...",
              )

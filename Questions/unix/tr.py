@@ -62,9 +62,9 @@ un</pre></tr></table>
         chaque mot qu'une seule fois."""),
         Expect('[a-z]'),
         Expect('[A-Z]'),
-        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\n\n\n\n" | sort -u'))),
-        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\\n\\n\\n\\n" | sort -u'))),
-        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\\012\\012\\012\\012" | sort -u'))),
+        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\n\n\n" | sort -u'))),
+        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\\n\\n\\n" | sort -u'))),
+        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\\012\\012\\012" | sort -u'))),
         shell_display,
         ),
     )
