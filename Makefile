@@ -17,7 +17,8 @@ help:
 
 # the following session name must contains the collected student data
 # It is necessary to run the load_simulator, profiling and histogram_animation
-SESSION=L2unix2007s1
+SESSION=L2unix2010s2
+SESSION_STUDENTS=39
 
 
 # Generate statistic graph
@@ -42,18 +43,17 @@ load_simulator: # Use port 34001
 		 >Stats/load_simulator.$$NR_STUDENTS.$$TIME_SLICE.unix ; \
 	done
 
-profiling: # Use port 34002
+profiling: # Use port 34002 and 10 requests per student
 	ulimit -s 512 ; \
 	TIME_SLICE=300 ; \
-	NR_STUDENTS=50 ; \
 	Scripts/load_simulator.py \
-		$$NR_STUDENTS \
+		$(SESSION_STUDENTS) \
 		$$TIME_SLICE \
 		$(SESSION) \
-		100 `expr $$NR_STUDENTS '*' 1000` 34002 profiling ; \
+		1000 `expr $(SESSION_STUDENTS) '*' 2` 34002 profiling ; \
 	awk '/primitive calls/ { T=1 ; } T == 1 { print $$0 ; }' \
 		<Students/profiling/logs \
-		>Stats/profiling.$$NR_STUDENTS
+		>Stats/profiling.$(SESSION_STUDENTS)
 
 simulator_plot:
 	# Scripts/simulator_plot 0.fixed_ttl
@@ -65,7 +65,7 @@ simulator_plot:
 # Compute with a time acceleration of 10
 # Display histogram every 6 seconds real time (60 seconds simultated time)
 xxx.histogram:
-	Scripts/load_simulator.py 49 6 $(SESSION) 10 0 6666 xxx histogram
+	Scripts/load_simulator.py $(SESSION_STUDENTS) 6 $(SESSION) 10 0 6666 xxx histogram
 # display the animation
 histogram_animation:xxx.histogram
 	while true ; do clear ; IFS="" ; while read A ; do case "$$A" in *0*) echo "$$A" ;; *) sleep 0.05 ; clear ;; esac ; done <xxx.histogram ; done

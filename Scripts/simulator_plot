@@ -1,0 +1,57 @@
+#!/bin/sh
+# -*- ksh -*-
+
+X_LABEL='Time in seconds since the start of the work'
+
+extract_parameters() {
+  NR_STUDENTS=$(echo $1 | sed 's/\./ /g'|(read LOAD S SEC Q; echo $S  )) 
+  NR_SECONDS=$(echo $1  | sed 's/\./ /g'|(read LOAD S SEC Q; echo $SEC)) 
+  QUESTIONS=$(echo $1   | sed 's/\./ /g'|(read LOAD S SEC Q; echo $Q  )) 
+}
+
+cd "Stats/$1"
+
+for I in load_simulator.*
+do
+  extract_parameters "$I"
+  export DIVI=$(expr 10000 '*' $NR_SECONDS / 60 )
+
+  gnuplot <<%EOT% &
+
+  set logscale y
+  set title '$1 $NR_STUDENTS students, "$QUESTIONS" questions'
+  set xlabel '$X_LABEL'
+  set ylabel 'Seconds or Requests per minute/10000'
+  plot '$I' title 'Response time' with lines, '$I' using 1:(\$3/$DIVI) title 'Requests' with lines
+  pause 1000
+%EOT%
+
+done
+
+
+N=""
+for I in $(ls load_simulator.* | sort -t. -n +1)
+do
+  extract_parameters "$I"
+
+  if [ "$NR_STUDENTS" = 401 ]
+  then
+    continue
+  fi
+  if [ "$N" != "" ]
+    then
+      N="$N,"
+      fi
+  N="$N '$I' title '$NR_STUDENTS students' with lines"
+done
+
+
+gnuplot <<%EOT% &
+
+  set logscale y
+  set title '$1 Response time with different number of client'
+  set xlabel '$X_LABEL'
+  set ylabel 'Seconds'
+  plot $N
+  pause 1000
+%EOT%

@@ -70,7 +70,7 @@ def execute(state, plugin, argument):
         else:
             style = ''
 
-    last_answer_html = last_answer.replace("%","&#37").replace("'", "&#39;"). \
+    last_answer_html = last_answer.replace("%","&#37;").replace("'", "&#39;").\
                   replace('"', '&#34;')
 
     question = state.question.question(state)

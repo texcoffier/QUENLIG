@@ -136,7 +136,7 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         #                               /prefix/Ticket/number/?action=qu
         #                                         0        1       2
         path = self.path.strip('/')
-            
+
         if path.startswith(configuration.prefix):
             path = path.replace(configuration.prefix, "", 1)
 
@@ -185,6 +185,11 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         mime, content = session.execute(form)
         self.send_head(mime, cached=False, content_length=len(content))
         self.wfile.write(content)
+
+    def address_string(self):
+        """Override to avoid DNS lookups"""
+        return "%s:%d" % self.client_address
+ 
 
 server = None
 

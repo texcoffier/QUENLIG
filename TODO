@@ -1,8 +1,11 @@
 TODO Absolute :
+	Le rechargement d'une question empeche les etudiant d'y aller
+	Adresses IP dans stats étudiant
+	Changer les dates de début et fin par le web
+	Authentitification boucle si l'URL se termine par /
 	Statistique sur un etudiqnt en pqrticulier
 	voir 'question stat' marche pas si pas 'voir toute'
 
-	'deconnexion' ==> RECONNEXION marche pas
 	'session_start' pas affiché quand on fait 'Visibilité'
 	Pouvoir noter les mauvaises réponse automatiquement ou manuellement.
 	Le recharge question, n'est pas immédiat sur l'affichage,
