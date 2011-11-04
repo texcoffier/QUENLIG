@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 tip = "L'ensemble des commentaires qui ont été déposés par l'ensemble des étudiants"
 

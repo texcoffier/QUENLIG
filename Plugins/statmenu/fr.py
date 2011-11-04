@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 tip = "Informations concernant les exercices à faire et votre progression dans le groupe"
 

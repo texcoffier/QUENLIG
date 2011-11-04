@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 tip = "Voir toutes les questions et réponses qui ont été faites"
 

@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #

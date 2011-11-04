@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 title = "Questions auxquelles vous avez déjà répondu et qui peuvent peut-être vous servir"
 

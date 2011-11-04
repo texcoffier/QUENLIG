@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 tip = "Pour chaque étudiant affiche les statistiques concernant l'ensemble de son travail"
 

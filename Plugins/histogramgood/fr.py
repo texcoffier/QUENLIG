@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 tip = "Voir l'histogramme du nombre de bonnes réponses par étudiants"
 

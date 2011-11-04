@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 translations = {
     'statmenugood-2': 'Vous êtes très en retard, faites vous aider',

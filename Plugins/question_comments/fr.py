@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 title = "Les commentaires qui ont été déposés à propos de cette question"
 

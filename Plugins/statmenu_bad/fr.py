@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: latin-1 -*-
 
 tip = "Nombres de mauvaises réponses que vous avez donné, évitez de répondre au hasard si vous avez la possibilité de tester."
 
