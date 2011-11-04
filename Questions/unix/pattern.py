@@ -283,6 +283,8 @@ add(name="inverse",
               qui contient un caractère interdit mais commence
               par un caractère autorisé"""),
     reject(("]]", "]["), "N'imbriquez pas les crochets, une seule paire suffit"),
+    reject('![', """Le <tt>!</tt> de la négation est juste après
+    le crochet ouvrant, pas avant."""),
     require("!", "La négation s'indique avec le <tt>!</tt>"),
     number_of_is('!', 1, "Une seule négation est suffisante"),
     require("a-z", "Et les minuscules&nbsp;?"),

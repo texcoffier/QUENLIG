@@ -382,6 +382,7 @@ class Sh(tpg.VerboseParser):
             | diese/x $ d+=x $
             | REPLACEMENT/x $ x.double_quoted=1 ; d+=str(x) $
             | VARIABLE/x $ x.double_quoted=1 ; d+=str(x) $
+            | dollar/x $ d+=x $
             | escaped_char/x $ d += double_quote_backslash(x) $
             | pattern/x $ d+=x $
             | redirect/x $ d+=x $
@@ -616,6 +617,7 @@ def test():
 ('echo $@', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>@</variable></argument></command></pipeline></sequence>"),
 ('echo $1', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>1</variable></argument></command></pipeline></sequence>"),
 ('echo $*', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>*</variable></argument></command></pipeline></sequence>"),
+('echo "$/"', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument>$/</argument></command></pipeline></sequence>"),
 # Do not work... it should
 # ('"\'" \'\'', ""),
 ]:

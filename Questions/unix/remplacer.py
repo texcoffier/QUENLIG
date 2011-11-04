@@ -219,7 +219,10 @@ add(name="TAG XML vides",
     before="""Les fichiers XML contiennent des marqueurs (balises) de la forme :
     <pre>Du &lt;NOM_DU_TAG&gt;texte &lt;b&gt;pouvant&lt;/b&gt; contenir&lt;/NOM_DU_TAG&gt; d'autres &lt;x&gt;&lt;/x&gt; marqueurs.</pre>
     Dans le texte précédent il y a 3 marqueurs.
-    Le marqueur <tt>x</tt> ne contient rien.""",
+    Le marqueur <tt>x</tt> ne contient rien.
+<p>
+    ATTENTION: &lt;x&gt;&lt;/y&gt; n'est pas un marqueur vide.
+""",
     question="""Donnez la commande réécrivant sur sa sortie standard
     le fichier XML lu sur son entrée standard en éliminant
     les marqueurs ne contenant rien.""",
@@ -237,7 +240,12 @@ add(name="TAG XML vides",
             Equal("sed -r 's/<(.+)><\\/\\1>//g'"))),
                     "Le <tt>.+</tt> va <em>avaler</em> le symbole &lt;"),
             ),
-        Expect('/g', 'Il peut y avoir plusieurs TAG sur la même ligne'),
+        Expect('/g', """Il peut y avoir plusieurs TAG sur la même ligne,
+               il faut donc faire plusieurs remplacements"""),
+        Expect('(', """Vous devez définir un groupe pour vérifier que le TAG
+        fermant est du même type que le TAG ouvrant."""),
+        Expect('-r', """Pour que le groupes fonctionnent, il faut utiliser
+        une expression régulière étendue."""),
         shell_display,
         ),
     )
@@ -455,7 +463,8 @@ VANDORPE&#9251;
     reject(('^', '$'),
            """<tt>^</tt> et <tt>$</tt> ne sont pas nécessaires pour
            répondre à cette question"""),
-    
+    reject('\\2\\1', """N'auriez-vous pas oublié de mettre un espace entre
+    le nom et le prénom&nbsp;?"""),    
     shell_display,
     ),
     indices=("""On doit donner une option particulière à <tt>sed</tt>
@@ -688,7 +697,8 @@ add(name="cherche PATH",
     shell_require("<replacement",
                   """Je ne vois pas de 'remplacement'.
                   La commande <tt>for</tt> a besoin du résultat
-                  du pipeline pour avoir la liste des paramètres."""), 
+                  du pipeline pour avoir la liste des paramètres."""),
+    require('-ld', "On veut utiliser <tt>-ld</tt> comme option de <tt>ls</tt>"),
     shell_display,
     ),
     good_answer="""La solution que vous avez proposée est en effet
@@ -949,7 +959,7 @@ gz</pre></tr></table>""",
 add(name="enlève point gauche",
     required=['intro','expreg:négation', 'expreg:ligne de A'],
     question="""Quelle ligne de commande filtre l'entrée standard en remplaçant
-    les lignes ne contenant pas le caractère '.' par une ligne vide.
+    les lignes ne contenant <b>pas</b> le caractère '.' par une ligne vide.
     <p>
     Par exemple :
     <table><tr><th>Entrée<th>Sortie</tr>
@@ -1019,6 +1029,7 @@ add(name="liste extensions",
             Equal("ls | sed -e 's/^[^.]*$//' -e 's/.*\\.//' | sort -u")
             | Equal("ls | sed -e 's/^[^.]*$//' -e 's/.*[.]//' | sort -u")
             )),
+        Expect('sort', "Chaque extension doit être affichée une seule fois"),
         ),
     default_answer = "ls | ",
     )
@@ -1078,9 +1089,16 @@ afsdfsf
                     """Cela n'a aucun intérêt d'indiquer la chaine de
                     caractères quelconques à droite, cela ne fait
                     que rallonger votre commande.""")),
-        
+        Bad(Comment(Contain('-r') & ~Contain('('),
+                    """Pas besoin d'expression régulière étendue si
+                    vous n'utilisez pas de groupe""")),
+        Bad(Comment(~Contain('-r') & Contain('('),
+                    """Vous avez besoin d'expression régulière étendue si
+                    utilisez un groupe""")),
+        Reject("$", """Pas besoin d'indiquer de fin de ligne, puisque
+               seul le début vous intéresse"""),
         Good(Shell(Equal("sed 's/.*X/ &/'"))),
-        Good(Shell(Equal("sed 's/(.*X)/ \\1/'"))),
+        Good(Shell(Equal("sed -r 's/(.*X)/ \\1/'"))),
         shell_display,
         ),
     )

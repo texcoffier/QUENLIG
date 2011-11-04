@@ -394,7 +394,8 @@ add(name='nombre entier',
     
 add(name="identique",
     question="""Quelle expression régulière étendue représente les
-    lignes ne contenant que des caractères identiques.
+    lignes ne contenant <b>que</b> des caractères identiques au premier
+    de la ligne.
     """,
     tests=(
     reject(('a','A'),
@@ -412,7 +413,9 @@ add(name="identique",
     good('(^.)\\1*$', "Je préfère : <tt>^(.)\\1*$</tt>"),
     bad('^(.)\\1+$', """Presque, mais cela ne trouve pas
     les lignes d'un seul caractère"""),
-    reject('+', "Vous ne devez pas utiliser le <tt>+</tt>"),
+    reject('+', """Vous ne devez pas utiliser le <tt>+</tt>
+    car une ligne contenant un seul caractère contient que des caractères
+    identiques !"""),
     require_startswith('^', """Pour ce problème,
     le <tt>^</tt> doit être en début d'expression régulière""") ,
     require_endswith('$', """Pour ce problème,

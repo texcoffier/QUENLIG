@@ -147,7 +147,8 @@ add(name="copie distante",
                 "tar -cf - . | ssh b201pc34 cd /tmp/toto\;tar -xf -"
                 ),
                dumb_replace=dumb_replace),
-
+    reject('.tar', """Vous n'avez pas besoin de passer par un fichier
+    <tt>.tar</tt> puisque vous utilisez un pipeline"""),
     reject(('scp', 'rcp'), """Avec <tt>scp</tt> ou <tt>rcp</tt> c'est bien,
     mais on vous demande de répondre avec ce que vous avez déjà vu
     durant ce TP (regardez les prérequis)."""),

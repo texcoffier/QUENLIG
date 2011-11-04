@@ -56,7 +56,7 @@ add(name="tous",
     question="""Quel est le script minimal qui affiche
     tous ses paramètres&nbsp;?""",
     tests = (
-        Expect('"'),
+        Expect('"', "Il ne manquerait pas des guillemets ?"),
         Good(Shell(Equal('echo "$@"'))),
         Bad(Comment(Shell(Equal('echo "$*"')),
                     """La variable <tt>*</tt> est obsolette, il est
@@ -128,7 +128,12 @@ add(name="for tous",
     required=["tous", "sh:boucle"],
     question="""Quel est le script d'une seule ligne qui affiche
     ses arguments en en mettant UN par ligne.
-    <p>
+    Si votre script est appelé avec comme arguments&nbsp;:<br>
+    <tt>un deux "3&nbsp;&nbsp;&nbsp;&nbsp;4"</tt>
+     <br>il affichera&nbsp;:
+    <pre>un
+deux
+3    4</pre>
     La variable de boucle s'appelera <tt>I</tt>
     """,
     tests = (

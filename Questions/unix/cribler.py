@@ -207,6 +207,7 @@ add(name="source",
     shell_good(("grep sqrt *.c","grep -h sqrt *.c") ),
     grep_required,
     grep_e_inutile,
+    reject('echo', "Pas besoin de <tt>echo</tt> pour cette commande triviale"),
     reject(".C",
            "L'extension est <tt>.c</tt> pas <tt>.C</tt>"
            ),

@@ -40,6 +40,9 @@ add(name="intro",
         Expect('liste'),
         Expect('ls -R '),
         Expect('~', "Vous n'avez pas indiqué votre répertoire de connexion"),
+        Expect('|', """Il faut que la commande <tt>tee</tt> lise sur son
+              entrée standard ce que la commande <tt>ls</tt> écrit sur
+              sa sortie standard."""),
         Good(Shell(Equal("ls -R ~ | tee liste"))),
         Good(Comment(Shell(Equal("ls -R ~/ | tee liste")),
                      'Le / après le ~ est inutile dans ce cas'

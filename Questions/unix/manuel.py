@@ -99,7 +99,7 @@ add(name="voir aussi",
     mais la moins visible est la liste des autres documentations
     qui sont liées à celle-ci.
     En effet cette liste est à la fin de la documentation.
-    C'est dans la section <b>SEE ALSO</b> (VOIR AUSSI) du manuel.
+    C'est dans la partie <b>SEE ALSO</b> (VOIR AUSSI) de la page manuel.
     """,
     question="Citez l'une des <b>commandes</b> liées à <tt>man</tt>",
     tests=(

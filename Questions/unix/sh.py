@@ -210,9 +210,9 @@ add(name="père",
     require("cd", """Je ne vois pas le nom de la commande permettant
     de changer de répertoire courant"""),
     shell_bad("cd /..", "Vous n'allez pas dans le père mais à la racine"),
-    shell_bad("cd ../", "Un caractère plus court s'il vous plais."),    
-    shell_bad("cd .", "Vous restez sur place&nbsp;!"),    
-    shell_bad("cd ../.", "Deux caractères plus court s'il vous plais."),    
+    shell_bad("cd ../", "Un caractère plus court s'il vous plaît."),
+    shell_bad(("cd .", "cd ./"), "Vous restez sur place&nbsp;!"),    
+    shell_bad("cd ../.", "Deux caractères plus court s'il vous plaît."),
     shell_display,
     )
     )
@@ -307,12 +307,12 @@ add(name="affiche paramètres spéciaux",
     )
 
 add(name="affiche étoile",
-    question="""Quel commande permet d'afficher le texte suivant
+    question="""Quelle commande permet d'afficher le texte suivant
     sur la sortie standard (l'écran)&nbsp;:
     <pre>*</pre>""",
     tests=(
     shell_good("echo '*'"),
-    shell_bad("echo *",
+    shell_bad(("echo *", "echo '\*'"),
               """Essayez la commande que vous avez indiqué,
               cela ne va pas afficher une étoile..."""),
     shell_display,
@@ -634,7 +634,7 @@ add(name="deuxième mot",
     "Z=$(date | read A Z C ; echo $Z)",
     "Z=$(date | read A Z B ; echo $Z)",),
     """La commande <tt>echo</tt> a lieu après que les deux commandes
-    dans le pipeline se soit terminée.
+    dans le pipeline se soient terminées.
     Elle obtient la valeur de la variable de son père et
     non de la commande <tt>read</tt>"""),
     reject('cut', """N'utilisez pas <tt>cut</tt> mais <tt>read</tt>
@@ -655,7 +655,7 @@ add(name="exécution séquencielle",
     tests=(
     good(";"),
     bad("|", "L'exécution est parallèle et non séquentielle"),
-    bad("||", """La deuxième commande s'exécute QUE SI la première c'est
+    bad("||", """La deuxième commande s'exécute QUE SI la première s'est
     mal passé."""),
     bad("&", "Mis à la fin d'un commande, elle s'exécute en arrière plan."),
     bad("&&", """Exécution séquencielle fiable, la deuxième s'exécute seulement
@@ -889,7 +889,7 @@ Tout autre nom de variable sera refusé.
     et testez vos commandes avant de répondre"""),
     reject('for $I', """En tapant <tt>for $I</tt> vous dites à la commande
     <tt>for</tt> que le nom de la variable à itérer est dans
-    la variable <tt>I</tt>. Alors que c'est <tT>I</tt> la variable
+    la variable <tt>I</tt>. Alors que c'est <tt>I</tt> la variable
     que l'on veut itérer."""),
     shell_display,
     ),
@@ -957,16 +957,21 @@ add(name="longueurs",
 """,
     default_answer = 'while read A ; do echo "$A" ; done',
     tests=(
+    expect('length'),
+    expect('expr'),
+    reject('-', "Pas besoin d'options pour cette commande"),
+    reject(("$A ", "$A)"),
+           "N'oubliez pas les guillemets quand vous accédez aux variables"),
     shell_good('while read A;do echo "$(expr length "$A") $A" ; done'),
     shell_good('while read A;do echo $(expr length "$A") "$A" ; done'),
     shell_good('while read A;do echo $(expr length "$A")" $A" ; done'),
     shell_bad('while read A;do echo "$(expr length "$A")" "$A" ; done',
               "Vous enlevez 2 caractères et vous avez trouvé."),
-    expect('expr'),
     shell_display,
     ),
     )
 
+# XXX Faire une question pour enlever le premier caractère de la ligne
 
 add(name="refaire cat",
     required=["tant que", "remplacer:intro", "pipeline:intro"],
@@ -1001,6 +1006,7 @@ add(name="refaire cat",
     expect('read'),
     expect('echo'),
     expect('A'),
+    Expect(' $A', "Où ajoutez-vous l'espace avant le contenu de A&nbsp;?"),
     shell_display,
     ),
     )

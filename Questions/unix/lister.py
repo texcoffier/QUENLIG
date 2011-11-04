@@ -59,6 +59,8 @@ add(name="nommé",
             sans faire référence à <tt>/usr</tt> dans la
             ligne de commande&nbsp;?"""),
     reject("-", "Il n'y a pas besoin de donner des options à <tt>ls</tt>"),
+    reject("echo", """Dans la liste des questions qui peuvent vous servir,
+           on ne parle pas d'<tt>echo</tt> mais de..."""),
     shell_display,
     ),
     )

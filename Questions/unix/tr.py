@@ -53,6 +53,8 @@ un</pre></tr></table>
     """,
     nr_lines = 7,
     tests = (
+        Reject('text', """Le texte « Ceci est un texte court, très court. »
+               ne fait pas parti de votre réponse, c'était un exemple."""),
         Expect('sort'),
         Expect('tr'),
         Expect('|',
@@ -62,9 +64,17 @@ un</pre></tr></table>
         chaque mot qu'une seule fois."""),
         Expect('[a-z]'),
         Expect('[A-Z]'),
-        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\n\n\n" | sort -u'))),
-        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\\n\\n\\n" | sort -u'))),
-        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\\012\\012\\012" | sort -u'))),
+        Bad(Comment(~ NumberOfIs('tr', 1),
+                      """Vous ne devez lancer la commande <tt>tr</tt> qu'une
+                      seule fois.""")),
+        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\n\n\n" | sort -u')
+                   | Equal('tr "[A-Z],. " "[a-z]\\n\\n\\n" | sort -u')
+                   | Equal('tr "[A-Z],. " "[a-z]\\012\\012\\012" | sort -u'))),
+        Good(Comment(Shell(Equal('tr "[A-Z],. " "[a-z]\n" | sort -u')
+                           | Equal('tr "[A-Z],. " "[a-z]\\n" | sort -u')
+                           | Equal('tr "[A-Z],. " "[a-z]\\012" | sort -u')),
+                     """Ceci fonctionne, mais il est conseillé de mettre le
+                     même nombre de caractères dans les deux paramètres""")),
         shell_display,
         ),
     )

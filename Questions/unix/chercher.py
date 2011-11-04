@@ -31,6 +31,9 @@ add(name="intro",
     tests=(
     reject('ls', "<tt>ls</tt> permet de les voir, pas de les chercher"),
     reject('grep', "<tt>grep</tt> cherche dans les fichiers pas les fichiers"),
+    reject('locate', """<tt>locate</tt> n'est pas une commande unix.
+           de plus, elle cherche dans une base de données qui n'est
+           pas très fiable."""),
     good("find"),
     ),
     indices=("C'est le mot 'trouver' en anglais",
@@ -264,6 +267,7 @@ add(name="exécuter",
             """Il faut un espace avant le <tt>\\;</tt> final"""),
     reject("ls", """On vous demande pas de lister les informations
     sur les fichiers, on veut les copier"""),
+    reject("cp -", "Pas besoin d'option pour <tt>cp</tt>"),
     shell_good("find . -name '*.c' -exec cp {} {}.bak \;",
                dumb_replace=dumb_replace + (('-type f ',''),)),
     shell_display,
@@ -295,7 +299,7 @@ d' | xargs echo</pre>
     )
 
 add(name="xargs rm",
-    required=["xargs", "detruire:simple"],
+    required=["xargs", "pipeline:intro", "detruire:simple"],
     before = """Si vous avez des milliers de fichiers dans un répertoire,
     la commande <tt>rm *</tt> ne va pas se lancer car il y en a trop.
     Il faut alors procéder autrement.""",
@@ -307,12 +311,15 @@ add(name="xargs rm",
     tests = (
         Good(Shell(Equal("echo * | xargs rm"))),
         Good(Shell(Equal("ls | xargs rm"))),
-        Bad(Shell(Comment(Equal("rm *"),
-                          "On vous a dit que cela ne fonctionnait pas!"))),
+        Bad(Shell(Comment(Contain("rm *"),
+                          "On vous a dit que <tt>rm *</tt> cela ne fonctionnait pas!"))),
         Expect('rm'),
         Expect('xargs',
                """La commande <tt>xargs</tt> sert à découper en morceaux
                plus petits"""),
+        Reject("find", """La commande <tt>find</tt> va trouver tous les
+               fichier de la hiérarchie, pas les fichiers du répertoire
+               courant."""),
         Expect('|',
                """On utilise un pipeline pour ne pas passer par un fichier
                intermédiaire."""),

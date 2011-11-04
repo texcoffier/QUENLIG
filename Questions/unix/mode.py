@@ -231,6 +231,7 @@ add(name="récursif",
     On n'a pas besoin d'une commande autre que <tt>chmod</tt>.
     """,
     tests=(
+    reject("find", "Pas besoin de <tt>find</tt> seulement <tt>chmod</tt>"),
     reject('ugo', 'On veut <tt>a</tt> à la place de <tt>ugo</tt>'),
     reject('/', "Pourquoi un <tt>/</tt>&nbsp;?"),
     reject(('1','3','5','7'),
@@ -297,6 +298,7 @@ add(name="réparation",
     pas pour les PNG. Vous devez parenthéser""",
     dumb_replace=chercher.dumb_replace),
     require("find", "Il faut utiliser <tt>find</tt>"),
+    reject('$(', "N'utilisez pas <tt>$()</tt> mais <tt>-exec</tt>"),
     require("~",
             """Vous devez changer tous les fichiers
             à partir de la <b>racine de votre compte</b>"""),
@@ -308,10 +310,13 @@ add(name="réparation",
     require(("(", ")"),
             """Il faut parenthéser le 'ou' pour que le <tt>exec</tt>
             s'applique au deux"""),
-    require(("\\(", "\\)"), """N'oubliez pas de protéger les parenthèses,
-    car elles sont spéciales pour le shell"""),
-    require((" \\( ", " \\) "),
-            """N'oubliez pas les espaces autour des parenthèses."""),
+    Bad(Comment(~(Contain("\\(") | Contain("'('") | Contain('"("'))
+                | ~(Contain("\\)") | Contain("')'") | Contain('")"')),
+    """N'oubliez pas de protéger les parenthèses,
+    car elles sont spéciales pour le shell""")),
+    Bad(Comment(~(Contain(" \\( ") | Contain(" '(' ") | Contain(' "(" '))
+                | ~(Contain(" \\) ") | Contain(" ')' ") | Contain(' ")" ')),
+            """N'oubliez pas les espaces autour des parenthèses.""")),
     shell_require(('png','jpg'), "Pour les images PNG et JPG on a dit.",
             dumb_replace=chercher.dumb_replace),
     number_of_is('-iname', 2, "Je ne vois pas deux <tt>-iname</tt>"),

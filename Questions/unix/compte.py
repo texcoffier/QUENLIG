@@ -144,6 +144,10 @@ add(name="compte tout C",
         Reject('total', """Ce n'est pas une bonne idée de filtrer le mot
         <tt>total</tt> car il est lié à la langue de l'utilisateur"""),
         Good(Shell(Equal('find . -name "*.c" -print0|xargs -0 cat|wc -l'))),
+        Reject('-exec', """Quand vous utilisez <tt>-exec</tt> il y a un
+        processus lancé par fichier. C'est trop lent.
+        Utilisez la commande <tt>find</tt> seulement pour trouver
+        les noms de fichiers"""),
         Bad(Comment(
             Shell(Equal('find . -name "*.c" -exec cat {} \\; | wc -l')),
             """La commande <tt>cat</tt> est lancée très souvent.

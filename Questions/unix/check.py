@@ -60,14 +60,14 @@ class Shell(TestUnary):
 class shell_good(TestShellParsed):
     html_class = "test_shell test_good test_is"
     def test(self, student_answer, string):
-        if student_answer[1] == '':
+        if student_answer[1] == parse_error:
             return False, parse_error
         if string == student_answer[1]:
                 return True, self.comment + student_answer[1]
 class shell_bad(TestShellParsed):
     html_class = "test_shell test_bad test_is"
     def test(self, student_answer, string):
-        if student_answer[1] == '':
+        if student_answer[1] == parse_error:
             return False, parse_error
         if string == student_answer[1]:
                 return False, self.comment + student_answer[1]
@@ -75,14 +75,14 @@ class shell_bad(TestShellParsed):
 class shell_require(TestShell):
     html_class = "test_shell test_bad test_require"
     def test(self, student_answer, string):
-        if student_answer[1] == '':
+        if student_answer[1] == parse_error:
             return False, parse_error
         if string not in student_answer[1]:
                 return False, self.comment + student_answer[1]
 class shell_reject(TestShell):
     html_class = "test_shell test_bad test_reject"
     def test(self, student_answer, string):
-        if student_answer[1] == '':
+        if student_answer[1] == parse_error:
             return False, parse_error
         if string in student_answer[1]:
                 return False, self.comment + student_answer[1]
