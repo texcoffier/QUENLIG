@@ -82,7 +82,7 @@ Pour plus d'informations, regardez <tt>man 2 umask</tt>"""
 add(name="simple",
     required=["numérique"],
     before=b,
-    question="""Quel ligne de commande permet d'affecter
+    question="""Quelle ligne de commande permet d'affecter
     le mode <tt>rwxr-xr-x</tt> au fichier <tt>essai.sh</tt>
     en utilisant la syntaxe en octal.""",
     tests=(
