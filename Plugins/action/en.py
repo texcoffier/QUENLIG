@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 
-tip = "Choisissez ce que vous voulez faire"
+tip = "Select the action you want to do"
 
 title = "Actions"
 

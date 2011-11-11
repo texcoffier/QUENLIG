@@ -131,7 +131,13 @@ class State(object):
         self.client_ip = None
         self.client_browser = None
         self.update(server)
-        self.localization = 'fr'
+        lang = server.headers.get('accept-language','')
+        lang = lang.lower().replace(';',',').replace('-','_')
+        lang = [x for x in lang.split(',')
+                if len(x) == 2] # XXX Should test if the translation exists
+        if 'fr' not in lang:
+            lang.append('fr')
+        self.localization = tuple(lang)
         self.update_plugins()
 
     def update_plugins(self):

@@ -140,11 +140,15 @@ class Plugin:
         """
 
         if lang not in self.lang: # Not yet loaded module
-            module_name = os.path.join(self.dir_name, lang)
-            try:
-                self.lang[lang] = utilities.load_module(module_name)
-            except ImportError:
-                pass
+            for a_lang in lang: # Search the language
+                module_name = os.path.join(self.dir_name, a_lang)
+                try:
+                    self.lang[lang] = utilities.load_module(module_name)
+                    print module_name
+                    break
+                except ImportError:
+                    pass
+
         try: # Get the localized value
             return self.lang[lang].__dict__[attribute]
         except KeyError:

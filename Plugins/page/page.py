@@ -108,7 +108,7 @@ def css_cached(state):
     except KeyError:
         pass
     css_cached.cache[state.localization] = css(state)
-    utilities.write(os.path.join('HTML', state.localization + '.css'),
+    utilities.write(os.path.join('HTML', ','.join(state.localization) + '.css'),
                     css_cached.cache[state.localization])
     return css_cached.cache[state.localization]
 
@@ -204,10 +204,10 @@ def execute(state, plugin, argument):
         state.plugins_dict['title'].the_title,
         state.url_base_full,
         state.url_base,
-        state.localization,
+        ','.join(state.localization),
         state.url_base,
         state.url_base,
-        state.localization,
+        ','.join(state.localization),
         state.url_base,
         )
 
