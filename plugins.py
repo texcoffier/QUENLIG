@@ -144,7 +144,6 @@ class Plugin:
                 module_name = os.path.join(self.dir_name, a_lang)
                 try:
                     self.lang[lang] = utilities.load_module(module_name)
-                    print module_name
                     break
                 except ImportError:
                     pass

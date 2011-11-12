@@ -24,7 +24,9 @@ SESSION_STUDENTS=39
 # Generate statistic graph
 plots:
 	for I in `cd Students ; echo *` ; \
-		do echo ; echo $$I ;  main.py $$I plot ; \
+		do \
+                   if [ -d Students/$$I ] ; \
+                        then echo;echo $$I; ./main.py $$I plot >/dev/null ; fi \
 	done
 
 regtest:
