@@ -949,7 +949,7 @@ class Expect(TestString):
             if self.comment:
                 return False, self.comment
             else:
-                return False, "Je devrais trouver '<tt>%s</tt>' dans la réponse" % self.string
+                return False, '<p class="string_expected">\'<b>' + self.string + '</b>\'</p>'
 
 def expects(expected, comment=None):
     a = Expect(expected[0], comment)
@@ -965,7 +965,7 @@ class Reject(Expect):
             if self.comment:
                 return False, self.comment
             else:
-                return False, "Je devrais pas trouver '<tt>%s</tt>' dans la réponse" % self.string
+                return False, '<p class="string_rejected">\'<b>' + self.string + '</b>\'</p>'
     
 
 

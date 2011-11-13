@@ -96,8 +96,6 @@ A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {
   white-space:normal;
 }
 
-P.int_required:before { content: "La réponse à cette question doit être un nombre entier écrit en décimal." ; }
-
 PRE { background-color: #FF0 ; border: 1px solid black ; }
 
 """ + '\n'.join(s)
@@ -199,7 +197,7 @@ def execute(state, plugin, argument):
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
     <script src="%s/quenlig.js"></script>
   </head>
-  <body>
+  <body><div class="page">
   """ % (
         state.plugins_dict['title'].the_title,
         state.url_base_full,
@@ -216,6 +214,7 @@ def execute(state, plugin, argument):
         s.append('<!-- ' + a_plugin.plugin.css_name + ' -->')
         display(a_plugin, s)
 
+    s.append('</div></body></html>')
     try:
         state.full_page = '\n'.join(s)
     except:
