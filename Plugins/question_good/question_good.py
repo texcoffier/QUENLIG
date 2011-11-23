@@ -34,6 +34,8 @@ def execute(state, plugin, argument):
         return
     if state.question.tests == ():
         return
+    if 'question_answer' not in state.form:
+        return
 
     s = state.student.last_answer(state.question.name)
 
