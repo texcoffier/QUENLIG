@@ -27,30 +27,52 @@ from questions import *
 from check import *
 
 add(name="liste",
-    question = """ Definissez une liste contenant dans l'ordre les elements <TT> 1, 'a', 2, 'b', 3 </TT> """,
-    tests = ( Good(Equal("[ 1, 'a', 2, 'b', 3 ]") ) ) ,
-    good_answer = """ Evidemment, une liste aussi etre un element d'une liste """,
+    required = ["idem:chaine", "idem:flottant"],
+    question = """Définissez une liste contenant dans l'ordre les éléments :
+               <TT>1, "a", 2, "b", 3.5</TT>""",
+    tests = ( Good(P(Equal('[1,"a",2,"b",3.5]') ) ),
+            ),
+    good_answer = "Évidemment, une liste peut contenir des listes",
  )
 
 add(name="concatenation",
-    required = [ "liste" ],
-    question = """ Quel est l'operateur permettant de concatener 2 listes """,
-    tests = ( Good(Equal("+"))) ,
-    good_answer = """ Une nouvelle liste est creee par recopie des elements """,
+    required = ["liste", "table:concaténation"],
+    question = "Quel est l'opérateur permettant de concaténer 2 listes&nbsp;?",
+    tests = ( Good(Equal("+")),
+              ),
+    good_answer = "Une nouvelle liste est créée par recopie des éléments.",
 )
 
 add(name="sous-liste",
-    required = [ "liste" ],
-    question = """ Donner le resultat de l'expression <TT>[l[0]]+l[2:-2]+[l[-1]]</TT> appliquee a la liste <TT> l=[1,2,3,4,5,6] </TT> """,
-    tests = ( Good(Equal("[1,3,4,6]")) ) ,
-    good_answer = """ Effectivement, l'expression permet de retirer le deuxiemre et l'avant dernier element de toute liste <TT>l</TT> de longueur superieure ou egale a 3 """,
+    required = ["liste", "concatenation"],
+    question = """Donner le résultat de l'expression
+               <TT>[l[0]]+l[2:-2]+[l[-1]]</TT> appliquée à la liste
+               <TT>l=[1,2,3,4,5,6]</TT>""",
+    tests = ( Good(P(Equal("[1,3,4,6]"))),
+              ) ,
+    good_answer = """Effectivement,
+   l'expression permet de retirer le deuxième et
+   l'avant dernier élément de toute liste <TT>l</TT> de longueur supérieure
+   ou égale à 3.""",
 )
 
-add(name="rotation circulaire gauche",
-    required = ["liste","concatenation", "sous-liste"],
-    question = """Ecrire l'expression, qui quelle que soit une liste nommee <tt> l </tt> <bf>non vide</bf>, retire le dernier element et l'insere en tete""",
+add(name="rotation gauche",
+    required = ["liste", "concatenation", "sous-liste"],
+    question = """Ecrire l'expression, qui, quelle que soit une liste nommée
+    <tt>l</tt> <b>non vide</b>, retire le dernier élément et l'insère
+    en tête""",
     tests = (
-        Good(Equal("[l[-1]]+l[:-1]")| Equal("[l[len(l)-1]]+l[:len(l)-1]")) ),
-    good_answer = """On peut bien sur faire une fonction, mais dans ce cas, attention a la liste vide""",
+        Reject('[0:',
+               """On n'écrit pas <tt>t[0:4]</tt> mais <tt>t[:4]</tt>
+                  car c'est plus court."""),
+        Good(P(Equal("[l[-1]]+l[:-1]")| Equal("[l[len(l)-1]]+l[:len(l)-1]"))),
+        Bad(Comment(
+                P(Equal("l[-1]+l[:-1]")| Equal("l[len(l)-1]+l[:len(l)-1]")),
+                """Vous ajoutez un élément à une liste alors que vous
+                 devez ajouter deux listes""")
+            ),
+        ),
+    good_answer = """On peut bien sûr faire une fonction,
+                     mais dans ce cas, attention à la liste vide.""",
    )
     
