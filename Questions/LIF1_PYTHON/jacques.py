@@ -65,9 +65,13 @@ add(name="rotation gauche",
         Reject('[0:',
                """On n'écrit pas <tt>t[0:4]</tt> mais <tt>t[:4]</tt>
                   car c'est plus court."""),
-        Good(P(Equal("[l[-1]]+l[:-1]")| Equal("[l[len(l)-1]]+l[:len(l)-1]"))),
+        Reject('len',
+               """Vous n'avez pas besoin de calculer la longueur de la liste
+               car en Python les indices négatifs partent de la fin du
+              tableau&nbsp;: l[-1] est le dernier élément."""),
+        Good(P(Equal("[l[-1]]+l[:-1]"))),
         Bad(Comment(
-                P(Equal("l[-1]+l[:-1]")| Equal("l[len(l)-1]+l[:len(l)-1]")),
+                P(Equal("l[-1]+l[:-1]")),
                 """Vous ajoutez un élément à une liste alors que vous
                  devez ajouter deux listes""")
             ),
