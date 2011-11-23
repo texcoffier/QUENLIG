@@ -54,7 +54,9 @@ def execute(state, plugin, argument):
         return '<p class="maximum_bad_answer">'
 
     if state.student.answered_question(state.question.name):
-        if state.student.current_role != 'Teacher':
+        # Value setted in question_change_answer plugin
+        if (not hasattr(state.student, 'allowed_to_change_answer')
+            or not state.student.allowed_to_change_answer):
             s = state.student.last_answer(state.question.name)
             return utilities.answer_format(s)
 

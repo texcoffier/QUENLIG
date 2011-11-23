@@ -31,8 +31,9 @@ acls = { 'Default': ('executable',) }
 def execute(state, plugin, argument):
     state.start = time.time()
 
-    if state.question:
-        if state.question not in state.student.answerables():
-            state.question = None
+    #if state.question:
+    #    if state.question not in state.student.answerables():
+    #        if not hasattr(state.student, 'allowed_to_change_answer'):
+    #            state.question = None
 
     return ''

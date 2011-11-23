@@ -299,7 +299,9 @@ class Student:
                 q = questions.questions[a.question]
             except KeyError:
                 continue
-            s += "<h3 class=\"short\">" + q.name + "</h3>"
+            import Plugins.question_change_answer.question_change_answer
+            more = Plugins.question_change_answer.question_change_answer.link(state, q)
+            s += "<h3 class=\"short\">" + q.name + more + "</h3>"
             s += q.question(state)
 
             if a.indice >= 0 and a.indice < len(q.indices):
