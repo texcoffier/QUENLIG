@@ -20,20 +20,20 @@
 class Answer:
     """These objects track how a student answer to the question"""
     def __init__(self, question, student):
-        self.question = question
-        self.student = student
-        self.answered = False
-        self.indice = -1
-        self.nr_bad_answer = 0
-        self.nr_asked = 0
-        self.time_searching = 0
-        self.time_after = 0
-        self.first_time = 0
-        self.comments = []
-        self.bad_answers = []
-        self.last_time = 0
-        self.resign = False
-        self.last_answer = ''
+        self.question = question  # The question answered
+        self.student = student    # The answering student
+        self.answered = False     # The question is not correctly answered
+        self.indice = -1          # No indices have been asked by the student
+        self.nr_bad_answer = 0    # The student did not give bad answers
+        self.nr_asked = 0         # The number of display of the question text
+        self.time_searching = 0   # The time spend searching the answer
+        self.time_after = 0       # The time spend without onscreen question
+        self.first_time = 0       # The question first display date
+        self.comments = []        # The comment sent by the student
+        self.bad_answers = []     # The bad answers given by the student
+        self.last_time = 0        # The question last display date
+        self.resign = False       # The student saw the question in the past
+        self.last_answer = ''     # The last student answer
 
     def eval_action(self, action_time, command, value):
         self.last_time = action_time
