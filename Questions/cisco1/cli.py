@@ -80,6 +80,9 @@ add(name="minicom",
     <p>
     Si <tt>minicom</tt> proteste à cause d'un verrou et qu'il
     est lancé une seule fois alors détruisez le verrou (<tt>/var/lock/...</tt>)
+    <p>
+    <b>En cas d'interdiction d'acces, passez <tt>root</tt>
+       avant de lancer minicom</b>
     """,
     question = """Ouvrez un terminal et lancez <tt>minicom</tt>.
     Que devez-vous taper pour avoir l'aide sur <tt>minicom</tt>&nbsp;?

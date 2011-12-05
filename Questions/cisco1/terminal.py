@@ -62,7 +62,7 @@ add(name="pas de traduction",
               "tp1_serie:routeur>local s0 OK"],
     before = """En mode configuration du routeur,
     exécutez la commande <tt>no ip domain lookup</tt>""",
-    question = "Retapez la commande 'coucou'. Pouvez-vous arrêter la commande en tapant <em>Control-C</em>&nbsp;?",
+    question = "Retapez la commande 'coucou'. Avez-vous le temps d'arrêter la commande en tapant <em>Control-C</em>&nbsp;?",
     tests = ( no("Vous avez du mal taper la commande."), ),
     good_answer = """
     <b>

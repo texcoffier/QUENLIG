@@ -212,7 +212,8 @@ add(name="ping",
     question = """Quelle est la valeur en hexa du 13<sup>ème</sup> octet
     que <tt>wireshark</tt> récupère sur le réseaux lors d'un <tt>ping</tt>""",
     tests = (
-        Good(Equal('08') | Equal('8')),
+        Good(Replace((('0x',''),('0X','')),
+                     Equal('08') | Equal('8'))),
     ),
     )
 
