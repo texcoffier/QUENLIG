@@ -33,7 +33,7 @@ change_allowed_timeout = 3600
 
 def execute(state, plugin, argument):
 
-    state.student.allowed_to_change_answer = False
+    state.student.allowed_to_change_answer = True
     if state.student.current_role == 'Teacher':
         state.student.allowed_to_change_answer = True
         return ''
@@ -47,7 +47,7 @@ def execute(state, plugin, argument):
 
     return ''
 
-def link(state, question):
+def add_a_link(state, question):
     if not hasattr(state.student, 'allowed_to_change_answer'):
         return '' # Not the right to reanswer
     if not state.student.answered_question(question.name):

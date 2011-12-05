@@ -300,7 +300,7 @@ class Student:
             except KeyError:
                 continue
             import Plugins.question_change_answer.question_change_answer
-            more = Plugins.question_change_answer.question_change_answer.link(state, q)
+            more = Plugins.question_change_answer.question_change_answer.add_a_link(state, q)
             s += "<h3 class=\"short\">" + q.name + more + "</h3>"
             s += q.question(state)
 
