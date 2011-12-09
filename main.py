@@ -189,6 +189,66 @@ search_command('hotshot2calltree',
 search_command('kcachegrind',
                'No graphic profiling')
 
+import plugins
+plugins.init()
+
+if 'plugins.html' in sys.argv:
+    # These lines are here to create a fake environnement.
+    # because the initialisation methods need an environnement to run.
+    import state
+    class FakeServer:
+        headers = {"X-Forwarded-For":'IP?', "User-Agent": 'UI?',
+                   'accept-language': 'en;fr'}
+    configuration.url = 'fake'
+    for i in ('Logs', os.path.join('Logs', 'nostudent')):
+        try:
+            os.mkdir(i)
+        except OSError:
+            pass
+    s = state.State(FakeServer(), 'noticket', 'nostudent')
+
+    # Now the plugin tree is working
+    def display(f, plugin, margin=0):
+        f.write('<tr><td>')
+        f.write(plugin.plugin.doc_html())
+        f.write('<table class="plugin">')
+        for p in plugin.full_content:
+            display(f, p)
+        f.write('</table>')
+        f.write('</tr>')
+        
+    f = open('plugins.html', 'w')
+    f.write('''<style>
+TR { vertical-align: top; }
+BODY { font-family: sans-serif; }
+TD.pre { white-space: pre ; }
+TABLE.plugin TABLE.plugin { padding: 1em; margin-left: auto; margin-right: auto}
+TABLE.plugin TD { border: 1px solid black;}
+TABLE.attr TD, TABLE.attr TH { background: white ; border: 0px }
+TABLE.attr { background: black ; border-spacing: 1px }
+.style { background: #FF8 }
+DIV.title {
+   background: black ;
+   color: white ;
+   padding: 0.2em ;
+   font-size: 130% ;
+}
+.bool { background: #888 }
+DIV.title A { color: white }
+DIV.title A:visited { color: white }
+</style>
+<h1>Usable plugins</h1>
+The attributes values are for the english language, all of them
+may change in other languages.
+
+''')
+    f.write('<table class="plugin">')
+    for p in s.roots:
+        display(f, p)
+    f.write('</table>')
+    f.close()
+    sys.exit(0)
+
 # Analyse command line options
 
 name = sys.argv[0]
@@ -275,8 +335,6 @@ configuration.root = os.getcwd()
 
 configuration.version = os.path.basename(os.getcwd())
 
-import plugins
-plugins.init()
 
 if __name__ == "__main__":
     if len(args) == 0:

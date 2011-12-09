@@ -25,7 +25,7 @@ import utilities
 import sys
 
 priority_execute = 1000000000
-
+tip_preformated = True
 container = 'action'
 
 link_to_self = True

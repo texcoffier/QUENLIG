@@ -1,5 +1,5 @@
 # -*- coding: latin-1 -*-
 
-prefix = "Plus de questions !!!"
+before = "Plus de questions !!!"
 
 tip = "Vous êtes arrivé au bout du questionnaire, félicitations !"

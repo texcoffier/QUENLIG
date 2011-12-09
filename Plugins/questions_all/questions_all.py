@@ -23,6 +23,7 @@ container = 'questions'
 priority_display = '-questions_next'
 priority_execute = '-questions'
 acls = { 'Teacher': ('executable',) }
+tip_preformated = True
 
 types = ('normal', 'all')
 

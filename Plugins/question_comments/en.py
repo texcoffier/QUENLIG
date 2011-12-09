@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 
-title = "The comments about ths question"
+title = "The comments about this question"
 
 translations = {
     'c0': 'Comment',
