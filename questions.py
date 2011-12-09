@@ -849,7 +849,7 @@ class TestInvert(TestUnary):
         bool, comment = self.children[0](student_answer, state, parser)
         return not bool, comment
 
-class TestFunction(TestUnary):
+class TestFunction(TestExpression):
     """The given function returns a boolean and a comment"""
     def __init__(self, fct):
         if not callable(fct):
@@ -858,6 +858,12 @@ class TestFunction(TestUnary):
 
     def __call__(self, student_answer, state=None, parser=no_parse):
         return self.fct(student_answer, state)
+
+    def source(self, state=None, format=None):
+        name = str(self.fct.func_name)
+        if name == '<lambda>':
+            name = repr(self.fct.func_code)
+        return self.test_name(format) + '(' + cgi.escape(name) + ')'
 
 
 class Equal(TestString):
