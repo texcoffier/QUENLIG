@@ -47,7 +47,8 @@ add(name="adresses",
 add(name="protocol",
     required=["ip"],
     question = """Quel est l'acronyme du protocole bas niveau utilisé pour
-    communiquer sur Ethernet (envoyer les paquets)&nbsp;?""",
+    communiquer sur Ethernet (pour envoyer les paquets/trames en
+    évitant les collisions)&nbsp;?""",
     tests = (
         Good(UpperCase(Contain('CSMA') & Contain('CD'))),
         Bad(Comment(UpperCase(Contain('HDLC')),
@@ -106,7 +107,7 @@ add(name="mini",
     )
 
 def max_adresse():
-    return [8*random.randrange(1,256//8) for i in range(3)] + [0]
+    return [8*random.randrange(1,256//8) for dummy_i in range(3)] + [0]
 
 def max_netmask():
     addr = max_adresse()
@@ -118,7 +119,7 @@ def max_netmask():
 
 def int_to_dot(value):
     dot = []
-    for i in range(4):
+    for dummy_i in range(4):
         dot.append( '%d' % (value & 255) )
         value //= 256
     dot.reverse()

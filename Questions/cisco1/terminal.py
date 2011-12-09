@@ -239,7 +239,7 @@ add(name="who",
     question="""Quelle commande utilisez-vous pour afficher la liste
     des personnes connectées sur le routeur&nbsp;?""",
     tests = ( good("who"),
-              good("show users", "<tt>who</tt> est plis court"),
+              good("show users", "<tt>who</tt> est plus court"),
               ),
     indices = ("C'est comme sous unix", ),
     )

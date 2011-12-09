@@ -27,7 +27,7 @@ good_default = "<pre>route add default gw ???.???.???.???</pre>"
 add(name="defaut pc",
     required=["tp1_eth:machine>routeur 2 ?", "tp1_eth:routeur>remote eth OK"],
     question="""Quelle commande tapez-vous pour ajouter une route par
-    défaut à votre ordinateur pour qu'il envoit tout au routeur&nbsp;?""",
+    défaut à votre ordinateur pour qu'il envoie tout au routeur&nbsp;?""",
     tests = (
     require_startswith("route",
                        """Vous devez utiliser la commande <tt>route</tt>
