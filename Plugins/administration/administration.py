@@ -24,7 +24,7 @@ acls = { 'Teacher': ('executable',) }
 
 css_attributes = ( '{ position: absolute ; right: 0; top:0 }',
                    )
-
+container = 'page'
 permanent_acl = True
 
 

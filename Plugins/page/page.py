@@ -26,6 +26,7 @@ import configuration
 
 priority_execute = priority_display = 2000000000
 acls = { 'Default': ('executable',) }
+container = 'top'
 
 def css(state):
     s = []

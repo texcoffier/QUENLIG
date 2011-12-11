@@ -208,7 +208,7 @@ if 'plugins.html' in sys.argv:
     s = state.State(FakeServer(), 'noticket', 'nostudent')
 
     # Now the plugin tree is working
-    def display(f, plugin, margin=0):
+    def display(f, plugin):
         f.write('<tr><td>')
         f.write(plugin.plugin.doc_html())
         f.write('<table class="plugin">')
@@ -216,6 +216,30 @@ if 'plugins.html' in sys.argv:
             display(f, p)
         f.write('</table>')
         f.write('</tr>')
+
+    def display_TOC(f, plugin):
+        if len(plugin.full_content) == 0:
+            f.write('<p>%s' % plugin.plugin.css_name)
+            return
+        if plugin.horizontal:
+            colspan = ' colspan="%d"' % len(plugin.full_content)
+        else:
+            colspan = ''
+        f.write('<table class="toc"><tr><th%s>%s' % (
+                colspan, plugin.plugin.css_name))
+        if plugin.horizontal:
+            f.write('<tr>')
+            for p in plugin.full_content:
+                f.write('<td>')
+                display_TOC(f, p)
+            f.write('</tr>')
+        else:
+            for p in plugin.full_content:
+                f.write('<tr><td>')
+                display_TOC(f, p)
+                f.write('</tr>')
+        f.write('</table>')
+        
         
     f = open('plugins.html', 'w')
     f.write('''<style>
@@ -226,6 +250,9 @@ TABLE.plugin TABLE.plugin { padding: 1em; margin-left: auto; margin-right: auto}
 TABLE.plugin TD { border: 1px solid black;}
 TABLE.attr TD, TABLE.attr TH { background: white ; border: 0px }
 TABLE.attr { background: black ; border-spacing: 1px }
+TABLE.toc { border: 1px solid black; border-spacing: 0px; margin-top: 1px; margin-bottom: 1px }
+TABLE.toc TD, TABLE.toc TH { padding-top: 0px; padding-bottom: 0px; }
+TABLE.toc TD P { margin: 0px ; border: 0px; font-size: 80% }
 .style { background: #FF8 }
 DIV.title {
    background: black ;
@@ -237,12 +264,16 @@ DIV.title {
 DIV.title A { color: white }
 DIV.title A:visited { color: white }
 </style>
-<h1>Usable plugins</h1>
+<h1>Plugins display tree</h1>
+''')
+    for p in s.roots:
+        display_TOC(f, p)
+    f.write('<table class="plugin">')
+    f.write('''
+<h1>Plugin details</h1>
 The attributes values are for the english language, all of them
 may change in other languages.
-
 ''')
-    f.write('<table class="plugin">')
     for p in s.roots:
         display(f, p)
     f.write('</table>')
@@ -384,6 +415,13 @@ if __name__ == "__main__":
             utilities.write(user, "['Default','Teacher']\n")
         elif action == 'question-stats':
             session.question_stats()
+        elif action == 'stop-loading':
+            # DO NOT USE WHEN THE SESSION IS NOT FULLY TERMINATED.
+            # Usage example, to stop loading after one hour of student time.
+            # stop-loading 'lambda s:s.time_searching()+s.time_after()>3600'
+            # I use it to know student rank after one hour of work
+            import student
+            student.stop_loading_default = eval(args.pop())
         else:
             sys.stderr.write("""Unknown action : %s\n""" % action)
             sys.exit(2)

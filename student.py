@@ -52,8 +52,9 @@ def log_directory():
 
 class Student:
     """Student work log"""
+    writable = True
 
-    def __init__(self, name):
+    def __init__(self, name, stop_loading=lambda x: False):
         """Initialise student data or read the log file"""
         self.filename = name.translate(utilities.safe_ascii)
         self.seed = 1
@@ -96,6 +97,9 @@ class Student:
             answer = self.answer(question_name)
             answer.eval_action(action_time, command, value)
             self.update_time(action_time, answer, command)
+            if stop_loading(self):
+                self.writable = False
+                break
 
     def destroy(self):
         import shutil
@@ -354,6 +358,8 @@ class Student:
     # "bad" give the bad answer itself.
 
     def log(self, question_name, command, value=""):
+        if not self.writable:
+            return
         action_time = time.time()
         answer = self.answer(question_name)
         answer.eval_action(action_time, command, value)
@@ -431,17 +437,19 @@ class Student:
 
             
 students = {}
+stop_loading_default = lambda x: False
 
 def student(name):
     if not students.has_key(name):
-        students[name] = Student(name)
+        students[name] = Student(name, stop_loading=stop_loading_default)
     return students[name]
 
 def all_students():
     """Read the directory content in order to return the student list"""
     return [student(student_name)
             for student_name in os.listdir(log_directory())]
-    
+
+
 def dump():
     t = []
     for s in all_students():

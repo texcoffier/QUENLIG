@@ -21,7 +21,7 @@
 
 import random
 
-priority_display = 'questions'
+container = 'page'
 priority_execute = 'questions'
 acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
 

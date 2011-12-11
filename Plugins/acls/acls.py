@@ -42,6 +42,7 @@ import os
 
 priority_execute = 'role' # Role must have been computed.
 acls = { 'Default': ('executable',) }
+container = 'page'
 
 class Acls:
     """ACL helper class for Stateplugin.
