@@ -219,14 +219,15 @@ if 'plugins.html' in sys.argv:
 
     def display_TOC(f, plugin):
         if len(plugin.full_content) == 0:
-            f.write('<p>%s' % plugin.plugin.css_name)
+            f.write('<p><a href="#%s">%s</a>' % (
+                    plugin.plugin.css_name, plugin.plugin.css_name) )
             return
         if plugin.horizontal:
             colspan = ' colspan="%d"' % len(plugin.full_content)
         else:
             colspan = ''
-        f.write('<table class="toc"><tr><th%s>%s' % (
-                colspan, plugin.plugin.css_name))
+        f.write('<table class="toc"><tr><th%s><a href="#%s">%s</a>' % (
+                colspan, plugin.plugin.css_name, plugin.plugin.css_name))
         if plugin.horizontal:
             f.write('<tr>')
             for p in plugin.full_content:
@@ -246,6 +247,7 @@ if 'plugins.html' in sys.argv:
 TR { vertical-align: top; }
 BODY { font-family: sans-serif; }
 TD.pre { white-space: pre ; }
+A { text-decoration: none }
 TABLE.plugin TABLE.plugin { padding: 1em; margin-left: auto; margin-right: auto}
 TABLE.plugin TD { border: 1px solid black;}
 TABLE.attr TD, TABLE.attr TH { background: white ; border: 0px }
@@ -254,17 +256,22 @@ TABLE.toc { border: 1px solid black; border-spacing: 0px; margin-top: 1px; margi
 TABLE.toc TD, TABLE.toc TH { padding-top: 0px; padding-bottom: 0px; }
 TABLE.toc TD P { margin: 0px ; border: 0px; font-size: 80% }
 .style { background: #FF8 }
+
+TABLE.attributes { background: black ; border-spacing: 1px }
+TABLE.attributes TD, TABLE.attributes TH {  background: white ; border: 0px }
+
 DIV.title {
    background: black ;
    color: white ;
    padding: 0.2em ;
-   font-size: 130% ;
+   font-size: 110% ;
 }
 .bool { background: #888 }
 DIV.title A { color: white }
 DIV.title A:visited { color: white }
 </style>
 <h1>Plugins display tree</h1>
+Click on plugin names to see the details.
 ''')
     for p in s.roots:
         display_TOC(f, p)
@@ -273,11 +280,41 @@ DIV.title A:visited { color: white }
 <h1>Plugin details</h1>
 The attributes values are for the english language, all of them
 may change in other languages.
+<p>
+???? indicates a text computed (may be empty) computed by
+the plugin and that must be inserted in the page.
+<p>
+You can click on plugin attributes to see there definition.
 ''')
     for p in s.roots:
         display(f, p)
     f.write('</table>')
+
+    f.write('''
+<h1>Plugin Attributes</h1>
+<table class="attributes">
+    ''')
+    f.write('<tr><th>Attribute name<th>Default value<th>Documentation</tr>')
+    for k in sorted(plugins.Attribute.attributes):
+        a = plugins.Attribute.attributes[k]
+        if not hasattr(a, 'css_name'):
+            f.write(a.doc_html())
+    f.write('</table>')
+
+    f.write('''
+<h1>Plugin CSS Attributes</h1>
+<p>These attributes values are concatened into the CSS file.
+<table class="attributes">
+    ''')
+    f.write('<tr><th>Attribute name<th>CSS name<th>CSS selector<th>Documentation</tr>')
+    for k in sorted(plugins.Attribute.attributes):
+        a = plugins.Attribute.attributes[k]
+        if hasattr(a, 'css_name'):
+            f.write(a.doc_html())
+    f.write('</table>')
+    f.write('&nbsp;<br>'*60)
     f.close()
+
     sys.exit(0)
 
 # Analyse command line options

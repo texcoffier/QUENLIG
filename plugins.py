@@ -36,26 +36,40 @@ plugin_dir = 'Plugins'
 class Attribute:
     attributes = {}
     
-    def __init__(self, name, default=None, css_name=None, selector=None):
+    def __init__(self, name, doc, default=None, css_name=None, selector=None):
         self.name = name
         self.default = default
         self.attributes[name] = self
+        self.doc = doc
 
     def css(self, name, value):
         return ''
 
+    def doc_html(self, more=None):
+        if more is None:
+            more = '<td>' + cgi.escape(repr(self.default))
+        return '<tr><th><a name="attr_%s">%s</a>%s<td>%s</tr>' % (
+            self.name,
+            self.name,
+            more,
+            cgi.escape(self.doc))
+
 class AttributeCSS(Attribute):
-
     selector = ""
+    css_name = ''
 
-    def __init__(self, name, default=None, css_name=None, selector=None):
-        Attribute.__init__(self, name, default=default)
+    def __init__(self, name, doc, default=None, css_name=None, selector=None):
+        Attribute.__init__(self, name, doc, default=default)
         if css_name:
             self.css_name = css_name
         else:
             self.css_name = name.replace('_','-')
         if selector:
             self.selector = selector
+
+    def doc_html(self):
+        return Attribute.doc_html(self, '<td>' + self.css_name + '<td>' +
+                                  cgi.escape(self.selector))
 
     def generate_css(self, name, selector, attribute, value, div='DIV.'):
         if attribute == 'content':
@@ -81,42 +95,136 @@ class AttributeCSS(Attribute):
         return self.generate_css(name, self.selector, self.css_name, value)
 
 
-Attribute('javascript'      , '')
-Attribute('css_attributes'  , ()              )
-Attribute('execute'         , lambda state, plugin, argument: None)
-Attribute('acls'            , {})
-Attribute('permanent_acl'   , False)
-Attribute('sort_column'     , 1)
-Attribute('priority_display', 0)
-Attribute('priority_execute', 0)
-Attribute('priority_display_int')
-Attribute('priority_execute_int')
-Attribute('boxed')
-Attribute('content_is_title')
-Attribute('horizontal')
-Attribute('tip_preformated')
-Attribute('container')
-Attribute('link')
-Attribute('link_to_self')
-Attribute('prototype')
-AttributeCSS('width')
-AttributeCSS('color', selector='>A')
-AttributeCSS('font_size')
-AttributeCSS('text_align')
-AttributeCSS('title_background',
-             css_name='background',selector='>A>EM.box_title')
-AttributeCSS('background', selector='>TABLE>TBODY>TR>TD')
-AttributeCSS('before',
-             css_name='content', selector='>A:first-child.content:before')
-AttributeCSS('after' ,
-             css_name='content', selector='>A:first-child.content:after')
-AttributeCSS('tip'   ,
-             css_name='content', selector='>A:first-child.content> SPAN:before')
-AttributeCSS('title' ,
-             css_name='content',
-             selector='>A:first-child.content>.box_title:before' )
-AttributeCSS('translations',
-             css_name='content', selector=' .%s:before')
+Attribute('javascript'
+          , '''The javascript attributes for all the plugins are concatened
+               in order to create the .js file.'''
+          , '')
+Attribute('css_attributes'
+          ,'''These attributes are concatened in order to create the .css file.
+          This attribute is defined as a list a strings containing a
+          CSS selector and a value.
+          All the selectors not starting by / are prefixed by:
+          DIV.plugin_name.
+          '''
+          ,()
+          )
+Attribute('execute'
+          , '''An evaluation function "lambda state, plugin, argument: None"
+            The 'state' is the student session, 'plugin' is the
+            plugin being evaluated, and 'parameter' is None or a string
+            found in the URL.
+            If this function returns a string, then the string is displayed
+            in the user interface.
+            If it returns a tuple Mime-Type + string then the answer
+            is defined as a file of this type.
+           '''
+          , lambda state, plugin, argument: None)
+Attribute('acls'
+          , '''Define the default authorizations for each of the role/users.
+               For example:
+               {'Teacher': ('executable',) }.
+               Currently only 'executable' capacity exists.
+            '''
+          , {})
+Attribute('permanent_acl'
+          , '''If True, then the user can not lost the capacity to use this
+            plugin even when switching of role.'''
+          , False)
+Attribute('sort_column'
+          , 'The default sort column number if the plugin displays a table.'
+          , 1)
+Attribute('priority_display'
+          , '''The position of the plugin in the display.
+            It can be a integer or another plugin name.
+            If the plugin name is prefixed by '-' then the current
+            plugin is displayed before the indicated plugin.
+            If a plugin name is used, then the 2 plugins are in the
+            same container.'''
+          , 0)
+Attribute('priority_execute'
+          , '''Define the order of plugin execution.
+            It takes the same values than the 'priority_display' attribute.
+            '''
+          , 0)
+Attribute('priority_display_int'
+          , 'Do not define in plugin. It is computed from "priority_display"'
+          )
+Attribute('priority_execute_int'
+          , 'Do not define in plugin. It is computed from "priority_execute"'
+          )
+Attribute('boxed'
+          , '(TO REMOVE) If True then a box is drawed around the plugin.'
+          )
+Attribute('content_is_title'
+          , 'The plugin execution value defines the box title.'
+          )
+Attribute('horizontal'
+          , 'If True, the contained plugins are placed horizontaly'
+          )
+Attribute('tip_preformated'
+          , '(TO REMOVE) If True then the tip content is not reformatted'
+          )
+Attribute('container'
+          , 'The name of the plugin containing the defined plugin.'
+          )
+Attribute('link'
+          , '''If not None, then the plugin value become a link to
+             the indicated URL'''
+          )
+Attribute('link_to_self'
+          , '''If True, set "link" attribute so when clicked the plugin
+               will be called with '1' parameter value.
+            '''
+          )
+Attribute('prototype'
+          , '''A plugin name from which all the default attributes values
+            will be taken.'''
+          )
+AttributeCSS('width'
+             , 'CSS width of the plugin display DIV'
+             )
+AttributeCSS('color'
+             , 'Text color of the plugin content.'
+             , selector='>A')
+AttributeCSS('font_size'
+             , 'Font size of the plugin content.'
+             )
+AttributeCSS('text_align'
+             , 'Horizontal alignment of the plugin content.'
+             )
+AttributeCSS('title_background'
+             , 'Background color of the box title.'
+             , css_name='background'
+             , selector='>A>EM.box_title')
+AttributeCSS('background'
+             , 'Background color of the plugin content.'
+             , selector='>TABLE>TBODY>TR>TD')
+AttributeCSS('before'
+             , '''Text to be displayed before the plugin content.
+               This text is localisable.'''
+             , css_name='content'
+             , selector='>A:first-child.content:before')
+AttributeCSS('after'
+             , '''Text to be displayed after the plugin content.
+               This text is localisable.'''
+             , css_name='content'
+             , selector='>A:first-child.content:after')
+AttributeCSS('tip'
+             , 'The tip content. This text is localisable.'
+             , css_name='content'
+             , selector='>A:first-child.content> SPAN:before')
+AttributeCSS('title'
+             , 'The box title'
+             , css_name='content'
+             , selector='>A:first-child.content>.box_title:before')
+AttributeCSS('translations'
+             , '''A dictionary where the key is the CSS selector and the
+               value the style.
+               If the selector starts by // then it applies to the
+               "heart" plugin.
+               '''
+             , css_name='content'
+             , selector=' .%s:before')
 
 class Plugin:
     plugins_dict = {}
@@ -164,12 +272,14 @@ class Plugin:
     def doc_html_item(self, item):
         v = self[('en','fr'), item]
         if isinstance(v, str):
-            return cgi.escape(v)
-        if isinstance(v, int):
-            return str(v)
-        if v is None:
-            return ''
-        return cgi.escape(repr(v))
+            r = cgi.escape(v)
+        elif isinstance(v, int):
+            r = str(v)
+        elif v is None:
+            r = ''
+        else:
+            r = cgi.escape(repr(v))
+        return r
 
     def priority_html(self, value, name):
         if value == '0':
@@ -177,12 +287,13 @@ class Plugin:
         else:
             if not value[-1].isdigit():
                 value = '<a href="#%s">' % value.strip('-') + value + '</a>'
-            value = name + '=' + value
+            value = '<a href="#attr_priority_%s">%s=%s</a>'% (name, name, value)
         return value
 
     def display_dicts(self, name, d1, d2):
-        s = '<table class="attr"><caption><b>' + name + '</caption>'
-        s += '<tr><th>CSS selector<th>English<th>French</tr>'
+        s = ('<table class="attr"><caption><b><a href="#attr_' + name
+             + '">' + name + '</a>'
+             + '</caption><tr><th>CSS selector<th>English<th>French</tr>')
         for k in sorted(set(d1.keys() + d2.keys())):
             v1 = cgi.escape(d1.get(k, '???'))
             v2 = cgi.escape(d2.get(k, '???'))
@@ -202,8 +313,6 @@ class Plugin:
 
         if ('\\A' in self.doc_html_item('tip')) != (self.doc_html_item('tip_preformated') == 'True'):
             print self.css_name, '===PREFORMATED=====', self.doc_html_item('title')
-
-        
         boolean = ('link_to_self',  'boxed', 'permanent_acl',
                    'content_is_title', 'horizontal', 'tip_preformated')
         required = ('acls', 'container', 'execute', 'priority_execute',
@@ -227,7 +336,8 @@ class Plugin:
             more = ''
         s = ['<div class="title"><a name="%s"><b style="%s">' % (
                 self.css_name, more)
-             + self.css_name + '</b></a> [' + ','.join(acls) + '] ']
+             + self.css_name + '</b></a> [<a href="#attr_acls">'
+             + ','.join(acls) + '</a>] ']
         pe = self.priority_html(self.doc_html_item('priority_execute'),
                                 'execute')
         pd = self.priority_html(self.doc_html_item('priority_display'),
@@ -239,7 +349,7 @@ class Plugin:
         v = []
         for b in boolean:
             if self.doc_html_item(b) == 'True':
-                v.append(b)
+                v.append('<a href="#attr_%s">%s</a>' % (b, b))
         if v:
             s.append('<span class="bool">' + ', '.join(v)
                      + '</span>')
@@ -254,16 +364,16 @@ class Plugin:
             v = '<div class="style" style="'
             if color:
                 v += 'color:' + color + ';'
-                after += ' color:' + color
+                after += ' <a href="#attr_color">color</a>:' + color
             if font_size:
                 v += 'font-size:' + font_size + ';'
-                after += ' size:' + font_size
+                after += ' <a href="#attr_font_size">size</a>:' + font_size
             if text_align:
                 v += 'text-align:' + text_align + ';'
-                after += ' align:' + text_align
+                after += ' <a href="#attr_text_align">align</a>:' + text_align
             if background:
                 v += 'background:' + background + ';'
-                after += ' background:' + background
+                after += ' <a href="#attr_background">background</a>:' + background
             v += '">' + before + ' ????? ' + after + '</div>'
             s.append(v)
             
@@ -295,8 +405,9 @@ class Plugin:
                         v += ' class="pre"'
                     return v + '>' + x + '</td>'
                 
-                s.append('<table class="attr"><tr><th>'
-                      + attr.name + value_html(attr_value))
+                s.append('<table class="attr"><tr><th><a href="#attr_%s">'
+                         % attr.name
+                         + attr.name + '</a>' + value_html(attr_value))
                 if fr != attr_value:
                     s.append(value_html(fr))
                 s.append('</tr></table>')
