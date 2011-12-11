@@ -22,7 +22,7 @@
 import questions
 import statistics
 
-priority_execute = '-questions'
+priority_execute = '-question_before'
 
 container = 'action'
 
