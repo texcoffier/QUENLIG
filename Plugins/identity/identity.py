@@ -19,7 +19,6 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-boxed = True
 content_is_title = True
 container = 'menu'
 acls = { 'Default': ('executable',) }

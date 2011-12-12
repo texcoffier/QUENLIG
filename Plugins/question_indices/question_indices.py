@@ -23,7 +23,6 @@ import utilities
 
 priority_display = 'question_good'
 priority_execute = 'question_answer' # We need to know if the answer was answered
-boxed = True
 acls = { 'Default': ('executable',) }
 
 def execute(state, plugin, argument):

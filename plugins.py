@@ -152,9 +152,6 @@ Attribute('priority_display_int'
 Attribute('priority_execute_int'
           , 'Do not define in plugin. It is computed from "priority_execute"'
           )
-Attribute('boxed'
-          , '(TO REMOVE) If True then a box is drawed around the plugin.'
-          )
 Attribute('content_is_title'
           , 'The plugin execution value defines the box title.'
           )
@@ -238,6 +235,9 @@ class Plugin:
         self.prototype = self.plugin.__dict__.get('prototype')
         self.plugins_dict[self.css_name] = self
 
+    def boxed(self):
+        return self.content_is_title or self.title
+
     def __getitem__(self, (lang, attribute)):
         """Get an attribute from (in the order) :
         * The language dependent file (Plugins/plugin_name/fr.py for example)
@@ -305,15 +305,9 @@ class Plugin:
 
     def doc_html(self):
 
-        # Boxed attribute can be computed
-        if ((self.doc_html_item('boxed') != '')
-            != ( self.doc_html_item('title') != ''
-                 or self.doc_html_item('content_is_title') != '' )):
-            print self.css_name, '===BOXED=====', self.doc_html_item('title')
-
         if ('\\A' in self.doc_html_item('tip')) != (self.doc_html_item('tip_preformated') == 'True'):
             print self.css_name, '===PREFORMATED=====', self.doc_html_item('title')
-        boolean = ('link_to_self',  'boxed', 'permanent_acl',
+        boolean = ('link_to_self', 'permanent_acl',
                    'content_is_title', 'horizontal', 'tip_preformated')
         required = ('acls', 'container', 'execute', 'priority_execute',
                     'priority_display', 'before', 'font_size', 'color',

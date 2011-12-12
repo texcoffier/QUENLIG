@@ -149,7 +149,7 @@ def display(plugin, s):
     if plugin.tip:
         s.append('<SPAN></SPAN>')
 
-    if plugin.boxed:
+    if plugin.boxed():
         s.append('<em class="box_title">')
         if plugin.value_title:
             s.append(plugin.value_title)
@@ -174,7 +174,7 @@ def display(plugin, s):
     if plugin.value:
         s.append( plugin.value )
 
-    if plugin.boxed:
+    if plugin.boxed():
         s.append('</td></tr></tbody></table>')
     else:
         s.append('</A>')

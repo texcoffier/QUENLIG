@@ -7,7 +7,6 @@ Each plugin can define some informations about itself:
    * Its CSS style
    * Its default ACLs for the admin/teacher/author/student roles.
    * Its container.
-   * If it is boxed.
    * An evaluation function that may:
       * Define one part of the page.
       * Modify other page part.

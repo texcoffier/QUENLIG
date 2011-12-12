@@ -94,7 +94,7 @@ def execute(state, plugin, argument):
 
     for a_plugin in state.plugins_list:
         x = '<tt class="hide" onmouseup="hide(event,\'%s\')"></tt>' % a_plugin.plugin.css_name
-        if a_plugin.content or a_plugin.boxed:
+        if a_plugin.content or a_plugin.boxed():
             try:
                 a_plugin.value_title += x
             except (AttributeError, TypeError):

@@ -24,7 +24,6 @@ import utilities
 
 priority_display = 'question_bads'
 acls = { 'Teacher': ('executable',) }
-boxed = True
 
 css_attributes = (
     '> TABLE > TR { vertical-align: top ; }',

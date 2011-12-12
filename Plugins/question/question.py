@@ -22,7 +22,6 @@
 import random
 
 priority_display = 'question_before'
-boxed = True
 acls = { 'Default': ('executable',) }
 
 def execute(state, plugin, argument):

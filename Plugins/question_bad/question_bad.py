@@ -24,7 +24,6 @@ import cgi
 
 priority_display = 'question_answer'
 priority_execute = 'question_answer'
-boxed = True
 background = '#FCC'
 title_background = '#F88'
 acls = { 'Default': ('executable',) }

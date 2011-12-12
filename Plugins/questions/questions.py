@@ -23,7 +23,6 @@ import cgi
 
 priority_display = 'identity'
 priority_execute = 'question' # In order to emphasis current question
-boxed = True
 
 css_attributes = (
     "A.max_descendants { font-weight: bold; }",

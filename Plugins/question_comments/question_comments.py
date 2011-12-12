@@ -23,7 +23,6 @@ import utilities
 import statistics
 
 priority_display = 'question_required'
-boxed = True
 sort_column = 3
 acls = { 'Teacher': ('executable',) }
 

@@ -25,7 +25,6 @@ import utilities
 
 priority_execute = '-questions' # To update question list before
 priority_display = 'question'
-boxed = True
 css_attributes = (
     "INPUT { width: 100% ; font-family: times; font-size:120%}",
     "TEXTAREA { width: 100% ; }",

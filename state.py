@@ -101,6 +101,9 @@ class StatePlugin:
         for c in self.content:
             yield c
 
+    def boxed(self):
+        return self.content_is_title or self.title
+
     def __repr__(self):
         try:
             full_content = ' '.join([p.plugin.css_name

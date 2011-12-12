@@ -24,7 +24,6 @@ import statistics
 import questions
 
 priority_display = 'question_comments'
-boxed = True
 acls = { 'Teacher': ('executable',) }
 css_attributes = (
     "SPAN.uncommented { background: #FAA; }",

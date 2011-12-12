@@ -20,7 +20,6 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 priority_display = 'title_bar'
-boxed = True
 acls = { 'Default': ('executable',) }
 
 def execute(state, plugin, argument):

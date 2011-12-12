@@ -59,7 +59,7 @@ def execute(state, plugin, argument):
             
         s = '<tt class="tips"><span>' + '\n'.join(s) + '</span>*</tt>'
 
-        if a_plugin.boxed:
+        if a_plugin.boxed():
             if a_plugin.value_title == None:
                 a_plugin.value_title = s
             else:
