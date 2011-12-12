@@ -37,9 +37,9 @@ add(name="intro",
     des routeurs ainsi que de votre PC.
     <p>
     L'ensemble des réponses que vous allez donner seront analysées
-    afin de définir votre note de TP :
+    afin de définir votre note de TP, le calcul ressemblera à :
     <b>Soit les variables 'bonnes', 'mauvaises', 'indices' entre 0 et 1.
-    La note de TP est égale à : bonnes*bonnes*(20-6*mauvaises-2*indices).</b>
+    La note de TP est égale à : bonnes*bonnes*(20-6*mauvaises<sup>0.3</sup>-2*indices<sup>0.3</sup>).</b>
     En répondant à toutes les questions vous avez donc 12/20 au minimum.
     En répondant à la moitié des questions sans faire aucune erreur
     et sans demander d'indice, vous avez au mieux 5/20.
@@ -60,7 +60,7 @@ add(name="intro",
     compter des réponses fausses.
     
     """,
-    question="Êtes-vous prêt pour l'aventure&nbsp;? Répondez OUI s'il vous plais.",
+    question="Êtes-vous prêt pour l'aventure&nbsp;? Répondez OUI s'il vous plait.",
     tests = ( yes("Répondez OUI s'il vous plait"), ),
     good_answer = """Vous pouvez directement taper <tt>return</tt> pour
     voir la prochaine question.

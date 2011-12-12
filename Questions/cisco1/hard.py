@@ -25,7 +25,10 @@ from check import *
 
 add(name="modèle cisco",
     required=["tp1:intro"],
-    question="Quel est le modèle du routeur CISCO que vous allez utiliser&nbsp;?",
+    question="""Quel est le modèle du routeur CISCO
+                que vous allez utiliser&nbsp;?
+                La réponse est écrite sur la face avant.
+             """,
     tests=(
     HostCiscoModele(),
     ),
@@ -68,7 +71,7 @@ add(name="on off",
 add(name="console eth",
     required=['nb ethernet'],
     before = """On a besoin de détrompeur quand les trous dans lesquels
-    on met les connecteurs se ressemblent suffisemment (ou sont identiques)
+    on met les connecteurs se ressemblent suffisamment (ou sont identiques)
     pour que l'on se trompe.
     Par exemple&nbsp;:
     <ul>
@@ -102,7 +105,7 @@ add(name="show",
     tests=(
     expect('show'),
     good("show hardware"),
-    bad("show version",
+    good("show version",
         "Pas très logique comme réponse, comment dit-on matériel en anglais?"),
     ),
     indices = ("""Le paramètre est la traduction de <em>matériel</em>

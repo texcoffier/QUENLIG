@@ -29,6 +29,7 @@ add(name="intro",
     Quelle commande permet de passer en mode de configuration
     du routeur <small>(en tapant une seule fois sur <tt>return</tt>)</small>&nbsp;?""",
     tests = (
+    bad(("configure t", "conf t"), "Pas d'abréviations !!!"),
     require('configure', "La commande est <tt>configure</tt> + un paramètre"),
     bad("configure", """Vous pouvez en effet taper <tt>configure</tt>
     puis <tt>Return</tt> pour valider le choix <tt>terminal</tt>.
@@ -63,7 +64,8 @@ add(name="pas de traduction",
     before = """En mode configuration du routeur,
     exécutez la commande <tt>no ip domain lookup</tt>""",
     question = "Retapez la commande 'coucou'. Avez-vous le temps d'arrêter la commande en tapant <em>Control-C</em>&nbsp;?",
-    tests = ( no("Vous avez du mal taper la commande."), ),
+    tests = ( no("""C'est impossible car la commande se termine avant
+                 que vous puissiez taper quelque chose au clavier"""), ),
     good_answer = """
     <b>
     TOUTE LIGNE DE COMMANDE COMMENÇANT PAR 'NO' ANNULE
@@ -156,7 +158,7 @@ add(name="password console",
     sur la console de contrôle du routeur&nbsp;?
     <ul>
     <li> Une commande qui indique le mot de passe.
-    <li> Une commande indique que l'on veut un accès
+    <li> Une commande qui indique que l'on veut un accès
     avec authentification pour la connexion.
     </ul>
     <p>Ne recopiez pas l'invite de commande&nbsp;!
@@ -240,6 +242,7 @@ add(name="who",
     des personnes connectées sur le routeur&nbsp;?""",
     tests = ( good("who"),
               good("show users", "<tt>who</tt> est plus court"),
+              bad("show who","Cela indique qui vous êtes (<tt>who am i</tt>)"),
               ),
     indices = ("C'est comme sous unix", ),
     )

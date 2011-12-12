@@ -23,6 +23,10 @@ from questions import *
 from check import *
 from configuration_salles import *
 
+bad_name = """Utilisez le nom d'interface affiché par
+              <tt>show interfaces</tt>"""
+
+
 add(name="premier",
     required=["serie:affiche", "serie:premiere", "serie:prompt"],
     question="""Quelle commande tapez-vous pour avoir les informations
@@ -34,6 +38,7 @@ add(name="premier",
     good("show interface {C0.remote_port.host.E0.port.name}", parse_strings=host, uppercase=True),
     good("show interface {C0.remote_port.host.E0.port.name_without_space}", parse_strings=host, uppercase=True),
     ),
+    bad_answer = bad_name,
     )
 
 add(name="protocole",
@@ -59,7 +64,7 @@ add(name="protocole",
 add(name="paquet",
     required=["premier"],
     question="""Quelle est la taille maximale en octet des paquets
-    passant sur la liaison ethernet&nbsp;?""",
+    passant sur la liaison ethernet du CISCO&nbsp;?""",
     tests=(
         good("1500"),
         good("1500 bytes"),
@@ -106,6 +111,7 @@ add(name="configure",
             dans une des questions précédentes"""),              
         ))),
         ),
+    bad_answer = bad_name,
     )
 
 

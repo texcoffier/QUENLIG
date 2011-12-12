@@ -132,7 +132,7 @@ def int_to_netmask(i):
     return j
 
 def max_question():
-    return "Quel est le <em>netmask</em> du plus grand réseaux dont l'adresse est " + \
+    return "Quel est le <em>netmask</em> du plus grand réseau réalisable (on ne tient pas compte des classes) dont l'adresse est " + \
            '.'.join([str(i) for i in max_adresse()])
 
 add(name="max",
@@ -249,6 +249,10 @@ add(name="smallone",
         Bad(Comment(Start('172'),
                     """Le <em>netmask</em> de <tt>172.16.0.0</tt> est
                     <tt>255.240.0.0</tt>""")),
+        Bad(Comment(End('.1'),
+                    """Il est impossible que le dernier bit d'une adresse
+                       de réseau soit à 1. Cela voudrait dire que ce réseau
+                       ne contient aucune machine.""")),
     ),
     )
 
@@ -267,6 +271,8 @@ add(name="broadcast",
     tests = (
         Good(UpperCase(Replace(((':',''),('-',''),(' ',''),('.', '')),
                                Equal('FFFFFFFFFFFF')))),
+        Bad(Comment(Equal('255.255.255.255'),
+                    "Vous avez donné une adresse IP, par ethernet")),
     ),
     )
 

@@ -148,7 +148,8 @@ add(name="config pc eth",
     reject('broadcast',
            """Définir l'adresse de <em>broadcast</em> est inutile
            car on peut la calculer à partir de l'adresse réseau et
-           du <em>netmask</em>"""),
+           du <em>netmask</em>.
+           L'indiquer ne peut provoquer que des erreurs."""),
     require('{E0.port.ip}',
             "Je ne vois pas l'adresse IP de l'interface (ou elle est fausse)",
             parse_strings=host),

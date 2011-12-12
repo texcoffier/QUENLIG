@@ -89,6 +89,9 @@ add(name="minicom",
     <p>
     Attention : ne lancez pas <tt>minicom</tt> en arrière plan,
     il a besoin d'utiliser le clavier et l'écran.
+    <p>
+    Attention : la réponse attendue n'est pas <tt>man minicom</tt> ni
+    <tt>minicom --help</tt>
     """,
     tests = (
     reject('man', """On veut l'aide en ligne du logiciel, pas sa
@@ -260,7 +263,8 @@ add(name="voir",
     before="""<b>Attention, pour la suite des TP seuls les noms
     complets de commande seront acceptés, aucune abréviation
     que cela soit pour les commandes et les paramètres ne sera acceptée</b>.\n""",
-    question="""À votre avis, quelle est la commande vous permettant
+    question="""À votre avis, quelle est la <b>commande</b> (n'indiquez
+    pas les paramètres) vous permettant
     d'avoir des informations sur le routeur quelque soit le type
     d'informations que l'on désire voir&nbsp;?""",
     tests = (
@@ -280,7 +284,7 @@ add(name="show",
     before="""Deux moyens pour répondre à cette question&nbsp;:
     <ul>
     <li> Essayer bêtement.
-    <li> Ou faire liste les premier paramètres possible en utilisant
+    <li> Ou faire lister les premiers paramètres possibles en utilisant
     le point d'interrogation comme premier paramètre.
     </ul>""",
     question="La commande <tt>show</tt> prend-elle des paramètres&nbsp;?",
