@@ -158,9 +158,6 @@ Attribute('content_is_title'
 Attribute('horizontal'
           , 'If True, the contained plugins are placed horizontaly'
           )
-Attribute('tip_preformated'
-          , '(TO REMOVE) If True then the tip content is not reformatted'
-          )
 Attribute('container'
           , 'The name of the plugin containing the defined plugin.'
           )
@@ -235,9 +232,6 @@ class Plugin:
         self.prototype = self.plugin.__dict__.get('prototype')
         self.plugins_dict[self.css_name] = self
 
-    def boxed(self):
-        return self.content_is_title or self.title
-
     def __getitem__(self, (lang, attribute)):
         """Get an attribute from (in the order) :
         * The language dependent file (Plugins/plugin_name/fr.py for example)
@@ -308,7 +302,7 @@ class Plugin:
         if ('\\A' in self.doc_html_item('tip')) != (self.doc_html_item('tip_preformated') == 'True'):
             print self.css_name, '===PREFORMATED=====', self.doc_html_item('title')
         boolean = ('link_to_self', 'permanent_acl',
-                   'content_is_title', 'horizontal', 'tip_preformated')
+                   'content_is_title', 'horizontal')
         required = ('acls', 'container', 'execute', 'priority_execute',
                     'priority_display', 'before', 'font_size', 'color',
                     'text_align', 'after', 'background',

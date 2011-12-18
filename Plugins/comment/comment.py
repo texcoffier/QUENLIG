@@ -20,7 +20,6 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 priority_display = 'analyse'
-tip_preformated = True
 css_attributes = (
     "TEXTAREA { font-size: 80% ; }",
     "BUTTON { width: 100% ; }",

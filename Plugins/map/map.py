@@ -23,7 +23,6 @@ import questions
 import os
 
 priority_display = 'comment'
-tip_preformated = True
 css_attributes = (
     'IMG { width: 100% ; margin-top: 0.3em ; }',
     )

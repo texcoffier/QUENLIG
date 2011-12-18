@@ -23,7 +23,6 @@ import statistics
 
 container = 'analyse'
 link_to_self = True
-tip_preformated = True
 acls = { 'Teacher': ('executable',) }
 
 def execute(state, plugin, argument):

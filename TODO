@@ -1,3 +1,14 @@
+
+Je vais faire la même chose pour toutes les définitions de tests.
+
+L'avantage de cette méthode est que cela me force à documenter les sources.
+
+Ensuite je ferais les documentations pour les personnes :
+    * définissant les exercices ;
+    * ajoutant de nouveaux types de test ;
+    * ajoutant de nouveaux plugins.
+
+
 TODO Absolute :
 
 	Le rechargement d'une question empeche les etudiant d'y aller

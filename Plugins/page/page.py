@@ -32,7 +32,12 @@ def css(state):
     s = []
     for p in state.plugins_dict.values():
         s.append( p.css() )
-        if p.tip_preformated:
+        preformatted = False
+        if '\\A' in str(p.tip):
+            preformatted = True
+        elif p.translations and '\\A' in ''.join(p.translations.values()):
+            preformatted = True
+        if preformatted:
             s.append('DIV.%s A.tips > SPAN { white-space: pre ; }' % \
                      p.plugin.css_name)
 
