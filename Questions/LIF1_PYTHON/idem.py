@@ -68,7 +68,7 @@ add(name="affectation",
     <b>recopier une valeur</b> à l'emplacement mémoire de la variable.
     <p>
     En Python, cet opérateur indique que l'on
-    <b>donne une nom à la valeur</b>.
+    <b>donne un nom à la valeur</b>.
     <p>
     Dans un premier temps, faites comme si c'était la même chose
     car la plupart du temps c'est le cas.

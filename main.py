@@ -28,6 +28,7 @@ import questions
 import server
 import socket
 import utilities
+import re
 
 # To make casauth work we should not use a proxy
 # And the mailcheck speed-down shell startup.
@@ -314,6 +315,53 @@ You can click on plugin attributes to see there definition.
     f.write('</table>')
     f.write('&nbsp;<br>'*60)
     f.close()
+
+    tests = []
+    for c in questions.__dict__.values():
+        try:
+            if issubclass(c, questions.TestExpression):
+                tests.append(c)
+        except TypeError:
+            pass
+
+    f = open('tests.html', 'w')
+    f.write('''
+<style>
+BODY { font-family: sans-serif ; }
+PRE { border: 1px solid black ;
+margin-width: auto ;
+margin-left: 4em ;
+margin-top: 0px ;
+padding: 0.1em ;
+ }
+EM { font-family: sans-serif ; }
+</style>
+''')
+    tests.sort(key=lambda x: x.__name__)
+    def display_tests(t):
+        doc = t.__doc__.strip().split('Examples:')
+        doc[0] = doc[0].strip('\n ')
+        if len(doc) > 1:
+            examples = doc[1].strip('\n').split('\n')
+            indent = len(examples[0]) - len(examples[0].strip())
+            examples = [line[indent:].replace(t.__name__,
+                                              '<b>' + t.__name__ + '</b>'
+                                              )
+                        for line in examples]
+            examples = '<pre>' + '\n'.join(examples) + '</pre>'
+            examples = re.sub('(#.*)', '<em>\\1</em>', examples)
+        else:
+            examples = ''
+        f.write('<b>' + t.__name__ + '</b>: ' + doc[0] + examples)
+        for c in tests:
+            if c.__bases__[0] == t:
+                f.write('<ul>')
+                display_tests(c)
+                f.write('</ul>')
+    display_tests( questions.TestExpression)  
+    f.close()
+    
+
 
     sys.exit(0)
 

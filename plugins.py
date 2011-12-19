@@ -299,8 +299,6 @@ class Plugin:
 
     def doc_html(self):
 
-        if ('\\A' in self.doc_html_item('tip')) != (self.doc_html_item('tip_preformated') == 'True'):
-            print self.css_name, '===PREFORMATED=====', self.doc_html_item('title')
         boolean = ('link_to_self', 'permanent_acl',
                    'content_is_title', 'horizontal')
         required = ('acls', 'container', 'execute', 'priority_execute',
