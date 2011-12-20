@@ -1007,6 +1007,24 @@ class Bad(TestUnary):
     Examples:
         Bad(Equal('5') | Contain('6'))
         Bad(~ Equal('AA') & Equal('AA') ) # This one will never be bad...
+        
+        # The next test will be bad if the answer contains 'x' and 'y'
+        # Beware of the And evaluation shortcut, the second test will not
+        # be evaluated if the answer does not contains 'x'
+        # The comments for the student are:
+        #   x  : not bad, but with comment 'x'
+        #   y  : not bad, without comment
+        #   xy : bad with comments 'x' and 'y' concatened,
+        Bad(   Comment(Contain('x'),'x')  &amp;  Comment(Contain('y'),'y'))   )
+        
+        # The next test will be bad if the answer contains 'x' or 'y'
+        # Beware of the And evaluation shortcut, the second test will not
+        # be evaluated if the answer does contains 'x'
+        # The comments for the student are:
+        #   x  : bad with comment 'x'
+        #   y  : bad with comment 'y'
+        #   xy : bad with comment 'x'
+        Bad(   Comment(Contain('x'),'x')  |  Comment(Contain('y'),'y'))   )
         """
     def do_test(self, student_answer, state=None):
         bool, comment = self.children[0](student_answer, state)
@@ -1580,3 +1598,13 @@ if True:
     assert( a('bbb') == (False, '') )
     assert( a('bAb') == (True, '') )
 
+    a = create("Bad(Or(Comment(Contain('x'),'x'),Comment(Contain('y'),'y')))")
+    assert( a('x') == (False, 'x') )
+    assert( a('y') == (False, 'y') )
+    assert( a('yx') == (False, 'x') )
+    
+    a = create("Bad(And(Comment(Contain('x'),'x'),Comment(Contain('y'),'y')))")
+    assert( a('x') == (None, 'x') )
+    assert( a('y') == (None, '') )
+    assert( a('xy') == (False, 'xy') )
+    assert( a('yx') == (False, 'xy') )
