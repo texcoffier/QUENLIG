@@ -130,6 +130,10 @@ class Question:
         self.highlight = arg.get("highlight", False)
         self.maximum_bad_answer = int(arg.get("maximum_bad_answer", "0"))
 
+        for test in self.tests:
+            if hasattr(test, 'initialize'):
+                test.initialize(lambda string, state: string)
+
     def answers_html(self, state):
         s = ""
         s += "<table class=\"an_answer\"><caption>" + self.name + "</caption>" +\
@@ -795,6 +799,24 @@ class TestExpression(Test):
             return '<b>' + self.__class__.__name__ + '</b>'
         raise ValueError('Unknown output format')
 
+    def canonize(self, string, dummy_state):
+        return string
+
+    def canonize_test(self, parser, state):
+        """Modify test parameters"""
+        pass
+
+    def __call__(self, student_answer, state=None):
+        return self.do_test(self.canonize(student_answer, state), state)
+
+    def initialize(self, parser, state=None):
+        """The string in test descriptio must be canonized"""
+        self.canonize_test(parser, state)
+        for child in self.children:
+            child.initialize(lambda string, state:
+                                 self.canonize(parser(string, state), state)
+                             )
+
 class TestNAry(TestExpression):
     """Base class for tests with a variable number of test as arguments."""
     def source(self, state=None, format=None):
@@ -804,6 +826,9 @@ class TestNAry(TestExpression):
 
 class TestUnary(TestExpression):
     """Base class for tests with one child test."""
+    def do_test(self, student_answer, state=None):
+        return self.children[0](student_answer, state)
+    
     def source(self, state=None, format=None):
         return self.test_name(format) + \
                "(%s)" % self.children[0].source(state, format)
@@ -814,6 +839,9 @@ class TestString(TestExpression):
         if not isinstance(string, basestring):
             raise ValueError("Expect a string")
         self.string = string
+
+    def canonize_test(self, parser, state):
+        self.string_canonized = parser(self.string, state)
 
     def source(self, state=None, format=None):
         return self.test_name(format) + '(%s)' % pf(self.string, format)
@@ -826,11 +854,11 @@ class Or(TestNAry):
         Good(Or(Equal('a'), Equal('b'), Equal('c')))
         Good(Equal('a') | Equal('b') | Equal('c'))
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         all_comments = ""
         bool = False
         for c in self.children:
-            bool, comment = c(student_answer, state, parser)
+            bool, comment = c(student_answer, state)
             all_comments += comment
             if bool == True:
                 break
@@ -850,11 +878,11 @@ class And(TestNAry):
         Good(Contain('a') & Contain('b') & Contain('c'))
         """
     operator = " & "
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         all_comments = ""
         bool = False
         for c in self.children:
-            bool, comment = c(student_answer, state, parser)
+            bool, comment = c(student_answer, state)
             all_comments += comment
             if bool == False:
                 break
@@ -874,8 +902,8 @@ class TestInvert(TestUnary):
     """
     def source(self, state=None, format=None):
         return "~" + self.children[0].source(state, format)
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        bool, comment = self.children[0](student_answer, state, parser)
+    def do_test(self, student_answer, state=None):
+        bool, comment = self.children[0](student_answer, state)
         return not bool, comment
 
 class TestFunction(TestExpression):
@@ -896,7 +924,7 @@ class TestFunction(TestExpression):
             raise ValueError("Expect a callable object")
         self.fct = fct
 
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         return self.fct(student_answer, state)
 
     def source(self, state=None, format=None):
@@ -917,8 +945,8 @@ class Equal(TestString):
         Good(Equal('A good answer'))
         
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return student_answer == parser(self.string, state, self), ""
+    def do_test(self, student_answer, state=None):
+        return student_answer == self.string_canonized, ''
 
 class Contain(TestString):
     """Returns True the student answer contains the string in parameter.
@@ -928,8 +956,8 @@ class Contain(TestString):
         Bad(Contain('C++'))
         Good(Contain('')) # This test is always True
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return parser(self.string, state, self) in student_answer, ""
+    def do_test(self, student_answer, state=None):
+        return self.string_canonized in student_answer, ''
 
 class Start(TestString):
     """Returns True the student answer starts by the string in parameter.
@@ -941,8 +969,8 @@ class Start(TestString):
                    )
            )
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return student_answer.startswith(parser(self.string, state, parser)),""
+    def do_test(self, student_answer, state=None):
+        return student_answer.startswith(self.string_canonized), ''
 
 class End(TestString):
     """Returns True the student answer ends by the string in parameter.
@@ -957,8 +985,8 @@ class End(TestString):
                    )
            )
            """
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return student_answer.endswith(parser(self.string,state,parser)), ""
+    def do_test(self, student_answer, state=None):
+        return student_answer.endswith(self.string_canonized), ''
 
 class Good(TestUnary):
     """If the child test returns True then the student answer is good.
@@ -968,7 +996,7 @@ class Good(TestUnary):
         Good(Contain('6'))
         Good(~ Start('x'))
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         bool, comment = self.children[0](student_answer, state)
         if bool == True:
             return bool, comment
@@ -980,7 +1008,7 @@ class Bad(TestUnary):
         Bad(Equal('5') | Contain('6'))
         Bad(~ Equal('AA') & Equal('AA') ) # This one will never be bad...
         """
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         bool, comment = self.children[0](student_answer, state)
         if bool == True:
             return False, comment
@@ -1014,10 +1042,8 @@ class UpperCase(TestUnary):
                     )
           )
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return self.children[0](
-            student_answer.upper(), state,
-            lambda string, state, test: parser(string.upper(), state, test))
+    def canonize(self, string, state):
+        return string.upper()
 
 class SortLines(TestUnary):
     """The lines of the student answer are sorted and child test value
@@ -1027,11 +1053,8 @@ class SortLines(TestUnary):
         # The student answer 'b\na' will be fine.
         Good(SortLines(Equal('a\nb')))
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return self.children[0](
-            sort_lines(student_answer), state,
-            lambda string, state, test: parser(sort_lines(string), state, test)
-            )
+    def canonize(self, string, state):
+        return sort_lines(string)
 
 class Comment(TestUnary):
     """If the child test returns True then the comment will be displayed
@@ -1077,9 +1100,9 @@ class Comment(TestUnary):
         else:
             return self.test_name(format) + "(%s)" % pf(self.comment, format)
     
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         if self.children:
-            bool, comment = self.children[0](student_answer, state, parser)
+            bool, comment = self.children[0](student_answer, state)
         else:
             return None, self.comment
         if bool == True:
@@ -1103,8 +1126,8 @@ class Expect(TestString):
             self.comment = args[1]
         TestString.__init__(self, args[0])
 
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        if parser(self.string, state, self) in student_answer:
+    def do_test(self, student_answer, state=None):
+        if self.string_canonized in student_answer:
             return None, ''
         else:
             if self.comment:
@@ -1128,8 +1151,8 @@ class Reject(Expect):
          Reject("foo")
          Reject("bar", "Why 'bar'? there is no 'foo'...")
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        if parser(self.string, state, self) not in student_answer:
+    def do_test(self, student_answer, state=None):
+        if self.string_canonized not in student_answer:
             return None, ''
         else:
             if self.comment:
@@ -1163,12 +1186,8 @@ class Replace(TestUnary):
             pf(self.replace, format),
             self.children[0].source(state, format) )
 
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return self.children[0](
-            replace_strings(self.replace,student_answer), state,
-            lambda string, state, test: parser(replace_strings(self.replace,string), state, test)
-            )
-
+    def canonize(self, string, state):
+        return replace_strings(self.replace, string)
 
 class TestInt(TestExpression):
     """Base class for integer tests."""
@@ -1187,7 +1206,7 @@ class Int(TestInt):
         # If the answer is not an integer a comment is returned.
         Good(Int(1984) | Int(2001))
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         try:
             if self.integer == int(student_answer.rstrip('.')):
                 return True, ''
@@ -1203,7 +1222,7 @@ class IntGT(TestInt):
         # If the answer is not an integer a comment is returned.
         Good(IntGT(1984) & IntLT(2001))
 """
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         try:
             if int(student_answer) > self.integer:
                 return True, ''
@@ -1219,7 +1238,7 @@ class IntLT(TestInt):
         # If the answer is not an integer a comment is returned.
         Good(IntGT(1984) & IntLT(2001))
 """
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         try:
             if int(student_answer) < self.integer:
                 return True, ''
@@ -1235,7 +1254,7 @@ class Length(TestInt):
        # Note the negation of the condition: ~
        Bad(Comment(~Length(3), "The expected answer is 3 character long"))
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         return len(student_answer) == self.integer, ''
 
 class LengthLT(TestInt):
@@ -1247,7 +1266,7 @@ class LengthLT(TestInt):
        Bad(Comment(~LengthLT(10),
                    "The expected answer is less than 10 characters long"))
     """
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         return len(student_answer) < self.integer, ''
 
 class NumberOfIs(TestExpression):
@@ -1269,16 +1288,15 @@ class NumberOfIs(TestExpression):
         return self.test_name(format) + '(' + pf(self.string,format) + ',' + \
                str(self.number) + ')'
 
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return student_answer.count(parser(self.string,state,self)) \
-               == self.number, ''
+    def do_test(self, student_answer, state=None):
+        return student_answer.count(self.string) == self.number, ''
 
 
 # Should apply the parser on all the dict items
 
 class TestDictionary(TestExpression):
     """Base class for enumeration tests."""
-    def __call__(self, student_answer, state=None, parse=None):
+    def do_test(self, student_answer, state=None):
         if self.uppercase:
             student_answer = student_answer.upper()
         if student_answer not in self.dict:
@@ -1322,6 +1340,7 @@ if True:
 
     def create(txt):
         o = eval(txt)
+        o.initialize(lambda string, state: string )
         # print o.source()
         # print txt
         if o.source() != txt:
@@ -1444,26 +1463,24 @@ if True:
     assert( a('12c') == (True, '') )
 
     a = create("UpperCase(Replace((('a', '1'), ('b', '2')),Equal('abc')))")
-    assert( a('12c') == (True, '') )
+    # The string in the replacement are not uppercased.
+    # Replace is no more usable with the shell parser if they are.
+    assert( a('12c') == (False, '') )
 
     a = create("UpperCase(Replace((('a', '1'), ('b', '2')),Equal('12C')))")
     assert( a('12c') == (True, '') )
-    # XXX Fail because replacement is not uppercased
     assert( a('abc') == (False, '') )
 
     a = create("UpperCase(Replace((('A', '1'), ('B', '2')),Equal('12c')))")
     assert( a('abc') == (True, '') )
 
     a = create("UpperCase(Replace((('A', '1'), ('B', '2')),Equal('abc')))")
-    # XXX Fail because replacement is uppercased
-    assert( a('abc') == (False, '') )
+    assert( a('abc') == (True, '') )
 
 
     a = create("Replace((('a', 'x'),),UpperCase(Equal('a')))")
-    # XXX Fail because replacement is uppercased
-    assert( a('a') == (False, '') )
-    # XXX should Fail because replacement is uppercased
-    assert( a('A') == (True, '') )
+    assert( a('a') == (True, '') )
+    assert( a('A') == (False, '') )
 
     a = create("Replace((('a', 'x'),),UpperCase(Equal('A')))")
     assert( a('a') == (False, '') )
@@ -1478,9 +1495,9 @@ if True:
     assert( a('A') == (False, '') )
 
     a = create("Replace((('a', '1'), ('b', '2')),UpperCase(Equal('abc')))")
-    assert( a('12c') == (False, '') )
-    assert( a('abc') == (False, '') )
-    assert( a('ABc') == (True, '') )
+    assert( a('12c') == (True, '') )
+    assert( a('abc') == (True, '') )
+    assert( a('ABc') == (False, '') )
 
     a = create("Replace((('a', '1'), ('b', '2')),UpperCase(Equal('12c')))")
     assert( a('abc') == (True, '') )
@@ -1552,4 +1569,14 @@ if True:
     a = create("~Comment(~NumberOfIs('a',2),'bad')")
     assert( a('papa') == (True, '') )
     assert( a('ppa') == (False, 'bad') )
+
+    a = create("UpperCase(Contain('a'))")
+    assert( a('bab') == (True, '') )
+    assert( a('bbb') == (False, '') )
+    assert( a('bAb') == (True, '') )
+
+    a = create("UpperCase(Contain('A'))")
+    assert( a('bab') == (True, '') )
+    assert( a('bbb') == (False, '') )
+    assert( a('bAb') == (True, '') )
 
