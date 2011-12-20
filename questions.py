@@ -810,7 +810,7 @@ class TestExpression(Test):
         return self.do_test(self.canonize(student_answer, state), state)
 
     def initialize(self, parser, state=None):
-        """The string in test descriptio must be canonized"""
+        """The string in test description must be canonized"""
         self.canonize_test(parser, state)
         for child in self.children:
             child.initialize(lambda string, state:

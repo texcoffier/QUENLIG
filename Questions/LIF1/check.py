@@ -36,9 +36,6 @@ def C_clean(txt):
 
 
 class C(TestUnary):
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        return self.children[0](
-            C_clean(student_answer), state,
-            lambda string, state, test: parser(C_clean(string), state, test)
-            )
+    def canonize(self, student_answer, state=None):
+        return C_clean(string)
 

@@ -33,12 +33,26 @@ navigation = """<p>Quelques commandes pour naviguer dans les fichiers :
 """
 
 class C_stdout(TestUnary):
+    """This modifier has not canonizer because:
+      * We don't want to write the answer in the source.
+      * The teacher answer will be compiled each time (long time to load)
+
+      Examples:
+         # Good answer if the student program write 'Hello world !'
+         Good(C_stdout(Uppercase(Start('HELLO WORLD'))))
+         #
+         Good(C_stdout(Start('HELLO WORLD'),
+                       c_input = "Text put in the process stdin",
+                       c_args = ('arg1', 'arg2', 'arg3'),
+                      ))
+    """
+    
     def __init__(self, *args, **keys):
         self.c_input = keys.get('c_input', '')
         self.c_args = list(keys.get('c_args', ()))
         TestExpression.__init__(self, *args)
 
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def __call__(self, student_answer, state=None):
 
         utilities.write('xxx.c', student_answer + '\n')
         error = os.system("gcc -Wall xxx.c 2>xxx.errors")
@@ -53,7 +67,7 @@ class C_stdout(TestUnary):
             )
         result = f.communicate(self.c_input)
 
-        ok, comment = self.children[0](result[0], state, parser)
+        ok, comment = self.children[0](result[0], state)
 
         if error_text != '':
             message = 'Message du compilateur : <pre>'+error_text+'</pre><hr>'

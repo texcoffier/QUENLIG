@@ -32,7 +32,7 @@ add(name="intro",
     )
 
 class mode_display(TestExpression):
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def do_test(self, student_answer, state=None):
         n = int(student_answer, 8)
         s = ''
         for i in range(9):

@@ -38,7 +38,7 @@ def P_clean(txt):
 
 
 class P(TestUnary):
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    def canonize(self, student_answer, state=None):
         if re.match('.*;[ \t]*$', student_answer):
             return (False,
                     'On ne met pas de <tt>;</tt> en fin de ligne en Python')
@@ -48,10 +48,7 @@ class P(TestUnary):
             return (False,
                     'Message de Python : <b>' + cgi.escape(str(e)) + '</b><br>'
                     )
-        return self.children[0](
-            P_clean(student_answer), state,
-            lambda string, state, test: parser(P_clean(string), state, test)
-            )
+        return P_clean(student_answer)
 
 def python_color(txt):
     txt = cgi.escape(txt)

@@ -813,6 +813,7 @@ mv %s.svg %s.png %s
 #
 ##############################################################################
 
+# Do not  use this test
 class HostTest(Test):
     html_class = 'test_string test_good test_is'
 
@@ -829,21 +830,28 @@ class HostTest(Test):
 
 
 # NEW STYLE TEST : THIS ONE MUST BE USED.
-# The order is important : UpperCase(HostReplace(
 class HostReplace(TestUnary):
-    def __call__(self, student_answer, state=None, parser=no_parse):
+    """Replace {attribute_name} in the teacher defined answer
+    by the value for the host used by the student.
+
+    Example:
+       Good(HostReplace(Equal('ifconfig eth0 {E0.ip} netmask {E0.mask}')))
+       # The order is important :
+       Good(HostReplace(UpperCase('hostname {name}')))
+       # The following will not work because the {name} is uppercased
+       Good(UpperCase(HostReplace('hostname {name}')))
+    """
+    
+    def canonize(self, student_answer, state=None):
         if state is None:
             return False, ""
         if state.client_ip in Network.hosts:
-            return self.children[0](
-                student_answer, state,
-                lambda string, state, test: parser(
-                    host_substitute(string, Network.hosts[state.client_ip]),
-                    state, test))
+            return host_substitute(student_answer,
+                                   Network.hosts[state.client_ip])
         else:
             return False, """Cet ordinateur (%s) ne fait pas parti du TP
             changez de poste ou prévenez l'enseignant si c'est un bug.""" % \
-        state.client_ip
+             state.client_ip
 
 
 def host_substitute(string, host):

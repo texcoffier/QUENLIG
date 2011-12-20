@@ -49,13 +49,20 @@ class TestShellParsed(TestShell):
         b['parse_strings'] = shellparse
         TestShell.__init__(self, *a, **b)
 
-
 class Shell(TestUnary):
-    def __call__(self, student_answer, state=None, parser=no_parse):
-        parsed, comment = parse(student_answer)
-        return self.children[0](
-            parsed, state,
-            lambda string, state, test: parser(parse_only_not_commented(string), state, test))[0], ''
+    """Parse, canonise and translate the shell command to XML.
+
+    Examples:
+          Good(Shell('ls -a'))
+          # Replacement on the real string
+          Good(Replace((('dir', 'ls'),), Shell(Equal('ls -a'))))
+          # Replacement in the XML string
+          Good(Shell(Replace((('<command><argument>dir</argument>',
+                               '<command><argument>ls</argument>'),
+                             Equal('ls -a'))))
+     """
+    def canonize(self, student_answer, state=None):
+        return parse_only_not_commented(student_answer)
 
 class shell_good(TestShellParsed):
     html_class = "test_shell test_good test_is"
