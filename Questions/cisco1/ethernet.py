@@ -104,7 +104,7 @@ add(name="configure",
     good("interface {C0.remote_port.host.E0.port.name}", parse_strings=host, uppercase=True),
     good("interface {C0.remote_port.host.E0.port.name_without_space}", parse_strings=host, uppercase=True),
     expect('interface'),
-    Bad(UpperCase(HostReplace(Comment(
+    Bad(HostReplace(UpperCase(Comment(
             ~(End('{C0.remote_port.host.E0.port.name}')
               | End('{C0.remote_port.host.E0.port.name_without_space}')),
             """Vous avez déjà indiqué le nom de l'interface

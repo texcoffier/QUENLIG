@@ -132,7 +132,7 @@ class Question:
 
         for test in self.tests:
             if hasattr(test, 'initialize'):
-                test.initialize(lambda string, state: string)
+                test.initialize(lambda string, state: string, None)
 
     def answers_html(self, state):
         s = ""
@@ -800,7 +800,7 @@ class TestExpression(Test):
         raise ValueError('Unknown output format')
 
     def canonize(self, string, dummy_state):
-        """Returns the canonized the string.
+        """Returns the canonized string (student answer).
         To return an error: return False, "Syntax error"
         """
         return string
@@ -813,16 +813,18 @@ class TestExpression(Test):
         """Add a compatibility layer for old tests"""
         student_answer = self.canonize(student_answer, state)
         if isinstance(student_answer, str):
-            return self.do_test(self.canonize(student_answer, state), state)
+            return self.do_test(student_answer, state)
         else:
             return student_answer
 
-    def initialize(self, parser, state=None):
+    def initialize(self, parser, state):
         """The string in test description must be canonized"""
+        self.parser = parser # Store the parser for future use (See cisco)
         self.canonize_test(parser, state)
         for child in self.children:
-            child.initialize(lambda string, state:
-                                 self.canonize(parser(string, state), state)
+            child.initialize(lambda string, a_state:
+                                 self.canonize(parser(string,a_state),a_state),
+                             state
                              )
 
 class TestNAry(TestExpression):
@@ -834,7 +836,7 @@ class TestNAry(TestExpression):
 
 class TestUnary(TestExpression):
     """Base class for tests with one child test."""
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         return self.children[0](student_answer, state)
     
     def source(self, state=None, format=None):
@@ -862,7 +864,7 @@ class Or(TestNAry):
         Good(Or(Equal('a'), Equal('b'), Equal('c')))
         Good(Equal('a') | Equal('b') | Equal('c'))
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         all_comments = ""
         bool = False
         for c in self.children:
@@ -886,7 +888,7 @@ class And(TestNAry):
         Good(Contain('a') & Contain('b') & Contain('c'))
         """
     operator = " & "
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         all_comments = ""
         bool = False
         for c in self.children:
@@ -910,7 +912,7 @@ class TestInvert(TestUnary):
     """
     def source(self, state=None, format=None):
         return "~" + self.children[0].source(state, format)
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         bool, comment = self.children[0](student_answer, state)
         return not bool, comment
 
@@ -932,7 +934,7 @@ class TestFunction(TestExpression):
             raise ValueError("Expect a callable object")
         self.fct = fct
 
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         return self.fct(student_answer, state)
 
     def source(self, state=None, format=None):
@@ -953,7 +955,7 @@ class Equal(TestString):
         Good(Equal('A good answer'))
         
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         return student_answer == self.string_canonized, ''
 
 class Contain(TestString):
@@ -964,7 +966,7 @@ class Contain(TestString):
         Bad(Contain('C++'))
         Good(Contain('')) # This test is always True
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         return self.string_canonized in student_answer, ''
 
 class Start(TestString):
@@ -977,7 +979,7 @@ class Start(TestString):
                    )
            )
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         return student_answer.startswith(self.string_canonized), ''
 
 class End(TestString):
@@ -993,7 +995,7 @@ class End(TestString):
                    )
            )
            """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         return student_answer.endswith(self.string_canonized), ''
 
 class Good(TestUnary):
@@ -1004,7 +1006,7 @@ class Good(TestUnary):
         Good(Contain('6'))
         Good(~ Start('x'))
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         bool, comment = self.children[0](student_answer, state)
         if bool == True:
             return bool, comment
@@ -1034,7 +1036,7 @@ class Bad(TestUnary):
         #   xy : bad with comment 'x'
         Bad(   Comment(Contain('x'),'x')  |  Comment(Contain('y'),'y'))   )
         """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         bool, comment = self.children[0](student_answer, state)
         if bool == True:
             return False, comment
@@ -1126,7 +1128,7 @@ class Comment(TestUnary):
         else:
             return self.test_name(format) + "(%s)" % pf(self.comment, format)
     
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         if self.children:
             bool, comment = self.children[0](student_answer, state)
         else:
@@ -1152,7 +1154,7 @@ class Expect(TestString):
             self.comment = args[1]
         TestString.__init__(self, args[0])
 
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         if self.string_canonized in student_answer:
             return None, ''
         else:
@@ -1177,7 +1179,7 @@ class Reject(Expect):
          Reject("foo")
          Reject("bar", "Why 'bar'? there is no 'foo'...")
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         if self.string_canonized not in student_answer:
             return None, ''
         else:
@@ -1232,7 +1234,7 @@ class Int(TestInt):
         # If the answer is not an integer a comment is returned.
         Good(Int(1984) | Int(2001))
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         try:
             if self.integer == int(student_answer.rstrip('.')):
                 return True, ''
@@ -1248,7 +1250,7 @@ class IntGT(TestInt):
         # If the answer is not an integer a comment is returned.
         Good(IntGT(1984) & IntLT(2001))
 """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         try:
             if int(student_answer) > self.integer:
                 return True, ''
@@ -1264,7 +1266,7 @@ class IntLT(TestInt):
         # If the answer is not an integer a comment is returned.
         Good(IntGT(1984) & IntLT(2001))
 """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         try:
             if int(student_answer) < self.integer:
                 return True, ''
@@ -1280,7 +1282,7 @@ class Length(TestInt):
        # Note the negation of the condition: ~
        Bad(Comment(~Length(3), "The expected answer is 3 character long"))
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         return len(student_answer) == self.integer, ''
 
 class LengthLT(TestInt):
@@ -1292,7 +1294,7 @@ class LengthLT(TestInt):
        Bad(Comment(~LengthLT(10),
                    "The expected answer is less than 10 characters long"))
     """
-    def do_test(self, student_answer, state=None):
+    def do_test(self, student_answer, state):
         return len(student_answer) < self.integer, ''
 
 class NumberOfIs(TestExpression):
@@ -1366,7 +1368,7 @@ if True:
 
     def create(txt):
         o = eval(txt)
-        o.initialize(lambda string, state: string )
+        o.initialize(lambda string, state: string, None)
         # print o.source()
         # print txt
         if o.source() != txt:

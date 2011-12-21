@@ -839,20 +839,26 @@ class HostReplace(TestUnary):
        # The order is important :
        Good(HostReplace(UpperCase('hostname {name}')))
        # The following will not work because the {name} is uppercased
-       Good(UpperCase(HostReplace('hostname {name}')))
+       # Good(UpperCase(HostReplace('hostname {name}')))
     """
     
     def canonize(self, student_answer, state=None):
+        """Do not canonize the student answer, but the tests themselve"""
+        if state:
+            self.children[0].initialize(
+                lambda string, a_state:host_substitute(
+                    self.parser(string, a_state),
+                    Network.hosts[a_state.client_ip]
+                    ),
+                state)
         if state is None:
-            return False, ""
-        if state.client_ip in Network.hosts:
-            return host_substitute(student_answer,
-                                   Network.hosts[state.client_ip])
-        else:
+            return "?"
+        if state.client_ip not in Network.hosts:
             return False, """Cet ordinateur (%s) ne fait pas parti du TP
             changez de poste ou prévenez l'enseignant si c'est un bug.""" % \
              state.client_ip
-
+        return student_answer
+        
 
 def host_substitute(string, host):
     items = string.split('{')
@@ -979,8 +985,8 @@ class require_ip(Test):
 require_ping = require('ping',"On utilise la commande <tt>ping</tt>")
 
 postes = (      
-["10.57.19.233", 'A3',Cisco1700], # In order to modify after
-("10.57.18.10", 'B3',Cisco1800),
+["10.57.19.233", 'A3',Cisco1700], # Not tuple In order to modify after
+["10.57.18.10", 'B3',Cisco1800],
 ("10.57.30.150", 'C3',Cisco1700),
 ("10.57.30.152", 'D3',Cisco1800),
 ("10.56.145.237", 'E3',Cisco1700),
@@ -1005,5 +1011,5 @@ import socket
 if socket.gethostname() == 'lirispaj':
     postes[0][0] = "134.214.142.30"
 elif socket.gethostname() == 'pundit':
-    postes[0][0] = "127.0.1.1"
+    postes[1][0] = "127.0.1.1"
 

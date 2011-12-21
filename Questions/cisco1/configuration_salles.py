@@ -95,10 +95,12 @@ for ib, boucle in enumerate(boucles):
 for h in hosts:
     if h.name in ('A3', 'E3', 'I3', 'M3'):
         legend = h
-        
-i = 0
-for h in hosts:
-    if h.name in ('A3', 'E3', 'I3', 'M3'):
-        i += 1
-        network.dot("plan%d" % i, start=20, network_nodes=True, from_node=h,
-                    legend = h == legend)
+
+
+if False:
+    i = 0
+    for h in hosts:
+        if h.name in ('A3', 'E3', 'I3', 'M3'):
+            i += 1
+            network.dot("plan%d" % i, start=20, network_nodes=True,from_node=h,
+                        legend = h == legend)
