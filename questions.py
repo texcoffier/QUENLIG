@@ -800,6 +800,9 @@ class TestExpression(Test):
         raise ValueError('Unknown output format')
 
     def canonize(self, string, dummy_state):
+        """Returns the canonized the string.
+        To return an error: return False, "Syntax error"
+        """
         return string
 
     def canonize_test(self, parser, state):
@@ -807,7 +810,12 @@ class TestExpression(Test):
         pass
 
     def __call__(self, student_answer, state=None):
-        return self.do_test(self.canonize(student_answer, state), state)
+        """Add a compatibility layer for old tests"""
+        student_answer = self.canonize(student_answer, state)
+        if isinstance(student_answer, str):
+            return self.do_test(self.canonize(student_answer, state), state)
+        else:
+            return student_answer
 
     def initialize(self, parser, state=None):
         """The string in test description must be canonized"""
