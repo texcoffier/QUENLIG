@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007,2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,62 +28,61 @@ css_attributes = (
     )
 acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
 
+try:
+    import PIL.Image
+    def convert_to_gif(width, height, data, state):
+        filename = os.path.join(state.student.file, 'map.gif')
+        im = PIL.Image.new("RGB", (width, height))
+        im.putdata(data)
+        im.save(filename, 'GIF')
+        f = open(filename,'r')
+        image = f.read()
+        f.close()
+        return image
+except ImportError:
+    def convert_to_gif(width, height, data, state):
+        image = ['P6\n%d %d\n255\n' % (width, height)]
+        for p in data:
+            image.append( chr(p[0]) + chr(p[1]) + chr(p[2]) )
+
+        filename = os.path.join(state.student.file, 'map.gif')
+        f = os.popen('ppmtogif >"%s" 2>/dev/null' % filename, 'w')
+        f.write(''.join(image))
+        f.close()
+        f = open(filename,'r')
+        image = f.read()
+        f.close()
+        return image
+    print "To speed up Quenlig, install PIL package"
+
+
 def question_color(q, state, answerables):
     if (state.question != None and state.question.name == q.name):
-        p = '\377\377\0'
+        p = (255, 255, 0)
     elif state.student.answered_question(q.name):
-        p = '\0\377\0'
+        p = (0, 255, 0)
     elif state.student.bad_answer_question(q.name):
-        p = '\377\0\0'
+        p = (255, 0, 0)
     elif q.name in answerables:
         if state.student.given_question(q.name):
-            p = '\0\377\377'
+            p = (0, 255, 255)
         else:
-            p = '\0\0\377'
+            p = (0, 0, 255)
     else:
-        p = '\200\200\200'
+        p = (128, 128, 128)
     indice = state.student.nr_indices_question(q.name)
+    if indice == 0:
+        return p
+    
+    # Make lighter color on indices
     if indice > 3:
         indice = 3
-    ppp = ''
-    for pp in p:
-        if pp == '\0':
-            pp = chr( int(indice**0.5  *  80) )
-        ppp += pp
-    return ppp
-
-def question_pixel_map_circle(state):
-    answerables = [q.name for q in state.student.answerables(any=True)]
-    width = max([questions.questions[q].coordinates[0]
-                 for q in questions.questions]) + 1
-    height = max([questions.questions[q].coordinates[1]
-                  for q in questions.questions]) + 1
-    picture = []
-    for i in range(height):
-        picture.append(['\377\377\377']*width)
-
-    for q in questions.questions:
-        q = questions.questions[q]
-        picture[q.coordinates[1]][q.coordinates[0]] = question_color(q, state, answerables)
-
-    image = 'P6\n%d %d\n255\n' % (width, height)
-    for line in picture:
-        image += ''.join(line)
-
-    filename = os.path.join(state.student.file,'map.gif')
-    f = os.popen('ppmtogif >"%s" 2>/dev/null' % filename, 'w')
-    f.write(image)
-    f.close()
-    f = open(filename,'r')
-    image = f.read()
-    f.close()
-    return 'image/gif', image
+    return [
+        pp and pp or int(indice**0.5  *  80)
+        for pp in p
+        ]
 
 def question_pixel_map(state):
-
-    # if state.student.acls['question_pixel_map_circle']:
-    #    return question_pixel_map_circle(state)
-    
     m = []
     level = None
     answerables = [q.name for q in state.student.answerables(any=True)]
@@ -94,25 +93,14 @@ def question_pixel_map(state):
         m[-1].append(question_color(q, state, answerables))
     
     width = max([len(x) for x in m])
-    image = 'P6\n%d %d\n255\n' % (len(m), width)
-    for col in range(width):
-        for line in range(len(m)):
-            try:
-                image += m[line][col]
-            except IndexError:
-                image += '\377\377\377'
-                
+    image = []
+    for col in m:
+        image.append(col + [(255,255,255)] * (width - len(col)))
+    image = sum(zip(*image), ())
+    
+    return 'image/gif', convert_to_gif(len(m), width, image, state)
 
-    filename = os.path.join(state.student.file,'map.gif')
-    f = os.popen('ppmtogif >"%s" 2>/dev/null' % filename, 'w')
-    f.write(image)
-    f.close()
-    f = open(filename,'r')
-    image = f.read()
-    f.close()
-    return 'image/gif', image
-
-def execute(state, plugin, argument):
+def execute(state, dummy_plugin, argument):
     if argument:
         return question_pixel_map(state)
     return '<img src="?map=1">'
