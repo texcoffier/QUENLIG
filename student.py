@@ -234,7 +234,7 @@ class Student:
                 ("", "resigned ")[ a.resign ]
                 )
             tt.append( (i, info) )
-        tt.sort(lambda x,y: cmp(x[0].name, y[0].name))
+        tt.sort(key=lambda x: x[0].name)
         return tt
     
     def asked_questions(self):

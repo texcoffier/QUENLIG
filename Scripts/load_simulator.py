@@ -32,7 +32,7 @@ Script arguments are:
   - An existing session name (not modified)
   - Acceleration of the reality (1)
   - Compute server profiling, if 0 NO profiling,
-    else it give the number of retrieved URL before exiting
+    else it gives the number of retrieved URL before exiting
   - The port number
   - The name of the created session
   - If the argument is 'histogram' then store histogram
@@ -47,13 +47,14 @@ import time
 import re
 import sys
 import cgi
-import thread
+
+load_map = False # to load te question map picture
+load_map = True # to load te question map picture
 
 for i in ('http_proxy', 'https_proxy'):
     if os.environ.has_key(i):
         del os.environ[i]
 
-# Is this thread safe ?
 class Stats:
     def __init__(self):
         self.nr = 0
@@ -135,7 +136,7 @@ class Server:
         f = urllib2.urlopen(url)
         p = f.read()
         f.close()
-        if True or trace:
+        if trace:
             print 'GET %6.3f %s' % (time.time() - start, url)
         self.stats.add(time.time() - start)
         return p
@@ -166,38 +167,24 @@ class Student:
         self.student_log = student_log
         self.student_name = student_name
         self.index = 0
-        self.date = None
+        self.last_real_time = None
+        self.last_date = None
         self.base = "http://localhost:%d/%s" % (
             self.server.port, self.student_name)
         self.get('')
         self.get('?questions_all=all')
 
-    def get_action(self):
-        if self.index == len(self.student_log):
-            return None
-            
-        action = Action(self.student_log[self.index])
-        self.index += 1
-
-        return action
-
     def get(self, url, trace=False):
         page = self.server.get(self.base + url, trace)
-        if page.find('<base href='):
-            self.base = re.sub('(?s).*<base href="', '', page)
-            self.base = re.sub('(?s)".*', '', self.base)
+        base = page.split('<base href="')
+        if len(base) == 2:
+            self.base = base[1].split('"')[0]
         else:
             sys.stderr.write("Problem in the page\n")
         return page
 
-    def do_an_action(self):
-        action = self.get_action()
-        if action == None:
-            return
-        if False and self.date:
-            if action.date - self.date < 3600:
-                time.sleep((action.date - self.date)/time_acceleration)
-        self.date = action.date
+    def do_action(self):
+        action = self.action
         if action.action == 'asked':
             self.get('?question=%s' % cgi.urllib.quote(action.question))
         elif action.action == 'good' or action.action == 'bad':
@@ -211,14 +198,29 @@ class Student:
         else:
             pass
             # print action
+        if load_map and action.action != 'None':
+            self.server.get(self.base + '?map=1', False)
 
-    def do_all_actions(self):
-        while self.index != len(self.student_log):
-            self.do_an_action()
-
-def simulate_client(server, logs, name):
-    Student(server, logs, name).do_all_actions()
-    threads.pop()
+    def next_action(self):
+        if self.index == len(self.student_log):
+            return -1
+            
+        self.action = Action(self.student_log[self.index])
+        self.index += 1
+        if self.last_real_time is None:
+            self.last_real_time = time.time()
+            self.last_date = self.action.date
+            return time.time()
+            
+        dt = self.action.date - self.last_date
+        self.last_date = self.action.date
+        
+        if dt > 3600:
+            dt = 60.
+            
+        new_t = self.last_real_time + dt/time_acceleration
+        self.last_real_time = new_t
+        return new_t
 
 try:
     port = int(sys.argv[6])
@@ -232,7 +234,8 @@ f = open(os.path.join('Students', sessionname, 'questions'), 'r')
 questiondir = f.read()
 f.close()
 
-server = Server(port, questiondir, int(sys.argv[5]), sys.argv[7])
+nr_request = int(sys.argv[5])
+server = Server(port, questiondir, nr_request, sys.argv[7])
 
 histogram = True
 try:
@@ -254,31 +257,48 @@ try:
     nr_students = int(sys.argv[1])
     time_slice = int(sys.argv[2])
     time_acceleration = int(sys.argv[4])
+    print 'nr_students=', nr_students
+    print 'time_slice (to display statistics)=', time_slice
+    print 'time_acceleration=', time_acceleration
+    print 'sessionname=', sessionname
+    print 'port=', port
+    print 'created_session_nameport=', sys.argv[7]
+    print 'nr_request_for_profiling=', port
 
     if histogram:
         user = Student(server, '', 'guestme')
         histogram = open('xxx.histogram', 'w')
 
-    threads = []
+    todo = []
     for i in range(nr_students):
-        threads.append(i)
-        thread.start_new_thread(simulate_client,(server,
-                                                 logs[i%len(logs)],
-                                                 'guest%d' % i)
-                                                 )
-        time.sleep(0.1)
+        student = Student(server, logs[i%len(logs)], 'guest%d' % i)
+        todo.append( [student.next_action(), student] )
 
     i = 0
-    while threads:
-        time.sleep(time_slice)
-        print i, server.stats.reset()
-        i += time_slice
-        if histogram:
-            p = user.get('?histogramgood=1')
-            p = re.sub('(?s).*<pre>', '',p)
-            p = re.sub('(?s)</pre>.*', '',p)
-            histogram.write(p + '\n')
-            histogram.flush()
+    while todo:
+        todo.sort()
+        while todo and todo[0][0] == -1:
+            todo.pop(0)
+        if todo:
+            dt = todo[0][0] - time.time()
+            if dt > 0:
+                time.sleep(dt)
+            else:
+                if dt < -1:
+                    print 'Too much late (server overloaded)', -dt
+            todo[0][1].do_action()
+            todo[0][0] = todo[0][1].next_action()
+
+        j = int(time.time() / time_slice)
+        if i != j:
+            print i, server.stats.reset()
+            i = j
+            if histogram:
+                p = user.get('?histogramgood=1')
+                p = re.sub('(?s).*<pre>', '',p)
+                p = re.sub('(?s)</pre>.*', '',p)
+                histogram.write(p + '\n')
+                histogram.flush()
 
 finally:
     if histogram:
