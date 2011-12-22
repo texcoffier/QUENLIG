@@ -209,7 +209,7 @@ add(name="def",
     )
 
 add(name="if",
-required = ["idem:inférieur", "idem:égalité", "def"],
+    required = ["idem:inférieur", "idem:égalité", "def"],
     before = "La syntaxe du « si » en Python est : " + python_html("""
     if condition:
        Les lignes de commande qui sont écrites ici
@@ -246,3 +246,36 @@ required = ["idem:inférieur", "idem:égalité", "def"],
         qu'il est positif.""")),
         ),
    )
+
+add(name="while",
+    required = ["if"],
+    before = "La syntaxe du « while » en Python est : " + python_html("""
+    while condition:
+       Les lignes de commande qui sont écrites ici
+       sont exécutées tant que la la condition est vérifiée."""),
+    question = """Donnez la définition de la fonction <tt>log2</tt>,
+    qui a comme paramètre <tt>a</tt> un entier et qui retourne
+    le nombre de bits nécessaires pour écrire cet entier.
+    <p>
+    L'agorithme consiste à initialiser <tt>i</tt> à zéro,
+    puis tant que <tt>a</tt> n'est pas nul,
+    on le divise par 2 et on ajoute 1 à <tt>i</tt>
+    """,
+    nr_lines = 7,
+    tests = (
+        expects(('def', 'log2', 'while', 'return', 'a', '/', '2', '1', '0')),
+        Good(P(Replace((('a=a/2', 'a/=2'),
+                        ('a!=0', 'a'),
+                        ('i+=1;a/=2', 'a/=2;i+=1'),
+                        ),
+                       Equal("""def log2(a):
+ i = 0
+ while a:
+    a /= 2
+    i += 1
+ return i""")
+                       )
+               )
+             ),
+        ),
+    )

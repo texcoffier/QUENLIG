@@ -27,9 +27,11 @@ import compiler
 def P_clean(txt):
     if isinstance(txt, str):
         # Replace tabulations with space
-        txt = txt.strip(' \n\t').replace('\t',' ').replace('\n',' ')
+        txt = txt.strip(' \n\t').replace('\t',' ').replace('\n',';')
         # A run of spaces if replaced by one space
         txt = re.sub('  +', ' ', txt)
+        # A run of ; if replaced by one space
+        txt = re.sub(';;+', ';', txt)
         # Spaces around not a normal letter are removed
         txt = re.sub(' *([^a-zA-Z0-9_]) *', r'\1', txt)
         return txt
@@ -57,7 +59,7 @@ def python_color(txt):
     txt = re.sub("^( +)", r'<span style="background:#F88">\1</span>', txt)
     txt = re.sub(" in ", r' <span style="background:#FF8">in</span> ', txt)
 
-    txt = re.sub(r"\b(if|else|for|def|return|class)\b",
+    txt = re.sub(r"\b(if|else|for|def|return|class|while)\b",
                  r'<span style="background:#FF8">\1</span>',
                  txt)
     return txt
