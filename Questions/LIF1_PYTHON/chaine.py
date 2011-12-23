@@ -41,10 +41,14 @@ add(name="conversion",
     question="""Stockez dans la variable <tt>a</tt> l'entier désigné
     par la variable <tt>b</tt> entre parenthèses.
     <p>
-    Si <tt>b=76</tt> alors <tt>a</tt> contiendra <tt>(76)</tt>""",
+    Si <tt>b=76</tt> alors <tt>a</tt> contiendra la chaine de caractères
+    <tt>(76)</tt>""",
 
     tests = (
         Good(P(Equal('a="("+str(b)+")"'))),
+        Bad(Comment(Contain('76'),
+                    """La valeur 76 était un exemple, il faut que cela
+                    fonctionne pour toutes les valeurs de <tt>b</tt>""")),
         Bad(Comment(P(Equal('a=(b)')),
                     """Ici les parenthèses n'ont aucun effet,
                     c'est comme si vous aviez écrit <tt>a=b</tt>""")),

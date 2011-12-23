@@ -59,7 +59,7 @@ def python_color(txt):
     txt = re.sub("^( +)", r'<span style="background:#F88">\1</span>', txt)
     txt = re.sub(" in ", r' <span style="background:#FF8">in</span> ', txt)
 
-    txt = re.sub(r"\b(if|else|for|def|return|class|while)\b",
+    txt = re.sub(r"\b(if|else|for|def|return|class|while|import)\b",
                  r'<span style="background:#FF8">\1</span>',
                  txt)
     return txt

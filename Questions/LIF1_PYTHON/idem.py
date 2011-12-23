@@ -520,3 +520,48 @@ add(name="commentaire",
     mettre un <tt>#</tt> devant chacune des lignes.
     Un bon éditeur de texte doit permettre de le faire rapidement.""",
     )
+
+add(name="abs",
+    required=["control:if", "inférieur"],
+    before="""La fonction <tt>abs</tt> est définie en Python, elle retourne
+              la valeur absolu de son paramètre entier ou flottant.
+              <p>
+              ATTENTION, en langage C, la fonction <tt>abs</tt> retourne
+              un entier. Il faut utiliser la fonction <tt>fabs</tt> pour
+              faire le calcul en <tt>double</tt> ou <tt>flottant</tt>.
+           """,
+    question="""Donnez la définition de la fonction <tt>mon_abs</tt>,
+   qui a comme paramètre <tt>nombre</tt> et qui retourne la valeur
+   absolue du nombre.""",
+    nr_lines = 5,
+    tests = (
+        Good(P(Replace((('>=','>'), ('<=', '<'), (';else:', '')),
+                       Equal("""def mon_abs(nombre):
+                                 if nombre > 0:
+                                   return nombre
+                                 return -nombre""") |
+                       Equal("""def mon_abs(nombre):
+                                 if nombre < 0:
+                                   return -nombre
+                                 return nombre""")
+                       ))),
+        expects(('def', 'nombre', 'return', 'if', 'mon_abs','(',')',':')),
+        Bad(P(Comment(~(Contain('nombre>0')|Contain('nombre>=0')
+                        |Contain('nombre<=0')|Contain('nombre<0')),
+                       """Comment pouvez-vous connaître le signe sans
+                       comparer par rapport à 0&nbsp;?"""))),
+        Bad(Comment(Replace(((' ',''),), Contain('nombre=')),
+                    """Vous n'avez pas besoin de changer <tt>nombre</tt>,
+                    retournez directement le résultat,""")),
+        Bad(Comment(~NumberOfIs("return", 2),
+                     """Il doit y avoir 2 <tt>return</tt> dans votre fonction,
+                     un pour retourner la valeur sans la changer et un
+                     pour retourner la négation de la valeur.
+                     """)),
+        Bad(Comment(~NumberOfIs("nombre", 4),
+                     """Il doit y avoir 4 fois le mot nombre dans votre
+                        réponse&nbsp;: déclaration du paramètre, test de sa
+                        valeur, retour de sa valeur ou retour de la
+                        négation de sa valeur.""")),
+        ),
+    )

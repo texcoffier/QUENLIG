@@ -248,7 +248,7 @@ add(name="if",
    )
 
 add(name="while",
-    required = ["if"],
+    required = ["if", "idem:division", "idem:incrémenter", "idem:inégalité"],
     before = "La syntaxe du « while » en Python est : " + python_html("""
     while condition:
        Les lignes de commande qui sont écrites ici
@@ -264,7 +264,8 @@ add(name="while",
     nr_lines = 7,
     tests = (
         expects(('def', 'log2', 'while', 'return', 'a', '/', '2', '1', '0')),
-        Good(P(Replace((('a=a/2', 'a/=2'),
+        Good(P(Replace((('//', '/'),
+                        ('a=a/2', 'a/=2'),
                         ('a!=0', 'a'),
                         ('i+=1;a/=2', 'a/=2;i+=1'),
                         ),
@@ -278,4 +279,13 @@ add(name="while",
                )
              ),
         ),
+    good_answer = """Contrairement au langage C, il n'y a PAS
+    de <tt>do ... while(...)</tt> en langage Python.<p>
+    <p>
+    La boucle est très lente pour calculer le logarithme,
+    Il est bien sûr plus rapide de faire&nbsp;:""" + python_html("""
+    import math
+    log_de_2 = math.log(2)
+    def log2(a):
+       return math.log(a) / log_de_2"""),
     )
