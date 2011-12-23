@@ -12,6 +12,7 @@ help:
 	@echo "                    It uses real student behavior data"
 	@echo " - profiling      : Profil the python functions"
 	@echo "                    It uses real student behavior data"
+	@echo " - check-questions: Search problems in question definition"
 	@echo " - simulator_plot : Compute graphics from simulator data"
 	@echo "To run/configure the server, run the command: 'main.py'"
 
@@ -31,6 +32,16 @@ plots:
 
 regtest:
 	Scripts/regtest.py
+
+check-questions:
+	@-mkdir Students/check-questions
+	# For the cico questionnary
+	echo 4 >Students/check-questions/nr_hosts
+	for I in Questions/*/ ; \
+        do \
+        ./main.py check-questions create $$(echo $$I | sed 's/.$$//') 0 \
+                  check-questions --silent ; \
+        done
 
 load_simulator: # Use port 34001
 	ulimit -s 512 ; \

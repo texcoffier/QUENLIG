@@ -274,8 +274,8 @@ def add(**arg):
     "maximum_bad_answer": "Nombre maximum de mauvaises réponse",
     }
 
-    sys.stdout.write("*")
-    sys.stdout.flush()
+    # sys.stdout.write("*")
+    # sys.stdout.flush()
     world = inspect.currentframe().f_back.f_globals["__name__"].split(".")
     for a in arg.keys():
         if a not in attributs.keys():
@@ -1158,12 +1158,12 @@ class Expect(TestString):
          Expect("foo")
          Expect("bar", "You missed a 3 letters word always with 'foo'")
     """
-    def __init__(self, *args):
+    def __init__(self, *args, **keys):
         if len(args) == 1:
             self.comment = None
         else:
             self.comment = args[1]
-        TestString.__init__(self, args[0])
+        TestString.__init__(self, args[0], **keys)
 
     def do_test(self, student_answer, state):
         if self.string_canonized in student_answer:

@@ -70,7 +70,7 @@ add(name="créer instance",
     Good(P(Equal('a=Complexe()'))),
     expects(('Complexe', 'a', '=')),
     P(Expect('()', """La fonction <tt>Complexe</tt> est appelée sans paramètres
-             donc tout simplement <tt>Complexe()</tt>""")),
+             donc tout simplement <tt>Complexe()</tt>""", canonize=False)),
              ),
     good_answer = """Si vous écrivez <tt>a = [ Complexe(), Complexe() ]</tt>
     alors <tt>a</tt> est un tableau contenant deux complexes différents

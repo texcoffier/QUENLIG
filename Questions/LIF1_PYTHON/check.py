@@ -87,7 +87,7 @@ def python_html(txt):
 
 
 def expects(expected, comment=None):
-    a = Expect(expected[0], comment)
+    a = Expect(expected[0], comment, canonize=False)
     for e in expected[1:]:
-        a = a & Expect(e, comment)
+        a = a & Expect(e, comment, canonize=False)
     return a

@@ -546,8 +546,10 @@ add(name="abs",
                                  return nombre""")
                        ))),
         expects(('def', 'nombre', 'return', 'if', 'mon_abs','(',')',':')),
-        Bad(P(Comment(~(Contain('nombre>0')|Contain('nombre>=0')
-                        |Contain('nombre<=0')|Contain('nombre<0')),
+        Bad(P(Comment(~(Contain('nombre>0', canonize=False)
+                        |Contain('nombre>=0', canonize=False)
+                        |Contain('nombre<=0', canonize=False)
+                        |Contain('nombre<0', canonize=False)),
                        """Comment pouvez-vous connaître le signe sans
                        comparer par rapport à 0&nbsp;?"""))),
         Bad(Comment(Replace(((' ',''),), Contain('nombre=')),

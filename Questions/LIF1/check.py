@@ -37,5 +37,5 @@ def C_clean(txt):
 
 class C(TestUnary):
     def canonize(self, student_answer, state=None):
-        return C_clean(string)
+        return C_clean(student_answer)
 

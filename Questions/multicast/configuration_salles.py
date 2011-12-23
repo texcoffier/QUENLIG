@@ -23,6 +23,11 @@ from check import *
 import configuration
 import math
 
+add(name="intro",
+    question="to be done",
+    tests = (Good(Contain('')),),
+    )
+
 Host.default_nr_interfaces = 3
 
 postes = postes[0:4]
@@ -91,30 +96,37 @@ EthLink(24, Port(r17, prefix + "90.90.1"),
 
 # Link.dot_option = ",color=magenta"
 
-network.dot("plan_circo",
-            start = 4,
-            network_nodes = False,
-            label_distance = 3,
-            table = False,
-            showip = True,
-            legend = False,
-            dot_command = "circo",
-            )
-network.dot("plan_neato",
-            start = 1,
-            network_nodes = False,
-            label_distance = 1.4,
-            table = False,
-            showip = True,
-            legend = False,
-            dot_command = "neato",
-            )
-network.dot("plan_dot",
-            start = 4,
-            network_nodes = False,
-            label_distance = 2,
-            table = False,
-            showip = True,
-            legend = False,
-            dot_command = "dot",
-            )
+import statistics
+old = statistics.graph_dot
+
+def graph_dot():
+    old()
+
+    network.dot("plan_circo",
+                start = 4,
+                network_nodes = False,
+                label_distance = 3,
+                table = False,
+                showip = True,
+                legend = False,
+                dot_command = "circo",
+                )
+    network.dot("plan_neato",
+                start = 1,
+                network_nodes = False,
+                label_distance = 1.4,
+                table = False,
+                showip = True,
+                legend = False,
+                dot_command = "neato",
+                )
+    network.dot("plan_dot",
+                start = 4,
+                network_nodes = False,
+                label_distance = 2,
+                table = False,
+                showip = True,
+                legend = False,
+                dot_command = "dot",
+                )
+statistics.graph_dot = graph_dot

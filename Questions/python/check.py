@@ -24,16 +24,17 @@ from questions import *
 import questions
 import cgi
 
-f = os.popen('sudo -u nobody echo ok', 'r')
-if f.read() != 'ok\n':
-    sys.stderr.write("""Please use the command 'visudo' to add the line:
-    
-login_name_of_the_user_running_the_server   ALL=(nobody)   NOPASSWD: ALL
+if not hasattr(questions, 'silent'):
+    f = os.popen('sudo -u nobody echo ok', 'r')
+    if f.read() != 'ok\n':
+        sys.stderr.write("""Please use the command 'visudo' to add the line:
 
-This allow the server to use 'sudo nobody'
-""")
-    sys.exit(1)
-f.close()
+    login_name_of_the_user_running_the_server   ALL=(nobody)   NOPASSWD: ALL
+
+    This allow the server to use 'sudo nobody'
+    """)
+        sys.exit(1)
+    f.close()
 
 
 global_evals = {}

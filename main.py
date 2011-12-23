@@ -174,21 +174,64 @@ class Session:
         statistics.display_no_more_valid_answers()
         sys.exit(0)
 
+    def check_questions(self):
+        analysers = set(('Shell', 'P'))
+        testers = set(('Contain', 'Start', 'End', 'Expect'))
+        top_level = set(('Good',))
+        top_level_or_and = set(('Bad', 'Reject', 'Expect'))
+        def formate(q, test, text):
+            return '%s.py(%s): [%s] %s' % (os.path.sep.join(q.path),
+                                           q.name,
+                                           test.__class__.__name__,
+                                           text)
+        
+        def warn_me(q, test, danger, top, top_and):
+            cname = test.__class__.__name__
+            if cname in analysers:
+                danger = True
+            if cname in top_level and not top:
+                return formate(q, test, "must be toplevel test")
+            if cname in testers and danger:
+                if test.do_canonize:
+                    return formate(q, test, "argument is parsed (dangerous)")
+            if cname != 'And':
+                top_and = False
+            if hasattr(test, 'children'):
+                for child in test.children:
+                    e = warn_me(q, child, danger, False, top_and)
+                    if e:
+                        return e
+                
+        print 'Check all questions in ' + utilities.read(self.dir + 'questions')
+        self.init()
+        os.chdir(self.dir)
+        errors = []
+        for q in questions.questions.values():
+            for t in q.tests:
+                e = warn_me(q, t, danger=False, top=True, top_and=True)
+                if e:
+                   errors.append(e)
+        errors.sort()
+        print '\n'.join(errors)
 
-search_command('ppmtogif',
-               'So no the graphical question map for the student (netpbm)')
-search_command('highlight',
-               'So no Python source highlighting for the author')
-search_command('weblint',
-               'So no HTML testing in the regression tests')
-search_command('xvcg',
-               'So some picture of the question graph are not computed')
-search_command('dot',
-               'So some picture of the question graph are not computed')
-search_command('hotshot2calltree',
-               'No graphic profiling (needs package kcachegrind-converters)')
-search_command('kcachegrind',
-               'No graphic profiling')
+if '--silent' not in sys.argv:
+    search_command('ppmtogif',
+                   'So no the graphical question map for the student (netpbm)')
+    search_command('highlight',
+                   'So no Python source highlighting for the author')
+    search_command('weblint',
+                   'So no HTML testing in the regression tests')
+    search_command('xvcg',
+                   'So some picture of the question graph are not computed')
+    search_command('dot',
+                   'So some picture of the question graph are not computed')
+    search_command('hotshot2calltree',
+                   'No graphic profiling (needs kcachegrind-converters)')
+    search_command('kcachegrind',
+                   'No graphic profiling')
+else:
+    questions.silent = True
+    sys.argv.remove('--silent')
 
 import plugins
 plugins.init()
@@ -498,6 +541,8 @@ if __name__ == "__main__":
             mkdir(user)
             user = os.path.join(user, 'roles')
             utilities.write(user, "['Default','Teacher']\n")
+        elif action == 'check-questions':
+            session.check_questions()
         elif action == 'question-stats':
             session.question_stats()
         elif action == 'stop-loading':

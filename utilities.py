@@ -239,11 +239,11 @@ def load_directory(dirname, py=True):
             if not i.endswith('.py'):
                 continue
             i = i[:-3]
-            print '\n%20s' % str(i),
+            # print '\n%20s' % str(i),
         else:
             if not os.path.isdir(os.path.join(dirname,i)):
                 continue
-            print '\n%20s' % str(i),
+            # print '\n%20s' % str(i),
             i = os.path.join(i , i)
         try:
             modules[i] = load_module(os.path.join(dirname, i))

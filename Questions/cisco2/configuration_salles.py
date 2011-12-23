@@ -93,7 +93,12 @@ for i, h in enumerate(hosts):
                 Port(hosts[(i+1)%len(hosts)], "192.168.200.%d" % (4*i+2)),
                 )
 
-if True:
-    network.dot("plan", start=13,network_nodes=False, label_distance=1.1,
-               )
+import statistics
+old = statistics.graph_dot
+
+def graph_dot():
+    old()
+    network.dot("plan", start=13,network_nodes=False, label_distance=1.1)
+
+statistics.graph_dot = graph_dot
 

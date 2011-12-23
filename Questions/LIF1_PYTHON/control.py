@@ -69,14 +69,14 @@ add(name="for",
                créer les nombres entiers de 0 à 9 inclus."""),
         P(Expect('range(10)',
                """Vous devez utiliser <tt>range(10)</tt> pour
-               créer les nombres entiers de 0 à 9 inclus.""")),
+               créer les nombres entiers de 0 à 9 inclus.""", canonize=False)),
         Expect(':', """Le langage Python impose le « : » qui indique
         le début du corps de la boucle"""),
         Expect('print', """Vous devez utiliser la fonction <tt>print</tt>
         pour afficher la valeur de l'indice."""),
         P(Expect('print(i)',
                  """Vous devez simplement afficher la variable <tt>i</tt>.
-                 Donc c'est <tt>print(i)</tt>""")),
+                 Donc c'est <tt>print(i)</tt>""", canonize=False)),
         Expect(' in ', """Le langage Python est très littéraire,
         il manque le <tt>in</tt> qui veut dire <b>dans</b> en français."""),
         ),

@@ -1,1 +1,1 @@
-../ip1/check.py
+../cisco1/check.py
