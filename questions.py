@@ -732,7 +732,7 @@ class no(TestWithoutStrings):
 ## ShellParse change the Equal.string to parse it
 # Good(Shell(Equal("ls a")))
 ## ShellParse does not parse Contain.string
-# Good(Shell(Contain("<parameter>-z</parameter>")))
+# Good(Shell(Contain("<parameter>-z</parameter>", canonize=False)))
 
 # Good(Replace('-A', '-a', Equal('ls -a')))
 # Good(Replace('-A', '-a', Shell(Equal('ls -a'))))
@@ -844,14 +844,26 @@ class TestUnary(TestExpression):
                "(%s)" % self.children[0].source(state, format)
 
 class TestString(TestExpression):
-    """Base class for tests with a string argument."""
-    def __init__(self, string):
+    """Base class for tests with a string argument.
+    By default, the string in parameter is canonized.
+    In rare case, it is not the desired behavior, so we reject
+    the canonization:
+    Examples:
+         # The Contain parameter must not be canonized because
+         # the constant string is yet a fragment of a canonized shell command.
+         Bad(Shell(Contain('&lt;parameter&gt;-z&lt;/parameter&gt;', canonize=False)))
+    """
+    def __init__(self, string, canonize=True):
         if not isinstance(string, basestring):
             raise ValueError("Expect a string")
         self.string = string
+        self.do_canonize = canonize
 
     def canonize_test(self, parser, state):
-        self.string_canonized = parser(self.string, state)
+        if self.do_canonize:
+            self.string_canonized = parser(self.string, state)
+        else:
+            self.string_canonized = self.string
 
     def source(self, state=None, format=None):
         return self.test_name(format) + '(%s)' % pf(self.string, format)
@@ -1057,7 +1069,6 @@ class UpperCase(TestUnary):
                    UpperCase(Equal('a'))
                   )
           )
-      # XXX currently 'Replace' is bugged
       # To replace both 'a' and 'A' per 'X' the good order is:
       # So 'a', 'A', 'x' and 'X' are good answers.
       Good(UpperCase(Replace((('a','x'),),

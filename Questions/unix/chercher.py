@@ -311,8 +311,8 @@ add(name="xargs rm",
     tests = (
         Good(Shell(Equal("echo * | xargs rm"))),
         Good(Shell(Equal("ls | xargs rm"))),
-        Bad(Shell(Comment(Contain("rm *"),
-                          "On vous a dit que <tt>rm *</tt> cela ne fonctionnait pas!"))),
+        Bad(Comment(Contain("rm *"),
+                          "On vous a dit que <tt>rm *</tt> cela ne fonctionnait pas!")),
         Expect('rm'),
         Expect('xargs',
                """La commande <tt>xargs</tt> sert à découper en morceaux

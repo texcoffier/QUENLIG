@@ -195,7 +195,27 @@ print(nb)''')))),
                  ))),
         ),
     )
-    
+'''
+add(name="racine carré",
+    required=["control:while"],
+    nr_lines = 6,
+    question = """Donnez la définition de la fonction <tt>racine_carree</tt>,
+    qui a comme paramètre de type flottant <tt>nombre</tt> et qui retourne
+    la racine carrée.
+"""
+    tests = (
+        Good(P(Replace((),Equal(
+                        """def racine_carree(nombre):
+  racine = nombre / 2
+  ancienne_racine = 0
+  while abs(ancienne_racine - racine) > 0.001:
+     ancienne_racine = racine
+     racine = (nombre/racine + racine) / 2
+  return racine""")))),
+                
+        ),
+    )
+'''
     
 
 # XXX a finir ? (structure:instance paramétrée n'est pas fini non plus)
