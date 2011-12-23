@@ -2,11 +2,14 @@
 # Copier le questionnaire sur le site :
 ######################################################################
 
-rsync --archive $HOME/QUENLIG/. thierry.excoffier@demo710:QUENLIG
+rsync -v --archive $HOME/QUENLIG/. thierry.excoffier@demo710:QUENLIG
 ssh thierry.excoffier@demo710 "
 cd QUENLIG
 rm Students 
 ln -s ../Students .
+./main.py lif1_python stop
+sleep 1
+nohup ./main.py lif1_python start >/dev/null 2>&1 </dev/null &
 "
 
 ##########################################

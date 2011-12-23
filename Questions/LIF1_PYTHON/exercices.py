@@ -196,27 +196,81 @@ print(nb)''')))),
                  ))),
         ),
     )
-'''
+
+
 add(name="racine carré",
-    required=["control:while"],
-    nr_lines = 6,
+    required=["control:while", "idem:abs"],
+    nr_lines = 8,
     question = """Donnez la définition de la fonction <tt>racine_carree</tt>,
-    qui a comme paramètre de type flottant <tt>nombre</tt> et qui retourne
-    la racine carrée.
-"""
+    qui a un paramètre de type flottant nommé <tt>nombre</tt> et qui retourne
+    la racine carrée de ce nombre.
+    <p>
+    Cette fonction utilisera deux variables locales :
+    <tt>racine_courante</tt> qui contiendra l'approximation de la racine
+    et <tt>racine_precedente</tt> qui contiendra la valeur précédente.
+    <p>
+    Voici l'algorithme <b>à respecter scrupuleusement</b> :
+    <ul>
+    <li> On initialise la racine précédente à 0.
+    <li> On initialise la racine courante avec le nombre divisé par 2.
+    <li> Tant que la valeur absolue (fonction <tt>abs</tt>)
+         de la différence entre la racine précédente
+         et la nouvelle racine est supérieure à un millième&nbsp;:
+    <ul>
+         <li> La racine précédente prend la valeur de la racine courante.
+         <li> La racine courante prend pour valeur la moyenne de
+              la racine courante et du nombre divisé par la racine courante.
+              Cette opération est faite en une ligne.
+    </ul>
+    <li> On retourne la racine courante.
+    </ul>
+""",
     tests = (
-        Good(P(Replace((),Equal(
+        expects(('def', 'racine_carree', 'nombre', 'racine_precedente',
+                 'racine_courante', 'while', 'abs', '/', '+')),
+        P(Expect('racine_courante=nombre/2',
+                 "Je ne vois pas l'initialisation de la racine courante.",
+                 canonize = False)),
+        P(Expect('racine_precedente=0',
+                 "Je ne vois pas l'initialisation de la racine précédente.",
+                 canonize = False)),
+        P(Expect('nombre/racine_courante',
+                 "Je ne vois pas le nombre divisé par la racine courante",
+                 canonize = False)),
+        P(Expect(')/2',
+                 "Comment faites-vous la moyenne sans diviser par 2",
+                 canonize = False)),
+        Bad(P(Comment(~(Contain('racine_precedente-racine_courante',
+                                canonize = False)
+                        | Contain('racine_courante-racine_precedente',
+                                  canonize = False)
+                        ),
+                       """Je ne vois pas la différence entre la racine
+                       précédente et la nouvelle""",
+                       ))),
+        Good(P(Replace((('racine_courante-racine_precedente',
+                         'racine_precedente-racine_courante'),
+                        ('racine_courante+nombre/racine_courante',
+                         'nombre/racine_courante+racine_courante'),
+                        ('>=', '>'),
+                        ('2.', '2'),
+                        ('1.', '1'),
+                        ('1000.', '1000'),
+                        ('1/1000', '0.001'),
+                        ('1e-3', '0.001'),
+                        ('10**-3', '0.001'),
+                        ),Equal(
                         """def racine_carree(nombre):
-  racine = nombre / 2
-  ancienne_racine = 0
-  while abs(ancienne_racine - racine) > 0.001:
-     ancienne_racine = racine
-     racine = (nombre/racine + racine) / 2
-  return racine""")))),
+  racine_precedente = 0
+  racine_courante = nombre / 2
+  while abs(racine_precedente - racine_courante) > 0.001:
+     racine_precedente = racine_courante
+     racine_courante = (nombre/racine_courante + racine_courante) / 2
+  return racine_courante""")))),
                 
         ),
     )
-'''
+
     
 
 # XXX a finir ? (structure:instance paramétrée n'est pas fini non plus)
