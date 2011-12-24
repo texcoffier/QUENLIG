@@ -102,12 +102,12 @@ add(name="accès négatif",
     tests = (
         Reject("len", "Sans utiliser <tt>len</tt> bien sûr"),
         Reject("*", "Sans utiliser <tt>*</tt> s'il vous plaît."),
-        Good(P(Equal('for i in range(10):print(a[-i-1])'))),
-        Good(P(Equal('for i in range(10):print(a[-1-i])'))),
-        Good(P(Equal('for i in range(10):print(a[-(1+i)])'))),
-        Good(P(Equal('for i in range(10):print(a[-(i+1)])'))),
-        Good(P(Equal('for i in range(1,11):print(a[-i])'))),
-        Good(P(Equal('for i in range(-1,-11,-1):print(a[i])'))),        
+        Good(P(Equal('for i in range(10):\n print(a[-i-1])'))),
+        Good(P(Equal('for i in range(10):\n print(a[-1-i])'))),
+        Good(P(Equal('for i in range(10):\n print(a[-(1+i)])'))),
+        Good(P(Equal('for i in range(10):\n print(a[-(i+1)])'))),
+        Good(P(Equal('for i in range(1,11):\n print(a[-i])'))),
+        Good(P(Equal('for i in range(-1,-11,-1):\n print(a[i])'))),
         ),
     bad_answer = """Le plus simple est de compléter le code suivant&nbsp;:
     <pre>for i in range(10):
@@ -202,6 +202,36 @@ add(name="concaténation",
         P(expects(('+', 'a', 'c', 'd'))),
         ),
     good_answer = "À votre avis, que donne <tt>[5] + [] + [6]</tt>&nbsp;?",
+    )
+
+
+add(name="empiler",
+    required=["concaténation", "control:for"],
+    before = """Toutes les tables contiennent un attribut qui est une fonction
+                permettant d'ajouter un élément à la fin de la table.
+                C'est la fonction <tt>append</tt> qui a pour paramètre
+                l'élément à ajouter&nbsp;:
+                <tt>t.append(6)</tt> ajoute 6 à la fin de <tt>t</tt> qui
+                contiendra donc un élément de plus.
+             """,
+    question = """Écrivez une boucle ajoutant tous les éléments contenus
+                  dans la table <tt>a</tt> pour les mettre
+                  dans la table <tt>b</tt>
+               <p>Utilisez <tt>element_de_a</tt> comme indice de boucle.
+               """,
+    nr_lines = 3,
+    tests = (
+        P(expects(('for', 'element_de_a', ':', 'append', 'b.append',
+                   'b.append(element_de_a)'))),
+        Bad(Comment(~NumberOfIs('element_de_a', 2),
+                     """<tt>element_de_a</tt> doit apparaître deux fois
+                        dans votre réponse&nbsp;: une fois comme indice
+                        de boucle et une fois comme argument de
+                        la fonction <tt>append</tt>""")),
+        Good(P(Equal("for element_de_a in a:\n b.append(element_de_a)"))),
+        ),
+    good_answer = """Il est évidemment beaucoup plus rapide d'écrire
+                     <tt>b = b + a</tt>""",
     )
 
 add(name="chaine",
