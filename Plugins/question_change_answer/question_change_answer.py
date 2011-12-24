@@ -31,9 +31,9 @@ import time
 
 change_allowed_timeout = 3600
 
-def execute(state, plugin, argument):
+def execute(state, dummy_plugin, dummy_argument):
 
-    state.student.allowed_to_change_answer = True
+    state.student.allowed_to_change_answer = False
     if state.student.current_role == 'Teacher':
         state.student.allowed_to_change_answer = True
         return ''
