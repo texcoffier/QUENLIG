@@ -163,7 +163,6 @@ class Session:
         os.chdir(self.dir)
         utilities.write(os.path.join('HTML', 'simple.html'),
                         statistics.html_simple(None))
-        statistics.update_stats()
         statistics.graph_dot()
         statistics.graph2_dot()
         sys.exit(0)

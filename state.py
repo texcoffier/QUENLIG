@@ -267,7 +267,6 @@ class State(object):
         self.start = time.time()
         self.compute_stopped()
         self.analyse_form(form)
-        statistics.update_stats() # Update statistics
 
         self.url_base_full = "%s/%s/%d/" % (self.url_base,
                                             cgi.urllib.quote(self.ticket),

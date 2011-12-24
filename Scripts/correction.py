@@ -38,7 +38,6 @@ def generate(name):
     configuration.session.init()
     os.chdir(configuration.session.dir)
 
-    statistics.update_stats()
     stats = statistics.question_stats()
 
     ba = []

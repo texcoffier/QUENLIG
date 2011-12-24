@@ -261,13 +261,11 @@ def histogram_level():
     return histogram
 
 def question_stats():
+    _stats.update()
     return _stats
 
 def forget_stats():
     _stats.last_time = 0
-
-def update_stats():
-    _stats.update()
 
 def translate_dot_(name):
     return cgi.escape(name.translate(utilities.flat)).replace(':',' ').replace('"',' ').replace(' ', '\\n')
@@ -425,7 +423,6 @@ def display_no_more_valid_answers():
     Function called when running: 'main.py session problems'
     """
     import sys
-    update_stats()
     stats = question_stats()
     messages = {}
     print
