@@ -271,7 +271,71 @@ add(name="racine carré",
         ),
     )
 
-    
+
+add(name="créer matrice",
+    required=["table:matrice", "table:empiler",
+              "table:multiplication", "control:for"],
+    question="""Définissez une fonction <tt>creer_matrice</tt>
+    qui a pour arguments
+    <tt>nb_lignes</tt>, <tt>nb_colonnes</tt>, <tt>valeur</tt>
+    et qui retourne une matrice dont tous les éléments sont égaux
+    à la valeur.
+    <p>
+    <tt>creer_matrice(2, 3, 9)</tt> retourne <tt>[[9, 9, 9], [9, 9, 9]]</tt>
+    <p>
+    Votre fonction commencera par initialiser une variable <tt>matrice</tt>
+    de telle façon qu'elle ne contiennent aucune ligne,
+    puis une boucle utilisant la variable <tt>numero_ligne</tt> comme indice
+    lui ajoutera autant de lignes que nécessaire.
+    Chaque ligne est un tableau de <tt>nb_colonnes</tt> éléments
+    tous égaux à <tt>valeur</tt>
+    """,
+    nr_lines = 6,
+    tests = (
+        Good(P(Replace((('nb_colonnes*[valeur]',
+                         '[valeur]*nb_colonnes'),
+                        ),
+                       Equal('''
+def creer_matrice(nb_lignes, nb_colonnes, valeur):
+   matrice = []
+   for numero_ligne in range(nb_lignes):
+      matrice.append([valeur]*nb_colonnes)
+   return matrice'''
+    )))),
+        expects(('def', 'creer_matrice', 'nb_lignes', 'nb_colonnes',
+                 'valeur', 'append', 'return', 'numero_ligne')),
+        Expect('range',
+               """Vous devez faire la boucle autant de fois qu'il y a
+                  de lignes à créer, vous devez donc utiliser <tt>range</tt>
+                  pour créer l'ensemble sur lequel on va itérer."""),
+        P(Expect('matrice=[]',
+                 """Où est l'initialisation de <tt>matrice</tt> comme étant
+                 un tableau vide&nbsp;?""", canonize=False)),
+        P(Expect('[valeur]',
+                 """Le moyen le plus simple pour créer une ligne est
+                 d'utiliser un tableau d'un élément (<tt>valeur</tt>)
+                 et de le multiplier pour obtenir un tableau
+                 avec le nombre d'éléments désiré.""",
+                 canonize=False)),
+        Bad(P(Comment(~(Contain('[valeur]*nb_colonnes', canonize=False)
+                        | Contain('nb_colonnes*[valeur]', canonize=False)
+                        ),
+                       """Pour créer les lignes contenant les valeurs
+                       identiques, vous devez utilisez la multiplication."""))),
+        P(expects(('range(nb_lignes)', 'matrice.append',
+                   'for numero_ligne in'))),
+        ),
+    good_answer = """ATTENTION au piège :""" + python_html("""
+>>> a = creer_matrice(2,3,[1])
+>>> print(a)
+[[[1], [1], [1]], [[1], [1], [1]]]
+>>> a[0][0] = [3] # Remplace un élément par un autre.
+[[[3], [1], [1]], [[1], [1], [1]]]
+>>> a[1][1][0] = 2 # Change la valeur d'un élément
+[[[3], [2], [2]], [[2], [2], [2]]]"""
+    ) + """Ceci est du au fait que la mutiplication de tableau ne recopie
+    pas les valeurs, c'est la même valeur dans toutes les cases du tableau.""",
+)
 
 # XXX a finir ? (structure:instance paramétrée n'est pas fini non plus)
 # add(name="ajoute complexe",
@@ -286,7 +350,7 @@ add(name="racine carré",
 #     default_answer = """def sum_c(a, b):
 #     """,
 #     tests = (
-#         Good(P('def sum_c(a,b):return Complexe(a.reel+b.reel,a.imaginaire+b.imaginaire)')),
+#         Good(P('def sum_c(a,b):\n return Complexe(a.reel+b.reel,a.imaginaire+b.imaginaire)')),
 #         ),
 #     good_answer = """On peut bien sûr faire en sorte d'utiliser <tt>+</tt>
 #     pour additionner les complexes.

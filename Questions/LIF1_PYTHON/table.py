@@ -184,7 +184,7 @@ add(name="concaténation",
     """,
     question = """Proposez une commande qui crée la table&nbsp;:<br>
     <tt>[7, 3, 8, 9, 1]</tt><br>
-    En utilisant les variables suivantes :
+    En utilisant les variables suivantes (pas forcément toutes):
     <ul>
     <li> <tt>a = [7, 3 ,8]</tt>
     <li> <tt>b = [8, 9, 1]</tt>
@@ -198,6 +198,8 @@ add(name="concaténation",
                      """Vous obtenez <tt>[7, 3 ,8 ,8 ,9 ,1]</tt>,
                      ce n'est pas la valeur attendue."""
                      )),
+        Reject('[',
+               "Vous n'avez pas besoin d'accéder aux éléments des tables"),
         Reject('1', "Vous devez utiliser les variables, pas les valeurs"),
         P(expects(('+', 'a', 'c', 'd'))),
         ),

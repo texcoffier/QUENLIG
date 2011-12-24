@@ -1,9 +1,23 @@
 #####################################################################
-# Copier le questionnaire sur le site :
+# Copier le questionnaire sur le site : POUR EXCO
 ######################################################################
 
-rsync -v --archive $HOME/QUENLIG/. thierry.excoffier@demo710:QUENLIG
-ssh thierry.excoffier@demo710 "
+SERVER=thierry.excoffier@demo710
+PORT=22
+
+SERVER='thierry.excoffier@127.0.0.1'
+PORT='22223'
+
+rsync --verbose \
+      --recursive \
+      --links \
+      --delete \
+      --exclude '.git' \
+      --exclude '*.pyc' \
+      --exclude '*~' \
+      --rsh "ssh -p $PORT" \
+      $HOME/QUENLIG/. $SERVER:QUENLIG
+ssh -p $PORT $SERVER "
 cd QUENLIG
 rm Students 
 ln -s ../Students .
@@ -16,7 +30,7 @@ nohup ./main.py lif1_python start >/dev/null 2>&1 </dev/null &
 # Créer le questonnaire la première fois :
 ##########################################
 
-# Sur demo710 :
+# Sur demo710.univ-lyon1.fr :
 
 cd QUENLIG
 ./main.py lif1_python create Questions/LIF1_PYTHON 2222 \
