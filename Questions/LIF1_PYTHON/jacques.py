@@ -59,9 +59,13 @@ add(name="sous-liste",
 add(name="rotation gauche",
     required = ["liste", "concatenation", "sous-liste"],
     question = """Ecrire l'expression, qui, quelle que soit une liste nommée
-    <tt>l</tt> <b>non vide</b>, retire le dernier élément et l'insère
-    en tête""",
+    <tt>l</tt> de la forme <tt>[a, b..., c, d]</tt>,
+    crée une nouvelle liste qui déplace le dernier élément en tête
+    pour obtenir <tt>[d, a, b..., c]</tt>.
+""",
     tests = (
+        Reject('=', """On veux seulement le résultat, vous n'avez pas
+               besoin de le stocker"""),
         Reject('[0:',
                """On n'écrit pas <tt>t[0:4]</tt> mais <tt>t[:4]</tt>
                   car c'est plus court."""),
