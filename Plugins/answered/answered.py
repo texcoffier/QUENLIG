@@ -19,6 +19,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display all the questions and answer given by the connected student."""
 
 import statistics
 

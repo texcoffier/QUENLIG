@@ -48,6 +48,8 @@ def execute(state, dummy_plugin, dummy_argument):
     return ''
 
 def add_a_link(state, question):
+    """This function is called by 'answered' plugin."""
+    
     if not hasattr(state.student, 'allowed_to_change_answer'):
         return '' # Not the right to reanswer
     if not state.student.answered_question(question.name):

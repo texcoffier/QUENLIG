@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Displays all the bad answers given for a question."""
+
 import utilities
 import statistics
 import questions

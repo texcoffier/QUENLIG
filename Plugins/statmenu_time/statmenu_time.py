@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the student work time."""
+
 import utilities
 
 priority_display = 'statmenu_nr_questions'

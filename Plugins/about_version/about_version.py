@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Running version of Quenlig"""
+
 import configuration
 
 container = 'about'

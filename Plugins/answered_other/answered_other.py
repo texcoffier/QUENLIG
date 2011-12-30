@@ -19,6 +19,11 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the questions and answers of any student.
+This plugin link is not visible on the web page.
+To use it, you must click on a student name on the student statistics page.
+"""
+
 import Plugins.answered.answered
 import student
 

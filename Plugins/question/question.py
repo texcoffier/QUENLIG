@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the question text."""
+
 import random
 
 priority_display = 'question_before'

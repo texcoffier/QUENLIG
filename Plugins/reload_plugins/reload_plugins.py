@@ -19,6 +19,10 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Reload all the modified Quenlig plugins.
+It is currently not working nicely, do not try to use.
+"""
+
 import plugins
 import os
 import utilities

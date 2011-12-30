@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""The 'logout' button."""
+
 import casauth
 
 priority_display = 'session_duration'

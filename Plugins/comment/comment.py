@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Allow the students to leave a comment about the question."""
+
 priority_display = 'analyse'
 css_attributes = (
     "TEXTAREA { font-size: 80% ; }",

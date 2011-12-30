@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""An horizontal bar at the top of the page."""
+
 horizontal = True
 container = 'heart'
 acls = { 'Default': ('executable',) }

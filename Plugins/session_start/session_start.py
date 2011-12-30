@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""It rejects any work before the session start."""
+
 import configuration
 import utilities
 

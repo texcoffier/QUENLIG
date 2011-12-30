@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the informations about the required questions."""
+
 import utilities
 import questions
 

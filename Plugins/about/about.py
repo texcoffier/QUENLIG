@@ -19,8 +19,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""About Quenlig box."""
 priority_display = 'map'
 font_size = "60%"
 acls = { 'Default': ('executable',) }
-
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }

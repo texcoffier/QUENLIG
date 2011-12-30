@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""The total number of questions."""
+
 import questions
 
 priority_display = 'statmenu_indice'

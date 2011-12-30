@@ -19,6 +19,9 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display an SVG graphic of the session with all the questions and statistics.
+This graphic is very slow to display so it is unusable."""
+
 import statistics
 import questions
 import configuration

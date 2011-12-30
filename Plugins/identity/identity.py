@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the identity of the connected user."""
+
 content_is_title = True
 container = 'menu'
 acls = { 'Default': ('executable',) }

@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""display the 'before answering' informations box."""
+
 priority_display = 'title_bar'
 acls = { 'Default': ('executable',) }
 

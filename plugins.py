@@ -1,5 +1,5 @@
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007-2008 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -362,6 +362,9 @@ class Plugin:
                 after += ' <a href="#attr_background">background</a>:' + background
             v += '">' + before + ' ????? ' + after + '</div>'
             s.append(v)
+
+        if self.plugin.__doc__:
+            s.append('<pre><em>' + self.plugin.__doc__.strip() + '</em></pre>')
             
         for attr in Attribute.attributes.values():
             if attr.name in required:

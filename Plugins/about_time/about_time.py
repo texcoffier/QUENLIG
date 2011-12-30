@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""CPU time used to create the HTML page"""
+
 import time
 
 priority_execute = '-debug' # Just before the page composition

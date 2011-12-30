@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""The questions box, it displays the allowed questions."""
+
 import cgi
 
 priority_display = 'identity'
@@ -54,22 +56,22 @@ def execute(state, plugin, argument):
         s = ""
         focus_done = False
         for q, info in answerables:
-           focus = ''
-           if not focus_done:
-               if not focusable_found or info.find("resigned ") == -1:
-                   focus = 'ID="1" '
-                   focus_done = True
-           if len(q.descendants) == max_descendants:
-               info += ' max_descendants'
-           if q.highlight:
-               info += ' highlight'
-                    
-           s += "<A %sHREF=\"%s\" CLASS=\"%s\">%s</A><BR>\n" % (
-               focus,
-               q.url(),
-               info,
-               cgi.escape(q.name),
-               )
+            focus = ''
+            if not focus_done:
+                if not focusable_found or info.find("resigned ") == -1:
+                    focus = 'ID="1" '
+                    focus_done = True
+            if len(q.descendants) == max_descendants:
+                info += ' max_descendants'
+            if q.highlight:
+                info += ' highlight'
+                     
+            s += "<A %sHREF=\"%s\" CLASS=\"%s\">%s</A><BR>\n" % (
+                focus,
+                q.url(),
+                info,
+                cgi.escape(q.name),
+                )
         s += '<!--SCRIPT-->'
         if focus_done:
             s += "<script type=\"text/javascript\">document.getElementById('1').focus();</script>"

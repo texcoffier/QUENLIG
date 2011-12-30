@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""It rejects any work after the session stop."""
+
 import configuration
 import utilities
 

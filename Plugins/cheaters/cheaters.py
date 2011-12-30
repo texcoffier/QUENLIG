@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Detection of the student always giving the same answer at the same time."""
+
 import utilities
 import statistics
 import questions

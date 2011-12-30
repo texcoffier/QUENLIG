@@ -19,6 +19,10 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""This plugin is a container for the right column.
+But it is also the page composer, it must be
+the last one to be executed."""
+
 import utilities
 import os
 import cgi

@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Displays session statistics about the questions."""
+
 import utilities
 import statistics
 import questions

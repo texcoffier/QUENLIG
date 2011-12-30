@@ -19,6 +19,9 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the histogram of the number of good and bad answers
+for all the students."""
+
 import statistics
 
 container = 'analyse'

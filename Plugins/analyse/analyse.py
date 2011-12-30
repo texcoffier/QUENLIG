@@ -19,5 +19,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Analyse menu"""
+
 priority_display = 'action'
 acls = { 'Default': ('executable',) }

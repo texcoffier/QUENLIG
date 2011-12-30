@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display an informative text when there is no more questions to answer."""
+
 container = 'questions'
 acls = { 'Default': ('executable',) }
 

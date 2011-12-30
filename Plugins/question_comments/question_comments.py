@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Displays all the comments about the current question."""
+
 import utilities
 import statistics
 

@@ -19,6 +19,9 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""For each role, display the number of active users
+currently in this role."""
+
 import collections
 import time
 import statistics

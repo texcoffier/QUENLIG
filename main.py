@@ -284,7 +284,6 @@ if 'plugins.html' in sys.argv:
                 f.write('</tr>')
         f.write('</table>')
         
-        
     f = open('plugins.html', 'w')
     f.write('''<style>
 TR { vertical-align: top; }
@@ -318,7 +317,14 @@ Click on plugin names to see the details.
 ''')
     for p in s.roots:
         display_TOC(f, p)
-    f.write('<table class="plugin">')
+
+    f.write('<h2>Plugin execution order</h2>')
+    for p in s.plugins_list:
+        f.write(' <a href="#%s">%s</a>' % (p.plugin.css_name,
+                                           p.plugin.css_name))
+
+        
+
     f.write('''
 <h1>Plugin details</h1>
 The attributes values are for the english language, all of them
@@ -329,6 +335,7 @@ the plugin and that must be inserted in the page.
 <p>
 You can click on plugin attributes to see there definition.
 ''')
+    f.write('<table class="plugin">')
     for p in s.roots:
         display(f, p)
     f.write('</table>')

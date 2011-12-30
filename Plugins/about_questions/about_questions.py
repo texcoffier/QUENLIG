@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the directory name containing the questionnary"""
+
 import configuration
 
 priority_display = 'about_version'

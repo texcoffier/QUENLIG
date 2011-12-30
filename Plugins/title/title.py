@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the page title."""
+
 font_size = "200%"
 container = 'title_bar'
 text_align = 'center'

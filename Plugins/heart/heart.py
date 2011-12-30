@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""The heart of the web page."""
+
 priority_display = 'menu'
 width = '100%'
 acls = { 'Default': ('executable',) }

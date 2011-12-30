@@ -19,6 +19,9 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""This plugin display a box with the information about the bad answer."""
+
+
 import configuration
 import cgi
 

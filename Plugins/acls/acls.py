@@ -26,14 +26,14 @@ The roles ACLS may be defined in the user named after the role.
 
 ACLS are taken from:
   * The default ACLs from plugin:
-     * acls = {'Default':('executable','hiddable'), 'Teacher':('!executable',)}
+     acls = {'Default':('executable','hiddable'), 'Teacher':('!executable',)}
   * The ACLs from role
   * The student ACLs
-     * acls = {plugin_A:('executable',), plugin_B: ('!hiddable', )}
+     acls = {plugin_A:('executable',), plugin_B: ('!hiddable', )}
      
 The code assume that :
   * The role of a role does not change
-  * A role is a student: The ACLs from role are the ACLs of the student
+  * A role is a student: The ACLs of a role are the ACLs of the student
 """
 
 import student

@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""The number of good answers."""
+
 container = 'statmenu'
 priority_execute = 'question_answer' # Verify answer before
 acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }

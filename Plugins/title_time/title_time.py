@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the mean time used by student to answer the current question."""
+
 import statistics
 import utilities
 

@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Add smileys to the statistics of good/bad/tip/..."""
+
 import utilities
 
 priority_execute = 'statmenu_bad'

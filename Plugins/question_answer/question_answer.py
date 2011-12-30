@@ -19,12 +19,20 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""It both display the INPUT HTML tag to enter the answer
+but it also verify the answer.
+
+As the answer may modify the question list, it must be executed
+before the question list computation.
+"""
+
 import configuration
 import cgi
 import utilities
 
 priority_execute = '-questions' # To update question list before
 priority_display = 'question'
+
 css_attributes = (
     "INPUT { width: 100% ; font-family: times; font-size:120%}",
     "TEXTAREA { width: 100% ; }",

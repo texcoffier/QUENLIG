@@ -19,6 +19,10 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""The output of this plugin is a CSV file containing for each student
+the normalized number of good/bad answers and indices.
+There is also the work time in hours."""
+
 import statistics
 
 container = 'analyse'

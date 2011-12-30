@@ -19,7 +19,9 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-import time
+"""Top level plugin. It defines the 3 columns of the page:
+the left menu, the heart of the page and the administrator menu.
+"""
 
 css_attributes = (
     "> DIV > TABLE { width: 100% ; }",
@@ -29,8 +31,6 @@ horizontal = True
 acls = { 'Default': ('executable',) }
 
 def execute(state, plugin, argument):
-    state.start = time.time()
-
     if state.question:
         if state.question not in state.student.answerables():
             if not hasattr(state.student, 'allowed_to_change_answer'):

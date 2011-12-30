@@ -19,6 +19,12 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""This plugin display the content of the first plugin with
+an not empty attribute named 'heart_content'.
+This allow plugins in the menu to display their content in the
+heart of the page when clicked, for example the 'action_help' plugin.
+"""
+
 priority_display = 'title_bar'
 priority_execute = '-page'
 acls = { 'Default': ('executable',) }

@@ -19,6 +19,10 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""This plugin allows to remove acls to others users.
+It is not yet working."""
+
+
 import plugins
 import utilities
 import student

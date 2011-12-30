@@ -19,6 +19,9 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Displays the student rank computed with the number of good answers.
+It is only useful when all the students are working together."""
+
 import utilities
 
 priority_display = 'statmenu_time'

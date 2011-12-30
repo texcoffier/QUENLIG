@@ -19,6 +19,13 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Reload the current question source file.
+This plugin can be used while a real session is running.
+
+It is not totally safe, if you introduce a syntax error in the module,
+the server will need a restart to restore the question file.
+"""
+
 import questions
 import statistics
 import student

@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Displays the box with the tips for the current question."""
+
 import utilities
 
 priority_display = 'question_good'

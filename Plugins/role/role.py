@@ -19,9 +19,15 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display the 'role' menu. This plugin needs JavaScript.
+
+It will create the 'roles' file with the default role.
+"""
+
 import student
 import utilities
 import os
+import time
 
 priority_execute = -100
 container = 'identity'
@@ -51,6 +57,8 @@ def update_roles(astudent):
 
 
 def execute(state, plugin, argument):
+    state.start = time.time()
+
     update_roles(state.student)
 
     if argument in state.student.roles: # Change the role if possible

@@ -19,6 +19,9 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display a menu allowing to choose between seeing all the questions
+or only the allowed ones."""
+
 container = 'questions'
 priority_display = '-questions_next'
 priority_execute = '-questions'

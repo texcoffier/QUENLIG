@@ -19,6 +19,12 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Display for each question answered the informations about the question.
+Not really useful.
+It should be enhanced to allow the teacher to see these informations
+for the other students.
+"""
+
 container = 'analyse'
 link_to_self = True
 priority_execute = "-question_answer"

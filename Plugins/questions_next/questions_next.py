@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Allow to go to the next question in alphabetical order."""
+
 container = 'questions'
 acls = { 'Teacher': ('executable',) }
 

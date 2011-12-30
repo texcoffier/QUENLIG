@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Administration menu."""
+
 acls = { 'Teacher': ('executable',) }
 
 css_attributes = ( '{ position: absolute ; right: 0; top:0 }',

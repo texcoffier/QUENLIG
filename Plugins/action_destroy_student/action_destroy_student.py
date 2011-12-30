@@ -19,6 +19,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+"""Destroy all the students without any good answer."""
+
 import statistics
 
 container = 'action'
