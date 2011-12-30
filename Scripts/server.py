@@ -47,7 +47,7 @@ class Server:
             './main.py %s create %s %d begin-date "1:1 1/1/1970" end-date "1:1 1/1/2020" url "%s" start &) >xxx.log 2>&1' % (
             name, questions, port, self.base)
             )
-        
+        print 'Log file is: xxx.log'
         print 'Wait server start: ',
         while True:
             try:

@@ -37,15 +37,19 @@ def execute(state, plugin, argument):
         return
     if state.question.tests == ():
         return
-    if argument and not state.student.bad_answer_yet_given(state.question.name,
-                                                           argument):
+    if argument:
+        # Check the answer even if it is a known one because
+        # the question tests may have benne updated in live
         number, message = state.student.check_answer(state.question,
                                                      argument,
                                                      state)
         if number:
             state.student.good_answer(state.question.name,argument)
         else:
-            state.student.bad_answer(state.question.name,argument)
+            # Does not count the same bad answer
+            if not state.student.bad_answer_yet_given(state.question.name,
+                                                      argument):
+                state.student.bad_answer(state.question.name,argument)
 
     if (state.question.maximum_bad_answer
         and state.student.bad_answer_question(state.question.name) >= state.question.maximum_bad_answer):

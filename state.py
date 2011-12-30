@@ -246,7 +246,10 @@ class State(object):
 
         try:
             h = self.history[int(self.form["number"])]
-            self.question = h
+            if h:
+                self.question = questions.questions[h]
+            else:
+                self.question = None
         except IndexError:
             self.question = None
 
@@ -309,7 +312,10 @@ class State(object):
             if isinstance(plugin.value, tuple):
                 return plugin.value
 
-        self.history.append(self.question)
+        if self.question:
+            self.history.append(self.question.name)
+        else:
+            self.history.append(None)
         return 'text/html', self.full_page
 
     def close(self):

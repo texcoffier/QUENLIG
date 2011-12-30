@@ -501,6 +501,50 @@ def test_0370_choice(student):
     student.expect('<p class="maximum_bad_answer">')
     student.reject('name="question_answer"')
 
+def test_0400_root_reload_questions(student):
+    student_bad = Student(the_server, 'user_bad')
+    student_bad.goto_question('a:a')
+    student_bad.give_answer('bad')
+
+    student_bad2 = Student(the_server, 'user_bad2')
+    student_bad2.goto_question('a:a')
+    student_bad2.give_answer('bad')
+    student_bad2.give_comment('MyComment')
+
+    student_bad3 = Student(the_server, 'user_bad3')
+    student_bad3.goto_question('a:a')
+    student_bad3.give_answer('a')
+    student_bad3.goto_question('a:b')
+    student_bad3.give_answer('bad')
+    student_bad3.goto_question('a:c')
+    student_bad3.give_answer('bad')
+
+    student_see = Student(the_server, 'user_good')
+    student_see.goto_question('a:a')
+
+    student_bad4 = Student(the_server, 'user_bad4')
+
+    student.select_role('Teacher')
+    student.goto_question('a:a')
+    student.get('?reload_questions=1')
+    student.goto_question('a:b')
+    student.get('?reload_questions=1')
+
+    student_bad4.goto_question('a:a')
+    minimal_tests(student_bad4, good=0, bad=0, title='a:a')
+
+    student_bad2.goto_question('a:a')
+    minimal_tests(student_bad2, good=0, bad=1, title='a:a')
+
+    student_bad3.goto_question('a:b')
+    minimal_tests(student_bad3, good=1, bad=2, title='a:b')
+
+    student_see.give_answer('a')
+    minimal_tests(student_see, good=1, title='a:a')
+
+    student_bad.give_answer('a')
+    minimal_tests(student_bad, good=1, bad=1, title='a:a')
+    
 
 
 ############

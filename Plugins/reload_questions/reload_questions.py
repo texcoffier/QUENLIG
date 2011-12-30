@@ -21,6 +21,7 @@
 
 import questions
 import statistics
+import student
 
 priority_execute = '-question_before'
 
@@ -46,7 +47,8 @@ def execute(state, plugin, argument):
         reload(questions.modules[module_name])
         state.question = questions.questions[state.question.name]
         statistics.forget_stats()
-        state.student.answerables_cache = None
+        for s in student.all_students():
+            s.answerables_cache = None
         questions.sort_questions()
 
     return ''

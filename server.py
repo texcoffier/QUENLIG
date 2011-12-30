@@ -27,6 +27,7 @@ import state
 import os
 import configuration
 import utilities
+import sys
 
 cache = None # Do not cache files
 cache = {}   # Allow file caching
@@ -184,9 +185,9 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
             return
 
         # Execute and return page
-        # import sys
-        # print path, os.system('grep VmSize </proc/self/status')
+        sys.stdout.flush() # To really log into the file for 'regtests'
         mime, content = session.execute(form)
+        sys.stdout.flush()
         self.send_head(mime, cached=False, content_length=len(content))
         self.wfile.write(content)
 
