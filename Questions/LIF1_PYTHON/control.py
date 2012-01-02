@@ -190,7 +190,8 @@ add(name="def",
    à gauche que la première ligne de la fonction.
    """,
     question = """La réponse à cette question est la définition de la fonction
-   <tt>carre</tt> qui retourne le carré du nombre <tt>x</tt> passé en paramètre.
+   <tt>carre</tt> qui a un paramètre nommé <tt>x</tt> et qui retourne le carré
+   du nombre passé en paramètre.
    """,
     tests = (
         Good(P(Equal('def carre(x):\n return x*x'))),
@@ -226,10 +227,10 @@ add(name="if",
    <li> 0 s'il est nul.
    <li> 1 s'il est positif
    </ul>
-   N'utilisez pas de <tt>else</tt> dans cette fonction, ce n'est
-   pas la peine car il y a des <tt>return</tt>.
+   <b>N'utilisez pas de <tt>else</tt> dans cette fonction, ce n'est
+   pas la peine car il y a des <tt>return</tt></b>.
    <p>
-   Retournez les valeurs dans l'ordre indiqués sinon votre
+   Retournez les valeurs dans l'ordre indiqué dans l'énumération sinon votre
    réponse sera injustement refusée même si elle est correcte.
    """,
    nr_lines = 7,

@@ -39,7 +39,7 @@ nombres = {}          # Dictionnaire vide
 nombres["un"] = 1     # La valeur de la clef 'un' est 1
 nombres["deux"] = 2   # La valeur de la clef 'deux' est 2</pre>
     """,
-    question="""Donnez l'écriture directe (avec les {clef: valeur...})
+    question="""Donnez l'écriture sous la forme <tt>{clef: valeur...}</tt>
     du dictionnaire dont la valeur de la clef « nom » est
     la chaine de caractère « thierry »
     et la valeur de la clef « age » est l'entier « 21 ».
@@ -48,7 +48,7 @@ nombres["deux"] = 2   # La valeur de la clef 'deux' est 2</pre>
     """,
 
     tests = (
-        Good(P(Equal('{"nom":"thierry", "age": 21}'))),
+        Good(P(End('{"nom":"thierry","age":21}'))),
         P(expects(('nom', 'thierry', 'age', '21', ':', '{', '}', ',', '"',
                    '"nom":', '"age":', '"nom":"thierry"',
                    '"age": 21'))),

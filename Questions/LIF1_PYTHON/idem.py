@@ -424,7 +424,11 @@ add(name="égalité",
         ),
     good_answer = """En langage Python, même si les variables ne sont
     pas déclarées, il tient compte du type et ne mélange pas les choses
-    qui ne vont pas ensemble.""",
+    qui ne vont pas ensemble.
+    <p>
+    5 est un nombre (entier) et "5" est une chaine de caractères
+    ils sont donc différents par nature.
+""",
     )
 
 add(name="inégalité",
