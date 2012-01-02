@@ -1,4 +1,4 @@
-V=2.2
+V=2.3.0
 
 help:
 	@echo "Goals:"
@@ -76,7 +76,7 @@ simulator_plot:
 
 # Compute an animated histogram (very long because it uses the simulator)
 # Compute with a time acceleration of 10
-# Display histogram every 6 seconds real time (60 seconds simultated time)
+# Display histogram every 6 seconds real time (60 seconds simulated time)
 xxx.histogram:
 	Scripts/load_simulator.py $(SESSION_STUDENTS) 6 $(SESSION) 10 0 6666 xxx histogram
 # display the animation

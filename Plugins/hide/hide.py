@@ -22,9 +22,6 @@
 """This plugin allows to remove acls to others users.
 It is not yet working."""
 
-
-import plugins
-import utilities
 import student
 
 priority_execute = '-page'
@@ -92,12 +89,14 @@ def execute(state, plugin, argument):
             s.acls.change_acls(args[0], '!executable')
             print '\n\n', args[0], role, '\n\n'
         # XXX : should recompute all, but it can't be done here : deffered
-        state.update_the_plugins = True
+        # state.update_the_plugins = True
 
         errors += 'window.location = "?" ;\n'
 
     for a_plugin in state.plugins_list:
         x = '<tt class="hide" onmouseup="hide(event,\'%s\')"></tt>' % a_plugin.plugin.css_name
+        if not hasattr(a_plugin, 'content'):
+            continue
         if a_plugin.content or a_plugin.boxed():
             try:
                 a_plugin.value_title += x
@@ -110,16 +109,17 @@ def execute(state, plugin, argument):
                 a_plugin.value = x
                 pass
 
-    make_visible = ''
-    for plugin_name, plugin in state.plugins_dict.items():
-        if plugin.value or plugin.content:
+    make_visible = '</a>'
+    for plugin_name, a_plugin in state.plugins_dict.items():
+        if not hasattr(a_plugin, 'content'):
+            continue
+        if a_plugin.value or a_plugin.content:
             continue
         make_visible += '<br><var class="hide" onmouseup="hide(event,\'%s\')">' % plugin_name + '&nbsp;<small>+ ' + plugin_name + '</small></var>'
-        
-    
+
 
     return (make_visible + '<script><!--\nhide_roles = ["'
-            + state.student.name
+            + state.student.filename
             + '",'
             + ','.join(['"%s"' % role
                         for role in state.student.roles])
