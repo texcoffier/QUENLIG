@@ -30,7 +30,7 @@ add(name="liste",
     required = ["idem:chaine", "idem:flottant"],
     question = """Définissez une liste contenant dans l'ordre les éléments :
                <TT>1, "a", 2, "b", 3.5</TT>""",
-    tests = ( Good(P(Equal('[1,"a",2,"b",3.5]') ) ),
+    tests = ( Good(P(End('[1,"a",2,"b",3.5]') ) ),
             ),
     good_answer = "Évidemment, une liste peut contenir des listes",
  )

@@ -106,6 +106,7 @@ Vous utiliserez <tt>i</tt> comme indice de boucle.""",
     nr_lines = 3,
     tests = (
         Good(P(Equal('for i in range(10):\n   print(i, i*i)'))),
+        Good(P(Equal('for i in range(10):\n   print(i, i**2)'))),
         expects(('for', ' i ', ' in ', 'range', 'range(10)', ':', 'print')),
         Expect('*', """Pour calculer le carré de <tt>i</tt> vous devez
         utiliser une multiplication"""),
@@ -142,6 +143,7 @@ la variable <tt>i</tt>, vous utiliserez deux fois la fonction <tt>print</tt>.
     nr_lines = 4,
     tests = (
         Good(P(Equal('for i in range(5):\n   print("i=",i)\n   print("i*i=",i*i)'))),
+        Good(P(Equal('for i in range(5):\n   print("i=",i)\n   print("i*i=",i**2)'))),
         P(expects(('for', ' i ', ' in ', 'range', 'range(5)', ':', 'print',
                    'i=', 'i*i='))),
         Expect('*', """Pour calculer le carré de <tt>i</tt> vous devez
@@ -239,6 +241,7 @@ add(name="if",
                  ),
                  Equal('def signe(a):\n if a<0:\n  return -1\n if a==0:\n  return 0\n return 1')))),
    expects(('def', 'signe', 'a', 'if', 'return', '0', '1', '-1', ':')),
+   Reject("else", "N'utilisez pas de <tt>else</tt> dans cette fonction, ce n'est pas la peine car il y a des <tt>return</tt>."),
    Bad(Comment(~NumberOfIs('if', 2),
        """Il faut deux « si » (pas un ni trois).
        Il y en a un pour savoir si c'est négatif et un pour savoir

@@ -74,8 +74,8 @@ add(name="accès",
     tests = (
         Good(P(Equal('i5 = t[4]'))),
         Bad(Comment(P(Equal('i5 = t[5]')),
-                    """ATTENTION : la position du premier élement est
-                    <tt>0</tt>. Vous avez donc pris le sixième élement
+                    """ATTENTION : la position du premier élément est
+                    <tt>0</tt>. Vous avez donc pris le sixième élément
                     du tableau <tt>t</tt>""")),
         Expect('i5'),
         Expect('t'),

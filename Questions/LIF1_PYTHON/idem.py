@@ -154,6 +154,7 @@ add(name="opposé",
     question = """Que tapez-vous pour <b>ajouter</b> 5
     à l'entier <b>moins</b> 8&nbsp;?""",
     tests = (
+        Reject("(", "Il faut répondre sans utiliser de parenthèses"),
         Good(P(Equal('5 + -8'))),
         Good(P(Equal('-8 + 5'))),
         Bad(Comment(P(Equal('5 - 8')),
