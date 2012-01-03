@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,25 +19,38 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-"""Destroy all the students without any good answer."""
+"""Destroy all the students with 0 or 1 good answer."""
 
 import statistics
+import utilities
 
-container = 'action'
+container = 'administration'
 link_to_self = True
 priority_execute = '-question_answer'
 
+acls = { 'Teacher': ('executable',) }
+
 def execute(state, plugin, argument):
-    if argument == None:
+    if not argument:
         return ''
     
     stats = statistics.question_stats()
+
+    roles = set()
+    for e in stats.all_students:
+        try:
+            for role in eval(utilities.read(e.roles_filename)):
+                roles.add(role)
+        except:
+            pass
 
     s = []
     for e in stats.all_students:
         if e == state.student:
             continue
-        if e.the_number_of_good_answers < 1:
+        if e.filename in roles:
+            continue
+        if e.the_number_of_good_answers < 2:
             s.append('%s(%s)' %(e.name, e.the_number_of_good_answers))
             e.destroy()
             
