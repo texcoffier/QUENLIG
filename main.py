@@ -498,9 +498,6 @@ mkdir(session.dir + 'Logs' )
 mkdir(session.dir + 'HTML' )
 configuration.root = os.getcwd()
 
-configuration.version = os.path.basename(os.getcwd())
-
-
 if __name__ == "__main__":
     if len(args) == 0:
         sys.stderr.write("""

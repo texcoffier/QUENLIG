@@ -1,7 +1,8 @@
-V=2.3.0
+V=$(shell python -c "import configuration ; print configuration.version")
 
 help:
-	@echo "Goals:"
+	@echo "QUENLIG version $(V)"
+	@echo "Makefile Goals:"
 	@echo " - plots          : Generate all questions graphs"
 	@echo " - regtests       : Run the regression tests"
 	@echo " - clean          : Remove not necessary files"

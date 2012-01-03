@@ -1,3 +1,6 @@
+# Version
+version = "2.3.0"
+
 # URL Of the Centralized Authentification service
 CAS = 'https://cas.univ-lyon1.fr/cas'
 
