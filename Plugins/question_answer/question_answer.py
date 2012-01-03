@@ -40,14 +40,34 @@ css_attributes = (
     )
 acls = { 'Default': ('executable',) }
 
+javascript = """
+function disable_tab(event)
+{
+     if ( window.event )
+        event = window.event ;
+     key = event.keyCode ;
+
+     if(key == 9)
+         {
+          event.target.value += '   ' ;
+          return false;
+         }
+     else
+          return true;
+
+}
+"""
+
 def execute(state, plugin, argument):
     if state.question == None:
         return
     if state.question.tests == ():
         return
     if argument:
+        # Fill 'last_answer' attribute
+        state.student.bad_answer_yet_given(state.question.name, argument)
         # Check the answer even if it is a known one because
-        # the question tests may have benne updated in live
+        # the question tests may have been updated in live
         number, message = state.student.check_answer(state.question,
                                                      argument,
                                                      state)
@@ -104,7 +124,7 @@ def execute(state, plugin, argument):
             configuration.nr_columns, last_answer_html,
             last_answer_html, style)
     else:
-        s += '<TEXTAREA NAME="%s" ID="2" COLS="%d" ROWS="%d">%s</TEXTAREA>' % (
+        s += '<TEXTAREA NAME="%s" ID="2" COLS="%d" ROWS="%d" onkeypress="return disable_tab(event)">%s</TEXTAREA>' % (
             plugin.plugin.css_name,
             configuration.nr_columns,
             state.question.nr_lines,
