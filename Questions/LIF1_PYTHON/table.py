@@ -94,7 +94,7 @@ add(name="accès négatif",
     <tt>a[-1]</tt> est le dernier élément et
     <tt>a[-2]</tt> est l'avant-dernier.""",
     question = """Faites afficher les 10 derniers éléments
-    du tableau <tt>a</tt>
+    du tableau <tt>a</tt>&nbsp;: le dernier, l'avant dernier, l'avant avant dernier....
     <p>
     Vous utiliserez <tt>i</tt> comme variable de boucle.
     """,
@@ -114,7 +114,7 @@ add(name="accès négatif",
     print()</pre>""",
     good_answer = """Cela marche aussi sur les chaines de caractères.
     <p><tt>"QWERTY"[-1]</tt> c'est tout simplement <tt>Y</tt>""",
-    ),
+)    
     
     
 
@@ -193,6 +193,7 @@ add(name="concaténation",
     </ul>
     """,
     tests = (
+        Reject('=', "Pas besoin d'affecter le résultat à une variable"),
         Good(P(Equal('a+c+d'))),
         Bad(Comment(P(Equal('a+b')),
                      """Vous obtenez <tt>[7, 3 ,8 ,8 ,9 ,1]</tt>,

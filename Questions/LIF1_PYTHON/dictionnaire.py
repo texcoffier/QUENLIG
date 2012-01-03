@@ -39,7 +39,7 @@ nombres = {}          # Dictionnaire vide
 nombres["un"] = 1     # La valeur de la clef 'un' est 1
 nombres["deux"] = 2   # La valeur de la clef 'deux' est 2</pre>
     """,
-    question="""Donnez l'écriture sous la forme <tt>{clef: valeur...}</tt>
+    question="""Donnez l'écriture sous la forme <tt>{clef1: valeur1, clef2: valeur2...}</tt>
     du dictionnaire dont la valeur de la clef « nom » est
     la chaine de caractère « thierry »
     et la valeur de la clef « age » est l'entier « 21 ».

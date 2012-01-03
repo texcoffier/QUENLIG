@@ -28,8 +28,12 @@ from questions import *
 from check import *
 
 add(name="CLIQUEZ-ICI !",
-    before="""
-    Tout d'abord lancez l'interpréteur Python XXXXXXXXXXXXXXXXXXXXX
+    before="""Tout d'abord lancez l'environnement Python en tapant
+    dans l'adresse de l'explorateur Windows&nbsp;:
+    <tt>P:\\Portable Python 3.2.1.1\\PyScripter-Portable.exe</tt>
+    <p>
+    Après quelques longues secondes une fenêtre recouvrira tout l'écran,
+    c'est un environnement de développement Python.
     """,
     question="""Répondez par <tt>oui</tt> dans le cadre intitulé
     <tt><em>Donnez votre réponse ici</em></tt>
@@ -49,6 +53,16 @@ add(name="CLIQUEZ-ICI !",
 
 add(name="interpréteur",
     required = ["CLIQUEZ-ICI !"],
+    before = """La zone du bas de l'environnement Python est l'interpéteur
+    de commandes.
+    C'est dans cette zone que vous tapez les commandes Python
+    qui tiennent sur une ligne.
+    <p>
+    Vous utiliserez la grande zone pour éditer du code Python sur plusieurs
+    lignes et vous cliquerez sur « Run » pour lancer l'exécution
+    de l'ensemble des lignes. Vous pouvez complètement effacer le contenu
+    de cette fenêtre.
+""",
     question = """Quand vous tapez <tt>2**10</tt> dans la fenêtre
     de l'interpréteur Python et que vous validez
     en appuyant sur la touche « Entrée ».
@@ -326,7 +340,8 @@ add(name="division entière",
     good_answer = """ATTENTION : la division entière de Python
     donne un résultat différent de la division entière du langage C.
     <p>
-    En langage C <tt>3/-2</tt> donne <tt>-1</tt>""",
+    En langage C <tt>3/-2</tt> donne <tt>-1</tt>,
+    en Python c'est <tt>-2</tt>""",
     )
 
 add(name="chaine",
@@ -401,9 +416,9 @@ add(name="multi-ligne",
     nr_lines = 3,
     default_answer = "a = b +\n    c",
     tests = (
-        Good(P(Equal('a=b+\\c'))),
+        Good(P(Equal('a=b+\\\nc'))),
         expects(('a', 'b', 'c', '+', '=', '\\')),
-        Reject('(', "N'utilisez pas de parenthèses mais l'<em>backslash</em>"),
+        Reject('(', "N'utilisez pas de parenthèses mais le <em>backslash</em>"),
         ),
     good_answer = """Il est conseillé d'ajouter des parenthèses plutôt
     que d'utiliser des <em>backslash</em>.
@@ -419,7 +434,7 @@ add(name="égalité",
     before = """Le test d'égalité est le même en Python et en C.
     C'est un opérateur binaire qui retourne une valeur booléenne.""",
     question = """Qu'est-ce que l'interpréteur Python affiche quand vous
-    tapez <tt>5 == "5"<tt>&nbsp;?""",
+    tapez <tt>5 == "5"</tt>&nbsp;?""",
     tests = (
         Good(Contain('False')),
         ),
@@ -437,7 +452,7 @@ add(name="inégalité",
     before = """Le test d'inégalité est le même en Python et en C.
     C'est un opérateur binaire qui retourne une valeur booléenne.""",
     question = """Qu'est-ce que l'interpréteur Python affiche quand vous
-    tapez <tt>5 != "5"<tt>&nbsp;?""",
+    tapez <tt>5 != "5"</tt>&nbsp;?""",
     tests = (
         Good(Contain('True')),
         ),

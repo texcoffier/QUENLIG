@@ -115,7 +115,7 @@ add(name="pattern",
            Il faut l'utiliser en connaissance de cause."""),
     reject('-', "On a besoin d'aucune option pour répondre."),
     reject('/', """Le caractère <tt>/</tt> indique que l'on
-    indique une nom dans un autre répertoire, hors les fichiers à détruire
+    indique un nom dans un autre répertoire, hors les fichiers à détruire
     sont dans le répertoire courant, ce n'est donc pas la peine"""),
     answer_length_is(6, "La réponse à cette question est en 6 caractères"),
     expect('rm'),

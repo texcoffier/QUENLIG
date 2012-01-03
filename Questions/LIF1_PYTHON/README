@@ -15,6 +15,7 @@ rsync --verbose \
       --exclude '.git' \
       --exclude '*.pyc' \
       --exclude '*~' \
+      --exclude Students \
       --rsh "ssh -p $PORT" \
       $HOME/QUENLIG/. $SERVER:QUENLIG
 ssh -p $PORT $SERVER "

@@ -227,7 +227,8 @@ add(name="if",
    <ul>
    <li> -1 si <tt>a</tt> est négatif
    <li> 0 s'il est nul.
-   <li> 1 s'il est positif
+   <li> 1 s'il est positif (en fait c'est pas la peine de tester car
+        s'il n'est pas inférieur ou égale à 0 alors il est positif.)
    </ul>
    <b>N'utilisez pas de <tt>else</tt> dans cette fonction, ce n'est
    pas la peine car il y a des <tt>return</tt></b>.
@@ -239,7 +240,12 @@ add(name="if",
    tests = (
    Good(P(Replace((('a<=-1', 'a<0'), ('return a', 'return 0'),
                  ),
-                 Equal('def signe(a):\n if a<0:\n  return -1\n if a==0:\n  return 0\n return 1')))),
+                 Equal('''def signe(a):
+   if a<0:
+      return -1
+   if a==0:
+      return 0
+   return 1''')))),
    expects(('def', 'signe', 'a', 'if', 'return', '0', '1', '-1', ':')),
    Reject("else", "N'utilisez pas de <tt>else</tt> dans cette fonction, ce n'est pas la peine car il y a des <tt>return</tt>."),
    Bad(Comment(~NumberOfIs('if', 2),
@@ -261,7 +267,7 @@ add(name="while",
     qui a comme paramètre <tt>a</tt> un entier et qui retourne
     le nombre de bits nécessaires pour écrire cet entier.
     <p>
-    L'agorithme consiste à initialiser <tt>i</tt> à zéro,
+    L'algorithme consiste à initialiser <tt>i</tt> à zéro,
     puis tant que <tt>a</tt> n'est pas nul,
     on le divise par 2 et on ajoute 1 à <tt>i</tt>
     """,
@@ -271,6 +277,7 @@ add(name="while",
         Good(P(Replace((('//', '/'),
                         ('a=a/2', 'a/=2'),
                         ('a!=0', 'a'),
+                        ('i=i+1', 'i+=1'),
                         ('i+=1;a/=2', 'a/=2;i+=1'),
                         ),
                        Equal("""def log2(a):

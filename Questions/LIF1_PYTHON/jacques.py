@@ -27,7 +27,7 @@ from questions import *
 from check import *
 
 add(name="liste",
-    required = ["idem:chaine", "idem:flottant"],
+    required = ["table:création", "idem:chaine", "idem:flottant", ],
     question = """Définissez une liste contenant dans l'ordre les éléments :
                <TT>1, "a", 2, "b", 3.5</TT>""",
     tests = ( Good(P(End('[1,"a",2,"b",3.5]') ) ),
