@@ -1071,7 +1071,7 @@ class UpperCase(TestUnary):
           )
       # To replace both 'a' and 'A' per 'X' the good order is:
       # So 'a', 'A', 'x' and 'X' are good answers.
-      Good(UpperCase(Replace((('a','x'),),
+      Good(UpperCase(Replace((('A','X'),),
                              Equal('a'))
                     )
           )
@@ -1083,6 +1083,20 @@ class UpperCase(TestUnary):
     """
     def canonize(self, string, state):
         return string.upper()
+
+class RemoveSpaces(TestUnary):
+    """Remove unecessary spaces/tabs.
+    White space at the end of line are removed, but not at the start.
+    So 'a +   5' become 'a+5'
+    But 'a 5' stays as 'a 5'
+    """
+    def canonize(self, string, state):
+        # Remove white spaces after a separator.
+        string = re.sub('([^a-zA-Z0-9_\n\r\t ])[ \t]+', r'\1', string)
+        # Remove white spaces before a separator if there is a normal
+        # character at the left of the run.
+        string = re.sub('([a-zA-Z0-9_])[ \t]+([^a-zA-Z0-9_])', r'\1\2', string)
+        return string
 
 class SortLines(TestUnary):
     """The lines of the student answer are sorted and child test value
@@ -1206,6 +1220,7 @@ class Replace(TestUnary):
     """The first argument is a tuple of (old_string, new_string)
     all the replacements are done on the student answer and
     the test in parameter is then evaluated.
+    The replacements strings are NOT canonized.
 
     Examples:
         # Student answers 'aba', 'ab1'... will pass this test.
@@ -1629,3 +1644,12 @@ if True:
     assert( a('y') == (None, '') )
     assert( a('xy') == (False, 'xy') )
     assert( a('yx') == (False, 'xy') )
+
+    a = create("Good(RemoveSpaces(Equal('a + 5')))")
+    assert( a('a+5') == (True, '') )
+    assert( a('a + 5') == (True, '') )
+    assert( a('a  +  5') == (True, '') )
+
+    a = create("Good(RemoveSpaces(Equal('a + - 5')))")
+    assert( a('a+-5') == (True, '') )
+    assert( a('a  +   -   5') == (True, '') )
