@@ -48,7 +48,7 @@ add(name="for",
     <li> On peut utiliser n'importe quelle variable comme indice
     de boucle, par forcément <tt>element</tt>.
     """,
-    question="""Faites un boucle avec <tt>i</tt> comme indice de boucle,
+    question="""Faites une boucle avec <tt>i</tt> comme indice de boucle,
     qui parcourt l'ensemble des nombre entiers de 0 à 9 inclus et
     qui affiche chacun des nombre.
     <p>
@@ -196,8 +196,11 @@ add(name="def",
    du nombre passé en paramètre.
    """,
     tests = (
+        Reject("=", """Vous n'avez pas besoin de passer par une
+        variable intermédiaire, retournez directement la bonne valeur."""),
         Good(P(Equal('def carre(x):\n return x*x'))),
         Good(P(Equal('def carre(x):\n return x**2'))),
+        Expect(':', "Vous avez oublié les ':' à la fin de la première ligne."),
         expects(('def ', 'carre', 'x', 'return')),
         expects(('(', ')'),
                 "Les paramètres de la fonction sont entre parenthèses"),
@@ -270,6 +273,9 @@ add(name="while",
     L'algorithme consiste à initialiser <tt>i</tt> à zéro,
     puis tant que <tt>a</tt> n'est pas nul,
     on le divise par 2 et on ajoute 1 à <tt>i</tt>
+    <p>
+    Le nombre de bits nécessaires pour écrire l'entier est égale
+    au nombre de divisions par 2 que vous avez du faire.
     """,
     nr_lines = 7,
     tests = (

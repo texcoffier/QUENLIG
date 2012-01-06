@@ -139,19 +139,44 @@ add(name="stocke élément",
     dans un élement en dehors du tableau, il y a une erreur.""",
     )
 
+add(name="list",
+    required = ["création", "dictionnaire:création"],
+    before = """Les tableaux sont en fait appelés <tt>list</tt> en Python.
+    <tt>list</tt> est la classe des tableaux et en même temps
+    une fonction qui crée un tableau à partir d'un ensemble de valeurs.
+    Par exemple :
+    <ul>
+    <li> <tt>list({"1": 1, 8: "huit"})</tt> retourne <tt>["1", 8]</tt>
+    <li> <tt>list("Bonjour")</tt> retourne <tt>['B', 'o', 'n', 'j', 'o', 'u', 'r']</tt>
+    </ul>""",
+    question = """Que retourne <tt>list([9,7])</tt>&nbsp;?""",
+    tests = (
+        Good(P(Equal("[9,7]"))),
+        ),
+    good_answer = """La fonction <tt>list</tt> est utile seulement
+    quand on veut convertir un ensemble en un tableau.
+    C'est rarement le cas.""",
+    )
+
 add(name="range",
     required = ["création"],
-    before = """La fonction <tt>range</tt> permet de créer des tableaux
-    contenant des entiers successifs.""",
-    question = """Tapez <tt>range(10)[0]</tt> dans votre interpréteur Python.
+    before = """La fonction <tt>range</tt> définie l'ensemble des entiers
+    successifs. Mais bien sûr pour ne pas gaspiller de mémoire elle ne
+    crée par réellement tous les nombres dans la mémoire&nbsp;!""",
+    question = """Tapez <tt>list(range(10))</tt> dans votre interpréteur Python.
     <p>
-    Quel est le nombre affiché&nbsp;?
+    Qu'est-ce qui est affiché&nbsp;?
     """,
     tests = (
-        Good(Int(0)),
+        Good(P(Equal("[0,1,2,3,4,5,6,7,8,9]"))),
         ),
     good_answer = """<tt>range</tt> permet aussi de générer un tableau
-    contenant les entiers entre 2 bornes : <tt>range(100, 200)</tt>""",
+    contenant les entiers entre 2 bornes : <tt>range(100, 200)</tt>
+    <p>
+    ATTENTION : pas la suite, n'indiquer pas la fonction <tt>list</tt>,
+    elle n'est indiquée ici que pour forcer la conversion d'un ensemble
+    en un tableau.
+""",
     )
 
 add(name="len",
@@ -274,7 +299,7 @@ add(name="affectation",
     before = """Contrairement au langage C, l'affectation n'est pas une recopie
     mais un nommage.
     Vous pouvez donc donner plusieurs noms à la même chose.""",
-    question = "Que va afficher le programme suivant&nbsp;?" + python_html(
+    question = "Que va afficher le programme suivant&nbsp;? (essayez de devinez avant de recopier dans l'interpréteur Python)" + python_html(
         """a = [1, 2]
 b = a
 b[0] = 3

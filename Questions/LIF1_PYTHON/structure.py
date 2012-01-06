@@ -63,7 +63,9 @@ add(name="créer classe",
 add(name="créer instance",
     required=["créer classe", "table:création"],
     before = """Le nom de la classe est en fait une fonction qui
-    retourne un nouvel élément de la classe.""",
+    retourne un nouvel élément de la classe.
+    Quand vous voulez une nouvelle instance, il vous suffit d'appeler
+    cette fonction.""",
     question = """Créez un nouveau <tt>Complexe</tt>
     que vous nommerez <tt>a</tt>""",
     tests = (

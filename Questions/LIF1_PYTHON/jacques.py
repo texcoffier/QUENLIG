@@ -44,7 +44,7 @@ add(name="concatenation",
 )
 
 add(name="sous-liste",
-    required = ["liste", "concatenation"],
+    required = ["liste", "concatenation", "table:accès négatif"],
     question = """Donner le résultat de l'expression
                <TT>[l[0]]+l[2:-2]+[l[-1]]</TT> appliquée à la liste
                <TT>l=[1,2,3,4,5,6]</TT>""",
@@ -60,8 +60,7 @@ add(name="rotation gauche",
     required = ["liste", "concatenation", "sous-liste"],
     question = """Ecrire l'expression, qui, quelle que soit une liste nommée
     <tt>l</tt> de la forme <tt>[a, b..., c, d]</tt>,
-    crée une nouvelle liste qui déplace le dernier élément en tête
-    pour obtenir <tt>[d, a, b..., c]</tt>.
+    crée une nouvelle liste de la forme <tt>[d, a, b..., c]</tt>.
 """,
     tests = (
         Reject('=', """On veux seulement le résultat, vous n'avez pas

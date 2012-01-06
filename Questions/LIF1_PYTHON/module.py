@@ -38,17 +38,17 @@ add(name="math",
     vous le préfixez par le nom de la bibliothèque suivi d'un caractère point.
     <pre>math.pi</pre>
     """,
-    question = """On suppose que la librairie mathématique a été
-    importée.
-    <p> Donnez la ligne Python affichant le cosinus de Pi/2&nbsp;?""",
+    question = """Donnez les 2 lignes python affichant le cosinus de Pi/2""",
+    nr_lines=3,
     tests = (
-        Good(P(Equal("print(math.cos(math.pi/2))"))),
+        Good(P(Equal("import math\nprint(math.cos(math.pi/2))"))),
         Reject('3', "Vous devez utiliser <tt>math.pi</tt>"),
         Reject('0', """On ne vous demande pas d'afficher le résultat
         mais de le calculer"""),
-        expects(('print', 'cos', 'pi', '2')),
-        Bad(Comment(~NumberOfIs('math', 2),
-                    """Vous devez utilisez deux fois le module mathématique,
+        expects(('import', 'print', 'cos', 'pi', '2')),
+        Bad(Comment(~NumberOfIs('math', 3),
+                    """Vous devez utilisez trois fois 'math',
+                    une fois pour l'importer,
                     une fois pour Pi et une fois pour le cosinus""")),
         Bad(Comment(~NumberOfIs('(', 2) | ~NumberOfIs(')', 2),
                     """Il faut des parenthèses pour la fonction <tt>print</tt>

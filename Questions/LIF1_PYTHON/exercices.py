@@ -32,7 +32,7 @@ add(name="len",
     question = """La réponse à cette question est la définition de la fonction
    <tt>longueur</tt> qui retourne la longueur du tableau passé en paramètre.
    <p>
-   La définition de la fonction est la suivante~:
+   La définition de la fonction est la suivante&nbsp;:
    <ul>
    <li>On déclare <tt>longueur</tt> comme une fonction avec un paramètre
         <tt>table</tt>
@@ -64,7 +64,7 @@ add(name="sum",
    <tt>somme</tt> qui retourne la somme des éléments d'un tableau
    passé en paramètre.
    <p>
-   La définition de la fonction est la suivante~:
+   La définition de la fonction est la suivante&nbsp;:
    <ul>
    <li>On déclare <tt>somme</tt> comme une fonction avec un paramètre
         <tt>table</tt>
@@ -131,14 +131,6 @@ add(name="ajoute complexe",
     l'objectif de ce cours.""",
     )
 
-'''
-nb = [0]*13
-for d1 in range(1, 7):
-  for d2 in range(1, 7) :
-    nb[d1+d2] += 1
-print(nb)
-'''
-
 add(name="somme 2 dés",
     required=['table:range', 'control:for', 'table:multiplication',
               'io:print'],
@@ -172,6 +164,7 @@ add(name="somme 2 dés",
             ('b+a', 'a+b'),
             ('nb[a+b]=nb[a+b]+1', 'nb[a+b]+=1'),
             ('nb[a+b]=1+nb[a+b]', 'nb[a+b]+=1'),
+            ('13*[0]', '[0]*13'),
             ),
                        Equal('''nb = [0]*13
 for a in range(1, 7):
@@ -181,7 +174,8 @@ print(nb)''')))),
         Expect('13', """Vous devez initialiser <tt>nb</tt> avec un tableau
         contenant 13 entiers nul en utilisant la multiplication de tableau"""),
         Reject('range(6)', """Les variables représentant les dés doivent
-        prendre des valeurs entre 1 et 6 inclu (pas entre 0 et 5)"""),
+        prendre des valeurs entre 1 et 6 inclu (pas entre 0 et 5).
+        Utilisez <tt>range(1,7)</tt>."""),
         Reject('range(1,6)', """Les variables représentant les dés doivent
         prendre des valeurs entre 1 et 6 inclu (pas entre 1 et 5)"""),
         P(Replace((('b+a', 'a+b'),),
@@ -248,7 +242,7 @@ add(name="racine carré",
                        """Je ne vois pas la différence entre la racine
                        précédente et la nouvelle""",
                        ))),
-        Good(P(Replace((('racine_courante-racine_precedente',
+        Good(RemoveSpaces(Replace((('racine_courante-racine_precedente',
                          'racine_precedente-racine_courante'),
                         ('racine_courante+nombre/racine_courante',
                          'nombre/racine_courante+racine_courante'),
@@ -259,14 +253,14 @@ add(name="racine carré",
                         ('1/1000', '0.001'),
                         ('1e-3', '0.001'),
                         ('10**-3', '0.001'),
-                        ),Equal(
+                        ),P_AST(Equal(
                         """def racine_carree(nombre):
   racine_precedente = 0
   racine_courante = nombre / 2
   while abs(racine_precedente - racine_courante) > 0.001:
      racine_precedente = racine_courante
      racine_courante = (nombre/racine_courante + racine_courante) / 2
-  return racine_courante""")))),
+  return racine_courante"""))))),
                 
         ),
     )
@@ -303,7 +297,10 @@ def creer_matrice(nb_lignes, nb_colonnes, valeur):
    return matrice'''
     )))),
         expects(('def', 'creer_matrice', 'nb_lignes', 'nb_colonnes',
-                 'valeur', 'append', 'return', 'numero_ligne')),
+                 'valeur', 'return', 'numero_ligne')),
+        Expect('append', """Dans la boucle vous devez utiliser la
+               fonction <tt>append</tt> pour ajouter une ligne à
+               la matrice."""),
         Expect('range',
                """Vous devez faire la boucle autant de fois qu'il y a
                   de lignes à créer, vous devez donc utiliser <tt>range</tt>
