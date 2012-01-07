@@ -47,9 +47,6 @@
       <li> <a href="#methodes">Méthodes de travail</a></li>
       <li> <a href="#exploitation">Exploitation des trace</a></li>
       </ul>
-      <li> <a href="#todo">TODO</a></li>
-      <li> <a href="#nottodo">Not TODO</a></li>
-      <li> <a href="#changements">Historique des changements</a></li>
     </ul>
     </div>
 
@@ -208,17 +205,6 @@
 -->
 </li>
     </ul>
-
-    <h2><a name="graphe">Graphe des questions</a></h2>
-    <p>
-      Le graphe des questions peut être affiché
-      de différentes manière.
-      Voici ce que donne l'une d'elle.</p>
-
-    <h2><a name="graphePython">Python</a></h2>
-    
-    <a href="Students/python/HTML/xxx.ps"><img src="Students/python/HTML/xxx.png" alt=""></a><br>
-
 
 
     <h2><a name="definir">Comment définir des exercices</a></h2>
@@ -974,74 +960,6 @@ class UpperCase(TestUnary):
     </ul>
 
 
-
-    <h2><a name="todo">Todo</a></h2>
-
-    <p>
-      Sur le système lui-même&nbsp;:</p>
-    <ul>
-	<li> Afficher erreur si le nom de la question contient des () </li>
-	<li> Faire un éditeur interactif de question.</li>
-      <li> Passer les noms d'invité en minuscules pour éviter les doublons,
-	ajouter un anti-SPAMMER, limiter la tailler des noms</li>
-      <li> Indiquer pour chaque question les cheminements d'étudiant
-           les plus long jusqu'à la bonne réponse (ou sans réponse)
-	en affichant les indices donnés par le système.
-      </li>
-      <li> Indiquer l'adresse IP / machine de derniere connexion </li>
-      <li> Afficher le mail de l'étudiant sur sa page de stat </li>
-      <li> Tester le cas des noms d'utilisateur avec des '?'</li>
-      <li> BUG: Le graphique des questions n'est pas affiché à la première
-	connexion.</li>
-      <li> Pouvoir envoyer un message à un étudiant, le message
-	apparaîtra sur toutes les pages jusqu'à ce que l'étudiant le ferme.
-	</li>
-      <li> Liste des bonnes réponses COURTE pour diffuser aux étudiants</li>
-      <li> Indiquer le nombre de caractères différents, la longueur,
-	le nombre de mots par rapport à la bonne réponse la plus proche</li>
-      <li> Faire une question_map pour l'enseignant qui met
-	en évidence les questions affichées sur les écrans des étudiants.</li>
-      <li> Faire en sorte que le SVG soit imprimable :
-	problème du background,	changer les marges.
-      <li> Pointeur SVG sur la carte des questions en pixels.</li>
-      <li> Problème langue sur la durée si elle est supérieur à 24 heures.</li>
-      <li> Choix de la langue dans la configuration ?</li>
-      <li> Amélioration vitesse : statistiques incrémentales.
-	C'est obligatoire si l'on veut supporter des centaines
-	  d'étudiants simultanés.</li>
-      <li> Faire les boutons : 'il manque des indices', 'le message d'aide est inaproprié', ...
-      <li> Liste des connectés ? Liste des étudiants ?</li>
-      <li> Faire disparaitre configuration.py ?</li>
-      <li> Le tester sous Windows</li>
-    </ul>
-
-    <p>
-      Pour les différents questionnaires,
-      il faut regarder dans <tt>Questions/.../TODO</tt>
-    
-
-    <h2><a name="nottodo">Not Todo</a></h2>
-    <ul>
-      <li> Faire une 'thread' pour la partie affichage page ?<br>
-	Non, car le système supporte sans problème en mono tache&nbsp;:
-	<table border="1">
-	    <tbody><tr><th>Nb Étudiants</th><th>Questionnaire</th><th>Mémoire</th><th>Max des temps moyens de réponse sur 5 minutes</th></tr>
-	    <tr><td>50</td><td>unix</td><td>?</td><td>0.024 secondes</td></tr>
-	    <tr><td>100</td><td>unix</td><td>?</td><td>0.035 secondes</td></tr>
-	    <tr><td>200</td><td>unix</td><td>?</td><td>0.14 secondes</td></tr>
-	    <tr><td>300</td><td>unix</td><td>70Mo</td><td>1.55 secondes</td></tr></tbody>
-      </table>
-	<p>Et faire du multi tâche complique inutilement bien que
-	  cela ne devrait pas poser de problème grace à la séparation
-	  <tt>action</tt> et <tt>page</tt>.</p>
-	<p>
-	  De plus, on peut encore optimiser le code.</p></li>
-      <li> Mot de passe pour guest :<br>
-	non car c'est le nom et cela n'en vaut pas la peine.</li>
-      <li> URL avec que des ?x=y plus de / pour le numero et le nom :<br>
-	NON car on ne peut pas utiliser BASE.</li>
-
-    </ul>
 
 
     <hr>

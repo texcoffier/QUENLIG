@@ -284,7 +284,7 @@ if 'plugins.html' in sys.argv:
                 f.write('</tr>')
         f.write('</table>')
         
-    f = open('plugins.html', 'w')
+    f = open(os.path.join('Documentation', 'plugins.html'), 'w')
     f.write('''<style>
 TR { vertical-align: top; }
 BODY { font-family: sans-serif; }
@@ -373,7 +373,7 @@ You can click on plugin attributes to see there definition.
         except TypeError:
             pass
 
-    f = open('tests.html', 'w')
+    f = open(os.path.join('Documentation', 'tests.html'), 'w')
     f.write('''
 <style>
 BODY { font-family: sans-serif ; }
@@ -409,8 +409,6 @@ EM { font-family: sans-serif ; }
                 f.write('</ul>')
     display_tests( questions.TestExpression)  
     f.close()
-    
-
 
     sys.exit(0)
 
@@ -490,17 +488,8 @@ SET TEMPORARY SESSION OPTIONS:
                 ))    
     sys.exit(1)
 
-mkdir('Students')
-mkdir(session.dir)
-session.set_begin_date('1:1 1/1/1970', overwrite=False)
-session.set_end_date('3:3 3/3/2033', overwrite=False)    
-mkdir(session.dir + 'Logs' )
-mkdir(session.dir + 'HTML' )
-configuration.root = os.getcwd()
-
-if __name__ == "__main__":
-    if len(args) == 0:
-        sys.stderr.write("""
+if __name__ == "__main__" and len(args) == 0:
+    sys.stderr.write("""
     You indicate no action to do about your session named '%s'
 
     Run without parameters to see the help.
@@ -510,10 +499,19 @@ if __name__ == "__main__":
     main.py unix2007 create Questions/unix 55555
     main.py unix2007 admin  guestadmin
     main.py unix2007 start
-    """ % session.name )
-        sys.exit(1)
+    \n""" % session.name )
+    sys.exit(1)
 
+    
+mkdir('Students')
+mkdir(session.dir)
+session.set_begin_date('1:1 1/1/1970', overwrite=False)
+session.set_end_date('3:3 3/3/2033', overwrite=False)    
+mkdir(session.dir + 'Logs' )
+mkdir(session.dir + 'HTML' )
+configuration.root = os.getcwd()
 
+if __name__ == "__main__":
     while args:
         action = args.pop()
         if action == 'start':

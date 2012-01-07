@@ -1,17 +1,15 @@
 
 
 
-Dans la doc des test: piocher dans les répertoires
+Questionnaire Python : anonymiser les variables
 
 Ensuite je ferais les documentations pour les personnes :
     * définissant les exercices ;
     * ajoutant de nouveaux types de test ;
     * ajoutant de nouveaux plugins.
 
-
 TODO Absolute :
 
-	Le rechargement d'une question empeche les etudiant d'y aller
 	Adresses IP dans stats étudiant
 	Changer les dates de début et fin par le web
 	Authentitification boucle si l'URL se termine par /
@@ -33,6 +31,12 @@ TODO Absolute :
 	plugin : language
 
 TODO maybe :
-	Extract 'auto focus' from 'questions.py' ?
-	Split 'tips' from 'page.py' ?
+     Passer les noms d'invité en minuscules pour éviter les doublons,
+     	    ajouter un anti-SPAMMER, limiter la tailler des noms
+     Pouvoir envoyer un message à un étudiant, le message
+     	    apparaîtra sur toutes les pages jusqu'à ce que l'étudiant le ferme.
+     Faire un éditeur interactif de question.
+     Extract 'auto focus' from 'questions.py' ?
+     Split 'tips' from 'page.py' ?
+     Liste des bonnes réponses COURTE pour diffuser aux étudiants
 
