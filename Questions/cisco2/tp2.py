@@ -39,7 +39,7 @@ add(name="intro",
     Faites en priorité les questions en caractères <b>gras</b>.
     <p>
     <b>Soit les variables 'bonnes', 'mauvaises', 'indices' entre 0 et 1.
-    La note de TP est égale à : bonnes*bonnes*(20-6*mauvaises-2*indices).</b>
+    La note de TP est égale à : bonnes<sup>2</sup>*(20-6*mauvaises<sup>0.3</sup>-2*indices<sup>0.3</sup>).</b>
     En répondant à toutes les questions vous avez donc 12/20 au minimum.
     En répondant à la moitié des questions sans faire aucune erreur
     et sans demander d'indice, vous avez au mieux 5/20.
@@ -202,7 +202,7 @@ for i in (0,1):
         required=["lien:remote s%d OK" % i],
         question="""Quelle commande tapez-vous sur votre routeur
         pour pinguer le port ethernet
-        du routeur qui est connecté au votre via le port série %d&nbsp;?
+        du routeur qui est connecté au votre via votre port série %d&nbsp;?
         <p>
         Donnez votre réponse même si le ping échoue.
         """ % i,

@@ -21,6 +21,8 @@
 
 """display the 'before answering' informations box."""
 
+import random
+
 priority_display = 'title_bar'
 acls = { 'Default': ('executable',) }
 
@@ -28,4 +30,5 @@ def execute(state, plugin, argument):
     if state.question == None or state.question.before == None:
         return None
 
+    random.seed(state.student.seed)
     return state.question.before(state)

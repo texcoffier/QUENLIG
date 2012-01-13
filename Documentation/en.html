@@ -1,0 +1,906 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Quenlig: Online Questionnary</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <link href="doc.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="menu">
+      <p>
+      Table of Content</p>
+    <ul>
+      <li> <a href="#quoi">What's Quenlig?</a></li>
+      <li> <a href="#run">Running Quenlig</a></li>
+      <li> <a href="#create">Questionnary Creation</a></li>
+      <li> <a href="#question">Question Creation</a></li>
+      <li> <a href="#question_reference">Question Reference</a></li>
+      <ul>
+      <li> <a href="#name"><tt>name</tt></a></li>
+      <li> <a href="#required"><tt>required</tt></a></li>
+      <li> <a href="#before"><tt>before</tt></a></li>
+      <li> <a href="#question"><tt>question</tt></a></li>
+      <li> <a href="#tests"><tt>tests</tt></a></li>
+      <li> <a href="#indices"><tt>indices</tt></a></li>
+      <li> <a href="#nr_lines"><tt>nr_lines</tt></a></li>
+      <li> <a href="#default_answer"><tt>default_answer</tt></a></li>
+      <li> <a href="#highlight"><tt>highlight</tt></a></li>
+      <li> <a href="#maximum_bad_answer"><tt>maximum_bad_answer</tt></a></li>
+      <li> <a href="#good_answer"><tt>good_answer</tt></a></li>
+      <li> <a href="#bad_answer"><tt>bad_answer</tt></a></li>
+      </ul>
+
+      <li> <a href="#session_management">Session Management</a></li>
+      <li> <a href="#student_management">Student Management</a></li>
+      <li> <a href="#access_rights">Access rights</a></li>
+      <li> <a href="#author_work">Author work</a></li>
+      <li> <a href="#test_creation">Test creation</a></li>
+      <ul>
+      <li> <a href="#leaves">Leaves</a></li>
+      <li> <a href="#canonizers">Canonizers</a></li>
+      <li> <a href="#expressions">Expressions</a></li>
+      <li> <a href="#comments">Comments</a></li>
+      <li> <a href="#goodbad">Good/Bad</a></li>
+      </ul>
+      <li> <a href="#plugin_creation">Plugin creation</a></li>
+      <li> <a href="#developper_tools">Developper tools</a></li>
+    </ul>
+    </div>
+
+    <div class="texte">
+    <h1>Quenlig: Online Questionnary</h1>
+
+    <p>
+      This documentation can be read from begin to end,
+      it starts with the most common pattern usages
+      and also contains links to full technical references.
+      As the system is easely extensible in many ways
+      it is adaptable to any usage case.
+    </p>
+
+    <h2><a name="quoi">What's Quenlig?</a></h2>
+
+    <p>
+      Quenlig allow to create interactive "free text" questionnaries
+      on the web.
+    </p>
+    <ul>
+      <li> It displays a question list containing only answerable questions.
+	A question is answerable only if all the prerequired questions
+	have yet been answered.
+      </li>
+      <li> The student choose a question in the list, then Quenlig
+	displays:
+	<ul>
+	  <li> Some informations needed before answering the question,
+	    as fragments of the courses, things to be prepared before
+	    answering.
+	  <li> The question text.
+	  <li> The place where the student enter its answer.
+	  <li> A link allowing to get a tip to answer the question.
+	</ul>
+      </li>
+      <li> When the student answer, Quenlig may display additionnal information
+	to explain its bad answer, to guide the student to the good answer
+	or to a better answer,
+	or to give additionnal information contextual to the student answer.
+
+      <li> Quenlig displays statistics about the work done by the student:
+	the number of questions done or to do, the number of bad answers,
+	the number of tips asked and the rank of the student in the class.
+      </li>
+      
+      <li> Quenlig allows the student to see all its answers,
+	to leave a comment for the teacher about the question,
+	to see an help page about the questionnary.
+      </li>
+
+      <li> Quenlig allows the teachers to locate students with problems
+	or cheaters.
+	It provides questionnary author with analysis tools in order to
+	enhances the questionnary.
+	</li>
+    </ul>
+
+    
+    <h2><a name="run">Running Quenlig</a></h2>
+
+    <p>You can try a french unix questionnary at this place (you need
+      to enter an alias):
+      <a href="http://demo710.univ-lyon1.fr/-quenlig-/guest.html">
+        http://demo710.univ-lyon1.fr/-quenlig-/guest.html
+	</a>
+    </p>
+    <p>To run your own server, use the following suite of commands:
+    </p>
+    <pre>
+# Create in 'Students' directory a new questionnary session.
+# The questions are in the directory 'Questions/unix'
+# When running the server will be listening on TCP port 9999
+./main.py Unix2010Spring create Questions/unix 9999
+# The guest user named 'admin' will be session administrator.
+./main.py Unix2010Spring admin guestadmin
+# Start the server, it displays the URL to use to access it.
+./main.py Unix2010Spring start
+</pre>
+    <p>If you use CAS authentication, you can
+      configure Quenlig to use it.
+      </p>
+
+    <h2><a name="create">Questionnary creation</a></h2>
+    <p>
+      The questionnaries are not defined as data structures
+      but as Python programs.
+      This is much more flexible approach,
+      it allows to have algorithms creating the question and checking
+      the answers.
+    </p>
+    <p>
+      The questionnaries are defined in 'Questions' directory.
+      The 'C_variable' directory contains a small commented questionnary.
+      The questionnary directory must contain an empty <tt>__init__.py</tt>
+      file to please Python.
+    </p>
+    <p>
+      The filenames used to contains the questions are visible by the students.
+      The filename must be short, it defines in one word the subject
+      or domain of all the questions it contains.
+      This name is important, it helps the student to see the context
+      of the question.
+    </p>
+    <p>
+      Each file contains questions, the recommended way to create
+      questions is to start from the most simple ones.
+      When a complex question is defined, it requires that the student
+      answered correctly a set of other questions.
+      This set of other question ensure that the student
+      has the needed knowledges to answer the complex one.
+    </p>
+    <p>
+      When Quenlig displays a question, it displays the information
+      about the required questions.
+      This will give the student a context to answer the current question.
+      It will see its old answers and may reuses parts of them to answer.
+    </p>
+    
+    <h2><a name="question">Question creation</a></h2>
+    <p>
+      The file containing the questions should start by
+    </p>
+    <pre>
+# -*- coding: utf-8 -*- 
+from questions import * # all the needed functions
+</pre>
+
+    A minimal question is:
+    <pre>
+add(name="hello",
+    question="Are you ready?",  # Question text is in HTML
+    tests=(
+           Good(Equal("yes")),
+          )
+    )
+</pre>
+    <p>
+      If you want to add a comment about the student answer:
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(<em>Comment(</em>Equal("yes")<em>,
+	                "Hit return to see the next question")</em>
+               ),
+          )
+    )
+</pre>      
+    <p>
+      This question requires that the student answer exactly 'yes'
+      and not 'Yes' or 'YES'.
+      To turn arround this problem, the student answer can be uppercased.
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(<em>UpperCase(</em>Equal("yes")<em>)</em>),
+          )
+    )
+</pre>
+    <p>
+      If you also want to allow the answer 'sure' and the digit '1'
+    </p>
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(UpperCase(Equal("yes")<em>
+	                  | Equal("sure")
+			  | Equal("1")</em>)),
+          )
+    )
+</pre>
+    <p>
+      If you don't like complex expression, it is possible to write:
+    </p>
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(UpperCase(Equal("yes"))),
+<em>           Good(UpperCase(Equal("sure"))),
+           Good(Equal("1")),</em>
+          )
+    )
+</pre>
+    <p>
+      The tests are done from the first to the last until a test
+      tell that the answer is good or bad.
+    </p>
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(UpperCase(Equal("yes"))),
+<em>           Bad(UpperCase(Comment(Equal("no"),
+                                 "Are you joking?")),</em>
+           Good(UpperCase(Equal("sure"))),
+          )
+    )
+</pre>
+    <p>
+      If a student answer 'Yes I am' its answer will be rejected,
+      we should not test equality, but only that its answer contains 'yes'.
+    </p>
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(UpperCase(<em>Contain</em>("yes"))),
+          )
+    )
+</pre>
+    <p>
+      There is no help if the students answers 'foobar',
+      it is not nice for the student.
+      The tilda indicates the negation, so the student answer
+      does not contain 'yes'.      
+    </p>
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(UpperCase(Contain("yes"))),
+           <em>Bad(UpperCase(Comment(~ Contain("yes"),
+                                 "Please answer 'yes' or 'no'")
+	                )),</em>
+          )
+    )
+</pre>
+    <p>
+      Another way to add help is to allow the student to ask tips.
+      Most of the time it is better to give a good bad answer
+      comment than to add tips.
+      The students do not know when to ask tips, some always ask them,
+      some never. And they are frustrated when the tip was yet
+      given in a bad answer comment or when it is as lame as « Read the manual »
+    </p>
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(UpperCase(Contain("yes"))),
+          )<em>,
+    indices = ("You must answer a 3 letters english word",
+               # The tip are in HTML
+	       "Enter &lt;b&gt;yes&lt;/b&gt; if you are ready.",
+	      ),</em>
+   )
+</pre>
+    <p>
+      Or more simple way to do all this is to use a base test
+      that does all this work:
+   </p>
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           <em>Yes(),</em>
+	   ),
+    )
+</pre>   
+    <p>
+      Now if the student answered this first question, a second
+      question must be available.
+      With the following test, any number greater or equal to 18 are
+      a good answer.
+      If the student enter a string that is not a number, a comment
+      will explain that an integer answer is required.
+   </p>
+     <pre>
+add(name="age",
+    question="How old are you?",
+    <em>required=["hello"],</em>
+    tests=(
+          Good(IntGT("17")),
+	   ),
+    )
+</pre>   
+    <p>
+   Do not forget, the order of the tests is important, the bad test
+   will never make it if you put it after the good one:
+   </p>
+     <pre>
+add(name="age",
+    question="How old are you?",
+    required=["hello"],
+    tests=(
+          <em>Bad(Comment(IntGT("100"), "Your real age please.")),</em>
+          Good(IntGT("17")),
+	   ),
+    )
+</pre>   
+    <p>
+      An another problem is that students may append 'years' to their answer.
+      It is possible to get ride of it by using a replacement.
+      The 'Replace' operator apply all the string substitutions to
+      the student answer before continuing the testing.
+   </p>
+     <pre>
+add(name="age",
+    question="How old are you?",
+    required=["hello"],
+    tests=(
+          Good(<em>Replace((
+                        (' ', ''),
+                        ('years', ''),
+                       ), </em>IntGT("17")<em>)</em>),
+	   ),
+    )
+</pre>
+     <p>
+       If you also want to accept '20 Years' with an uppercase then
+       there is a little problem because canonizers are not applied
+       to <tt>Replace</tt> parameters.
+       It is done so because for most of the canonizers there is little sense
+       to apply to string parts.
+       The correct way to do the test is presently:
+     </p>
+     <pre>
+add(name="age",
+    question="How old are you?",
+    required=["hello"],
+    tests=(
+          Good(<em>UpperCase(</em>Replace((
+                        (' ', ''),
+                        ('<em>YEARS</em>', ''),
+                       ), IntGT("17"))<em>)</em>),
+	   ),
+    )
+</pre>
+      
+    <h2><a name="question_reference">Question reference</a></h2>
+
+    <p>
+      There are all the possible arguments of the 'add' question function.
+    </p>
+      
+
+    
+    <h3><a name="name">Parameter: <tt>name</tt></a></h3>
+
+    <p>
+      It is the question name, keep it short and avoid special characters,
+      especially '/', ':', '(', ')'. It may contain spaces.
+      It is the name displayed in the question list,
+      so it must not clearly give the good answer.
+    </p>
+
+    <h3><a name="required">Parameter: <tt>required</tt></a></h3>
+
+    <p>
+      It is a list of required question name that must have been answered
+      in order to see this one.
+      If this parameter is not provided then the preceding question
+      in the file is considered as required.
+      <b>It is a bad idea to do so because a change in the questions order
+	will break the dependencies tree.</b>
+      If there is not preceding question, then there is no dependencies
+      and the question will be visible immediatly.
+    </p>
+    <p>
+      If a question name contains <tt>:</tt>
+      then it references a question in another file of the questionnary.
+      The left part is the filename without the <tt>.py</tt> extension.
+    </p>
+    <p>
+      If the question name is followed by <tt>(regular expression)</tt>
+      then the student answer must match the regular expression.
+      For example <tt>personnel:sexe([mM])</tt>
+      will require that the answer given to 'sexe' question in
+      the 'personnel.py' file is 'm' or 'M'.
+    </p>
+
+    
+    <h3><a name="before">Parameter: <tt>before</tt></a></h3>
+
+    <p>
+      Defines the text displayed before the question itself.
+      It contains general explanation to help the student
+      or things that must be done or checked BEFORE reading the
+      question itself.
+    </p>
+    <p>
+      The value of this parameter can be an HTML string or a function
+      returning an HTML string.
+      The function may have a 'state' parameter allowing to get
+      information about the student or the IP address of its computer.
+    </p>
+    <p>
+      If in the function, random function are used, it will always
+      return the same random serie. Each student will have a
+      different random serie.
+    </p>
+    <p>
+      To put 'my_picture' in the HTML, store the file in
+      'Questions/YourQuestionnary/HTML/my_picture.png'
+      and give the link: <tt>&lt;IMG SRC='my_picture.png'&gt;</tt>
+    </p>
+    <p>
+      If you want to add a CSS style to your questionnary,
+      put it in 'Questions/YourQuestionnary/HTML/questions.css'
+    </p>
+    
+    <h3><a name="question">Parameter: <tt>question</tt></a></h3>
+
+    <p>
+      It is the question text, it is defined exactly as the 'before'
+      parameter and so it may be generated specificaly for each student.
+    </p>
+    <p>
+      It is possible to display check buttons in place
+      of a free text input.
+      To do so, in your question text, use <tt>{{{an answer}}}</tt>
+      to indicate the possible choices.
+      For example:
+    </p>
+      <pre>question = "Are you {{{M}}} male or {{{F}}} female?"</pre>
+    <p>
+      The possible student answer may by 'M' or 'F' or 'M F'
+    </p>
+
+    <h3><a name="tests">Parameter: <tt>tests</tt></a></h3>
+
+    <p>
+      The list of tests to be done on the student answer.
+      If this parameter is not defined then the student will see
+      the question but will not have a way to enter its answer.
+    </p>
+    <p>
+      There is many tests in the
+      <a href="tests.html">test reference documentation</a>.
+      These tests are not all of the same kind:
+    </p>
+    <ul>
+      <li> The final answer returns True to indicates a good
+	answer, False for a bad and None if the testing must continue.
+	For example:
+	    <a href="tests.html#Good">Good</a>,
+	    <a href="tests.html#Bad">Bad</a>,
+	    <a href="tests.html#Yes">Yes</a>,
+	    <a href="tests.html#No">No</a>,
+	    <a href="tests.html#Expect">Expect</a>,
+	    <a href="tests.html#Reject">Reject</a>,
+      <li> The expression leaves really test the student answer,
+	they return True is the test is fine.
+	For example:
+	    <a href="tests.html#Equal">Equal</a>,
+	    <a href="tests.html#Start">Start</a>,
+	    <a href="tests.html#End">End</a>,
+	    <a href="tests.html#Contain">Contain</a>,
+	    <a href="tests.html#Int">Int</a>,
+	    <a href="tests.html#IntLG">IntLG</a>,
+	    <a href="tests.html#IntGT">IntGT</a>,
+	    <a href="tests.html#NumberOfIs">NumberOfIs</a>,
+	    <a href="tests.html#TestFunction">TestFunction</a>,
+	    <a href="tests.html#Length">Length</a>,
+	    <a href="tests.html#LengthLT">LengthLT</a>,
+	    <a href="tests.html#TestDictionnary">TestDictionnary</a>,
+
+     <li> The string canonizers allows to transform the student answer
+       and the teacher expected answer to make them as close as possible.
+       Beware, the transformation is applied to the 'Equal' parameter
+       but not to the 'Replace' string list because it has little sense.
+       Example of canonizers:
+	    <a href="tests.html#RemoveSpace">RemoveSpaces</a>,
+	    <a href="tests.html#Replace">Replace</a>,
+	    <a href="tests.html#SortLines">SortLines</a>,
+	    <a href="tests.html#UpperCase">UpperCase</a>.
+	    Specific canonizers are defined in the questionnaries
+	    for specific languages: Shell, Python, C, Cisco...
+
+     <li> Boolean operation:
+       <a href="tests.html#And">And</a> '&amp;',
+       <a href="tests.html#Or">Or</a> '|',
+       <a href="tests.html#TestInvert">Negation</a> '~',
+
+	 <li> The comment operator that add a comment if its parameter
+	   is True: <a href="tests.html#Comment">Comment</a>
+
+    </ul>
+
+
+
+    <h3><a name="indices">Parameter: <tt>indices</tt></a></h3>
+
+    <p>
+      A list of tips given as HTML strings.
+      They are given one by one when asked.
+    </p>
+
+
+    
+    <h3><a name="nr_lines">Parameter: <tt>nr_lines</tt></a></h3>
+
+    <p>
+      An integer defining the number of lines expected for the student
+      answer. The default value is one.
+    </p>
+
+    <h3><a name="default_answer">Parameter: <tt>default_answer</tt></a></h3>
+
+    <p>
+      A string that defines a default answer.
+      The student will modify this default answer in order to
+      answer the question.
+    </p>
+
+
+    <h3><a name="highlight">Parameter: <tt>highlight</tt></a></h3>
+
+    <p>
+      If this parameter is True then the question is highlighted
+      in the questions list.
+      The student should answer to this question quickly because
+      it is very contextual with its last answer.
+    </p>
+
+
+    <h3><a name="maximum_bad_answer">Parameter: <tt>maximum_bad_answer</tt></a></h3>
+
+      <p>
+	Specifies the maximum number of bad answer allowed.
+	When the student has given the maximum bad answers
+	the question will no more be in the question list.
+	The student will not be able to answer the question.
+      </p>
+
+      <h3><a name="good_answer">Parameter: <tt>good_answer</tt></a></h3>
+
+    <p>
+      This HTML text will be displayed to the student
+      when it answers correctly.
+    </p>
+
+    <h3><a name="bad_answer">Parameter: <tt>bad_answer</tt></a></h3>
+
+    <p>
+      This HTML string will be displayed to the student each time
+      a bad answer is given.
+      It will be displayed even if a specific bad answer comment
+      is also given.
+      So it is not a good way to do the feedback.
+      <b>It is not recommended to use this parameter</b>.
+    </p>
+    <p>
+      To add a comment on non commented bad answer a better way is
+      to add this last test to the 'tests' parameter :
+      <tt>Bad(Comment(Contain(''), "The comment"))</tt>
+    </p>
+    <p>
+      The usage of Quenlig shows that generic bad answer comment
+      does not really help the student.
+    </p>
+      
+    <h2><a name="session_management">Session Management</a></h2>
+
+    <p>
+      Quenlig management is done with the <tt>./main.py</tt> command.
+      If you run it without parameter,
+      it will display the help about the command line parameters
+      and the list of sessions with the questionnary name,
+      the TCP port used, the process and computer running it,
+      the session start date and duration.
+    </p>
+    <p>
+      The first parameter of <tt>./main.py</tt> is the session name.
+      It is the name of the sub directory of 'Students' that
+      contains all the informations about the session and the students.
+      The following parameters defines actions and may be concatened.
+      The most useful actions are:
+    </p>
+    <ul>
+      <li> <tt>create Questions/C_variable 9999</tt> :
+	    it creates a new session (the name is the first parameter),
+	    using questions in 'Questions/C_variable' directory and
+	    will be listening on TCP port 9999.
+      <li> <tt>admin guestjoe</tt> : the role 'Teacher' is
+	given to the guest user named 'joe'.
+      <li> <tt>start</tt> : start the server for the session.
+      <li> <tt>stop</tt> : stop the server for the session.
+      <li> <tt>begin-date "15:00 31/1/2011"</tt> :
+	The students will be allowed to start to work
+	at 3PM the january 31 2011.
+      <li> <tt>end-date "16:00 31/1/2011"</tt> :
+	No more student answer will be accepted after 
+	4PM the january 31 2011.
+      <li> <tt>url "http://quenlig.my-university.org/session_name"</tt> :
+	Quenlig server will assume that it is used with this URL.
+	It is useful to hide the port number to students or to
+	use a reverse proxy to jump over a firewall.
+    </ul>
+      
+    <p>
+      A user with the admin rights will use the web interface
+      to take the <tt>Teacher</tt> role and see all the informations
+      about the student group.
+      The user interface is self explanatory, use it to see
+      the possibilities.
+    </p>
+      
+    <h2><a name="student_management">Student Management</a></h2>
+
+    <p>
+      The ACLS (access rights and much more)
+      define the things the user is allowed to do
+      when it is using Quenlig.
+      The ACLS of an user is defined by the ACLS of the current
+      role of the user and then by the ACLS specifics to the user.
+    </p>
+    <p>
+      The roles are defined exactly the same way than users,
+      there is no difference, a user name can be used as a role name.
+      You can add as many roles as you want.
+      Two roles are hardcoded into Quenlig:
+    </p>
+    <ul>
+      <li> <tt>Default</tt> role is defined recursively because
+	it is the base type for all the roles.
+	It is the default user role and so define what the students can do.
+      <li> <tt>Teacher</tt> default <b>role</b> is
+	    <tt>Default</tt> and it is initialized with ACLS
+	    allowing it to be usable
+	    by the session managers and questionnary authors.
+    </ul>
+
+    <p>
+      Currently there is no student management with the web interface.
+      So the operations must be done directly on the files.
+      For each student and role there is a directory named
+      <tt>Students/YourSessionName/Logs/TheStudent</tt>
+      containing:
+    </p>
+    <ul>
+      <li> <tt>log</tt> : all the logged data about the student.
+      <li> <tt>roles</tt> : a Python list of possible roles for the user.
+      <li> <tt>acls</tt> : a Python dictionnary whose keys are Quenlig plugin
+	names and the values define in which ways the plugin can be used.
+    </ul>
+    <p>
+      The modifications of <tt>Default</tt> or <tt>Teacher</tt> ACLS
+      will propagate to all the users using these roles.
+      If the files are modified manually Quenlig server must be
+      restarted to make the change effectives.
+    </p>
+    
+    <h2><a name="access_rights">Access Rights (ACLS)</a></h2>
+
+    <p>
+      A Quenlig page is created by the composition of many plugins.
+      The ACLS defines for each plugins the operations allowed on the plugin.
+      Currently the only operation is <tt>executable</tt>, in the future
+      other operations may be added as <tt>movable</tt> or <tt>hidable</tt>.
+    </p>
+    <p>
+      There is an example of <tt>YourSession/Logs/Default/acls</tt> file:
+      <pre>
+# The file contains a Python dictionnary.
+{
+  # Allow the students to modify their good answer if they want.
+  'question_change_answer': ('executable',),
+  # Allow the students to connect at any time
+  # This ACL change is commonly done for one student,
+  # needing to work out of the normal hours.
+  'session_start': ('!executable',),
+  'session_stop': ('!executable',),
+  # do not display session duration it is not applicable.
+  'session_duration': ('!executable',),
+  # The smileys and rank are only useful when all the student
+  # are working at the same time.
+  'statmenu_smiley': ('!executable',),  
+  'statmenu_rank': ('!executable',),
+  # Do not display the number of bad answers.
+  'statmenu_bad':('!executable',),
+  # Do not shuffle the questions.
+  'questions_shuffle': ('!executable',),
+}
+</pre>
+      <p>
+	You can find the plugin names
+	in the <a href="plugins.html">plugin reference page</a>.
+	Another way is to take the <tt>Teacher</tt> role
+	and click on <tt>Debug</tt>.
+	A star will be visible next to each GUI element,
+	by putting the cursor on the star you will find out
+	the name of the plugin displaying the GUI element.
+	</p>
+
+      
+      <h2><a name="author_work">Author work</a></h2>
+
+      <p>
+	The questionnary creation takes a long time,
+	about one hour per question if you want to help the students.
+	It is recommended to put a minimal amount of time for
+	the question creation but to take more time after each session
+	to analyse the bad student answers.
+      </p>
+      <p>
+	With the teacher role, for each question 
+	all the bad answers and comments will be displayed.
+	The identical bad answers are merged and there is
+	the list of student having given this bad answer.
+      </p>
+      <p>
+	The bad answers that where not commented to help the student
+	are with a red background.
+	If there is more than one student giving this bad answer,
+	an explanation must be given to the student.
+      </p>
+      <p>
+	When adding tests to a question, the recommended way
+	is to put all the Good tests in front and the
+	other tests after.
+	It is a bad idea to add a Reject in front of the others because
+	one of the Good tests after may use the rejected string.
+	If there is many Good tests, it is easy to miss the problem.
+      </p>
+      <p>
+	The questionnary author can modify the Python source
+	defining the question and then clicks on « Reload question »
+	to update its page with the new question.
+	It will verify the behaviour of the updated question.
+	It will see the comments given to the students have
+	been correctly updated.
+      </p>
+      <p>
+	Currently, if the question change introduced a Python
+	syntax error then all the questions defined in the file
+	are no more accessible by the students.
+	So, think twice before using this feature when
+	tens of students are working.
+      </p>
+    
+      <h2><a name="test_creation">Test creation</a></h2>
+      <p>
+	A test is a class with the following methods and attributes.
+	The class hierarchy of test is defined in the
+	<a href="tests.html">test reference documentation</a>.
+      </p>
+
+      <h3><a name="leaves">Leaves of the test expression</a></h3>
+
+      <p>
+	Most of the leaves are based on string tests,
+	the <tt>TestString</tt> base class is here to help,
+	it provides the canonization (disablable) of the test parameter
+	in <tt>self.string_canonized</tt>.
+	The only thing to do to create a new test is to
+	define the <tt>do_test</tt> method that is returning a boolean and
+	a specific comment for the student.
+      </p>
+      <pre>
+class Contain(TestString):
+    def <em>do_test</em>(self, student_answer, state):
+        return self.string_canonized in student_answer, ''
+</pre>
+      <p>
+	The <tt>__init__</tt> and <tt>canonize_test</tt>
+	methods are inherited from <tt>TestString</tt>:
+      </p>
+      <pre>
+class TestString(TestExpression):
+    def <em>__init__</em>(self, string, canonize=True):
+        if not isinstance(string, basestring):
+            raise ValueError("Expect a string")
+        self.string = string
+        self.do_canonize = canonize
+    def <em>canonize_test</em>(self, parser, state):
+        if self.do_canonize:
+            self.string_canonized = parser(self.string, state)
+        else:
+            self.string_canonized = self.string
+</pre>
+      <p>
+	The <tt>canonize_test</tt> is called when it is necessary
+	to apply a canonization upon the test parameter,
+	the <tt>parser</tt> function is the composition of
+	all the upper canonizers.
+	The canonization may depend on the session <tt>state</tt>,
+	in this case, the <tt>canonize_test</tt> is called
+	each time the student answers (see the <tt>HostReplace</tt> canonizer).
+      </p>
+	
+      <h3><a name="canonizers">Canonizers</a></h3>
+      <p>
+	The canonizers apply a transformation on the student
+	answer and/or on the children test parameters.
+      </p>
+      <pre>
+class UpperCase(TestUnary):
+    def <em>canonize</em>(self, string, state):
+        return string.upper()
+</pre>
+      <p>
+	The canonizers are automaticaly applied to student answers.
+	They are applied on most tests parameters (<tt>Replace</tt>
+	is an exception).
+	In rare case a canonizer must apply <tt>canonize_test</tt>
+	on the child expression (see the <tt>HostReplace</tt> canonizer).
+	It is necessary if the canonization depends on the state value,
+	for example the computer used by the student.
+	To do so, the canonizer calls the <tt>initialize</tt> method
+	with the current canonizer and the current state.
+	<tt>self.parser</tt> contains the current upper parser
+	at this point of the evaluation.
+      </p><pre>
+    def canonize(self, string, state):
+        self.children[0].<em>initialize</em>(
+                lambda a_string, a_state:
+                    your_canonizer(
+                           <em>self.parser</em>(a_string, a_state),
+                                  )
+                    ),
+                state)
+        return your_canonizer(string)
+</pre>
+      <p>
+	Never forget that canonization must be done from top to
+	bottom (root to leaves).
+	It is not the same direction than for a normal expression
+	evaluation.
+      </p>
+      <p>
+	If the canonizer works on a strict language it may detect syntax errors.
+	In this case, the canonizer can shortcut the evaluation
+	process and return a comment.
+      </p>
+      <pre>
+    def canonize(self, string, state):
+        try:
+            return my_canonizer(string, state)
+        except MyError:
+            return False, "There is a syntax error..."
+</pre>          
+
+      <h3><a name="expressions">Expressions</a></h3>
+
+      <p>
+	
+      </p>
+
+      <h3><a name="comments">Comments</a></h3>
+
+      <p>
+	
+      </p>
+
+      <h3><a name="goodbad">Good or Bad</a></h3>
+
+      <p>
+	
+      </p>
+
+      <h2><a name="plugin_creation">Plugin creation</a></h2>
+
+      
+      <h2><a name="developper_tools">Developper tools</a></h2>

@@ -819,7 +819,7 @@ class TestExpression(Test):
 
     def initialize(self, parser, state):
         """The string in test description must be canonized"""
-        self.parser = parser # Store the parser for future use (See cisco)
+        self.parser = parser #Store the parser for future use (See HostReplace)
         self.canonize_test(parser, state)
         for child in self.children:
             child.initialize(lambda string, a_state:
@@ -1269,7 +1269,7 @@ class Int(TestInt):
             return False, '<p class="int_required"></p>'
 
 class IntGT(TestInt):
-    """Returns True if the student answer is an integer greater than
+    """Returns True if the student answer is an integer strictly greater than
     the specified value.
     
     Examples:
@@ -1349,7 +1349,10 @@ class NumberOfIs(TestExpression):
 # Should apply the parser on all the dict items
 
 class TestDictionary(TestExpression):
-    """Base class for enumeration tests."""
+    """Base class for enumeration tests.
+    The class is easely derivable by specifying a dictionnary containing
+    all the allowed answers and how they are canonized.
+    """
     def do_test(self, student_answer, state=None):
         if self.uppercase:
             student_answer = student_answer.upper()

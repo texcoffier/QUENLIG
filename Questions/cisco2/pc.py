@@ -129,7 +129,8 @@ add(name="traceroute -n",
     question="""Testez l'option <tt>-n</tt> de <tt>traceroute</tt>.
     <p>
     En une phrase, donnez les différences de fonctionnement entre la version
-    avec et sans l'option.
+    avec et sans l'option. Des mots clefs sont suffisants,
+    il y a deux choses à remarquer.
     """,
     tests = (
     require(("DNS", "LOGIQUE", "DOMAIN", "NOM", "IP"),
@@ -203,6 +204,7 @@ add(name="vers routeur eth0",
     """,
     tests = (
     good("ping {C0.remote_port.host.E0.port.ip}",parse_strings=host),
+    expect('ping'),
     ),
     )
 
@@ -247,6 +249,8 @@ add(name="table routage",
          "Vous pouvez aussi taper <tt>ip route</tt> (moins standard)"),
     good(("ip route", "netstat -r"),
          "Vous pouvez aussi utiliser la commande standard : <tt>route</tt>"),
+    Good(Comment(RemoveSpaces(Equal('route -n')),
+                 "On vous demande la commande, pas ses options...")),
     reject('show', 'Sous UNIX, pas sur le CISCO'),
     reject('netstat', 'Il y a une commande plus courte et plus logique'),
     ),

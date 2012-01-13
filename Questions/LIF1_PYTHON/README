@@ -45,7 +45,7 @@ cd QUENLIG
 (
 set +H
 echo "{"
-for I in session_start session_stop session_duration statmenu_smiley statmenu_rank action_help questions_shuffle
+for I in session_start session_stop session_duration statmenu_smiley statmenu_rank action_help questions_shuffle statmenu_indice
 do
     echo "'$I': ('!executable',),"
 done

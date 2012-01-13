@@ -401,7 +401,7 @@ EM { font-family: sans-serif ; }
             examples = re.sub('(#.*)', '<em>\\1</em>', examples)
         else:
             examples = ''
-        f.write('<b>' + t.__name__ + '</b>: ' + doc[0] + examples)
+        f.write('<a name="' + t.__name__ + '"><b>' + t.__name__ + '</b></a>: ' + doc[0] + examples)
         for c in tests:
             if c.__bases__[0] == t:
                 f.write('<ul>')

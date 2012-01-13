@@ -1,0 +1,54 @@
+body {
+  background: #EEE ;
+}
+h1 {
+  text-align: center ;
+  border: 3px solid black ;
+  background: #FFF ;
+}
+h2 {
+  text-align: center ;
+  border: 1px solid black ;
+  background: #FFF ;
+}
+h3 {
+  display: table;
+  border: 1px solid black ;
+  padding: 0.1em ;
+  background: #FFF ;
+  margin: 0px ;
+
+  position: relative ;
+  left: 20% ;
+  width: auto;
+}
+h4 {
+  display: table ;
+  text-align: left ;
+  border: 1px solid black ;
+  padding: 0.1em ;
+  background: #EEE ;
+  margin: 0px ;
+}
+PRE {
+      background: #F0F0F0;
+      padding: 0.5em;
+      border: 4px ridge #00FF00;
+      page-break-inside: avoid;
+      }
+LI { margin-top: 0.3em }
+TT { border: 1px solid black; padding: 1px; font-size: 80% }
+H2 TT, H3 TT, .menu TT { border: 0px }
+EM { background: #AFA }
+DIV.menu { position: fixed; left:0px ; top:0px ; width: 15em; }
+DIV.texte { margin-left:15em; text-align: justify  }
+DIV.menu UL { padding-left: 1em ; margin-left: 0em ; }
+DIV.menu UL UL { font-size: 80% ; line-height: 0.8em }
+@media print {
+    DIV.menu { display: none; }
+    DIV.texte { margin-left: 0px }
+    EM { font-weight: bold ; }
+}
+
+
+

@@ -137,6 +137,8 @@ add(name="config telnet",
                        "Il faut utiliser la commande <tt>line</tt>"),
     require('vty', """La console d'administration à distance utilise
     un <em><b>V</b>irtual <b>T</b>elet<b>Y</b>pe</em> (TTY virtuel)"""),
+    Bad(Comment(UpperCase(Equal('line vty 0 4')),
+                "Vous êtes en train de configurer les ligne VTY de 0 à 4.")),
     ),
     )
 
@@ -159,7 +161,7 @@ add(name="password telnet",
     )
 
 add(name="config console",
-    required=["password telnet"],
+    required=["config telnet", "password telnet"],
     question="""Quelle commande tapez-vous pour passer en mode configuration
     de la <b>console</b> de contrôle du routeur&nbsp;?
     <p>
