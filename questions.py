@@ -27,6 +27,8 @@ import sys
 import cgi
 import re
 
+
+
 current_evaluate_answer = None
 class Required:
     def __init__(self, world, string):
@@ -866,7 +868,12 @@ class TestString(TestExpression):
             self.string_canonized = self.string
 
     def source(self, state=None, format=None):
-        return self.test_name(format) + '(%s)' % pf(self.string, format)
+        if self.do_canonize:
+            canonize = ''
+        else:
+            canonize = ',canonize=False'
+        return self.test_name(format) + '(%s%s)' % (
+            pf(self.string, format), canonize)
 
 class Or(TestNAry):
     """True if one of the child test returns True,
@@ -878,13 +885,13 @@ class Or(TestNAry):
     """
     def do_test(self, student_answer, state):
         all_comments = ""
-        bool = False
+        a_bool = False
         for c in self.children:
-            bool, comment = c(student_answer, state)
-            all_comments += comment
-            if bool == True:
+            a_bool, a_comment = c(student_answer, state)
+            all_comments += a_comment
+            if a_bool == True:
                 break
-        return bool, all_comments
+        return a_bool, all_comments
 
     def __or__(self, other):
         self.children.append(other)
@@ -902,13 +909,13 @@ class And(TestNAry):
     operator = " & "
     def do_test(self, student_answer, state):
         all_comments = ""
-        bool = False
+        a_bool = False
         for c in self.children:
-            bool, comment = c(student_answer, state)
-            all_comments += comment
-            if bool == False:
+            a_bool, a_comment = c(student_answer, state)
+            all_comments += a_comment
+            if a_bool == False:
                 break
-        return bool, all_comments
+        return a_bool, all_comments
     def __and__(self, other):
         self.children.append(other)
         return self
@@ -925,8 +932,8 @@ class TestInvert(TestUnary):
     def source(self, state=None, format=None):
         return "~" + self.children[0].source(state, format)
     def do_test(self, student_answer, state):
-        bool, comment = self.children[0](student_answer, state)
-        return not bool, comment
+        a_bool, a_comment = self.children[0](student_answer, state)
+        return not a_bool, a_comment
 
 class TestFunction(TestExpression):
     """The parameter function returns a boolean and a comment.
@@ -967,7 +974,7 @@ class Equal(TestString):
         Good(Equal('A good answer'))
         
     """
-    def do_test(self, student_answer, state):
+    def do_test(self, student_answer, dummy_state):
         return student_answer == self.string_canonized, ''
 
 class Contain(TestString):
@@ -978,7 +985,7 @@ class Contain(TestString):
         Bad(Contain('C++'))
         Good(Contain('')) # This test is always True
     """
-    def do_test(self, student_answer, state):
+    def do_test(self, student_answer, dummy_state):
         return self.string_canonized in student_answer, ''
 
 class Start(TestString):
@@ -991,7 +998,7 @@ class Start(TestString):
                    )
            )
     """
-    def do_test(self, student_answer, state):
+    def do_test(self, student_answer, dummy_state):
         return student_answer.startswith(self.string_canonized), ''
 
 class End(TestString):
@@ -1007,11 +1014,13 @@ class End(TestString):
                    )
            )
            """
-    def do_test(self, student_answer, state):
+    def do_test(self, student_answer, dummy_state):
         return student_answer.endswith(self.string_canonized), ''
 
 class Good(TestUnary):
     """If the child test returns True then the student answer is good.
+    The child comment will be visible to the student even if it
+    returns False.
 
     Examples:
         Good(Equal('5'))
@@ -1019,10 +1028,10 @@ class Good(TestUnary):
         Good(~ Start('x'))
     """
     def do_test(self, student_answer, state):
-        bool, comment = self.children[0](student_answer, state)
-        if bool == True:
-            return bool, comment
-        return None, comment
+        a_bool, a_comment = self.children[0](student_answer, state)
+        if a_bool == True:
+            return a_bool, a_comment
+        return None, a_comment
 
 class Bad(TestUnary):
     """If the child test returns True then the student answer is bad.
@@ -1049,10 +1058,10 @@ class Bad(TestUnary):
         Bad(   Comment(Contain('x'),'x')  |  Comment(Contain('y'),'y'))   )
         """
     def do_test(self, student_answer, state):
-        bool, comment = self.children[0](student_answer, state)
-        if bool == True:
-            return False, comment
-        return None, comment
+        a_bool, a_comment = self.children[0](student_answer, state)
+        if a_bool == True:
+            return False, a_comment
+        return None, a_comment
 
 class UpperCase(TestUnary):
     """The student answer is uppercased, and the child test value
@@ -1081,7 +1090,7 @@ class UpperCase(TestUnary):
                     )
           )
     """
-    def canonize(self, string, state):
+    def canonize(self, string, dummy_state):
         return string.upper()
 
 class RemoveSpaces(TestUnary):
@@ -1163,7 +1172,7 @@ class Comment(TestUnary):
         return bool, comment
 
 class Expect(TestString):
-    """Returns False the student answer does not contains
+    """Returns False if the student answer does not contains
     the string in parameter, if a comment is not provided then
     an automatic one is created.
     It is a shortcut for:  Bad(Comment(~Contain(string), "string is expected"))
@@ -1220,7 +1229,7 @@ class Replace(TestUnary):
     """The first argument is a tuple of (old_string, new_string)
     all the replacements are done on the student answer and
     the test in parameter is then evaluated.
-    The replacements strings are NOT canonized.
+    The replacements strings are NOT canonized by default.
 
     Examples:
         # Student answers 'aba', 'ab1'... will pass this test.
@@ -1229,19 +1238,35 @@ class Replace(TestUnary):
         # Beware single item python tuple, do not forget the coma:
         Good(Replace( (('a', '1'), ),
                       Equal('121')))
+        # With UpperCase canoniser, canonization is a good idea
+        Good(UpperCase(Replace((('a', 'b'),), Equal('a'), canonize=True)))
     """
-    def __init__(self, replace, a):
+    def __init__(self, replace, a, canonize=False):
         TestExpression.__init__(self, a)
         self.replace = replace
+        self.do_canonize = canonize
+
+    def canonize_test(self, parser, state):
+        if self.do_canonize:
+            self.replace_canonized = [
+                (parser(old, state), parser(new, state))
+                for old, new in self.replace
+                ]
+        else:
+            self.replace_canonized = self.replace
 
     def source(self, state=None, format=None):
+        if self.do_canonize:
+            canonize = ',canonize=True'
+        else:
+            canonize = ''
         return self.test_name(format) + \
-               "(%s,%s)" % (
+               "(%s,%s%s)" % (
             pf(self.replace, format),
-            self.children[0].source(state, format) )
+            self.children[0].source(state, format), canonize)
 
     def canonize(self, string, state):
-        return replace_strings(self.replace, string)
+        return replace_strings(self.replace_canonized, string)
 
 class TestInt(TestExpression):
     """Base class for integer tests."""
@@ -1394,7 +1419,6 @@ class No(YesNo):
 
 if True:
     # Regression test on new tests.
-
     def create(txt):
         o = eval(txt)
         o.initialize(lambda string, state: string, None)
@@ -1524,6 +1548,10 @@ if True:
     # Replace is no more usable with the shell parser if they are.
     assert( a('12c') == (False, '') )
 
+    a = create("UpperCase(Replace((('a', '1'), ('b', '2')),Equal('abc'),canonize=True))")
+    # The string in the replacement are uppercased.
+    assert( a('12c') == (True, '') )
+    
     a = create("UpperCase(Replace((('a', '1'), ('b', '2')),Equal('12C')))")
     assert( a('12c') == (True, '') )
     assert( a('abc') == (False, '') )
