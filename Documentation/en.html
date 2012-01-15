@@ -39,7 +39,6 @@
       <ul>
       <li> <a href="#leaves">Leaves</a></li>
       <li> <a href="#canonizers">Canonizers</a></li>
-      <li> <a href="#expressions">Expressions</a></li>
       <li> <a href="#comments">Comments</a></li>
       <li> <a href="#goodbad">Good/Bad</a></li>
       </ul>
@@ -852,6 +851,10 @@ class UpperCase(TestUnary):
 	with the current canonizer and the current state.
 	<tt>self.parser</tt> contains the current upper parser
 	at this point of the evaluation.
+	All the children of the canonizer are in the table <tt>children</tt>,
+	but every predefined canonizer only have one child.
+	
+
       </p><pre>
     def canonize(self, string, state):
         self.children[0].<em>initialize</em>(
@@ -872,7 +875,7 @@ class UpperCase(TestUnary):
       <p>
 	If the canonizer works on a strict language it may detect syntax errors.
 	In this case, the canonizer can shortcut the evaluation
-	process and return a comment.
+	process and can return a comment.
       </p>
       <pre>
     def canonize(self, string, state):
@@ -881,12 +884,6 @@ class UpperCase(TestUnary):
         except MyError:
             return False, "There is a syntax error..."
 </pre>          
-
-      <h3><a name="expressions">Expressions</a></h3>
-
-      <p>
-	
-      </p>
 
       <h3><a name="comments">Comments</a></h3>
 

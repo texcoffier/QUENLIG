@@ -831,10 +831,18 @@ class TestExpression(Test):
 
 class TestNAry(TestExpression):
     """Base class for tests with a variable number of test as arguments."""
+    def __init__(self, *args, **keys):
+        self.shortcut =  keys.get('shortcut', True)
+        TestExpression.__init__(self, *args)
+
     def source(self, state=None, format=None):
+        if self.shortcut:
+            shortcut = ''
+        else:
+            shortcut = ',shortcut=False'
         return self.test_name(format) + '(' + \
                ','.join( [c.source(state, format) for c in self.children]) + \
-               ')'
+               shortcut + ')'
 
 class TestUnary(TestExpression):
     """Base class for tests with one child test."""
@@ -878,10 +886,19 @@ class TestString(TestExpression):
 class Or(TestNAry):
     """True if one of the child test returns True,
     the syntax with '|' operator can be used.
+    As in other programmation language, by default, the evaluation stops
+    is the result is predictible.
     
     Examples:
         Good(Or(Equal('a'), Equal('b'), Equal('c')))
         Good(Equal('a') | Equal('b') | Equal('c'))
+        # To continue the test even if the first is True, use shortcut=False.
+        # The following test returns 2 comments on 'ab' answer and not
+        # only the first one.
+        Bad(Or(Comment(Contain('a'), 'comment A'),
+               Comment(Contain('b'), 'comment B'),
+               shortcut=False
+               ))
     """
     def do_test(self, student_answer, state):
         all_comments = ""
@@ -889,7 +906,7 @@ class Or(TestNAry):
         for c in self.children:
             a_bool, a_comment = c(student_answer, state)
             all_comments += a_comment
-            if a_bool == True:
+            if self.shortcut and a_bool == True:
                 break
         return a_bool, all_comments
 
@@ -901,10 +918,19 @@ class Or(TestNAry):
 class And(TestNAry):
     """True if all the children test returns True,
     the syntax with '&' operator can be used.
+    As in other programmation language, by default, the evaluation stops
+    is the result is predictible.
     
     Examples:
         Good(And(Contain('a'), Contain('b'), Contain('c')))
         Good(Contain('a') & Contain('b') & Contain('c'))
+        # To continue the test even if the first is False, use shortcut=False.
+        # The following test returns a comment on 'b' answer even
+        # if the answer does not contains 'a'
+        Good(And(Comment(Contain('a'), 'comment A'),
+                 Comment(Contain('b'), 'comment B'),
+                 shortcut=False
+                ))
         """
     operator = " & "
     def do_test(self, student_answer, state):
@@ -913,7 +939,7 @@ class And(TestNAry):
         for c in self.children:
             a_bool, a_comment = c(student_answer, state)
             all_comments += a_comment
-            if a_bool == False:
+            if self.shortcut and a_bool == False:
                 break
         return a_bool, all_comments
     def __and__(self, other):
@@ -1490,6 +1516,9 @@ if True:
     assert( a('f') == (True, 'F') )
     assert( a('g') == (True, 'G') )
     assert( a('x') == (False, '') )
+
+    a = create("Or(Comment(Contain('f'),'F'),Comment(Contain('g'),'G'),shortcut=False)")
+    assert( a('fg') == (True, 'FG') )
 
     a = create("And(Comment(Contain('f'),'F'),Comment(Contain('g'),'G'))")
     assert( a('x') == (False, '') )
