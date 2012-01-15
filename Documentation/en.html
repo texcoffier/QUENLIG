@@ -39,8 +39,6 @@
       <ul>
       <li> <a href="#leaves">Leaves</a></li>
       <li> <a href="#canonizers">Canonizers</a></li>
-      <li> <a href="#comments">Comments</a></li>
-      <li> <a href="#goodbad">Good/Bad</a></li>
       </ul>
       <li> <a href="#plugin_creation">Plugin creation</a></li>
       <li> <a href="#developper_tools">Developper tools</a></li>
@@ -784,6 +782,8 @@ add(name="age",
 	A test is a class with the following methods and attributes.
 	The class hierarchy of test is defined in the
 	<a href="tests.html">test reference documentation</a>.
+	Only leaves and canonizers are explained here, see the source
+	codes for the other kinds.
       </p>
 
       <h3><a name="leaves">Leaves of the test expression</a></h3>
@@ -885,19 +885,77 @@ class UpperCase(TestUnary):
             return False, "There is a syntax error..."
 </pre>          
 
-      <h3><a name="comments">Comments</a></h3>
-
-      <p>
-	
-      </p>
-
-      <h3><a name="goodbad">Good or Bad</a></h3>
-
-      <p>
-	
-      </p>
 
       <h2><a name="plugin_creation">Plugin creation</a></h2>
 
+      <p>
+	Each GUI element and Quenlig functionnality is defined
+	by a plugin.
+	You can find the plugin names
+	in the <a href="plugins.html">plugin reference page</a>,
+	but an interactive way is to take the teacher role and
+	to click on 'Debug'.
+	A '*' will be displayed next to each plugin, you can
+	put the cursor over the star to see more information.
+      </p>
+      <p>
+	Currently <a href="plugins.html#plugin_attributes">14 attributes</a>
+	may define the plugin behavior and appearence.
+	There is <a href="plugins.html#plugin_css_attributes">11 CSS
+	  attributes</a> defining the graphical aspects and
+	<b>the translations</b>.
+	The plugin attributes are defined for each language.
+      </p>
+      <pre>Plugins/
+   plugin_name/
+      __init__.py      # To please Python
+      plugin_name.py   # Language independent attributes
+      en.py            # English specialisation
+      fr.py            # French specialisation
+      ...
+</pre>
+      <p>
+	The reference contains all the attributes and plugins with their
+	documentation.
+	Most of the plugins are really short piece of code easely
+	understandable.
+	There is some things needing some explanation.
+      </p>
+
+      <h3><a name="display">What is displayed ?</a></h3>
+      
+      <h3><a name="heartcontent">Page heart content</a></h3>
+
+      <h3><a name="evaluation">Evaluation</a></h3>
+      <p>
+	The 'execute' attribute is called to generate the web page
+	if the user is allowed (or imposed) to use the plugin.
+	The function most important parameter indicates if the
+	plugin has been triggered by the user.
+      </p>
+      <ul>
+	<li>
+	  The 'question_answer' plugin displays the entry where the user
+	  type its answer.
+	  If the user enter an answer, the plugin will check it,
+	  in the other case it will display the entry with the
+	  last bad answer given.
+	<li>
+	  The 'questions_comments' plugin display only a link to activate
+	  itself if it is not triggered.
+	  If triggered, it sets its own page heart content and
+	  set the current question to None to remove any
+	  other heart content.
+      </ul>
+	
+      </p>
+      <h3><a name="priorities">Priorities</a></h3>
+      <p>
+	The attributes defines a 'display' and an 'execute' priority.
+      </p>
+	
+	
+
+	
       
       <h2><a name="developper_tools">Developper tools</a></h2>

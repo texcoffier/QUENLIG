@@ -341,7 +341,7 @@ You can click on plugin attributes to see there definition.
     f.write('</table>')
 
     f.write('''
-<h1>Plugin Attributes</h1>
+<h1><a name="plugin_attributes">Plugin Attributes</a></h1>
 <table class="attributes">
     ''')
     f.write('<tr><th>Attribute name<th>Default value<th>Documentation</tr>')
@@ -352,7 +352,7 @@ You can click on plugin attributes to see there definition.
     f.write('</table>')
 
     f.write('''
-<h1>Plugin CSS Attributes</h1>
+<h1><a name="plugin_css_attributes">Plugin CSS Attributes</a></h1>
 <p>These attributes values are concatened into the CSS file.
 <table class="attributes">
     ''')
