@@ -41,6 +41,12 @@
       <li> <a href="#canonizers">Canonizers</a></li>
       </ul>
       <li> <a href="#plugin_creation">Plugin creation</a></li>
+      <ul>
+      <li><a href="#trigger">What is triggering ?</a></li>
+      <li><a href="#evaluation">Evaluation</a></li>
+      <li><a href="#display">What is displayed ?</a></li>
+      </ul>
+
       <li> <a href="#developper_tools">Developper tools</a></li>
     </ul>
     </div>
@@ -899,6 +905,13 @@ class UpperCase(TestUnary):
 	put the cursor over the star to see more information.
       </p>
       <p>
+	There is currently 69 plugins, their average size is about 40 lines.
+	The mediane size is only 25 lines without the messages.
+	It is really easy to create plugins,
+	the most simple way is to start from a copy of simple existing
+	plugin and modify it.
+      </p>
+      <p>
 	Currently <a href="plugins.html#plugin_attributes">14 attributes</a>
 	may define the plugin behavior and appearence.
 	There is <a href="plugins.html#plugin_css_attributes">11 CSS
@@ -922,40 +935,117 @@ class UpperCase(TestUnary):
 	There is some things needing some explanation.
       </p>
 
-      <h3><a name="display">What is displayed ?</a></h3>
-      
-      <h3><a name="heartcontent">Page heart content</a></h3>
+      <h3><a name="trigger">What is triggering ?</a></h3>
 
+      <p>
+	When the web page is generated, all the allowed plugins
+	are executed in order to create the page.
+	But in some case, the page creation is triggered by the
+	user action on a plugin.
+	For example when the user answers the question, asks a tip,
+	leaves a comment...
+	In these cases, the triggered plugin will do its work
+	to perform the required action and also generate its
+	part of work to generate the web page.
+      </p>
+	
+      <h3><a name="display">What is displayed ?</a></h3>
+      <p>
+	If the plugin contains other plugins then it is a
+	container box with all the contained plugin stacked
+	verticaly is the <a href="plugins.html#attr_horizontal">horizontal</a>
+	attribute is not True.
+	The box <a href="plugins.html#attr_title">title</a>
+	is defined in the CSS or by the	plugin evaluation if the
+	<a href="plugins.html#attr_content_is_title">content_is_title</a>
+	attribute is True.
+      </p>
+      <p>
+	If the plugin does not contain other plugin then the
+	evaluation of the plugin returns the HTML code to display.
+	If the <a href="plugins.html#attr_link_to_self">link_to_self</a>
+	attribute is True then
+	the plugin HTML is a link that <b>trigger</b> the plugin
+	execution when followed.
+      </p>
+      <p>
+	In both case, the content or the box title may be tipped
+	with the localized attribute
+	<a href="plugins.html#attr_tip">tip</a>.
+	As all the texts in the interface, the tip in stored in the CSS
+	and not in the HTML.
+      </p>
+      <p>
+	All the generated content is boxed in an HTML element
+	whose class is the plugin name.
+	When defining
+	<a href="plugins.html#attr_css_attributes">css_attributes</a>,
+	you start the selector relatively
+	to the plugin element selector.
+	If your selector is empty, the style applies to the plugin element.
+	If you want to define the complete selector, start it with <tt>/</tt>
+      </p>
+      <p>
+	The order of the plugins in a container is defined by
+	the <a href="plugins.html#attr_priority_display">priority_display</a>
+	attribute.
+	The display position can be defined as an absolute number
+	or relative to another plugin.
+      </p>
+      <p>
+	Finally, when a plugin is triggered it may generate some
+	content for the core of the web page.
+	It store this content in its <tt>heart_content</tt> attribute,
+	the <a href="plugins.html#heart_content">heart_content</a>
+	plugin retrieve this attribute to put it in good place
+	at the core of the page.
+      </p>
+      
       <h3><a name="evaluation">Evaluation</a></h3>
       <p>
-	The 'execute' attribute is called to generate the web page
+	The <a href="plugins.html#attr_execute">execute</a>
+	attribute is called to generate the web page
 	if the user is allowed (or imposed) to use the plugin.
 	The function most important parameter indicates if the
 	plugin has been triggered by the user.
       </p>
       <ul>
 	<li>
-	  The 'question_answer' plugin displays the entry where the user
+	  The <a href="plugins.html#question_answer">question_answer</a>
+	  plugin displays the entry where the user
 	  type its answer.
 	  If the user enter an answer, the plugin will check it,
 	  in the other case it will display the entry with the
 	  last bad answer given.
 	<li>
-	  The 'questions_comments' plugin display only a link to activate
+	  The <a href="plugins.html#questions_comments">questions_comments<a/>
+	  plugin display only a link to activate
 	  itself if it is not triggered.
 	  If triggered, it sets its own page heart content and
 	  set the current question to None to remove any
 	  other heart content.
       </ul>
-	
-      </p>
-      <h3><a name="priorities">Priorities</a></h3>
       <p>
-	The attributes defines a 'display' and an 'execute' priority.
+	The order of execution can not be the same than the display order.
+	For example, when the user answer correctly a question
+	with the <a href="plugins.html#question_answer">question_answer</a>
+	plugin, all the other plugin must take this into account when
+	displaying the user interface.
+	So the <a href="plugins.html#question_answer">question_answer</a>
+	must be excuted <b>before</b> the other,
+	and its generated content must be stored until needed.
+	The order of execution is defined with the attribute
+	<a href="plugins.html#attr_priority_execute">priority_execute</a>
+	the same way than the display order.
       </p>
-	
-	
-
-	
-      
+      <p>
+	As the generated content is stored for each plugin,
+	it is easy to create plugins that transform the
+	generated content of other plugins.
+	The <a href="plugins.html#page">page</a> and
+	<a href="plugins.html#debug">debug</a> plugins are such plugins.
+	But there is a catch, as the plugin modifying the other must
+	be evaluated last, 2 plugins can not mutualy modify themselves.
+      </p>
+       
       <h2><a name="developper_tools">Developper tools</a></h2>

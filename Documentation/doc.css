@@ -41,7 +41,7 @@ TT { border: 1px solid black; padding: 1px; font-size: 80% }
 H2 TT, H3 TT, .menu TT { border: 0px }
 EM { background: #AFA }
 DIV.menu { position: fixed; left:0px ; top:0px ; width: 15em; }
-DIV.texte { margin-left:15em; text-align: justify  }
+DIV.texte { margin-left:15em; text-align: justify; max-width: 40em  }
 DIV.menu UL { padding-left: 1em ; margin-left: 0em ; }
 DIV.menu UL UL { font-size: 80% ; line-height: 0.8em }
 @media print {
