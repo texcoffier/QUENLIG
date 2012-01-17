@@ -36,7 +36,7 @@ regtest:
 
 check-questions:
 	@-mkdir Students/check-questions
-	# For the cico questionnary
+	# For the cisco questionnary
 	echo 4 >Students/check-questions/nr_hosts
 	for I in Questions/*/ ; \
         do \
@@ -101,14 +101,16 @@ stat:
 	@echo 'Python lines Python  : ' `cat Questions/python/*.py | wc -l`
 	@echo 'Python lines Cisco   : ' `cat Questions/cisco*/*.py | wc -l`
 	@echo 'CSS lines            : ' `cat HTML/*.css | wc -l`
-	@echo 'Doc HTML             : ' `wc -l <Welcome.html`
 
 tags:
 	etags $$(find . -name '*.py')
 
-tar:clean tags
+doc:
+	cd Documentation ; $(MAKE)
+
+tar:clean tags doc
 	ln -s . QUENLIG-$(V)
-	git ls-files | \
+	(git ls-files ; echo TAGS ; echo Documentation/plugins.html ; echo Documentation/tests.html ) | \
 		sed 's/^/QUENLIG-$(V)\//' | \
 		grep -v 'HTML/sujet' \
 		>xxx.to_be_tarred

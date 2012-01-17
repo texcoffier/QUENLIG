@@ -30,7 +30,7 @@ done
 
 
 N=""
-for I in $(ls load_simulator.* | sort -t. -n +1)
+for I in $(ls load_simulator.* | sort -t. -n -k +1)
 do
   extract_parameters "$I"
 

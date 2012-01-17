@@ -4,6 +4,7 @@
     <title>Quenlig: Online Questionnary</title>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
     <link href="doc.css" rel="stylesheet">
+    <link REL="icon" HREF="../HTML/favicon.ico">
   </head>
 
   <body>
@@ -1026,13 +1027,13 @@ class UpperCase(TestUnary):
 	  other heart content.
       </ul>
       <p>
-	The order of execution can not be the same than the display order.
+	The order of execution may be different than the display order.
 	For example, when the user answer correctly a question
 	with the <a href="plugins.html#question_answer">question_answer</a>
 	plugin, all the other plugin must take this into account when
 	displaying the user interface.
 	So the <a href="plugins.html#question_answer">question_answer</a>
-	must be excuted <b>before</b> the other,
+	must be executed <b>before</b> the other,
 	and its generated content must be stored until needed.
 	The order of execution is defined with the attribute
 	<a href="plugins.html#attr_priority_execute">priority_execute</a>
@@ -1049,3 +1050,47 @@ class UpperCase(TestUnary):
       </p>
        
       <h2><a name="developper_tools">Developper tools</a></h2>
+
+      <p>
+	The developper tools are launchable using a Makefile goal.
+	The parameters are defined in the Makefile.
+      </p>
+      <ul>
+	<li> <tt>plot</tt>: launches Quenlig on every <b>session</b>
+	  to compute the necessary graphics for the session.
+	  The default graphic is the question graph, but the Cisco
+	  questionnary computes a network graphic.
+
+	<li> <tt>regtest</tt>: run the regression tests.
+	  
+	<li> <tt>check-questions</tt>: run sanity test on every questionnary.
+	  
+	<li> <tt>load_simulator</tt>: run a load simulator to see if
+	  how many users the server can manage.
+	  The load simulator replays real session data at real time
+	  or more quickly.
+
+	<li> <tt>profiling</tt>: same tool than the load simulator
+	  but it profiles the Python functions.
+	  
+	<li> <tt>simulator_plot</tt>: plot the load simulator data.
+	  Currently broken, do not try to use it.
+
+	<li> <tt>xxx.histogram</tt>: use the load simulator to compute
+	  an animation of the number of good answer histogram from
+	  a recorded session.
+	  
+	<li> <tt>histogram_animation</tt>: display the previous
+	  animation on screen.
+
+	<li> <tt>clean</tt>: remove recursively garbage file.
+	  
+	<li> <tt>figures</tt>: run the make command without goal on the
+	  HTML directory of every questionnary.
+
+	<li> <tt>tags</tt>: compute the index of functions.
+
+	<li> <tt>tar</tt>: compute the tar file.
+
+      </ul>
+	  
