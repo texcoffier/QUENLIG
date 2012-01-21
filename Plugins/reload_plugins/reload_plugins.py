@@ -31,7 +31,7 @@ import sys
 priority_execute = 1000000000
 container = 'action'
 
-link_to_self = True
+# link_to_self = True
 
 acls = { 'Teacher': ('executable',) }
 
@@ -45,6 +45,12 @@ def execute(state, plugin, argument):
             if plugin.plugin.__name__ in sys.modules:
                 del sys.modules[plugin.plugin.__name__]
             plugins.Plugin.plugins_dict[plugin.plugin.name] = plugins.Plugin(utilities.load_module(plugin.plugin.name))
+    # Keep the current state on screen
+    plugin.link = "?reload_plugins=1&" + '&'.join(
+        ['%s=%s' % (k, v)
+         for k, v in state.form.items()
+         if k not in ('number', 'ticket', 'reload_plugins')
+         ])
     return ''
 
 def init():
