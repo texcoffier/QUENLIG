@@ -96,28 +96,26 @@ class StudentAcls:
             self.acls[plugin] = [key]
 
     def change_acls(self, plugin, key):
+        old = repr(self.acls)
         self.add_an_acl(plugin, key)
-        utilities.write(self.filename, repr(self.acls))
-        reload() # Force plugins tree update
+        if old != repr(self.acls):
+            utilities.write(self.filename, repr(self.acls))
+            reload() # Force plugins tree update
 
     def add_an_acl(self, plugin, key):
-        """Change the ACL with checking"""
-        current = self.get_an_acl(plugin, key)
-        if current == None:
-            self.append_an_acl(plugin, key)
-            return
-        if key.startswith('!'):
-            if current == False:
-                return
+        """Change the ACL with checking:
+              XXX  : add XXX right for plugin
+              !XXX : reject XXX right for plugin
+              @XXX : inherite XXX right for plugin
+        """
+        # remove existing ACL
+        for prefix in ('', '!'):
             try:
-                self.acls[plugin].remove(key[1:])
-            except ValueError:
+                self.acls[plugin].remove(prefix + key.strip('@!'))
+            except:
                 pass
-            self.append_an_acl(plugin, key)
-        else:
-            if current == True:
-                return
-            self.acls[plugin].remove('!' + key)
+        if key.startswith('@'):
+            return
         self.append_an_acl(plugin, key)
 
     def __str__(self):

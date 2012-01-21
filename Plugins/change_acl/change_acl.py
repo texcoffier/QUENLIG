@@ -37,10 +37,18 @@ sort_column = 0
 
 acls = { 'Teacher': ('executable',) }
 
-css_attributes = (
-    '/tt.roles { font-size: 70%; font-weight: normal ; }',
-    '/.doc { font-size: 70%; }',
-    )
+javascript = """
+function change_acls(user)
+{
+  var f = document.getElementById('acls_form') ;
+  var selects = f.getElementsByTagName('SELECT') ;
+  var s = [user] ;
+  for(var i=0; i<selects.length; i++)
+    s.push( selects[i].name + '=' + selects[i].selectedIndex ) ;
+
+  window.location = '?change_acl=' + s.join(',') ;
+}
+"""
 
 def acl_page(plugin, user):
     # Plugins.acls.acls.update_student_acls(student.students[user])
@@ -50,7 +58,7 @@ def acl_page(plugin, user):
     while not stop:
         stop = True
         for role in student.students[roles[-1]].roles[::-1]:
-            if role not in roles:
+            if role != 'Wired' and role not in roles:
                 roles.append(role)
                 stop = False
               
@@ -60,15 +68,35 @@ def acl_page(plugin, user):
         line = [plugin_name, a_plugin.default_container(),
                 ('class="doc"', a_plugin.plugin.__doc__)
                 ]
-        for role in roles:
-            a = student.students[role].acls.get_an_acl(plugin_name, 'executable')
-            if a is None:
-                a = ''
-            if 'executable' in a_plugin.plugin.acls.get(role, ()):
-                b = 'True'
-            else:
-                b = ''
-            line.append('<b>' + str(a) + '</b>/' + str(b))
+        if 'executable' in a_plugin.plugin.acls.get('Wired', ()):
+            for role in roles:
+                line.append('')
+        else:
+            for role in roles:
+                a = student.students[role].acls.get_an_acl(plugin_name,
+                                                           'executable')
+                if role == roles[0]:
+                    aa = '<select name="' + plugin_name + '"><option'
+                    if a is None:
+                        aa += ' selected'
+                    aa += '></option><option'
+                    if a is False:
+                        aa += ' selected'
+                    aa += '>Reject</option><option'
+                    if a is True:
+                        aa += ' selected'
+                    aa += '>Allow</option></select>'
+                else:
+                    aa = {None: '', False: 'Reject', True: 'Allow'}[a]
+                    aa = '<b>' + aa + '</b>'
+                acl = a_plugin.plugin.acls.get(role, ())
+                if 'executable' in acl:
+                    b = 'Allow'
+                elif '!executable' in acl:
+                    b = 'Reject'
+                else:
+                    b = ''
+                line.append((' class="nowrap"', aa + '/' + b))
         t.append(line)
 
     titles = ['Plugin', 'Container', 'Documentation']
@@ -76,17 +104,38 @@ def acl_page(plugin, user):
         titles.append(role + '<br><tt class="roles">'
                       + ' '.join(student.students[role].roles)
                       + '</tt>')
-    
-    return utilities.sortable_table(plugin.sort_column,
-                                    t,
-                                    url = "%s&%s=%s" % (plugin.plugin.css_name,
-                                                        plugin.plugin.css_name,
-                                                        user),
-                                    titles = titles)
+
+    return (
+        '<form id="acls_form" action="javascript:change_acls(\'' +
+        user + '\')">' +
+        '<button type="submit" class="change_acl_save" value=""></button>' +
+        utilities.sortable_table(plugin.sort_column,
+                                 t,
+                                 url = "%s&%s=%s" % (plugin.plugin.css_name,
+                                                     plugin.plugin.css_name,
+                                                     user),
+                                 titles = titles) +
+        '<button type="submit" class="change_acl_save" value="x"></button>' +
+        '</form>')
 
 
 def execute(state, plugin, argument):
     if argument:
+        arguments = argument.split(',')
+        argument = arguments[0]
+        if len(arguments) > 1:
+            for i in arguments[1:]:
+                i = i.split('=')
+                if i[0] not in plugins.Plugin.plugins_dict:
+                    continue
+                print argument, i
+                acls = student.students[argument].acls
+                if i[1] == '2':
+                    acls.change_acls(i[0], 'executable')
+                elif i[1] == '1':
+                    acls.change_acls(i[0], '!executable')
+                elif i[1] == '0':
+                    acls.change_acls(i[0], '@executable')
         plugin.heart_content = acl_page(plugin, argument)
         return
 
@@ -95,7 +144,7 @@ def execute(state, plugin, argument):
     if not p.heart_content:
         return
 
-    p.heart_content = ('<a href="?change_acl='
-                       + state.form['answered_other'] + '">ACL</a>'
+    p.heart_content = ('<a class="change_acl" href="?change_acl='
+                       + state.form['answered_other'] + '">&nbsp;</a>'
                        + p.heart_content
                        )

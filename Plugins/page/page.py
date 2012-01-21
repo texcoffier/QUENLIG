@@ -29,7 +29,7 @@ import cgi
 import configuration
 
 priority_execute = priority_display = 2000000000
-acls = { 'Default': ('executable',) }
+acls = { 'Wired': ('executable',) }
 container = 'top'
 
 def css(state):

@@ -30,7 +30,7 @@ container = 'administration'
 
 link_to_self = True
 
-acls = { 'Teacher': ('executable',) }
+acls = { }
 
 javascript = r"""
 
@@ -88,8 +88,6 @@ def execute(state, plugin, argument):
             # It is normally a tristate : add, remove or inherit
             s.acls.change_acls(args[0], '!executable')
             print '\n\n', args[0], role, '\n\n'
-        # XXX : should recompute all, but it can't be done here : deffered
-        # state.update_the_plugins = True
 
         errors += 'window.location = "?" ;\n'
 
@@ -125,18 +123,3 @@ def execute(state, plugin, argument):
                         for role in state.student.roles])
             + '] ; %s\n--></script>' % errors)
             
-
-def init():
-    import state
-
-    old_state = state.State
-
-    class State(state.State):
-        def execute(self, form):
-            self.update_the_plugins = False
-            a = old_state.execute(self, form)
-            if self.update_the_plugins:
-                self.update_plugins()
-            return a
-
-    state.State = State

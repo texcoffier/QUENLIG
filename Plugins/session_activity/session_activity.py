@@ -29,7 +29,7 @@ import statistics
 priority_display = 'role'
 # font_size = "70%"
 # color = "#999"
-acls = { 'Default': ('!executable',), 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',) }
 
 def execute(state, plugin, argument):
     stats = statistics.question_stats()
