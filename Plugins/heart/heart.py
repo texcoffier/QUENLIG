@@ -23,7 +23,7 @@
 
 priority_display = 'menu'
 width = '100%'
-acls = { 'Default': ('executable',) }
+acls = { 'Wired': ('executable',) }
 
 css_attributes = (
     ".box_title { background: #CFC ; padding: 2px;}",

@@ -41,7 +41,7 @@ import utilities
 import os
 
 priority_execute = 'role' # Role must have been computed.
-acls = { 'Default': ('executable',) }
+acls = { 'Wired': ('executable',) }
 container = 'page'
 
 class Acls:

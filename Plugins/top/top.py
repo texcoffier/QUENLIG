@@ -28,7 +28,7 @@ css_attributes = (
     )
 priority_execute = -10 # Before the other
 horizontal = True
-acls = { 'Default': ('executable',) }
+acls = { 'Wired': ('executable',) }
 
 def execute(state, plugin, argument):
     if state.question:

@@ -34,7 +34,7 @@ css_attributes = (
     "A.current_question{text-decoration:underline;}",
     "A.highlight       { background: black; color: white;text-decoration: blink; }",
     )
-acls = { 'Default': ('executable',) }
+acls = { 'Wired': ('executable',) }
 
 def execute(state, plugin, argument):
 

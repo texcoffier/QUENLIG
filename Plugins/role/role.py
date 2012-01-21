@@ -41,12 +41,16 @@ def update_roles(astudent):
     if 'roles' in astudent.__dict__:
         return
     astudent.roles_filename = os.path.join(astudent.file, 'roles')
-    utilities.write(astudent.roles_filename, "['Default']", overwrite=False)
-    try:
-        astudent.roles = eval(utilities.read(astudent.roles_filename))
-    except:
-        print 'BUG', astudent, utilities.read(astudent.roles_filename)
-        astudent.roles = ['Default']
+    if astudent.filename in ('Default', 'Wired'):
+        astudent.roles = ['Wired']
+    else:
+        default = "['Default']"
+        utilities.write(astudent.roles_filename, default, overwrite=False)
+        try:
+            astudent.roles = eval(utilities.read(astudent.roles_filename))
+        except:
+            print 'BUG', astudent, utilities.read(astudent.roles_filename)
+            astudent.roles = eval(default)
 
 
     astudent.current_role = astudent.roles[0]

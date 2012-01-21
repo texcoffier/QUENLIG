@@ -38,7 +38,7 @@ css_attributes = (
     "TEXTAREA { width: 100% ; }",
     "FORM { margin: 0px }",
     )
-acls = { 'Default': ('executable',) }
+acls = { 'Wired': ('executable',) }
 
 javascript = """
 function disable_tab(event)

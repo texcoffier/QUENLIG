@@ -28,4 +28,4 @@ css_attributes = (
     ".box_title { display: block ; }",
     )
 
-acls = { 'Default': ('executable',) }
+acls = { 'Wired': ('executable',) }
