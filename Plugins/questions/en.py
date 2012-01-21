@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 
-title = "The questions"
+title = "Questions"
 
 tip = "Choose your question in the following list"
 

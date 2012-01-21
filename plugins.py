@@ -297,6 +297,13 @@ class Plugin:
                 s += '<tr><td>%s<td colspan="2">%s</tr>' % (cgi.escape(k), v1)
         return s + '</table>'
 
+    def default_container(self):
+        if hasattr(self.plugin, 'container'):
+            return self.plugin.container
+        if not hasattr(self.plugin, 'priority_display'):
+            return ''
+        return self.plugins_dict[self.plugin.priority_display.strip('-')].default_container()
+    
     def doc_html(self):
 
         boolean = ('link_to_self', 'permanent_acl',

@@ -104,13 +104,15 @@ def line_attributes(cell):
     return ""
 
 
-def sortable_table(sort_column, content, html_class='', url=''):
+def sortable_table(sort_column, content, html_class='', url='',
+                   titles=()
+                   ):
     """Content is a list of line.
     Each line is a list containing the same number of cell.
     If a cell is a list then it contains the attributes
     of the cell and the content of the cell
 
-    If the firt cell of the line contains a list of 3 elements,
+    If the first cell of the line contains a list of 3 elements,
     the third is the TR attributes.
     """
 
@@ -135,8 +137,12 @@ def sortable_table(sort_column, content, html_class='', url=''):
 
     i = 0
     for i in range(nr_columns):
-        s.append('<TH><A CLASS="c%d tips" HREF="?sort_column=%d+%s"><SPAN></SPAN>'%\
-                 (i, (i,-i-1)[ascending], url))
+        if i < len(titles):
+            title = titles[i]
+        else:
+            title = ''
+        s.append('<TH><A CLASS="c%d tips" HREF="?sort_column=%d+%s">%s<SPAN></SPAN>'%\
+                 (i, (i,-i-1)[ascending], url, title))
         if sort_column == i:
             s[-1] += ('&#8593;', '&#8595;')[ascending]
         s.append('</A></th>')
