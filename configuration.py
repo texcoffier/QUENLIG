@@ -1,5 +1,5 @@
 # Version
-version = "2.3.1"
+version = "2.3.2"
 
 # URL Of the Centralized Authentification service
 CAS = 'https://cas.univ-lyon1.fr/cas'
@@ -9,7 +9,7 @@ CAS = 'https://cas.univ-lyon1.fr/cas'
 timeout_on_question = 1800 # In seconds
 
 # Once per 10 hour, a new ticket is asked to CAS
-timeout = 36000 # in secondes
+timeout = 36000 # in seconds
 
 # Statistics take some time to compute.
 # We don't want to compute them every time, so they are cached some time.

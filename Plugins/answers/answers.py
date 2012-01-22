@@ -35,7 +35,11 @@ def execute(state, plugin, argument):
     if argument:    
         s = ""
         for question in questions.sorted_questions:
-            s += question.answers_html(state)
+            s += '<table><caption>' + question.name + '</caption>'
+            for t in question.tests:
+                if 'good' in t.__class__.__name__.lower():
+                    s += t.html(state=state) + '<br>'
+            s += '</table>'
 
         plugin.heart_content = s
         state.question = None

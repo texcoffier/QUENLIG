@@ -2,6 +2,4 @@
 
 tip = "Voir les réponses"
 
-before = "Les réponses"
-
-
+before = "Les bonnes réponses"

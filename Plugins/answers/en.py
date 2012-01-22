@@ -2,6 +2,6 @@
 
 tip = "See the answers"
 
-before = "The answers"
+before = "The good answers"
 
 
