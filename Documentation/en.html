@@ -6,8 +6,26 @@
     <link href="doc.css" rel="stylesheet">
     <link REL="icon" HREF="../HTML/favicon.ico">
   </head>
+  <script><!--
+	   function make_style()
+	     {
+	     var a = document.getElementsByTagName('A') ;
+	     var location = window.location.hash.toString().substr(1) ;
+	     for(var i = 0 ; i < a.length; i++)
+		   if ( a[i].href.split('#')[1] == location
+		        ||  a[i].name == location
+				 )
+				 {
+				 a[i].parentNode.style.background = '#FF6' ;
+				 }
+			 else
+				 {
+				 a[i].parentNode.style.background = '' ;
+				 }
+	     }
+  --></script>
 
-  <body>
+  <body onload="make_style()" onclick="setTimeout('make_style()',100)">
     <div class="menu">
       <p>
       Table of Content</p>
@@ -667,18 +685,16 @@ add(name="age",
       Two roles are hardcoded into Quenlig:
     </p>
     <ul>
-      <li> <tt>Default</tt> role is defined recursively because
+      <li> <tt>Wired</tt> role is defined recursively because
 	it is the base type for all the roles.
+	This role is used to define ACLS that must not be removed.
+      <li> <tt>Default</tt> is defined from <tt>Wired</tt> role.
 	It is the default user role and so define what the students can do.
-      <li> <tt>Teacher</tt> default <b>role</b> is
-	    <tt>Default</tt> and it is initialized with ACLS
-	    allowing it to be usable
-	    by the session managers and questionnary authors.
+      <li> <tt>Teacher</tt> is defined from <tt>Default</tt> role.
+	It adds (and remove) ACLS in order to be used
+	by the session managers and questionnary authors.
     </ul>
-
-    <p>
-      Currently there is no student management with the web interface.
-      So the operations must be done directly on the files.
+      You can edit ACLS and role directly in files.
       For each student and role there is a directory named
       <tt>Students/YourSessionName/Logs/TheStudent</tt>
       containing:
@@ -703,6 +719,13 @@ add(name="age",
       The ACLS defines for each plugins the operations allowed on the plugin.
       Currently the only operation is <tt>executable</tt>, in the future
       other operations may be added as <tt>movable</tt> or <tt>hidable</tt>.
+    </p>
+    <p>
+      To change ACLS: display the students list, click on a student
+      or a role and click on 'Edit ACLS'.
+      Then you can for each plugin indicate if it is allowed, rejected
+      or inherited from the current role.
+      ACLS modification have immediate effect and are stored in files.
     </p>
     <p>
       There is an example of <tt>YourSession/Logs/Default/acls</tt> file:
