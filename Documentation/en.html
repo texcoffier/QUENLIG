@@ -6,24 +6,7 @@
     <link href="doc.css" rel="stylesheet">
     <link REL="icon" HREF="../HTML/favicon.ico">
   </head>
-  <script><!--
-	   function make_style()
-	     {
-	     var a = document.getElementsByTagName('A') ;
-	     var location = window.location.hash.toString().substr(1) ;
-	     for(var i = 0 ; i < a.length; i++)
-		   if ( a[i].href.split('#')[1] == location
-		        ||  a[i].name == location
-				 )
-				 {
-				 a[i].parentNode.style.background = '#FF6' ;
-				 }
-			 else
-				 {
-				 a[i].parentNode.style.background = '' ;
-				 }
-	     }
-  --></script>
+  <script src="doc.js"></script>
 
   <body onload="make_style()" onclick="setTimeout('make_style()',100)">
     <div class="menu">
@@ -33,7 +16,7 @@
       <li> <a href="#quoi">What's Quenlig?</a></li>
       <li> <a href="#run">Running Quenlig</a></li>
       <li> <a href="#create">Questionnary Creation</a></li>
-      <li> <a href="#question">Question Creation</a></li>
+      <li> <a href="#question_creation">Question Creation</a></li>
       <li> <a href="#question_reference">Question Reference</a></li>
       <ul>
       <li> <a href="#name"><tt>name</tt></a></li>
@@ -186,7 +169,7 @@
       It will see its old answers and may reuses parts of them to answer.
     </p>
     
-    <h2><a name="question">Question creation</a></h2>
+    <h2><a name="question_creation">Question creation</a></h2>
     <p>
       The file containing the questions should start by
     </p>

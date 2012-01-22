@@ -285,7 +285,10 @@ if 'plugins.html' in sys.argv:
         f.write('</table>')
         
     f = open(os.path.join('Documentation', 'plugins.html'), 'w')
-    f.write('''<style>
+    f.write('''<html>
+<script src="doc.js"></script>
+<body onload="make_style()" onclick="setTimeout('make_style()',100)">
+<style>
 TR { vertical-align: top; }
 BODY { font-family: sans-serif; }
 TD.pre { white-space: pre ; }
@@ -374,7 +377,10 @@ You can click on plugin attributes to see there definition.
             pass
 
     f = open(os.path.join('Documentation', 'tests.html'), 'w')
-    f.write('''
+    f.write('''<html>
+  <script src="doc.js"></script>
+  <body onload="make_style()" onclick="setTimeout('make_style()',100)">
+
 <style>
 BODY { font-family: sans-serif ; }
 PRE { border: 1px solid black ;
