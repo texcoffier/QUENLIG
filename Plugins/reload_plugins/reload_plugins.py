@@ -63,9 +63,9 @@ def init():
             self.reload = False
             a = old_state.execute(self, form)
             if self.reload:
-                import Plugins.page.page
-                Plugins.page.page.css_cached.cache = {}
-                utilities.allow_one_more_call(Plugins.page.page.generate_javascript)
+                import Plugins.top.top
+                Plugins.top.top.css_cached.cache = {}
+                utilities.allow_one_more_call(Plugins.top.top.generate_javascript)
                 import server
                 server.cache = {}
 

@@ -26,7 +26,7 @@ heart of the page when clicked, for example the 'action_help' plugin.
 """
 
 priority_display = 'title_bar'
-priority_execute = '-page'
+priority_execute = '-top'
 acls = { 'Wired': ('executable',) }
 
 def execute(state, plugin, argument):

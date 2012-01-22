@@ -24,7 +24,7 @@ It is not yet working."""
 
 import student
 
-priority_execute = '-page'
+priority_execute = '-top'
 
 container = 'administration'
 

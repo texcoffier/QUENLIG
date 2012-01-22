@@ -23,7 +23,7 @@
 allow students to change an old good answer
 """
 
-container = 'page'
+container = 'top'
 priority_execute = '-question_answer'
 acls = { 'Teacher': ('executable',) }
 

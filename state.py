@@ -73,7 +73,11 @@ class StatePlugin:
         if isinstance(self.__dict__[attribute], int):
             self.__dict__[attribute_int] = self.__dict__[attribute]
             return
-        after = self.state.plugins_dict[self.__dict__[attribute].strip('-')]
+        try:
+            after= self.state.plugins_dict[self.__dict__[attribute].strip('-')]
+        except KeyError:
+            raise ValueError(self.plugin.css_name
+                             + ' use non existent ' + self.__dict__[attribute])
         after.priority_compute(attribute)
         if self.__dict__[attribute][0] == '-':
             self.__dict__[attribute_int] = after.__dict__[attribute_int] - 1

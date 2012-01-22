@@ -302,6 +302,8 @@ class Plugin:
             return self.plugin.container
         if not hasattr(self.plugin, 'priority_display'):
             return ''
+        if isinstance(self.plugin.priority_display, int):
+            return ''
         return self.plugins_dict[self.plugin.priority_display.strip('-')].default_container()
     
     def doc_html(self):

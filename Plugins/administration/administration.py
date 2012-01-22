@@ -22,10 +22,5 @@
 """Administration menu."""
 
 acls = { 'Teacher': ('executable',) }
-
-css_attributes = ( '{ position: absolute ; right: 0; top:0 }',
-                   )
-container = 'page'
+priority_display = 'analyse'
 permanent_acl = True
-
-

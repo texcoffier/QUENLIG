@@ -25,7 +25,7 @@ import plugins
 import cgi
 import student
 
-priority_execute = '-page'
+priority_execute = '-top'
 
 container = 'administration'
 

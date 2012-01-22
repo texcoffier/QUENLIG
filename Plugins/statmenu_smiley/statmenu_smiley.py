@@ -24,7 +24,7 @@
 import utilities
 
 priority_execute = 'statmenu_bad'
-container = 'page'
+container = 'statmenu'
 acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
 
 style = {
