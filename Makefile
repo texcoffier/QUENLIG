@@ -108,13 +108,27 @@ tags:
 doc:
 	cd Documentation ; $(MAKE)
 
-tar:clean tags doc
+git-commited:
+	@if [ "$$(git ls-files -m)" != '' ] ; \
+	      then echo 'GIT COMMIT PLEASE' ; exit 1 ; fi
+
+tar:git-commited regtest clean tags doc
 	ln -s . QUENLIG-$(V)
-	(git ls-files ; echo TAGS ; echo Documentation/plugins.html ; echo Documentation/tests.html ) | \
+	(git ls-files ; \
+         echo TAGS ; \
+         echo Documentation/plugins.html ; \
+         echo Documentation/tests.html ; \
+        ) | \
 		sed 's/^/QUENLIG-$(V)\//' | \
 		grep -v 'HTML/sujet' \
 		>xxx.to_be_tarred
 	tar -T xxx.to_be_tarred -cvf - | \
 		gzip >~/public_html/QUENLIG/QUENLIG-$(V).tar.gz
 	rm QUENLIG-$(V) xxx.to_be_tarred
+	cp Documentation/Welcome.html ~/public_html/QUENLIG/doc.html
+	cp Documentation/en.html ~/public_html/QUENLIG/
+	cp Documentation/plugins.html ~/public_html/QUENLIG/
+	cp Documentation/tests.html ~/public_html/QUENLIG/
 	ls -ls ~/public_html/QUENLIG
+	git tag $(V)
+	@echo "UPDATE ~/public_html/QUENLIG/Welcome.html"
