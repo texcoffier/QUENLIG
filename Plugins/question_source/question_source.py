@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,39 +22,73 @@
 """Displays the question Python source."""
 
 import os
-import re
 import configuration
+import cgi
 
 container = 'heart'
 priority_display = 10000000
 acls = { 'Teacher': ('executable',) }
 
-def extract_question(c, function):
+def extract_question(c, lineno):
     """Extract a question definition from the python source.
-    Extract some text before.
-    Bugs:
-       - Inside the 'add' the text must not go to the first column
-       """
-    
-    function = re.escape(function)
-    c = re.sub('\nadd[ \t]*\(', '\n', c) # simplify the not matching
+    """
 
-    lines_starting_by_space_or_empty = "(\n+[ \t][^\n]*)*"
+    start = lineno
+    while not c[start].startswith('add('):
+        start -= 1
 
-    not_an_add = "\n+[a-zA-Z][^\n]*"
-    not_an_add_bloc = not_an_add + lines_starting_by_space_or_empty
-    
-    the_add = '\n+name=[\'"]'+ function + '[\'"][^\n]*'
-    the_add_bloc = the_add + lines_starting_by_space_or_empty
-    
-    interesting_part = "(" + not_an_add_bloc + ")*" + the_add_bloc
-    
-    c = re.sub('(?s)(' + interesting_part + ")", '\\1', c)
-    c = re.sub('(?s).*', '', c)
-    c = re.sub('(?s).*', '', c)
-    c = c.replace('', 'add(')
+    end = lineno
+    while not c[end].strip() == '':
+        end += 1
 
-    return c
+    return ''.join(c[start:end])
+
+def string(txt):
+    if '\n' in txt:
+        if '"""' in txt:
+            sep = "'''"
+        else:
+            sep = '"""'
+        return sep + txt + sep
+    if '"' not in txt:
+        return '"' + txt + '"'
+    if "'" not in txt:
+        return "'" + txt + "'"
+    return repr(txt)
+
+def strings(strs, sep=','):
+    r = []
+    for x in strs:
+        r.append(string(x))
+    return '[' + sep.join(r) + ']'
+
+def source_python(question, state):
+    """Unfinished"""
+    s = ["add(name=\"%s\"," % question.short_name]
+    r = []
+    for required in question.required.names():
+        world, name = required.split(':')
+        if world == question.world:
+            required = name
+        r.append(required)
+    s.append("    required=%s," % strings(r))
+    if question.before:
+        s.append("    before=%s," % string(question.before(state)) )
+    s.append("    question=%s," % string(question.question(state)) )
+    if question.indices:
+        s.append("    indices=%s," % strings(question.indices,
+                                             sep = ',\n    ') )
+    if question.good_answer:
+        s.append("    good_answer=%s," % string(question.good_answer) )
+    if question.bad_answer:
+        s.append("    bad_answer=%s," % string(question.bad_answer) )
+    if question.tests:
+        s.append("    tests = (")
+        for t in question.tests:
+            s.append(t.source() + ',\n')
+        s.append("    ),")
+    s.append(")")
+    return '\n'.join(s)
 
 def execute(state, plugin, argument):
 
@@ -63,10 +97,10 @@ def execute(state, plugin, argument):
     
     f = open( os.path.join(configuration.root, configuration.questions,
                            state.question.world + ".py"), "r")
-    c = f.read()        
+    c = f.readlines()        
     f.close()
 
-    c = extract_question(c, state.question.short_name)
+    c = extract_question(c, state.question.f_lineno)
 
     f = open('xxx.source.py', 'w')
     f.write(c)
@@ -75,7 +109,7 @@ def execute(state, plugin, argument):
     c = f.read().replace('highlight.css', '/highlight.css')
     f.close()
 
-    return c
+    return c + '<pre>' + cgi.escape(source_python(state.question, state)) + '</pre>'
     
 
 

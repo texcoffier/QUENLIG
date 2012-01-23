@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,8 @@ class Requireds:
         return [r.name for r in self.requireds]
 
 def transform_question(question):
+    """If the question is a string, return a function
+    returning the string"""
     if question == None:
         return None
     q = question
@@ -207,54 +209,6 @@ class Question:
     def __str__(self):
         return self.name
 
-
-
-    # When storing source, we store the source of the question in a file.
-    # when a question is modified, the source of the question is saved
-    # and the sources of all the other questions.
-
-    def source_python(self, comment=""):
-        s = ["# %s\nadd(name=\"%s\"," % (comment, self.short_name)]
-        r = ""
-        for required in self.required.names():
-            world, name = required.split(':')
-            if world == self.world:
-                required = name
-            r += '"%s",' % required
-        s.append("required=[%s]," % r[:-1])
-        s.append("before=%s" % self.before )
-        s.append(")")
-        return '\n'.join(s)
-
-    def store_file(self):
-        """Store every questions in the file.py"""
-        f = open(os.path.join(self.path) + '.new', 'w')
-        for q in questions:
-            if q.world != self.world:
-                continue
-            f.write( q.source_python(self) )
-        f.close()
-
-    def store_source(self):
-        file_dir = os.path.join(*self.path)
-        if not os.path.isdir(file_dir):
-            os.mkdir(file_dir)
-        question_dir = os.path.join(file_dir, self.short_name) + '.log'
-        if not os.path.isdir(question_dir):
-            os.mkdir(question_dir)
-
-        history = [-1] + [int(i) for i in os.listdir(question_dir)]
-        history.sort()
-        new_name = '%04d' % (history[-1] + 1)
-        f = open( os.path.join(question_dir, new_name), 'w')
-        f.write(self.source_python())
-        f.close()
-        
-##    def __cmp__(self, other):
-##        if other == None:
-##            return 1
-##        return cmp(self.name, other.name)
-
 questions = {}
 previous_question = ""
 
@@ -288,15 +242,16 @@ def add(**arg):
             raise KeyError("Voir stderr")
     arg["name"] = world[-1] + ":" + arg["name"]
     if arg["name"] in questions.keys():
-        print "Une question porte deja le nom", arg["name"]
-        raise KeyError("Voir stderr")
+        raise KeyError("There is always a question with this name: %s"
+                       % arg["name"])
     global previous_question
     if previous_question and previous_question.split(":")[0] == world[-1]:
         pq = [previous_question]
     else:
         pq = []
-    questions[arg["name"]] = Question(world, arg, previous_question=pq
-                                      )
+    new_question = Question(world, arg, previous_question=pq)
+    questions[arg["name"]] = new_question
+    new_question.f_lineno = inspect.currentframe().f_back.f_lineno
     previous_question = arg["name"]
 
 def answerable(answered, student):
