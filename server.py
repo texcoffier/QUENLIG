@@ -183,7 +183,6 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         session = state.get_state(self, form['ticket'].translate(utilities.safe_ascii))
         if session == None:
             return
-
         # Execute and return page
         sys.stdout.flush() # To really log into the file for 'regtests'
         mime, content = session.execute(form)

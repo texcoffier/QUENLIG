@@ -26,8 +26,7 @@ import inspect
 import sys
 import cgi
 import re
-
-
+import configuration
 
 current_evaluate_answer = None
 class Required:
@@ -208,6 +207,11 @@ class Question:
 
     def __str__(self):
         return self.name
+
+    def python_file(self):
+        return os.path.join(configuration.root, configuration.questions,
+                            self.world + ".py")
+
 
 questions = {}
 previous_question = ""

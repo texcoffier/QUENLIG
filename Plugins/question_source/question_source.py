@@ -24,92 +24,98 @@
 import os
 import configuration
 import cgi
+import compiler
 
 container = 'heart'
 priority_display = 10000000
 acls = { 'Teacher': ('executable',) }
+priority_execute = '-reload_questions'
 
-def extract_question(c, lineno):
-    """Extract a question definition from the python source.
-    """
+javascript = r'''
+function encode_uri(t)
+{
+  return encodeURI(t).replace(/\?/g, "%3F").replace(/#/g, "%23")
+    .replace(/[.]/g, "%2E").replace(/;/g, "%3B").replace(/&/g, "%26")
+    .replace(/\//g, "%2F").replace(/,/g, "%2C").replace('+', '%2B') ;
+}
+'''
 
-    start = lineno
+def question_lines(c, question):
+    start = question.f_lineno
     while not c[start].startswith('add('):
         start -= 1
 
-    end = lineno
+    end = question.f_lineno
     while not c[end].strip() == '':
         end += 1
+    return start, end
 
-    return ''.join(c[start:end])
+def extract_question(c, question):
+    """Extract a question definition from the python source.
+    """
+    start, end = question_lines(c, question)
+    return c[start:end]
 
-def string(txt):
-    if '\n' in txt:
-        if '"""' in txt:
-            sep = "'''"
-        else:
-            sep = '"""'
-        return sep + txt + sep
-    if '"' not in txt:
-        return '"' + txt + '"'
-    if "'" not in txt:
-        return "'" + txt + "'"
-    return repr(txt)
+def replace_question(c, question, source, state):
+    start, end = question_lines(c, question)
+    f = open(question.python_file() + '.new', 'w')
+    f.write(''.join(c[:start]) + source + ''.join(c[end:]))
+    f.close()
+    os.rename(question.python_file(), question.python_file() + '.old')
+    os.rename(question.python_file() + '.new', question.python_file())
+    import plugins
+    reload_questions = plugins.Plugin.plugins_dict['reload_questions']
+    try:
+        reload_questions.plugin.execute(state, reload_questions, '1')
+        return 'OK'
+    except Exception, e:
+        os.rename(question.python_file() + '.old', question.python_file())
+        reload_questions.plugin.execute(state, reload_questions, '1')
+        return '<pre class="python_error">' + cgi.escape(str(e)) + '</pre>'
 
-def strings(strs, sep=','):
-    r = []
-    for x in strs:
-        r.append(string(x))
-    return '[' + sep.join(r) + ']'
+def edit_python(source):
+    return (
+        '<FORM action="javascript:window.location=(\'?question_source=\' + encode_uri(document.getElementById(\'src\').value));">' +
+        '<TEXTAREA id="src" style="width:100%%; height: %sem">' % (
+            1.3 * source.count('\n'))
+        + cgi.escape(source)
+        + '</TEXTAREA><BUTTON class="save_source"></BUTTON></FORM>')
 
-def source_python(question, state):
-    """Unfinished"""
-    s = ["add(name=\"%s\"," % question.short_name]
-    r = []
-    for required in question.required.names():
-        world, name = required.split(':')
-        if world == question.world:
-            required = name
-        r.append(required)
-    s.append("    required=%s," % strings(r))
-    if question.before:
-        s.append("    before=%s," % string(question.before(state)) )
-    s.append("    question=%s," % string(question.question(state)) )
-    if question.indices:
-        s.append("    indices=%s," % strings(question.indices,
-                                             sep = ',\n    ') )
-    if question.good_answer:
-        s.append("    good_answer=%s," % string(question.good_answer) )
-    if question.bad_answer:
-        s.append("    bad_answer=%s," % string(question.bad_answer) )
-    if question.tests:
-        s.append("    tests = (")
-        for t in question.tests:
-            s.append(t.source() + ',\n')
-        s.append("    ),")
-    s.append(")")
-    return '\n'.join(s)
-
-def execute(state, plugin, argument):
-
+def execute(state, dummy_plugin, argument):
     if state.question == None:
         return
-    
-    f = open( os.path.join(configuration.root, configuration.questions,
-                           state.question.world + ".py"), "r")
+
+    f = open(state.question.python_file(), "r")
     c = f.readlines()        
     f.close()
 
-    c = extract_question(c, state.question.f_lineno)
+    before = ''
+    if argument:
+        source = unicode(argument,'utf-8').encode('latin-1')
+        try:
+            compiler.parse(source)
+        except SyntaxError, e:
+            before = ('<pre class="python_error">' +
+                      cgi.escape(str(e)) + '</pre>')
+        if before == '':
+            before = replace_question(c, state.question, source, state)
+    else:
+        source = ''.join(extract_question(c, state.question))
 
-    f = open('xxx.source.py', 'w')
-    f.write(c)
-    f.close()
-    f = os.popen('highlight --xhtml xxx.source.py ; grep -v "body" <highlight.css >HTML/highlight.css', 'r')
-    c = f.read().replace('highlight.css', '/highlight.css')
-    f.close()
 
-    return c + '<pre>' + cgi.escape(source_python(state.question, state)) + '</pre>'
+    if False:
+        f = open('xxx.source.py', 'w')
+        f.write(''.join(source))
+        f.close()
+        f = os.popen('highlight --xhtml xxx.source.py ; grep -v "body" <highlight.css >HTML/highlight.css', 'r')
+        highlighted = f.read().replace('highlight.css', '/highlight.css')
+        f.close()
+        return highlighted
+
+    # To remove problem with the reload plugin url
+    state.form.pop('question_source', 1)
+    
+    return before + edit_python(source)
     
 
 
