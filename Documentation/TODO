@@ -1,31 +1,12 @@
-
-
-
-Questionnaire Python : anonymiser les variables
-
-Ensuite je ferais les documentations pour les personnes :
-    * définissant les exercices ;
-    * ajoutant de nouveaux types de test ;
-    * ajoutant de nouveaux plugins.
-
 TODO Absolute :
-
+	Correction/notation question par question manuelle avec commentaires.
 	Adresses IP dans stats étudiant
 	Changer les dates de début et fin par le web
 	Authentitification boucle si l'URL se termine par /
-	Statistique sur un etudiqnt en pqrticulier
+	Statistique sur un etudiant en particulier
 	voir 'question stat' marche pas si pas 'voir toute'
-
-	'session_start' pas affiché quand on fait 'Visibilité'
-	Pouvoir noter les mauvaises réponse automatiquement ou manuellement.
-	Le recharge question, n'est pas immédiat sur l'affichage,
 	enlever evaluate_answer et remplacer par plugin ? (pour cours Python)
-	finir answered_other
-	Probleme redirection UE constant ?
-	FINIR acls
-		ACL : hideable
-		Ajouter/Enlever une ACL	à quelqu'un.
-		Ajouter/Enlever un role	à quelqu'un.
+	Ajouter/Enlever un role	à quelqu'un via le web
 	Faire disparaitre 'configuration' au profit de 'session' ?
 	plugin : casauth
 	plugin : language
@@ -35,8 +16,8 @@ TODO maybe :
      	    ajouter un anti-SPAMMER, limiter la tailler des noms
      Pouvoir envoyer un message à un étudiant, le message
      	    apparaîtra sur toutes les pages jusqu'à ce que l'étudiant le ferme.
-     Faire un éditeur interactif de question.
      Extract 'auto focus' from 'questions.py' ?
      Split 'tips' from 'page.py' ?
-     Liste des bonnes réponses COURTE pour diffuser aux étudiants
+     Questionnaire Python : anonymiser les variables
+
 
