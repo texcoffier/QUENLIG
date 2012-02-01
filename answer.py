@@ -34,6 +34,7 @@ class Answer:
         self.last_time = 0        # The question last display date
         self.resign = False       # The student saw the question in the past
         self.last_answer = ''     # The last student answer
+        self.grades = {}          # The teachers grades
 
     def eval_action(self, action_time, command, value):
         self.last_time = action_time
@@ -53,6 +54,9 @@ class Answer:
             self.comments.append((action_time, value))
         elif command == "login" :
             pass
+        elif command == "grade" :
+            teacher, grade = value.split(',')
+            self.grades[teacher] = grade
         else:
             raise ValueError("Unknown action %s in %s" % (command, self.student))
 

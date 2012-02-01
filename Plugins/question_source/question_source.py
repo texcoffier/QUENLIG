@@ -46,7 +46,7 @@ def question_lines(c, question):
         start -= 1
 
     end = question.f_lineno
-    while not c[end].strip() == '':
+    while end < len(c) and not c[end].strip() == '':
         end += 1
     return start, end
 
@@ -116,14 +116,3 @@ def execute(state, dummy_plugin, argument):
     state.form.pop('question_source', 1)
     
     return before + edit_python(source)
-    
-
-
-
-    
-
-
-
-
-    
-

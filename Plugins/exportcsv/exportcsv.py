@@ -59,7 +59,8 @@ def execute(state, plugin, argument):
                 s.the_number_of_bad_answers   / max_bad_answers  ,
                 s.the_number_of_given_indices / max_given_indices,
                 (s.the_time_searching + s.the_time_after)/3600.,
-                s.points()
+                s.points(),
+                s.grades().replace(',', ' '),
             ))
     content.sort()
 
@@ -68,7 +69,7 @@ def execute(state, plugin, argument):
     t = [header[6]]
     t.append(','.join(header[1:6]))
     for c in content:
-        t.append("%s, %5.3f, %5.3f, %5.3f, %5.2f, %5.2f" % c)
+        t.append("%s, %5.3f, %5.3f, %5.3f, %5.2f, %5.2f, %s" % c)
         
     return 'text/comma-separated-values', '\n'.join(t)
 

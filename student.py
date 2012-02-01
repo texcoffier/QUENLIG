@@ -38,6 +38,7 @@ import configuration
 import statistics
 import sys
 import random
+import collections
 
 def unquote(s):
     "Anybody has a better idea for this complex function?"
@@ -287,6 +288,18 @@ class Student:
                     p += x
         return p
 
+    def grades(self):
+        p = ''
+        summed = collections.defaultdict(int)
+        for a in self.answers.values():
+            if a.grades:
+                p += repr(a.grades)
+            for teacher, grade in a.grades.items():
+                summed[teacher] += int(grade)
+        if summed:
+            return repr(summed.items()) + '----' + p
+        return ''
+
     def answered_page(self, state):
         t = self.answers.values()
         t.sort(lambda x,y: cmp(x.last_time, y.last_time))
@@ -375,6 +388,10 @@ class Student:
                                       command, value))
         f.close()
 
+    def set_grade(self, question, grade):
+        if question in self.answers:
+            self.log(question, "grade", grade)
+            
     def login(self, value):
         self.log("None", "login", value)
 
