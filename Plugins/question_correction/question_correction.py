@@ -28,7 +28,7 @@ javascript = r"""
 function question_correction(event)
 {
   var input = event ? event.target : window.event ;
-  var url = "?question_correction=" + input.name + "," + input.value ;
+  var url = "?question_correction=" + input.name + "," + encode_uri(input.value) ;
   var img = document.createElement('IMG') ;
   img.src = url ;
   input.parentNode.appendChild(img) ;
@@ -43,6 +43,7 @@ css_attributes = (
 import utilities
 import statistics
 import student
+import cgi
 
 def execute(state, plugin, argument):
     if state.question == None:
@@ -52,9 +53,16 @@ def execute(state, plugin, argument):
 
     if argument:
         the_student, grade = argument.split(',')
-        student.students[the_student].set_grade(
-            state.question.name,
-            teacher + ',' + grade)
+        if the_student.startswith('*'):
+            the_student = the_student[1:]
+            comment = unicode(grade,'utf-8').encode('latin-1')
+            student.students[the_student].set_why(
+                state.question.name,
+                teacher + '\002' + comment) # \001 is yet used
+        else:
+            student.students[the_student].set_grade(
+                state.question.name,
+                teacher + ',' + grade)
         return 'image/png', '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x01sRGB\x00\xae\xce\x1c\xe9\x00\x00\x00\x0fIDAT\x08\x1d\x01\x04\x00\xfb\xff\x00\x00\xff\x00\x02\x02\x01\x00\x0b\x0e\xaa\xaf\x00\x00\x00\x00IEND\xaeB`\x82'
 
     stats = statistics.question_stats()
@@ -65,6 +73,7 @@ def execute(state, plugin, argument):
         if not a.answered:
             continue
         last = int(a.grades.get(teacher, '-1'))
+        why = a.why.get(teacher, '')
             
         lines.append(
             [utilities.answer_format(a.answered),
@@ -73,7 +82,7 @@ def execute(state, plugin, argument):
                      + {0: '', 1: '', 2:'<br>'}[i%3]
                      for i in range(6)
                      ),
-             '<textarea rows="2" cols="40"></textarea>',
+             '<textarea rows="2" cols="40" name="*%s" onchange="question_correction(event)">%s</textarea>' % (s.filename, cgi.escape(why)),
              ])
 
     if len(lines) == 0:

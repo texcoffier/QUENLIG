@@ -391,6 +391,10 @@ class Student:
     def set_grade(self, question, grade):
         if question in self.answers:
             self.log(question, "grade", grade)
+
+    def set_why(self, question, comment):
+        if question in self.answers:
+            self.log(question, "why", comment)
             
     def login(self, value):
         self.log("None", "login", value)
