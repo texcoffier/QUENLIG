@@ -344,6 +344,10 @@ class Student:
                 s += utilities.div('comment',"<PRE>" + \
                                    cgi.escape(comment_text) + "</PRE>")
 
+            import Plugins.question_correction.question_correction
+            s += Plugins.question_correction.question_correction.add_a_link(state, q)
+
+                
         if none and none.comments:
             s += "<h3 class=\"short\">?</h3>"
             for comment_time, comment_text in none.comments:

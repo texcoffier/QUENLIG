@@ -9,5 +9,6 @@ translations = {
     'c0>SPAN': "Student answer",
     'c1>SPAN': "Click on the grade you want to give",
     'c2>SPAN': "Enter a comment about the student answer.\\AThey can be sent to the student.",
+    "question_correction_comment": 'A teacher comment by: ',
     }
 

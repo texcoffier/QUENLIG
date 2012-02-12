@@ -38,6 +38,8 @@ function question_correction(event)
 
 css_attributes = (
     "/.question_correction_table IMG { width: 8px; height: 8px; background: #F00; border: 0px }",
+    "/.question_correction_table SPAN { white-space: pre ; }",
+    "/.question_correction_comment { text-decoration: underline; }",
 )
 
 import utilities
@@ -77,11 +79,11 @@ def execute(state, plugin, argument):
             
         lines.append(
             [utilities.answer_format(a.answered),
-             ''.join('<input name="%s" type="radio" value="%d" onclick="question_correction(event)"%s> %d'
+             '<span>'+''.join('<input name="%s" type="radio" value="%d" onclick="question_correction(event)"%s>&nbsp;%d'
                      % (s.filename, i, ['',' checked'][i == last], i)
                      + {0: '', 1: '', 2:'<br>'}[i%3]
                      for i in range(6)
-                     ),
+                     ) + '</span>',
              '<textarea rows="2" cols="40" name="*%s" onchange="question_correction(event)">%s</textarea>' % (s.filename, cgi.escape(why)),
              ])
 
@@ -93,3 +95,16 @@ def execute(state, plugin, argument):
                                        html_class="question_correction_table",
                                        )
             )
+
+
+def add_a_link(state, question):
+    """This function is called by 'answered' plugin."""
+
+    a = state.student.answer(question.name)
+    t = []
+    for teacher, why in a.why.items():
+        t.append('<p class="question_correction_comment">'
+                 + cgi.escape(teacher) + '</p><pre>'
+                 + cgi.escape(why) + '</pre>')
+
+    return '<div class="question_correction">' + '\n'.join(t) + '</div>'
