@@ -31,6 +31,10 @@ function question_correction(event)
   var url = "?question_correction=" + input.name + "," + encode_uri(input.value) ;
   var img = document.createElement('IMG') ;
   img.src = url ;
+  var td = input.parentNode ;
+  if ( td.tagName != 'TD' )
+     td = td.parentNode ;
+  td.style.background = 'yellow' ;
   input.parentNode.appendChild(img) ;
 }
 
@@ -79,11 +83,12 @@ def execute(state, plugin, argument):
             
         lines.append(
             [utilities.answer_format(a.answered),
-             '<span>'+''.join('<input name="%s" type="radio" value="%d" onclick="question_correction(event)"%s>&nbsp;%d'
-                     % (s.filename, i, ['',' checked'][i == last], i)
-                     + {0: '', 1: '', 2:'<br>'}[i%3]
-                     for i in range(6)
-                     ) + '</span>',
+             '<span><!-- %2d -->' % last
+             +''.join('<input name="%s" type="radio" value="%d" onclick="question_correction(event)"%s>&nbsp;%d'
+                      % (s.filename, i, ['',' checked'][i == last], i)
+                      + {0: '', 1: '', 2:'<br>'}[i%3]
+                      for i in range(6)
+                      ) + '</span>',
              '<textarea rows="2" cols="40" name="*%s" onchange="question_correction(event)">%s</textarea>' % (s.filename, cgi.escape(why)),
              ])
 
