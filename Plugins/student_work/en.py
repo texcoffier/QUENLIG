@@ -21,5 +21,5 @@ translations = {
     '//c5>SPAN': "#comment leaved for the question",
     '//c6>SPAN': "Time with this question on screen",
     '//c7>SPAN': "A link the the question itself",
-    '//CAPTION': "Information about each questio saw by the student",
+    '//CAPTION': "Information about each question saw by the student",
     }

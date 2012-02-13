@@ -27,7 +27,7 @@ import utilities
 font_size = "70%"
 container = 'identity'
 color = "#999"
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 priority_execute = "-question_answer"
 
 def execute(state, plugin, argument):

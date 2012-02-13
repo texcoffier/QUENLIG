@@ -22,7 +22,7 @@
 """Allow to grade and comment the good answers."""
 
 priority_display = 'question_comments'
-acls = { 'Teacher': ('executable',) }
+acls = { 'Grader': ('executable',) }
 sort_column = 0
 javascript = r"""
 function question_correction(event)

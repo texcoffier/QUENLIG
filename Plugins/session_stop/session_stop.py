@@ -26,7 +26,7 @@ import utilities
 
 priority_display = 'session_start'
 priority_execute = "-question_answer"
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 font_size = "70%"
 color = "#999"
 

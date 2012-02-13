@@ -28,7 +28,7 @@ import questions
 container = 'analyse'
 link_to_self = True
 priority_execute = '-question_answer'
-acls = { 'Teacher': ('executable',) }
+acls = { 'Author': ('executable',) }
 
 def execute(state, plugin, argument):
     if argument == None:

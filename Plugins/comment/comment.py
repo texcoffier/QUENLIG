@@ -27,7 +27,7 @@ css_attributes = (
     "BUTTON { width: 100% ; }",
     ".comment_given { white-space: normal;}",
     )
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
     if argument:

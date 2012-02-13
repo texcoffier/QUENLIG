@@ -25,7 +25,7 @@ or only the allowed ones."""
 container = 'questions'
 priority_display = '-questions_next'
 priority_execute = '-questions'
-acls = { 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',), 'Author': ('executable',) }
 
 types = ('normal', 'all')
 

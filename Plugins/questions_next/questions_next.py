@@ -22,7 +22,7 @@
 """Allow to go to the next question in alphabetical order."""
 
 container = 'questions'
-acls = { 'Teacher': ('executable',) }
+acls = { 'Author': ('executable',) }
 
 def execute(state, plugin, argument):
 

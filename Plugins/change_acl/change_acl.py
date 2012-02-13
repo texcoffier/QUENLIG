@@ -31,11 +31,11 @@ import Plugins.acls.acls
 
 priority_execute = 'statmenu_students'
 
-container = 'administration'
+container = 'action'
 
 sort_column = 0
 
-acls = { 'Teacher': ('executable',) }
+acls = { 'Admin': ('executable',) }
 
 javascript = """
 function change_acls(user)
@@ -144,7 +144,7 @@ def execute(state, plugin, argument):
     if not p.heart_content:
         return
 
-    p.heart_content = ('<a class="change_acl" href="?change_acl='
+    p.heart_content = ('<p><a class="change_acl" href="?change_acl='
                        + state.form['answered_other'] + '">&nbsp;</a>'
                        + p.heart_content
                        )

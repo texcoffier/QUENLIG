@@ -23,7 +23,7 @@
 
 content_is_title = True
 container = 'menu'
-acls = { 'Default': ('executable',) }
+acls = { 'Wired': ('executable',) }
 
 def execute(state, plugin, argument):
     return state.student.name

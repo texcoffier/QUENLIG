@@ -26,15 +26,13 @@ import cgi
 import student
 
 priority_execute = '-top'
-
-container = 'administration'
+container = 'action'
 
 css_attributes = ( 'a.tips > div.tips > div { white-space: pre; }',
                    )
-
+permanent_acl = True
 link_to_self = True
-
-acls = { 'Teacher': ('executable',) }
+acls = { 'Developer': ('executable',) }
 
 def execute(state, plugin, argument):
 

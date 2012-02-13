@@ -28,7 +28,7 @@ import compiler
 
 container = 'heart'
 priority_display = 10000000
-acls = { 'Teacher': ('executable',) }
+acls = { 'Author': ('executable',) }
 priority_execute = '-reload_questions'
 
 javascript = r'''

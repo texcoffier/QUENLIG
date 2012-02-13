@@ -27,7 +27,7 @@ import statistics
 
 container = 'analyse'
 link_to_self = True
-acls = { 'Teacher': ('executable',) }
+acls = { 'Grader': ('executable',) }
 
 def execute(state, plugin, argument):
     if not argument:

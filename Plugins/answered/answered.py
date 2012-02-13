@@ -26,7 +26,7 @@ import statistics
 container = 'action'
 link_to_self = True
 priority_execute = '-question_answer'
-acls = { 'Default': ('executable',) }
+acls = { 'Default': ('executable',), 'Admin': ('!executable',) }
 
 css_attributes = (
 #    'TABLE        { border: 1px solid black ; }',

@@ -25,7 +25,7 @@ import utilities
 
 priority_execute = 'statmenu_bad'
 container = 'statmenu'
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 style = {
     -2: "<img align=\"top\" src=\"../../very_bad.png\">",

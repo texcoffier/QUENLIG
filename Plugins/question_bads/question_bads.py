@@ -26,7 +26,7 @@ import statistics
 import questions
 
 priority_display = 'question_comments'
-acls = { 'Teacher': ('executable',) }
+acls = { 'Author': ('executable',) }
 css_attributes = (
     "SPAN.uncommented { background: #FAA; }",
     "SPAN.uncommented PRE { background-color: #FAA ; }",

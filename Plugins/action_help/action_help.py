@@ -26,7 +26,7 @@ Any questionnary can redefine its own page.
 container = 'action'
 link_to_self = True
 priority_execute = '-question_answer'
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
     if argument:

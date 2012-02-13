@@ -547,7 +547,14 @@ if __name__ == "__main__":
             user = os.path.join(session.dir, 'Logs', args.pop())
             mkdir(user)
             user = os.path.join(user, 'roles')
-            utilities.write(user, "['Default','Teacher']\n")
+            import Plugins.role.role
+            x = list(Plugins.role.role.default_roles)
+            x.sort()
+            x.remove('Teacher')
+            x.insert(0, 'Teacher')
+            utilities.write(
+                user, '[' + ','.join("'%s'" % r
+                                     for r in x)  + ']')
         elif action == 'check-questions':
             session.check_questions()
         elif action == 'question-stats':

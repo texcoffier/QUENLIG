@@ -28,7 +28,7 @@ priority_display = 'comment'
 css_attributes = (
     'IMG { width: 100% ; margin-top: 0.3em ; }',
     )
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 try:
     import PIL.Image

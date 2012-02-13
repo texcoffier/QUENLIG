@@ -35,14 +35,24 @@ priority_display = 1000
 acls = { 'Teacher': ('executable',) }
 permanent_acl = True
 
+default_roles = {
+    'Wired'     : ["Wired"]  ,
+    'Default'   : ["Wired"]  ,
+    'Teacher'   : ["Default"],
+    'Student'   : ["Default"],
+    'Grader'    : ["Default"],
+    'Author'    : ["Default"],
+    'Admin'     : ["Default"],
+    'Developer' : ["Default"],
+    }
     
 def update_roles(astudent):
     """Initialize the role list for the student and its 'ancestors'""" 
     if 'roles' in astudent.__dict__:
         return
     astudent.roles_filename = os.path.join(astudent.file, 'roles')
-    if astudent.filename in ('Default', 'Wired'):
-        astudent.roles = ['Wired']
+    if astudent.filename in default_roles:
+        astudent.roles = default_roles[astudent.filename]
     else:
         default = "['Default']"
         utilities.write(astudent.roles_filename, default, overwrite=False)
@@ -70,6 +80,8 @@ def execute(state, plugin, argument):
         state.student.old_role = None
     s = []
     for role in state.student.roles:
+        if role in ('Default', 'Wired'):
+            continue
         if role == state.student.current_role:
             selected = 'selected'
         else:

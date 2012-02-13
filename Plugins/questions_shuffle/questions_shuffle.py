@@ -25,7 +25,7 @@ import random
 
 container = 'questions'
 priority_execute = 'questions'
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
     if 'shuffle_seed' not in state.__dict__:

@@ -26,7 +26,7 @@ import student
 
 priority_execute = '-top'
 
-container = 'administration'
+container = 'action'
 
 link_to_self = True
 

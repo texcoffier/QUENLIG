@@ -24,11 +24,11 @@
 import statistics
 import utilities
 
-container = 'administration'
+container = 'action'
 link_to_self = True
 priority_execute = '-question_answer'
 
-acls = { 'Teacher': ('executable',) }
+acls = { 'Admin': ('executable',) }
 
 def execute(state, plugin, argument):
     if not argument:

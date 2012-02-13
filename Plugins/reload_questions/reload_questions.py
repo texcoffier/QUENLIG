@@ -36,7 +36,7 @@ container = 'action'
 
 link_to_self = True
 
-acls = { 'Teacher': ('executable',) }
+acls = { 'Author': ('executable',) }
 
 def execute(state, plugin, argument):
     if state.question is None:

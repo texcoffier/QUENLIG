@@ -28,7 +28,8 @@ import Plugins.answered.answered
 import student
 
 prototype = 'answered' # Same plugin
-acls = { 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',), 'Admin': ('executable',) }
+link_to_self = False
 
 def execute(state, plugin, argument):
     if argument not in student.students:
@@ -36,8 +37,8 @@ def execute(state, plugin, argument):
 
     save = state.student
     state.student = student.students[argument]
-
-    Plugins.answered.answered.execute(state, plugin, argument)
-
-    state.student = save
+    try:
+        Plugins.answered.answered.execute(state, plugin, argument)
+    finally:
+        state.student = save
     

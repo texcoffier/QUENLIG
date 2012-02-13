@@ -30,10 +30,11 @@ import sys
 
 priority_execute = 1000000000
 container = 'action'
+permanent_acl = True
 
 # link_to_self = True
 
-acls = { 'Teacher': ('executable',) }
+acls = { 'Developer': ('executable',) }
 
 def execute(state, plugin, argument):
     if argument:

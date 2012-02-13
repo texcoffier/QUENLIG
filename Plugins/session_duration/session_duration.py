@@ -27,7 +27,7 @@ import utilities
 priority_display = 'session_stop'
 font_size = "70%"
 color = "#999"
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
     if state.start > configuration.dates[0] \

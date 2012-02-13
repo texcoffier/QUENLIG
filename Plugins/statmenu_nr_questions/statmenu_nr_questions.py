@@ -24,7 +24,7 @@
 import questions
 
 priority_display = 'statmenu_indice'
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
     return str(len(questions.questions))

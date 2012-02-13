@@ -23,7 +23,7 @@
 
 priority_display = 'statmenu_good'
 priority_execute = 'question_answer' # Verify answer before
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
     return str(state.student.number_of_bad_answers())

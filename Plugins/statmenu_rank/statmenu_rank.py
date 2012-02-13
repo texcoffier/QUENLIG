@@ -26,7 +26,7 @@ import utilities
 
 priority_display = 'statmenu_time'
 priority_execute = 'question_answer' # Verify answer before
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
     return str(state.student.classement())

@@ -28,12 +28,18 @@ import questions
 priority_display = 'statmenu_students'
 priority_execute = '-question_answer'
 link_to_self = True
-acls = { 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',),
+         'Author': ('executable',),
+         'Grader': ('executable',),
+         }
 
 def execute(state, plugin, argument):
     if argument == None:
         return ''
 
+    # In order to see the question in nay case
+    state.student.allowed_to_change_answer = True
+    
     stats = statistics.question_stats()
     nr_students = float(len(stats.all_students))
 

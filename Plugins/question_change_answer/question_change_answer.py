@@ -25,7 +25,7 @@ allow students to change an old good answer
 
 container = 'top'
 priority_execute = '-question_answer'
-acls = { 'Teacher': ('executable',) }
+acls = { }
 
 import time
 

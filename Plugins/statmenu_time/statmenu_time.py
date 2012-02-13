@@ -25,7 +25,7 @@ import utilities
 
 priority_display = 'statmenu_nr_questions'
 priority_execute = 'question_answer' # Verify answer before
-acls = { 'Default': ('executable',), 'Teacher': ('!executable',) }
+acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
     return utilities.time_format(int(state.student.time_searching()))

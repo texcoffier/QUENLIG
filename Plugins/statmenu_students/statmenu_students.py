@@ -29,7 +29,7 @@ container = 'statmenu'
 priority_execute = '-question_answer'
 priority_display = 1000000
 link_to_self = True
-acls = { 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',),  'Admin': ('executable',),}
 
 styles = {
     -2: "style='background-color:#FF0000;'",
