@@ -113,6 +113,10 @@ A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {
   white-space:normal;
 }
 
+/* Only here to fix a Chrome bug */
+A { background-image: url('transparent.png'); }
+
+
 PRE { background-color: #FF0 ; border: 1px solid black ; }
 
 """ + '\n'.join(s)

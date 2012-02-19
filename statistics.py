@@ -282,7 +282,7 @@ def graph_dot(show_stats=False):
     digraph "questions" {
     node[shape=none,margin="0",height="0.01",style="filled"];
     edge[arrowhead=empty, arrowsize="0.5",norm_width="0.5"];
-    graph[nodesep="0.1",ranksep="0.2",charset="Latin1", size="11.50,7.5", orientation="L",mclimit="10",nslimit="10"];
+    graph[dpi=40,nodesep="0.1",ranksep="0.2",charset="Latin1", orientation="P",mclimit="10",nslimit="10"];
     """)
     nb = float(len(questions.worlds()))
     rvb = {}
@@ -329,12 +329,14 @@ def graph_dot(show_stats=False):
     os.system("""
 
     (
-    dot -oHTML/xxx_graphe.ps -Tps HTML/xxx_graphe.dot
     dot -oHTML/xxx_graphe.png -Tpng HTML/xxx_graphe.dot
+    dot -oHTML/xxx_graphe.svg -Tsvg HTML/xxx_graphe.dot
     ) &
 
 
     """)
+
+graph_dot_minimal = graph_dot
 
 def graph2_dot():
     stats = question_stats()

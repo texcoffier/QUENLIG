@@ -32,6 +32,8 @@ import sys
 cache = None # Do not cache files
 cache = {}   # Allow file caching
 
+do_not_cache = set() # Files to not cache
+
 def html_time(t):
     weekdayname = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     monthname = [None,
@@ -153,7 +155,8 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
             if c.mime_type != None:
                 self.send_head(c.mime_type,
                                modif_time = c.modification_time,
-                               content_length = c.content_length)
+                               content_length = c.content_length,
+                               cached = path[-1] not in do_not_cache)
                 self.wfile.write(c.content)
                 return
 
