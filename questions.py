@@ -1397,8 +1397,41 @@ class No(YesNo):
     """
     good = 'N'
     
+class Grade(TestUnary):
+    """If the first expression is True:
+       Set a grade for the student+question+teacher.
+       The grade can be a positive or negative number.
+       The 'teacher' can be the name of a knowledge.
+       Grade always returns the value returned by the first expression.
+       The grades are summed per teacher when exporting all the grades.
 
-
+    Examples:
+       # If the student answers:
+       #   * '2' or 'two'    then 'point'       is set to 1.
+       #   *        'two'    then 'see_student' is set to 1
+       #   * another integer then 'calculus'    is set to -2
+       #   * not in integer then no grades are changed.
+       Good(Grade(Grade(Equal('two'), "see_student", 1)  |  Int(2),
+                  "point", 1)
+           ),
+       Bad(Grade(~Int(1), "calculus", -2))
+    """
+    def __init__(self, expression, teacher, grade):
+        self.teacher = teacher
+        self.grade = '%g' % float(grade)
+        TestUnary.__init__(self, expression)
+        
+        self.children = [expression]
+    def source(self, state=None, format=None):
+        return (self.test_name(format) + '('
+                + self.children[0].source(state, format) + ','
+                + repr(self.teacher) + ',' + self.grade + ')')
+    def do_test(self, student_answer, state=None):
+        bool, comment = self.children[0](student_answer, state)
+        if state.question and bool is True:
+            state.student.set_grade(
+                state.question.name, self.teacher + ',' + self.grade)
+        return bool, comment
 
 
 
@@ -1672,3 +1705,19 @@ if True:
     a = create("Good(RemoveSpaces(Equal('a + - 5')))")
     assert( a('a+-5') == (True, '') )
     assert( a('a  +   -   5') == (True, '') )
+
+    a = create("Grade(Equal('a'),'john',4)")
+    grades = {}
+    class S:
+        def set_grade(self, q, tg):
+            grades[q] = tg
+    class Q:
+        name = 'x'
+    class St:
+        student = S()
+        question = Q()
+    st = St()
+    assert( a('b',st) == (False, '') )
+    assert( grades == {} )
+    assert( a('a',st) == (True, '') )
+    assert( grades == {'x':'john,4'} )

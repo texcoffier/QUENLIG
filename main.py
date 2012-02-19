@@ -389,7 +389,7 @@ margin-left: 4em ;
 margin-top: 0px ;
 padding: 0.1em ;
  }
-EM { font-family: sans-serif ; }
+
 </style>
 ''')
     tests.sort(key=lambda x: x.__name__)

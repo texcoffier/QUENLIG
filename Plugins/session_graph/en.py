@@ -1,7 +1,7 @@
 # -*- coding: latin-1 -*-
 
-tip = "Display the question graph with session statistics"
+tip = "Display the question graph with session statistics. Click to see SVG file"
 
-before = "Question graph: click to see SVG file"
+before = "Question graph"
 
 

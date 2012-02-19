@@ -288,6 +288,12 @@ class Student:
                     p += x
         return p
 
+    def grading_teachers(self):
+        teachers = set()
+        for a in self.answers.values():
+            teachers.update(a.grades)
+        return teachers
+
     def grades(self):
         p = ''
         summed = collections.defaultdict(int)
@@ -296,9 +302,7 @@ class Student:
                 p += repr(a.grades)
             for teacher, grade in a.grades.items():
                 summed[teacher] += int(grade)
-        if summed:
-            return repr(summed.items()) + '----' + p
-        return ''
+        return summed
 
     def answered_page(self, state):
         t = self.answers.values()

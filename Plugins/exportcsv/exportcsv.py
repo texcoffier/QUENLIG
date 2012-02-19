@@ -25,7 +25,7 @@ There is also the work time in hours."""
 
 import statistics
 
-container = 'analyse'
+container = 'statmenu'
 link_to_self = True
 acls = { 'Grader': ('executable',) }
 
@@ -51,7 +51,12 @@ def execute(state, plugin, argument):
     else:
         max_given_indices = float(stats.max_given_indices)
 
+    teachers = set()
     for s in stats.all_students:
+        teachers.update(s.grading_teachers())
+        
+    for s in stats.all_students:
+        grades = s.grades()
         content.append(
             (
                 s.filename,
@@ -60,18 +65,21 @@ def execute(state, plugin, argument):
                 s.the_number_of_given_indices / max_given_indices,
                 (s.the_time_searching + s.the_time_after)/3600.,
                 s.points(),
-                s.grades().replace(',', ' '),
-            ))
+                ) +
+            tuple(grades.get(teacher, 0)  for teacher in teachers)
+            )
     content.sort()
 
-    header = plugin.tip.split('\\A')
+    header = plugin.tip.split('\\A')[1:-1]
+    header.append('Points')
+    header += list(teachers)
+    formater = "%s" + ", %5.3f" * (len(header)-1)
 
-    t = [header[6]]
-    t.append(','.join(header[1:6]))
+    t = [','.join(header)]
     for c in content:
-        t.append("%s, %5.3f, %5.3f, %5.3f, %5.2f, %5.2f, %s" % c)
+        t.append(formater % c)
         
-    return 'text/comma-separated-values', '\n'.join(t)
+    return 'text/csv', '\n'.join(t)
 
 
 

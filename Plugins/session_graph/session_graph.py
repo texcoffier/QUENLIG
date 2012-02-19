@@ -25,6 +25,7 @@
 container = 'action'
 link_to_self = True
 acls = { 'Teacher': ('executable',), 'Author': ('executable',), }
+priority_execute = '-questions'
 
 import statistics
 import server
