@@ -25,14 +25,14 @@ import urllib
 import os
 
 class Student:
-    def __init__(self, server, name, acls=None, roles=None):
+    def __init__(self, server, name, acls=None, roles="['Student']"):
         self.server = server
         self.base = server.base + '/?guest=' + name
         self.name = name
         if acls:
             self.set_acls(acls)
-        if roles:
-            self.set_roles(roles)
+        self.set_roles(roles)
+        self.number = 0
         self.get('')
 
     def get(self, url, trace=False, base=None):
@@ -46,6 +46,10 @@ class Student:
                 self.base = page.split('<base href="')[1].split('"')[0]
             else:
                 sys.stderr.write("Problem in the page\n")
+            f = open('xxx.%03d.html' % self.number, 'w')
+            f.write(page)
+            f.close()
+            self.number += 1
         except IndexError:
             # Pas une page HTML
             pass

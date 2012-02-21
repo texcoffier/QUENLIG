@@ -26,7 +26,8 @@ import statistics
 
 priority_display = 'question_required'
 sort_column = 3
-acls = { 'Teacher': ('executable',), 'Author': ('executable',) }
+acls = { 'Teacher': ('executable',), 'Author': ('executable',),
+         'Grader': ('executable',) }
 
 def execute(state, plugin, argument):
     if state.question == None:

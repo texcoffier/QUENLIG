@@ -369,7 +369,7 @@ def test_0280_require_test_regexp(student):
 def test_0290_root_minimal(student):
     student.check_question_link('a:a', default=True, max_descendants=True)
     student.expect('<option >Teacher</option>',
-                   '<option selected>Default</option>',
+                   # '<option selected>Default</option>',
                    '?role=',
                    )
     student.reject('?questions_all=')
@@ -377,7 +377,7 @@ def test_0290_root_minimal(student):
 
     student.select_role('Teacher')
     student.expect('<option selected>Teacher</option>',
-                   '<option >Default</option>',
+                   # '<option >Default</option>',
                    '?questions_all=',
                    )
     
@@ -422,8 +422,9 @@ def test_0320_root_statmenu_other_student(student):
     other_student.goto_question('a:a')
     other_student.give_answer('a')
     other_student.give_comment('otherComment')
+    other_student.expect('otherComment')
 
-    student.select_role('Teacher')
+    student.select_role('Grader')
     student.get('?statmenu_students=1')
     student.expect('<A HREF="?answered_other=guest' + other_student.name)
 
@@ -458,7 +459,7 @@ def test_0350_logout(student):
     student.expect('<A class="content tips" href="?session_deconnection=1">')
    
 def test_0360_root_question_reload(student):
-    student.select_role('Teacher')
+    student.select_role('Author')
     student.goto_question('a:a')
     student.reject('a:d')
     student.reject('question__a')
@@ -524,7 +525,7 @@ def test_0400_root_reload_questions(student):
 
     student_bad4 = Student(the_server, 'user_bad4')
 
-    student.select_role('Teacher')
+    student.select_role('Developer')
     student.goto_question('a:a')
     student.get('?reload_questions=1')
     student.goto_question('a:b')
@@ -553,22 +554,19 @@ def test_0400_root_reload_questions(student):
 
 try:
     the_server = Server(questions='Questions/regtest', name=name)
+    tests = sorted(globals())
     if len(sys.argv) > 1:
-        try:
-            tests = sorted(globals())[int(sys.argv[1])-1:]
-        except ValueError:
-            tests = sys.argv[1:]
-    else:
-        tests = sorted(globals())
+        if sys.argv[1] in tests:
+            tests = tests[tests.index(sys.argv[1]):]
     for test in tests:
         if not test.startswith('test_'):
             continue
         print '%-45s' % test,
         sys.stdout.flush()
         if '_root_' in test:
-            roles = "['Default','Teacher']"
+            roles="['Default','Teacher','Author','Grader','Developer','Admin']"
         else:
-            roles = None
+            roles = "['Student']"
         globals()[test](Student(the_server,
                                 test[len('test_'):],
                                 roles=roles,
