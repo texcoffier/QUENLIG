@@ -30,7 +30,6 @@ color = "#999"
 acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):
-    if state.start > configuration.dates[0] \
-           and state.start < configuration.dates[1]:
-        t = int(configuration.dates[1] - state.start)
+    if state.start > state.start_date and state.start < state.stop_date:
+        t = int(state.stop_date - state.start)
         return utilities.duration(t)

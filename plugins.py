@@ -174,6 +174,14 @@ Attribute('prototype'
           , '''A plugin name from which all the default attributes values
             will be taken.'''
           )
+
+def set_option(state, plugin, value):
+    plugin.option = value
+Attribute('option_default', 'Default value for the option')
+Attribute('option_help', 'Explanation of the option usage', 'No help')
+Attribute('option_name', 'The option name used on the command line')
+Attribute('option_set', 'A function parsing the option value', set_option)
+
 AttributeCSS('width'
              , 'CSS width of the plugin display DIV'
              )

@@ -21,15 +21,11 @@
 
 """Display session start/stop in one line."""
 
-import configuration
 import utilities
-import time
 
 priority_display = 'session_stop'
 font_size = "70%"
 acls = { 'Teacher': ('executable',) }
 
 def execute(state, plugin, argument):
-    f = "%H:%M %d/%m/%Y"
-    return time.strftime(f, time.localtime(configuration.dates[0])) + '-' +\
-           time.strftime(f, time.localtime(configuration.dates[1]))
+    return utilities.read('begin-date') + '-' + utilities.read('end-date')

@@ -46,6 +46,7 @@ def execute(state, plugin, argument):
             if plugin.plugin.__name__ in sys.modules:
                 del sys.modules[plugin.plugin.__name__]
             plugins.Plugin.plugins_dict[plugin.plugin.name] = plugins.Plugin(utilities.load_module(plugin.plugin.name))
+            state.session.init_option(plugin)
     # Keep the current state on screen
     plugin.link = "?reload_plugins=1&" + '&'.join(
         ['%s=%s' % (k, v)

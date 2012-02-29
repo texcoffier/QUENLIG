@@ -264,15 +264,8 @@ class State(object):
         if len(sort_column) == 2:            
             self.plugins_dict[sort_column[1]].sort_column = int(sort_column[0])
 
-    def compute_stopped(self):
-        self.system_stopped=self.stopped= self.start < configuration.dates[0] \
-                              or self.start > configuration.dates[1]
-        # if self.student.acls["question_answerable_anytime"]:
-        #    self.stopped = False
-
     def execute(self, form):
         self.start = time.time()
-        self.compute_stopped()
         self.analyse_form(form)
 
         self.url_base_full = "%s/%s/%d/" % (self.url_base,

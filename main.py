@@ -63,12 +63,28 @@ class Session:
         utilities.write(self.dir + 'questions', dirname)
     def set_port(self, port):
         utilities.write(self.dir + 'port', port)
-    def set_begin_date(self, date, overwrite=True):
-        utilities.write(self.dir + 'begin_date', date, overwrite)
-    def set_end_date(self, date, overwrite=True):
-        utilities.write(self.dir + 'end_date', date, overwrite)
     def set_url(self, url, overwrite=True):
         utilities.write(self.dir + 'url', url.strip('/'), overwrite)
+        
+    def set_option(self, option, values):
+        for plugin in plugins.Plugin.plugins_dict.values():
+            if plugin["", "option_name"] == option:
+                if plugin["", "option_default"] is None:
+                    value = None
+                else:
+                    value = values.pop()
+                utilities.write(self.dir + option, value, overwrite=True)
+                return True
+
+    def init_option(self, plugin):
+        option = plugin["", "option_name"]
+        if option:
+            try:
+                plugin.plugin.option_set(plugin,
+                                         utilities.read(self.dir + option))
+            except IOError:
+                plugin.plugin.option_set(plugin,
+                                         plugin["", "option_default"])
 
     def init(self):
         if questions.questions:
@@ -82,10 +98,6 @@ class Session:
             sys.stderr.write(
                 "You should 'create' the session before starting it\n")
             sys.exit(0)
-        configuration.dates = [
-            date_to_seconds(utilities.read(self.dir + 'begin_date')),
-            date_to_seconds(utilities.read(self.dir + 'end_date')),
-            ]
         if self.percentage_time_for_stat:
             configuration.statistics_cpu_allocation = \
             self.percentage_time_for_stat
@@ -102,6 +114,9 @@ class Session:
         else:
             configuration.prefix = '/'.join(url[3:]) + '/'
 
+        for plugin in plugins.Plugin.plugins_dict.values():
+            self.init_option(plugin)
+            
         # Create __init__.py in the question dir.
         i = os.path.join(configuration.questions, "__init__.py")
         if not os.path.exists(i):
@@ -432,11 +447,6 @@ except IndexError:
 SET PERSISTENT SESSION OPTIONS: 
     'create TheQuestionDirectory ThePortNumber'
         Create the session. For example: 'create Questions/unix 9999'
-    'begin-date "%%H:%%M %%d/%%m/%%Y"'
-        Set the date after which the students can answers questions.
-        For example: 'create begin-date "09:00 1/1/2005"'
-    'end-date "%%H:%%M %%d/%%m/%%Y"'
-        Set the date after which the students can NOT answers questions.
     'admin login_name'
         Give to 'login_name' the administrator role
     'url public_URL_of_the_server'
@@ -448,7 +458,17 @@ SET PERSISTENT SESSION OPTIONS:
            RewriteEngine On
            RewriteRule ^/quenlig(.*) http://intranet.univ.org:7777/$1 [P]
 
-ACTIONS:
+SET PERSISTENT SESSION OPTIONS FOR PLUGINS:
+""")
+    for plugin in plugins.Plugin.plugins_dict.values():
+        if plugin["", "option_name"] is None:
+            continue
+        sys.stderr.write("    '%s" % plugin["","option_name"])
+        if plugin["","option_default"] is not None:
+            sys.stderr.write(" \"%s\"" % plugin["","option_default"])
+        sys.stderr.write("'\n\t%s\n" % plugin["","option_help"])
+
+    sys.stderr.write("""ACTIONS:
     'start'
         Start the server
     'stop'
@@ -469,28 +489,21 @@ SET TEMPORARY SESSION OPTIONS:
 """ % configuration.statistics_cpu_allocation)
 
     if os.path.isdir('Students'):
-        format = "%-12s %-5s %5s@%-8s %-17s %16s %s\n"
+        format = "%-17s %5s %5s@%-8s %-17s\n"
 
         sys.stderr.write(format % (
-            "SESSION NAME", "PORT", "PID", "HOSTNAME", "QUESTIONS BASE",
-            "START DATE", "DURATION"))
+            "SESSION NAME", "PORT", "PID", "HOSTNAME", "QUESTIONS BASE"))
 
         for n in os.listdir('Students'):
             fn = os.path.join('Students', n)
             if not os.path.isdir(fn):
                 continue
-            begin_date =utilities.read(os.path.join('Students',n,'begin_date'))
-            end_date = utilities.read(os.path.join('Students', n, 'end_date'))
-            duration = date_to_seconds(end_date) - date_to_seconds(begin_date)
-            duration = utilities.duration(int(duration))
             sys.stderr.write(format % (
                 n,
                 utilities.read(os.path.join('Students', n, 'port')),
                 utilities.read(os.path.join('Students', n, 'pid')),
                 utilities.read(os.path.join('Students', n, 'hostname')),
                 utilities.read(os.path.join('Students', n, 'questions')),
-                begin_date,
-                duration,
                 ))    
     sys.exit(1)
 
@@ -511,8 +524,6 @@ if __name__ == "__main__" and len(args) == 0:
     
 mkdir('Students')
 mkdir(session.dir)
-session.set_begin_date('1:1 1/1/1970', overwrite=False)
-session.set_end_date('3:3 3/3/2033', overwrite=False)    
 mkdir(session.dir + 'Logs' )
 mkdir(session.dir + 'HTML' )
 configuration.root = os.getcwd()
@@ -534,10 +545,6 @@ if __name__ == "__main__":
             session.nr_requests = int(args.pop())
         elif action == 'percentage-time-for-stat':
             session.percentage_time_for_stat = int(args.pop())
-        elif action == 'begin-date':
-            session.set_begin_date(args.pop())
-        elif action == 'end-date':
-            session.set_end_date(args.pop())
         elif action == 'url':
             session.set_url(args.pop())
         elif action == 'create':
@@ -567,6 +574,7 @@ if __name__ == "__main__":
             import student
             student.stop_loading_default = eval(args.pop())
         else:
-            sys.stderr.write("""Unknown action : %s\n""" % action)
-            sys.exit(2)
+            if not session.set_option(action, args):
+                sys.stderr.write("""Unknown action : %s\n""" % action)
+                sys.exit(2)
 
