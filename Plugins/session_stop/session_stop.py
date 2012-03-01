@@ -32,17 +32,16 @@ font_size = "70%"
 color = "#999"
 
 def option_set(plugin, value):
-    plugin.stop_date = time.mktime(time.strptime(value.strip(),
-                                                  "%H:%M %d/%m/%Y") )
+    configuration.stop_date = time.mktime(time.strptime(value.strip(),
+                                                        "%H:%M %d/%m/%Y") )
 option_name = 'end-date'
 option_help = '''"HH:MM DD/MM/YYYY"
         Set the examination termination date.'''
 option_default = "19:00 1/1/2035" 
 
 def execute(state, plugin, argument):
-    state.stop_date = plugin.plugin.stop_date
-    state.session_stop_ok = state.start < state.stop_date
+    state.session_stop_ok = state.start < configuration.stop_date
     if not state.session_stop_ok:
         state.question = None
-        return utilities.user_date(state.stop_date)
+        return utilities.user_date(configuration.stop_date)
 
