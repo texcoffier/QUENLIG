@@ -1,5 +1,5 @@
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ import configuration
 import re
 import plugins
 import sys
+import os
+import utilities
 
 ###############################################################################
 # Information filling 
@@ -147,6 +149,16 @@ class State(object):
         self.localization = tuple(lang)
         self.update_plugins()
 
+    def init_option(self, plugin):
+        option = plugin.plugin[self.localization, "option_name"]
+        if option:
+            if os.path.exists(option):
+                plugin.option_set(plugin, utilities.read(option))
+            else:
+                plugin.option_set(plugin,
+                                  plugin.plugin[self.localization,
+                                                "option_default"])
+                
     def update_plugins(self):
         self.plugins_dict = {}
         for plugin in plugins.Plugin.plugins_dict.values():
@@ -186,6 +198,7 @@ class State(object):
 
 
         for plugin in self.plugins_list:
+            self.init_option(plugin)
             plugin.full_content.sort(key = lambda x:x.priority_display_int)
 
         self.roots.sort(key = lambda x:x.priority_display_int)

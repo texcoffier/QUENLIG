@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007,2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,8 +25,27 @@ import utilities
 
 priority_display = 'statmenu_nr_questions'
 priority_execute = 'question_answer' # Verify answer before
+priority_execute = '-question' # Check before displaying question
 acls = { 'Student': ('executable',) }
 
+option_name = 'max-thinking-time'
+option_help = """A Python dictionnary with the maximum number of minutes
+ 	of work time per student. The key is the student ID.
+	The '' key indicates the default time."""
+option_default = "{'':100*60, 'guest_john_doe': 60}"
+def option_set(plugin, value):
+    plugin.max_time = eval(value)
+    plugin.max_time_default = plugin.max_time.get('', 999999)
+
+
 def execute(state, plugin, argument):
-    return utilities.time_format(int(state.student.time_searching()))
+    max_time = plugin.max_time.get(state.student.name,
+                                   plugin.max_time_default)
+    t = state.student.time_after() + state.student.time_searching()
+    if t > max_time*60:
+        state.session_stop_ok = False
+        state.question = None
+        plugin.heart_content = '<p class="no_more_time"></p>'
+    
+    return utilities.time_format(int(t))
 

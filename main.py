@@ -76,16 +76,6 @@ class Session:
                 utilities.write(self.dir + option, value, overwrite=True)
                 return True
 
-    def init_option(self, plugin):
-        option = plugin["", "option_name"]
-        if option:
-            try:
-                plugin.plugin.option_set(plugin,
-                                         utilities.read(self.dir + option))
-            except IOError:
-                plugin.plugin.option_set(plugin,
-                                         plugin["", "option_default"])
-
     def init(self):
         if questions.questions:
             return
@@ -114,9 +104,6 @@ class Session:
         else:
             configuration.prefix = '/'.join(url[3:]) + '/'
 
-        for plugin in plugins.Plugin.plugins_dict.values():
-            self.init_option(plugin)
-            
         # Create __init__.py in the question dir.
         i = os.path.join(configuration.questions, "__init__.py")
         if not os.path.exists(i):

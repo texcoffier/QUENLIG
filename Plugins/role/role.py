@@ -54,7 +54,7 @@ def update_roles(astudent):
     if astudent.filename in default_roles:
         astudent.roles = default_roles[astudent.filename]
     else:
-        default = "['Default']"
+        default = "['Student']"
         utilities.write(astudent.roles_filename, default, overwrite=False)
         try:
             astudent.roles = eval(utilities.read(astudent.roles_filename))

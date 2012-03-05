@@ -1,6 +1,11 @@
 # -*- coding: latin-1 -*-
 
-tip = "reflexion time with a question on screen"
+tip = "The time you were working"
 
-after = "of thinking"
+after = "of work"
+
+translations = {
+    'no_more_time': 'No more time to answer.',
+    }
+
 
