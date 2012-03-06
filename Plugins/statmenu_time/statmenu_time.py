@@ -35,7 +35,7 @@ option_help = """A Python dictionnary with the maximum number of minutes
 option_default = "{'':100*60, 'guest_john_doe': 60}"
 def option_set(plugin, value):
     value = eval(value)
-    plugin.max_time = value.get(plugin.state.student.name,
+    plugin.max_time = value.get(plugin.state.student.filename,
                                 value.get('', 999999))
 
 

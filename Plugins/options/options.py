@@ -77,10 +77,11 @@ def save_options(a_state, m_plugin):
 def execute(state, plugin, argument):
     if argument == '1':
         plugin.heart_content = the_options(state, plugin)
+        state.question = None
     elif argument == 'set':
-        print 'set'
         save_options(state, plugin)
         plugin.heart_content = the_options(state, plugin)
+        state.question = None
         
     return ''
 

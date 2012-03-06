@@ -30,12 +30,25 @@ color = "#999"
 acls = { 'Student': ('executable',) }
 priority_execute = "-question_answer"
 
+def parse_date(value, student, default):
+    value = value.strip()
+    if value.startswith('{'):
+        value = eval(value)
+    else:
+        value = {"": value}
+
+    value = value.get(student, value.get("", default)).strip()
+    return time.mktime(time.strptime(value, "%H:%M %d/%m/%Y") )
+
 def option_set(plugin, value):
-    plugin.state.start_date = time.mktime(time.strptime(value.strip(),
-                                                        "%H:%M %d/%m/%Y") )
+    plugin.state.start_date = parse_date(value, plugin.state.student.filename,
+                                         option_default )
+
 option_name = 'begin-date'
 option_help = '''"HH:MM DD/MM/YYYY"
-        Set the examination start date.'''
+        Set the examination start date.
+	The value can be a Python dictionnary with student id as keys,
+	the default value is defined by the empty ("") key.'''
 option_default = "09:00 1/1/2005" 
 
 

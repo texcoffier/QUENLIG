@@ -23,6 +23,7 @@
 
 import utilities
 import time
+import Plugins.session_start.session_start
 
 priority_display = 'session_start'
 priority_execute = "-question_answer"
@@ -31,8 +32,9 @@ font_size = "70%"
 color = "#999"
 
 def option_set(plugin, value):
-    plugin.state.stop_date = time.mktime(time.strptime(value.strip(),
-                                                       "%H:%M %d/%m/%Y") )
+    plugin.state.stop_date = Plugins.session_start.session_start.parse_date(
+        value, plugin.state.student.filename, option_default )
+
 option_name = 'end-date'
 option_help = '''"HH:MM DD/MM/YYYY"
         Set the examination termination date.'''
