@@ -34,15 +34,14 @@ option_help = """A Python dictionnary with the maximum number of minutes
 	The '' key indicates the default time."""
 option_default = "{'':100*60, 'guest_john_doe': 60}"
 def option_set(plugin, value):
-    plugin.max_time = eval(value)
-    plugin.max_time_default = plugin.max_time.get('', 999999)
+    value = eval(value)
+    plugin.max_time = value.get(plugin.state.student.name,
+                                value.get('', 999999))
 
 
 def execute(state, plugin, argument):
-    max_time = plugin.max_time.get(state.student.name,
-                                   plugin.max_time_default)
     t = state.student.time_after() + state.student.time_searching()
-    if t > max_time*60:
+    if t > plugin.max_time*60:
         state.session_stop_ok = False
         state.question = None
         plugin.heart_content = '<p class="no_more_time"></p>'

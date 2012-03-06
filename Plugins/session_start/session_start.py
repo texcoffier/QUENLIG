@@ -21,7 +21,6 @@
 
 """It rejects any work before the session start."""
 
-import configuration
 import utilities
 import time
 
@@ -32,8 +31,8 @@ acls = { 'Student': ('executable',) }
 priority_execute = "-question_answer"
 
 def option_set(plugin, value):
-    configuration.start_date = time.mktime(time.strptime(value.strip(),
-                                                         "%H:%M %d/%m/%Y") )
+    plugin.state.start_date = time.mktime(time.strptime(value.strip(),
+                                                        "%H:%M %d/%m/%Y") )
 option_name = 'begin-date'
 option_help = '''"HH:MM DD/MM/YYYY"
         Set the examination start date.'''
@@ -41,7 +40,8 @@ option_default = "09:00 1/1/2005"
 
 
 def execute(state, plugin, argument):
-    state.session_start_ok = state.start > configuration.start_date
+    state.session_start_ok = state.start > state.start_date
     if not state.session_start_ok:
-        state.question = None        
-        return utilities.user_date(configuration.start_date)
+        state.question = None
+        plugin.heart_content = '<p class="session_not_started"></p>'
+        return utilities.user_date(state.start_date)
