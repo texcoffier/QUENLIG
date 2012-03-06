@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,11 +21,15 @@
 
 """Display session start/stop in one line."""
 
-import utilities
+import time
+import Plugins.session_start.session_start
 
 priority_display = 'session_stop'
 font_size = "70%"
 acls = { 'Teacher': ('executable',) }
 
 def execute(state, plugin, argument):
-    return utilities.read('begin-date') + '-' + utilities.read('end-date')
+    return (time.strftime(Plugins.session_start.session_start.date_format,
+                          time.localtime(state.start_date)) + '-' +
+            time.strftime(Plugins.session_start.session_start.date_format,
+                          time.localtime(state.stop_date)))

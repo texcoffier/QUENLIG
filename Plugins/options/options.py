@@ -27,6 +27,7 @@ container = 'action'
 sort_column = 0
 link_to_self = True
 acls = { 'Teacher': ('executable', ), 'Admin': ('executable',) }
+priority_execute = '-question'
 
 import utilities
 import plugins

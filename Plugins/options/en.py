@@ -14,4 +14,5 @@ translations = {
 
 css_attributes = (
     "/BUTTON.save_options:before { content:'Save the options' }",
+    "/.options TEXTAREA { width: 40em; height: 100% }",
 )

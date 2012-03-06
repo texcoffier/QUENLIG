@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007-2008 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@ color = "#999"
 acls = { 'Student': ('executable',) }
 priority_execute = "-question_answer"
 
+date_format = "%H:%M %d/%m/%Y"
+
 def parse_date(value, student, default):
     value = value.strip()
     if value.startswith('{'):
@@ -38,7 +40,7 @@ def parse_date(value, student, default):
         value = {"": value}
 
     value = value.get(student, value.get("", default)).strip()
-    return time.mktime(time.strptime(value, "%H:%M %d/%m/%Y") )
+    return time.mktime(time.strptime(value, date_format) )
 
 def option_set(plugin, value):
     plugin.state.start_date = parse_date(value, plugin.state.student.filename,
