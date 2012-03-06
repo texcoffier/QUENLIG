@@ -147,17 +147,18 @@ class State(object):
         if 'fr' not in lang:
             lang.append('fr')
         self.localization = tuple(lang)
+        self.option = None
         self.update_plugins()
 
     def init_option(self, plugin):
         option = plugin.plugin[self.localization, "option_name"]
         if option:
             if os.path.exists(option):
-                plugin.option_set(plugin, utilities.read(option))
+                plugin.option = utilities.read(option)
             else:
-                plugin.option_set(plugin,
-                                  plugin.plugin[self.localization,
-                                                "option_default"])
+                plugin.option = plugin.plugin[self.localization,
+                                            "option_default"]
+            plugin.option_set(plugin, plugin.option)
                 
     def update_plugins(self):
         self.plugins_dict = {}

@@ -47,14 +47,19 @@ def html_time(t):
     return s
 
 class CachedFile:
+    gmtime = 0
+    full_name = os.path.sep
+    modification_time = ''
+    content = ''
+    content_length = 0
+    mime_type = None
+    
     def __init__(self, filename):
-        self.mime_type = None
-        self.content_length = 0
-        self.content = ''
-        self.modification_time = ''
         # XXX Is this secure (UTF8) ?
         if '..' in filename or '/' in filename or '?' in filename:
-            return
+            print '*'*99, 'Inapropriate filename:', filename
+            filename = 'BUG'
+        
         self.filename = filename
 
         if filename.endswith(".css"):
@@ -99,7 +104,6 @@ class CachedFile:
                 pass
             except OSError:
                 pass
-        self.gmtime = 0
 
     def update(self):
         try:
