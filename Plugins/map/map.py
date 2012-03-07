@@ -79,10 +79,10 @@ def question_color(q, state, answerables):
     # Make lighter color on indices
     if indice > 3:
         indice = 3
-    return [
+    return tuple([
         pp and pp or int(indice**0.5  *  80)
         for pp in p
-        ]
+        ])
 
 def question_pixel_map(state):
     m = []

@@ -110,8 +110,8 @@ class CachedFile:
             if self.gmtime != os.path.getmtime(self.full_name):
                 self.load()
         except OSError:
-            pass
-        
+            if len(self.content) == 0:
+                self.load()
 
 
 def get_file(filename):

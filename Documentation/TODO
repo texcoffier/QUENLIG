@@ -1,8 +1,5 @@
 TODO Absolute :
-        Lien calcul et affichage : graphe question et graph session
-	Correction/notation question par question manuelle avec commentaires.
 	Adresses IP dans stats étudiant
-	Changer les dates de début et fin par le web
 	Authentitification boucle si l'URL se termine par /
 	Statistique sur un etudiant en particulier
 	voir 'question stat' marche pas si pas 'voir toute'

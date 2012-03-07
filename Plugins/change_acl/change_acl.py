@@ -50,6 +50,9 @@ function change_acls(user)
 }
 """
 
+import Plugins.role.role
+import Plugins.acls.acls
+
 def acl_page(plugin, user):
     # Plugins.acls.acls.update_student_acls(student.students[user])
     acls = []
@@ -57,7 +60,10 @@ def acl_page(plugin, user):
     stop = False
     while not stop:
         stop = True
-        for role in student.students[roles[-1]].roles[::-1]:
+        a_student = student.students[roles[-1]]
+        Plugins.role.role.update_roles(a_student)
+        Plugins.acls.acls.update_student_acls(a_student)
+        for role in a_student.roles[::-1]:
             if role != 'Wired' and role not in roles:
                 roles.append(role)
                 stop = False
@@ -128,8 +134,9 @@ def execute(state, plugin, argument):
                 i = i.split('=')
                 if i[0] not in plugins.Plugin.plugins_dict:
                     continue
-                print argument, i
-                acls = student.students[argument].acls
+                a_student = student.students[argument]
+                Plugins.acls.acls.update_student_acls(a_student)
+                acls = a_student.acls
                 if i[1] == '2':
                     acls.change_acls(i[0], 'executable')
                 elif i[1] == '1':
