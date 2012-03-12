@@ -121,8 +121,8 @@ def execute(state, plugin, argument):
     elif state.question.nr_lines == 1:
         s += '<INPUT TYPE="text" ID="2" NAME="%s.%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (
             # INPUT NAME
-            configuration.session.name,
-            plugin.plugin.css_name, state.question.name,
+            plugin.plugin.css_name, configuration.session.name,
+            state.question.name,
             #
             configuration.nr_columns, last_answer_html,
             last_answer_html, style)
