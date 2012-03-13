@@ -70,6 +70,7 @@ def execute(state, plugin, argument):
             utilities.date_format(s.the_time_last),
             "%3.1f" % s.nr_of_same_time_normed,
             int(s.the_time_variance),
+	    s.logs and s.logs[-1][1] or '?',
             ]
 
         # line.append('<img src="?action=question_pixel_map_see_other&student=%s">' % s.filename)

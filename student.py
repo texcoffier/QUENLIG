@@ -69,6 +69,7 @@ class Student:
         self.previous_command = ""
         self.last_asked_question = ""
         self.answerable_any = False
+        self.logs = []
         try:
             os.mkdir(self.file)
         except OSError:

@@ -54,7 +54,7 @@ class Answer:
         elif command == "comment" :
             self.comments.append((action_time, value))
         elif command == "login" :
-            pass
+            self.student.logs.append((action_time,value.split(' ')[0]))
         elif command == "grade" :
             teacher, grade = value.split(',')
             self.grades[teacher] = grade

@@ -17,6 +17,7 @@ translations = {
     '//c9': 'Last',
     '//c10': 'Sim.',
     '//c11': 'Var.',
+    '//c12': 'IP',
     '//c0>SPAN': "Link to the student work.",
     '//c1>SPAN': "#good answer (green: behind the others, red: late)",
     '//c2>SPAN': "#known questions",
@@ -29,5 +30,6 @@ translations = {
     '//c9>SPAN': "Last connection",
     '//c10>SPAN': "Simultaneous answers with other students",
     '//c11>SPAN': "Standard deviance of the student reflexion time for all the questions",
+    '//c12>SPAN': "Last connection IP of the student",
     '//CAPTION': tip,
     }

@@ -17,6 +17,7 @@ translations = {
     '//c9': 'Dernière',
     '//c10': 'Sim.',
     '//c11': 'Var.',
+    '//c12': 'IP',
     '//c0>SPAN': "Pointeur sur les statistiques de l'étudiant",
     '//c1>SPAN': "Nombre de bonnes réponses (vert si en avance et rouge si en retard)",
     '//c2>SPAN': "Nombre de questions connues",
@@ -29,5 +30,6 @@ translations = {
     '//c9>SPAN': "Dernière connexion",
     '//c10>SPAN': "Taux de réponses simultanés (sans intérêt)",
     '//c11>SPAN': "Variance du temps de réflexion sur l'ensemble des questions",
+    '//c12>SPAN': "Dernière IP utilisée",
     '//CAPTION': tip,
     }
