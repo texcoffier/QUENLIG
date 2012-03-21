@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2008 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2008,2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,15 +30,7 @@ priority_execute = '-question_answer'
 priority_display = 1000000
 link_to_self = True
 acls = { 'Teacher': ('executable',) }
-
-styles = {
-    -2: "style='background-color:#FF0000;'",
-    -1: "style='background-color:#FFA0A0;'",
-    0: "",
-    1: "style='background-color:#A0FFA0;'",
-    2: "style='background-color:#00FF00;'",
-    }
-
+sort_column = -3
 
 def execute(state, plugin, argument):
     if argument == None:
@@ -46,34 +38,34 @@ def execute(state, plugin, argument):
 
     stats = statistics.question_stats()
 
-    st = '<TABLE>'
+    pairs = []
     for s in stats.sorted_students:
-        st += "<TR><TH>%s</TH>" % s.a_href()
         for ss in stats.sorted_students:
-            try:
-                n = ( 10 * s.nr_answer_same_time[ss.name]
-                     / float(s.the_number_of_good_answers) )
-            except KeyError:
-                n = 0
-                
-            if n < 3 :
-                color = ""
-            elif n < 4 :
-                if abs(s.the_number_of_good_answers
-                       - ss.the_number_of_good_answers)<2:
-                    color = styles[-1]
-                else:
-                    color = styles[1]
-            else:
-                if abs(s.the_number_of_good_answers
-                       - ss.the_number_of_good_answers)<2:
-                    color = styles[-2]
-                else:
-                    color = styles[2]
-            st += "<TD %s>%d</TD>" % (color, n)
-        st += "</TR>\n"
-    st += "</TABLE>"
-    plugin.heart_content = st
+            if id(s) > id(ss):
+                try:
+                    pairs.append((s.nr_answer_same_time[ss.name],
+                                  (100 * s.nr_answer_same_time[ss.name])
+                                  / s.the_number_of_good_answers,
+                                  (100 * s.nr_answer_same_time[ss.name])
+                                  / ss.the_number_of_good_answers,
+                                  s, ss))
+                except KeyError:
+                    pass
+    pairs.sort()
+    pairs.reverse()
+    average = sum(zip(*pairs)[0]) / len(pairs)
+    average2 = sum(i[0]*i[0] for i in pairs) / len(pairs)
+    stddev = (average2 - average*average) ** 0.5
+    
+    st = []
+    for n, nn1, nn2, s1, s2 in pairs:
+        st.append([s1.a_href(), s2.a_href(), n, '%.2f' % nn1,  '%.2f' % nn2])
+        if max(nn1, nn2) < average + stddev: # not interesting
+            break
+    plugin.heart_content = utilities.sortable_table(plugin.sort_column,
+                                                    st,
+                                                    url = "%s&%s=1" % (plugin.plugin.css_name,
+                                                                       plugin.plugin.css_name))
     state.question = None
 
     return ''
