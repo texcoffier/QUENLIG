@@ -85,8 +85,8 @@ add(name="simple",
 add(name="attention spécial",
     required=["simple", "expreg:deux spécial"],
     question="""Donner la commande permettant d'afficher
-    les lignes contenant la chaine de caractères <tt>2*</tt>
-    dans le fichier <tt>/etc/passwd</tt>""",
+    les lignes du fichier <tt>/etc/passwd</tt>
+    contenant la chaine de caractères <tt>2*</tt>""",
     tests=(
     grep_required,
     grep_e_inutile,

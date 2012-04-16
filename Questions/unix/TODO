@@ -1,4 +1,11 @@
 
+tage XML vide : prereauis \1
+
+\ seul ou \ espace en fin de ligne shell
+Faire un message d'erreur plus joli
+
+
+
 Réécrire complètement le parser shell sans faire d'analyse lexicale/syntaxique
 car le shell n'est pas facilement parsable.
 

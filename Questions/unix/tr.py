@@ -28,9 +28,8 @@ add(name="intro",
     par un autre dans un flux de données.
     Par exemple :
     <ul>
-    <li> <tt>tr "[a-z]" "[A-Z]"</tt> transforme les minuscules en majuscules
-    <li> <tt>tr "XT" "AU"</tt> transforme les X en A et les T en U.
-    <li> <tt>tr "[0-9]" "XXXXXXXXXX"</tt> transforme les chiffres en X
+    <li> <tt>tr "a-z" "A-Z"</tt> transforme les minuscules en majuscules
+    <li> <tt>tr "XT0-9" "01XXXXXXXXXXX"</tt> transforme X en 0, T en 1 et les chiffres en X
     </ul>
 """,
     question="""Quel est le filtre qui à partir d'un texte fourni sur
@@ -46,7 +45,7 @@ très
 un</pre></tr></table>
     La commande <tt>tr</tt> remplacera <b>dans l'ordre indiqué</b>&nbsp;:
     <ul>
-    <li> Le majuscules par des minuscules.
+    <li> Les majuscules par des minuscules.
     <li> Les caractères «,», «.», « » par un retour à la ligne
     </ul>
 
@@ -62,17 +61,17 @@ un</pre></tr></table>
                et la commande <tt>sort</tt> dans un pipeline"""),
         Expect('-u', """Utilisez l'option de <tt>sort</tt> pour ne lister
         chaque mot qu'une seule fois."""),
-        Expect('[a-z]'),
-        Expect('[A-Z]'),
+        Expect('a-z'),
+        Expect('A-Z'),
         Bad(Comment(~ NumberOfIs('tr', 1),
                       """Vous ne devez lancer la commande <tt>tr</tt> qu'une
                       seule fois.""")),
-        Good(Shell(Equal('tr "[A-Z],. " "[a-z]\n\n\n" | sort -u')
-                   | Equal('tr "[A-Z],. " "[a-z]\\n\\n\\n" | sort -u')
-                   | Equal('tr "[A-Z],. " "[a-z]\\012\\012\\012" | sort -u'))),
-        Good(Comment(Shell(Equal('tr "[A-Z],. " "[a-z]\n" | sort -u')
-                           | Equal('tr "[A-Z],. " "[a-z]\\n" | sort -u')
-                           | Equal('tr "[A-Z],. " "[a-z]\\012" | sort -u')),
+        Good(Shell(Equal('tr "A-Z,. " "a-z\n\n\n" | sort -u')
+                   | Equal('tr "A-Z,. " "a-z\\n\\n\\n" | sort -u')
+                   | Equal('tr "A-Z,. " "a-z\\012\\012\\012" | sort -u'))),
+        Good(Comment(Shell(Equal('tr "A-Z,. " "a-z\n" | sort -u')
+                           | Equal('tr "A-Z,. " "a-z\\n" | sort -u')
+                           | Equal('tr "A-Z,. " "a-z\\012" | sort -u')),
                      """Ceci fonctionne, mais il est conseillé de mettre le
                      même nombre de caractères dans les deux paramètres""")),
         shell_display,

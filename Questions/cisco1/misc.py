@@ -50,7 +50,8 @@ add(name="protocol",
     communiquer sur Ethernet (pour envoyer les paquets/trames en
     évitant les collisions)&nbsp;?""",
     tests = (
-        Good(UpperCase(Contain('CSMA') & Contain('CD'))),
+        # Good(UpperCase(Contain('CSMA') & Contain('CD'))),
+        Good(UpperCase(Contain('CSMA'))),
         Bad(Comment(UpperCase(Contain('HDLC')),
                     "C'est le protocole utilisée pour la liaison série.")),
         Bad(Comment(UpperCase(Contain('MAC')),

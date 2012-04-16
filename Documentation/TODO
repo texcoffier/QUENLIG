@@ -1,5 +1,7 @@
 TODO Absolute :
-	Adresses IP dans stats étudiant
+        Colonne pas triable dans la page des options
+        Bug affichage arbre syntaxique shell dans Work done.
+	Eliminer les roles des stats
 	Authentitification boucle si l'URL se termine par /
 	Statistique sur un etudiant en particulier
 	voir 'question stat' marche pas si pas 'voir toute'

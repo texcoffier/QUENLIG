@@ -338,7 +338,10 @@ class Student:
                                    message)
 
             if a.answered:
-                number, message = self.check_answer(q, a.answered, state)
+                try:
+                    number, message = self.check_answer(q, a.answered, state)
+                except:
+                    message = '???BUG???'
                 if message:
                     message = "<br>" + message
                 s += utilities.div("good_answer",

@@ -62,10 +62,12 @@ def execute(state, plugin, argument):
         st.append([s1.a_href(), s2.a_href(), n, '%.2f' % nn1,  '%.2f' % nn2])
         if max(nn1, nn2) < average + stddev: # not interesting
             break
-    plugin.heart_content = utilities.sortable_table(plugin.sort_column,
-                                                    st,
-                                                    url = "%s&%s=1" % (plugin.plugin.css_name,
-                                                                       plugin.plugin.css_name))
+        
+    plugin.heart_content = utilities.sortable_table(
+        plugin.sort_column,
+        st,
+        url = "%s&%s=1" % (plugin.plugin.css_name, plugin.plugin.css_name))
+
     state.question = None
 
     return ''

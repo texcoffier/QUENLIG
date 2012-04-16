@@ -6,7 +6,9 @@ Cela copie et lance le TP en arrière plan.
 
 
 TODO :
-
+	nom routeur : R03 fait planter
+	cli:reinitialiser : etre plus explicite sur les commande
+	cli:aide (s?) dire de sortir de root
 	Enlever commande obsolettes
 
 
