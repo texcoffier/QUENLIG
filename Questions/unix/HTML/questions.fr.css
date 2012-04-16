@@ -7,40 +7,40 @@ p.shell_syntax_error:before{content:"Ce que vous avez tapé ne respecte pas la sy
  *****************************************************************************
  *****************************************************************************
  */
-SEQUENCE:before
+u\:SEQUENCE:before
 {content:"Séquence de commandes";}
-OR:before
+u\:OR:before
 {content:"Exécute LA commande qui suit seulement si l'on est en erreur";}
-AND:before
+u\:AND:before
 {content:"Exécute LA commande qui suit seulement s'il n'y a pas d'erreur";}
-IF:before
+u\:IF:before
 {content:"IF : la valeur testée est la valeur de retour de la commande";
 }
-IF > COMMAND:first-child:before
+u\:IF > u\:COMMAND:first-child:before
 {content:"Cette commande retourne vrai si elle s'est bien passée";}
-PIPELINE:before
+u\:PIPELINE:before
 {content:"Pipeline";}
-PIPELINE[background="1"] > COMMAND:before, OR[background="1"] > PIPELINE > COMMAND:before
+u\:PIPELINE[background="1"] > u\:COMMAND:before, u\:OR[background="1"] > u\:PIPELINE > u\:COMMAND:before
 {content:"Commande en arrière plan";}
-PIPELINE[background="1"] > SUBSHELL:before
+u\:PIPELINE[background="1"] > u\:SUBSHELL:before
 {content:"Regroupement de commandes en arrière plan";}
 
-COMMAND:before{content:"Commande";}
-COMMAND > ARGUMENT:before{content:"Argument : ";}
+u\:COMMAND:before{content:"Commande";}
+u\:COMMAND > u\:ARGUMENT:before{content:"Argument : ";}
 
-FOR:before                        {content:"Boucle FOR"               ;}
-FOR > ARGUMENT:first-child:before {content:" sur la variable "        ;}
-FOR > COMMAND:before              {content:"Corps de la boucle FOR"   ;}
-FOR > SEQUENCE:before             {content:"Corps de la boucle FOR"   ;}
-WHILE:before                      {content:"Boucle WHILE"             ;}
-WHILE > COMMAND:first-child:before{content:"La commande testée"       ;}
-WHILE > COMMAND:before            {content:"Corps de la boucle WHILE" ;}
-WHILE > SEQUENCE:before           {content:"Corps de la boucle WHILE" ;}
-FILDES:before                     {content:"Redirection :"            ;}
-SUBSHELL:before                   {content:"Regroupement de commandes";}
-CASE:before                       {content:"case :"                   ;}
-SELECTOR:before                   {content:"Sélecteur(s) :"           ;}
-AFFECTATION:before                {content:"Affectation temporaire :" ;}
-REPLACEMENT:before                {content:"Remplace la commande par sa sortie standard" }
+u\:FOR:before                        {content:"Boucle FOR"               ;}
+u\:FOR > u\:ARGUMENT:first-child:before {content:" sur la variable "        ;}
+u\:FOR > u\:COMMAND:before              {content:"Corps de la boucle FOR"   ;}
+u\:FOR > u\:SEQUENCE:before             {content:"Corps de la boucle FOR"   ;}
+u\:WHILE:before                      {content:"Boucle WHILE"             ;}
+u\:WHILE > u\:COMMAND:first-child:before{content:"La commande testée"       ;}
+u\:WHILE > u\:COMMAND:before            {content:"Corps de la boucle WHILE" ;}
+u\:WHILE > u\:SEQUENCE:before           {content:"Corps de la boucle WHILE" ;}
+u\:FILDES:before                     {content:"Redirection :"            ;}
+u\:SUBSHELL:before                   {content:"Regroupement de commandes";}
+u\:CASE:before                       {content:"case :"                   ;}
+u\:SELECTOR:before                   {content:"Sélecteur(s) :"           ;}
+u\:AFFECTATION:before                {content:"Affectation temporaire :" ;}
+u\:REPLACEMENT:before                {content:"Remplace la commande par sa sortie standard" }
 
 

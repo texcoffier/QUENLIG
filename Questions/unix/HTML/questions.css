@@ -1,7 +1,8 @@
 
 PRE SPAN.boxed { border: 1px solid black ;background: white ; }
 
-SELECTOR, SEQUENCE, PIPELINE, COMMAND, COMMAND>ARGUMENT, SUBSHELL, CASE, IF, FOR, WHILE{
+
+u\:SELECTOR, u\:SEQUENCE, u\:PIPELINE, u\:COMMAND, u\:COMMAND>u\:ARGUMENT, u\:SUBSHELL, u\:CASE, u\:IF, u\:FOR, u\:WHILE{
   margin-left:2em;
   display:block;
   border:1px solid black;
@@ -9,7 +10,7 @@ SELECTOR, SEQUENCE, PIPELINE, COMMAND, COMMAND>ARGUMENT, SUBSHELL, CASE, IF, FOR
   margin-top:1px;
   margin-bottom:1px;
 }
-SEQUENCE[nrchild="1"]{
+u\:SEQUENCE[nrchild="1"]{
   display:block;
   margin-left:0em;
   border:0pt solid black;
@@ -17,14 +18,14 @@ SEQUENCE[nrchild="1"]{
   margin-top:0em;
   margin-bottom:0em;
 }
-SEQUENCE[nrchild="1"]:before{
+u\:SEQUENCE[nrchild="1"]:before{
   content:"";
   margin-left:0em;
 }
-IF > COMMAND:first-child{
+u\:IF > u\:COMMAND:first-child{
   background:white;
 }
-PIPELINE[nrchild="1"]{
+u\:PIPELINE[nrchild="1"]{
   display:block;
   margin-left:0em;
   border:0pt solid black;
@@ -32,31 +33,31 @@ PIPELINE[nrchild="1"]{
   margin-top:0em;
   margin-bottom:0em;
 }
-PIPELINE[nrchild="1"]:before{
+u\:PIPELINE[nrchild="1"]:before{
   content:"";
   margin-left:0em;
 }
-COMMAND > ARGUMENT:first-child:before{
+u\:COMMAND > u\:ARGUMENT:first-child:before{
   content:"";
 }
-COMMAND > ARGUMENT:first-child{
+u\:COMMAND > u\:ARGUMENT:first-child{
   margin-left:1em;
 }
-COMMAND > ARGUMENT{
+u\:COMMAND > u\:ARGUMENT{
   display:block;
   white-space:pre;
 }
-FOR > ARGUMENT:first-child{
+u\:FOR > u\:ARGUMENT:first-child{
   border:0px;
   display:inline;
   margin-left:1em;
 }
-FOR > ARGUMENT{
+u\:FOR > u\:ARGUMENT{
   display:list-item;
   margin-left:3em;
 }
 
-FILDES{
+u\:FILDES{
   display:block;
   margin-left:2em;
 }
@@ -67,21 +68,22 @@ FILDES{
 *[double_quoted="0"]{
   background:#FBB;
 }
-VARIABLE:before{
+
+u\:VARIABLE:before{
   content:'$';
 }
-REPLACEMENT{
+u\:REPLACEMENT{
   display:block;
 }
-SELECTOR > PATTERN > ARGUMENT{
+u\:SELECTOR > u\:PATTERN > u\:ARGUMENT{
   margin-left:1em;
   display:block;
 }
-PATTERN_CHAR{
+u\:PATTERN_CHAR{
   display:inline;
   background:yellow;
 }
-AFFECTATION{
+u\:AFFECTATION{
   display:block;
   margin-left:2em;
 }

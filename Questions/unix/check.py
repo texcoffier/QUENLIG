@@ -17,6 +17,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
+import re
 import utilities
 from shellParser import parse, parse_only_not_commented, parse_error
 from questions import Test, TestUnary, no_parse
@@ -64,20 +65,27 @@ class Shell(TestUnary):
     def canonize(self, student_answer, state=None):
         return parse_only_not_commented(student_answer)
 
+def add_namespace(txt):
+    return (# '<div xmlns:u="u">' +
+            re.sub('<([^/])', '<u:\\1', 
+                   re.sub('</', '</u:', txt))
+            # + '</div>'
+            )
+
 class shell_good(TestShellParsed):
     html_class = "test_shell test_good test_is"
     def test(self, student_answer, string):
         if student_answer[1] == parse_error:
             return False, parse_error
         if string == student_answer[1]:
-                return True, self.comment + student_answer[1]
+                return True, self.comment + add_namespace(student_answer[1])
 class shell_bad(TestShellParsed):
     html_class = "test_shell test_bad test_is"
     def test(self, student_answer, string):
         if student_answer[1] == parse_error:
             return False, parse_error
         if string == student_answer[1]:
-                return False, self.comment + student_answer[1]
+                return False, self.comment + add_namespace(student_answer[1])
             
 class shell_require(TestShell):
     html_class = "test_shell test_bad test_require"
@@ -85,18 +93,19 @@ class shell_require(TestShell):
         if student_answer[1] == parse_error:
             return False, parse_error
         if string not in student_answer[1]:
-                return False, self.comment + student_answer[1]
+                return False, self.comment + add_namespace(student_answer[1])
 class shell_reject(TestShell):
     html_class = "test_shell test_bad test_reject"
     def test(self, student_answer, string):
         if student_answer[1] == parse_error:
             return False, parse_error
         if string in student_answer[1]:
-                return False, self.comment + student_answer[1]
-            
+                return False, self.comment + add_namespace(student_answer[1])
+
 class Shell_display(TestShell):
     html_class = "test_shell test_unknown"
     def test(self, student_answer, string):
-        return None, student_answer[1]
+        return None, add_namespace(student_answer[1])
+
 
 shell_display = Shell_display()

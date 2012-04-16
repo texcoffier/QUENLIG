@@ -123,7 +123,6 @@ def parse(answer, replacement=(), dumb_replace=()):
        last_answer = answer
     return last_parsed, last_uncommented
 
-
 def parse_only_not_commented(answer):
     commented, uncommented = parse(answer)
     if commented == parse_error:
