@@ -51,6 +51,9 @@ def execute(state, plugin, argument):
                                   s, ss))
                 except KeyError:
                     pass
+    if len(pairs) == 0:
+         plugin.heart_content = '<p class="no_pairs_found"></p>'
+         return ''
     pairs.sort()
     pairs.reverse()
     average = sum(zip(*pairs)[0]) / len(pairs)

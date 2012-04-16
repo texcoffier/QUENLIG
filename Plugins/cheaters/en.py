@@ -5,6 +5,7 @@ tip = "Search cheaters pairs"
 before = "Cheaters pairs"
 
 translations = {
+    'no_pairs_found': "No cheater pair found.",
     '//c0': 'Student 1',
     '//c1': 'Student 2',
     '//c2': 'Simultaneous',

@@ -5,6 +5,7 @@ tip = "Cherche les copieurs"
 before = "Copieurs"
 
 translations = {
+    'no_pairs_found': "Aucun copieur n'a été trouvé.",
     '//c0': 'Étudiant 1',
     '//c1': 'Étudiant 2',
     '//c2': 'Simultanées',
