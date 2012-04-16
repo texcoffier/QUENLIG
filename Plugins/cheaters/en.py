@@ -1,8 +1,8 @@
 # -*- coding: latin-1 -*-
 
-tip = "Search cheaters"
+tip = "Search cheaters pairs"
 
-before = "Cheaters"
+before = "Cheaters pairs"
 
 translations = {
     '//c0': 'Student 1',

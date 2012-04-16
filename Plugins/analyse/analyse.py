@@ -22,4 +22,5 @@
 """Analyse menu"""
 
 priority_display = 'action'
-acls = { 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',), 'Grader': ('executable',),
+         'Author': ('executable',), }

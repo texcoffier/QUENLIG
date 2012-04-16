@@ -29,7 +29,7 @@ container = 'analyse'
 priority_execute = '-question_answer'
 priority_display = 1000000
 link_to_self = True
-acls = { 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',), 'Grader': ('executable',) }
 sort_column = -3
 
 def execute(state, plugin, argument):

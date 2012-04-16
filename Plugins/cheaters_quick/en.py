@@ -2,7 +2,7 @@
 
 tip = "Search students answering too quickly."
 
-before = "Cheaters"
+before = "Cheaters too fast"
 
 translations = {
     '//c0': 'Student',
