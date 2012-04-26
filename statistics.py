@@ -17,14 +17,16 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-import questions
-import colorsys
-import utilities
+import collections
 import os
-import student
+import colorsys
 import time
-import configuration
 import cgi
+
+import questions
+import utilities
+import student
+import configuration
 import types
 
 _stats = None
@@ -139,7 +141,7 @@ student: %s
         # Search correct response time within a time window
         t = []
         for s in self.all_students:
-            s.nr_answer_same_time = {}
+            s.nr_answer_same_time = collections.defaultdict(lambda: [0,0])
             for answer in s.answers.values():
                 if answer.answered:
                     t.append( (answer.question, answer.last_time, s) )
@@ -152,18 +154,13 @@ student: %s
                     and current_time - t[j][1] < 60
                     and current_question == t[j][0]
                     ) :
-                try:
-                    t[i][2].nr_answer_same_time[t[j][2].name] += 1
-                except KeyError:
-                    t[i][2].nr_answer_same_time[t[j][2].name] = 1
-                    
-                try:
-                    t[j][2].nr_answer_same_time[t[i][2].name] += 1
-                except KeyError:
-                    t[j][2].nr_answer_same_time[t[i][2].name] = 1
+                # i copied on j
+                t[i][2].nr_answer_same_time[t[j][2].name][0] += 1
+                # j was copied by i
+                t[j][2].nr_answer_same_time[t[i][2].name][1] += 1
                 j -= 1
         for s in self.all_students:
-            s.nr_of_same_time = sum( s.nr_answer_same_time.values() )
+            s.nr_of_same_time = sum(sum( s.nr_answer_same_time.values(), []))
             if s.the_number_of_given_questions:
                 s.nr_of_same_time_normed = (
                     s.nr_of_same_time

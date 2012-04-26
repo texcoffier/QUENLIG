@@ -1,6 +1,5 @@
 TODO Absolute :
         Colonne pas triable dans la page des options
-        Bug affichage arbre syntaxique shell dans Work done.
 	Eliminer les roles des stats
 	Authentitification boucle si l'URL se termine par /
 	Statistique sur un etudiant en particulier
@@ -10,6 +9,8 @@ TODO Absolute :
 	Faire disparaitre 'configuration' au profit de 'session' ?
 	plugin : casauth
 	plugin : language
+
+cisco2 : Passer en RIP V2
 
 TODO maybe :
      Passer les noms d'invité en minuscules pour éviter les doublons,

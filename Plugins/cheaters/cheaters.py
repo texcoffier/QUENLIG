@@ -43,10 +43,13 @@ def execute(state, plugin, argument):
         for ss in stats.sorted_students:
             if id(s) > id(ss):
                 try:
-                    pairs.append((s.nr_answer_same_time[ss.name],
-                                  (100 * s.nr_answer_same_time[ss.name])
+                    if ss.name not in s.nr_answer_same_time:
+                        continue
+                    after, before = s.nr_answer_same_time[ss.name]
+                    pairs.append((after, before,
+                                  (100 * after)
                                   / s.the_number_of_good_answers,
-                                  (100 * s.nr_answer_same_time[ss.name])
+                                  (100 * before)
                                   / ss.the_number_of_good_answers,
                                   s, ss))
                 except KeyError:
@@ -54,16 +57,17 @@ def execute(state, plugin, argument):
     if len(pairs) == 0:
          plugin.heart_content = '<p class="no_pairs_found"></p>'
          return ''
-    pairs.sort()
+    pairs.sort(key=lambda x: x[0] + x[1])
     pairs.reverse()
-    average = sum(zip(*pairs)[0]) / len(pairs)
-    average2 = sum(i[0]*i[0] for i in pairs) / len(pairs)
+    average = (sum(zip(*pairs)[1]) + sum(zip(*pairs)[2])) / len(pairs)
+    average2 = sum((i[1]+i[2])**2 for i in pairs) / len(pairs)
     stddev = (average2 - average*average) ** 0.5
     
     st = []
-    for n, nn1, nn2, s1, s2 in pairs:
-        st.append([s1.a_href(), s2.a_href(), n, '%.2f' % nn1,  '%.2f' % nn2])
-        if max(nn1, nn2) < average + stddev: # not interesting
+    for after, before, nn1, nn2, s1, s2 in pairs:
+        st.append([s1.a_href(), s2.a_href(),
+                   after, before, '%.2f' % nn1,  '%.2f' % nn2])
+        if max(nn1, nn2) < average + stddev/2: # not interesting
             break
         
     plugin.heart_content = utilities.sortable_table(

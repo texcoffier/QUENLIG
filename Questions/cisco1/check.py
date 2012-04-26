@@ -862,13 +862,17 @@ class HostReplace(TestUnary):
 def host_substitute(string, host):
     items = string.split('{')
     new = items[0]
-    for i in items[1:]:
-        item = i.split('}')
-        if len(item) != 2:
-            new += '{' + i
-        else:
-            e = item[0].replace('[', '["').replace(']', '"]')
-            new += str(eval('host.' + e)) + item[1]
+    try:
+        for i in items[1:]:
+            item = i.split('}')
+            if len(item) != 2:
+                new += '{' + i
+            else:
+                e = item[0].replace('[', '["').replace(']', '"]')
+                new += str(eval('host.' + e)) + item[1]
+    except AttributeError:
+        print 'BUG REPLACE', string
+        return string
     return new
     
     

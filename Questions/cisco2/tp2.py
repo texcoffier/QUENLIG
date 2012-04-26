@@ -109,7 +109,7 @@ add(name="votre poste",
     required=['console'],
     before="""Vous devez avoir sous les yeux le plan du réseau que
     vous allez tous configurer.""",
-    question="Quel est le nom de votre poste sur le plan&nbsp;?",
+    question="Quel est le nom de votre ordinateur (pas routeur) sur le plan&nbsp;?",
     tests=(
     answer_length_is(2, "La réponse est UNE lettre majuscule + UN chiffre"),
     good("{name}", parse_strings=host),
