@@ -46,10 +46,13 @@ add(name="len",
    """,
     nr_lines = 5,
     tests = (
-        Good(P(Replace((('nb_elements=nb_elements+1', 'nb_elements+=1'),
-                        ('nb_elements=1+nb_elements', 'nb_elements+=1'),
-                        ),
-                       Equal('def longueur(table):\n nb_elements = 0\n for i in table:\n  nb_elements += 1\n return nb_elements')))),
+        Good(P_AST(Equal('''
+def longueur(table):
+    nb_elements = 0
+    for i in table:
+        nb_elements += 1
+    return nb_elements
+'''))),
         expects(('for', 'nb_elements', '1', 'return', '=', ' in ', 'def ',
                  'longueur', ':')),
         Expect(' i ', "L'indice de boucle doit être <tt>i</tt>"),
@@ -78,10 +81,13 @@ add(name="sum",
    """,
     nr_lines = 5,
     tests = (
-        Good(P(Replace((('la_somme=la_somme+i', 'la_somme+=i'),
-                        ('la_somme=i+la_somme', 'la_somme+=i'),
-                        ),
-                       Equal('def somme(table):\n la_somme = 0\n for i in table:\n  la_somme += i\n return la_somme')))),
+        Good(P_AST(Equal('''
+def somme(table):
+    la_somme = 0
+    for i in table:
+        la_somme += i
+    return la_somme
+'''))),
         expects(('for', 'la_somme', 'return', '=', ' in ', 'def ',
                  'somme', ':')),
         Expect(' i ', "L'indice de boucle doit être <tt>i</tt>"),
@@ -109,15 +115,17 @@ add(name="ajoute complexe",
     """,
     nr_lines = 4,
     tests = (
-        Good(P(Replace((
-            ('b.imaginaire+a.imaginaire', 'a.imaginaire+b.imaginaire'),
-            ('b.reel+a.reel', 'a.reel+b.reel'),
-            ('a.reel=a.reel+', 'a.reel+='),
-            ('a.imaginaire=a.imaginaire+', 'a.imaginaire+='),
-            ),
-                       Equal('def ajoute_au_premier(a,b):\n a.reel+=b.reel\n a.imaginaire+=b.imaginaire')
-                        | Equal('def ajoute_au_premier(a,b):\n a.imaginaire+=b.imaginaire\n a.reel+=b.reel')
-                       ))),
+        Good(P_AST(Equal('''
+def ajoute_au_premier(a,b):
+    a.reel       += b.reel
+    a.imaginaire += b.imaginaire
+''')
+                   | Equal('''
+def ajoute_au_premier(a,b):
+    a.imaginaire += b.imaginaire
+    a.reel       += b.reel
+''')
+                   )),
         Bad(Comment(~ NumberOfIs('\n', 2),
                     """La réponse est en 3 lignes : le <tt>def</tt>
                     et les deux affections (parties réelle et imaginaire)""")),
@@ -160,17 +168,12 @@ add(name="somme 2 dés",
     <li> Vous utilisez un simple <tt>print</tt> pour afficher <tt>nb</tt>
     </ul> """,
     tests = (
-        Good(P(Replace((
-            ('b+a', 'a+b'),
-            ('nb[a+b]=nb[a+b]+1', 'nb[a+b]+=1'),
-            ('nb[a+b]=1+nb[a+b]', 'nb[a+b]+=1'),
-            ('13*[0]', '[0]*13'),
-            ),
-                       Equal('''nb = [0]*13
+        Good(P_AST(Equal('''
+nb = [0]*13
 for a in range(1, 7):
   for b in range(1, 7) :
     nb[a+b] += 1
-print(nb)''')))),
+print(nb)'''))),
         Expect('13', """Vous devez initialiser <tt>nb</tt> avec un tableau
         contenant 13 entiers nul en utilisant la multiplication de tableau"""),
         Reject('range(6)', """Les variables représentant les dés doivent
@@ -244,8 +247,6 @@ add(name="racine carré",
                        ))),
         Good(RemoveSpaces(Replace((('racine_courante-racine_precedente',
                          'racine_precedente-racine_courante'),
-                        ('racine_courante+nombre/racine_courante',
-                         'nombre/racine_courante+racine_courante'),
                         ('>=', '>'),
                         ('2.', '2'),
                         ('1.', '1'),
@@ -254,14 +255,16 @@ add(name="racine carré",
                         ('1e-3', '0.001'),
                         ('10**-3', '0.001'),
                         ),P_AST(Equal(
-                        """def racine_carree(nombre):
-  racine_precedente = 0
-  racine_courante = nombre / 2
-  while abs(racine_precedente - racine_courante) > 0.001:
-     racine_precedente = racine_courante
-     racine_courante = (nombre/racine_courante + racine_courante) / 2
-  return racine_courante"""))))),
-                
+                        """
+def racine_carree(nombre):
+    racine_precedente = 0
+    racine_courante = nombre / 2
+    while abs(racine_precedente - racine_courante) > 0.001:
+         racine_precedente = racine_courante
+         racine_courante = (nombre/racine_courante + racine_courante) / 2
+    return racine_courante
+"""))))),
+                  
         ),
     )
 
@@ -286,16 +289,14 @@ add(name="créer matrice",
     """,
     nr_lines = 6,
     tests = (
-        Good(P(Replace((('nb_colonnes*[valeur]',
-                         '[valeur]*nb_colonnes'),
-                        ),
-                       Equal('''
+        Good(P_AST(Equal('''
 def creer_matrice(nb_lignes, nb_colonnes, valeur):
    matrice = []
    for numero_ligne in range(nb_lignes):
       matrice.append([valeur]*nb_colonnes)
-   return matrice'''
-    )))),
+   return matrice
+'''
+    ))),
         expects(('def', 'creer_matrice', 'nb_lignes', 'nb_colonnes',
                  'valeur', 'return', 'numero_ligne')),
         Expect('append', """Dans la boucle vous devez utiliser la

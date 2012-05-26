@@ -58,7 +58,10 @@ add(name="for",
     """,
     nr_lines = 3,
     tests = (
-        Good(P(Equal('for i in range(10):\n   print(i)'))),
+        Good(P_AST(Equal('''
+for i in range(10):
+    print(i)
+'''))),
         Expect("for",
                "On utilise le mot-clef <tt>for</tt> pour faire un boucle"),
         Expect(' i ',
@@ -105,8 +108,13 @@ add(name="for 2",
 Vous utiliserez <tt>i</tt> comme indice de boucle.""",
     nr_lines = 3,
     tests = (
-        Good(P(Equal('for i in range(10):\n   print(i, i*i)'))),
-        Good(P(Equal('for i in range(10):\n   print(i, i**2)'))),
+        Good(P_AST(Equal('''
+for i in range(10):
+    print(i, i*i)
+''') | Equal('''
+for i in range(10):
+    print(i, i**2)
+'''))),
         expects(('for', ' i ', ' in ', 'range', 'range(10)', ':', 'print')),
         Expect('*', """Pour calculer le carré de <tt>i</tt> vous devez
         utiliser une multiplication"""),
@@ -142,8 +150,16 @@ la variable <tt>i</tt>, vous utiliserez deux fois la fonction <tt>print</tt>.
 """,
     nr_lines = 4,
     tests = (
-        Good(P(Equal('for i in range(5):\n   print("i=",i)\n   print("i*i=",i*i)'))),
-        Good(P(Equal('for i in range(5):\n   print("i=",i)\n   print("i*i=",i**2)'))),
+        Good(P_AST(Equal('''
+for i in range(5):
+    print("i=",i)
+    print("i*i=",i*i)
+''')
+        | Equal('''
+for i in range(5):
+    print("i=",i)
+    print("i*i=",i**2)
+'''))),
         P(expects(('for', ' i ', ' in ', 'range', 'range(5)', ':', 'print',
                    'i=', 'i*i='))),
         Expect('*', """Pour calculer le carré de <tt>i</tt> vous devez
@@ -198,8 +214,13 @@ add(name="def",
     tests = (
         Reject("=", """Vous n'avez pas besoin de passer par une
         variable intermédiaire, retournez directement la bonne valeur."""),
-        Good(P(Equal('def carre(x):\n return x*x'))),
-        Good(P(Equal('def carre(x):\n return x**2'))),
+        Good(P_AST(Equal('''
+def carre(x):
+    return x*x
+''') | Equal('''
+def carre(x):
+    return x**2
+'''))),
         Expect(':', "Vous avez oublié les ':' à la fin de la première ligne."),
         expects(('def ', 'carre', 'x', 'return')),
         expects(('(', ')'),
@@ -241,14 +262,18 @@ add(name="if",
    """,
    nr_lines = 7,
    tests = (
-   Good(P(Replace((('a<=-1', 'a<0'), ('return a', 'return 0'),
-                 ),
-                 Equal('''def signe(a):
+        # XXX Not nice
+   Good(P_AST(Equal('''
+def signe(a):
    if a<0:
       return -1
    if a==0:
       return 0
-   return 1''')))),
+   return 1
+'''))),
+   P(Reject('return a',
+            """Il est plus simple de retourner un constance qu'une variable
+               quand la valeur de la variable est connue""")),
    expects(('def', 'signe', 'a', 'if', 'return', '0', '1', '-1', ':')),
    Reject("else", "N'utilisez pas de <tt>else</tt> dans cette fonction, ce n'est pas la peine car il y a des <tt>return</tt>."),
    Bad(Comment(~NumberOfIs('if', 2),
@@ -280,21 +305,24 @@ add(name="while",
     nr_lines = 7,
     tests = (
         expects(('def', 'log2', 'while', 'return', 'a', '/', '2', '1', '0')),
-        Good(P(Replace((('//', '/'),
-                        ('a=a/2', 'a/=2'),
-                        ('a!=0', 'a'),
-                        ('i=i+1', 'i+=1'),
-                        ('i+=1;a/=2', 'a/=2;i+=1'),
-                        ),
-                       Equal("""def log2(a):
- i = 0
- while a:
-    a /= 2
-    i += 1
- return i""")
-                       )
-               )
-             ),
+        Good(Replace((('//', '/'), ),
+                     P_AST(Equal("""
+def log2(a):
+    i = 0
+    while a:
+       a /= 2
+       i += 1
+    return i
+""")
+                     | Equal("""
+def log2(a):
+    i = 0
+    while a:
+       i += 1
+       a /= 2
+    return i
+""")),
+        )),
         ),
     good_answer = """Contrairement au langage C, il n'y a PAS
     de <tt>do ... while(...)</tt> en langage Python.<p>

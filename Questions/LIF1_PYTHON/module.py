@@ -41,7 +41,10 @@ add(name="math",
     question = """Donnez les 2 lignes python affichant le cosinus de Pi/2""",
     nr_lines=3,
     tests = (
-        Good(P(Equal("import math\nprint(math.cos(math.pi/2))"))),
+        Good(P_AST(Equal("""
+import math
+print(math.cos(math.pi/2))
+"""))),
         Reject('3', "Vous devez utiliser <tt>math.pi</tt>"),
         Reject('0', """On ne vous demande pas d'afficher le résultat
         mais de le calculer"""),
@@ -75,7 +78,10 @@ add(name="créer",
     la somme du tableau vide.""",
     nr_lines = 3,
     tests = (
-        Good(P(Equal("import exo\nprint(exo.somme([]))"))),
+        Good(P_AST(Equal("""
+import exo
+print(exo.somme([]))
+"""))),
         P(expects(('import', 'exo', 'print', 'somme', '[]',
                 'exo.somme', 'import exo', 'somme([])'))),  
         Bad(Comment(~NumberOfIs('(', 2) | ~NumberOfIs(')', 2),

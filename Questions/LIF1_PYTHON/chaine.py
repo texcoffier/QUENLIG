@@ -120,7 +120,10 @@ add(name="entier",
     """,
     nr_lines = 3,
     tests = (
-        Good(P(Equal("def lire_entier():\n return int(sys.stdin.readline())"))),
+        Good(P_AST(Equal("""
+def lire_entier():
+    return int(sys.stdin.readline())
+"""))),
         expects(('def', 'lire_entier', ':', 'return', 'sys', 'stdin',
                  'readline', 'int', '.')),
         Bad(Comment(~NumberOfIs('(',3) | ~NumberOfIs(')',3),

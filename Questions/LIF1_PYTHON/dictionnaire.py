@@ -75,7 +75,10 @@ add(name="keys",
     après les autres&nbsp;?""",
     nr_lines = 3,
     tests = (
-        Good(P(Equal('for key in dico:\n print(key)'))),
+        Good(P_AST(Equal('''
+for key in dico:
+    print(key)
+'''))),
         P(expects(('for', 'key', 'in', 'dico', ':', 'print', '(', ')',
                    'print(key)'))),
         ),
@@ -98,7 +101,10 @@ add(name="values",
     appelé <tt>dico</tt> les unes après les autres&nbsp;?""",
     nr_lines = 3,
     tests = (
-        Good(P(Equal('for value in dico.values():\n print(value)'))),
+        Good(P_AST(Equal('''
+for value in dico.values():
+    print(value)
+'''))),
         P(expects(('for', 'value', 'in', 'dico', ':', 'print', '(', ')',
                  'values', 'values()', '.values()', 'dico.values()'))),
         ),

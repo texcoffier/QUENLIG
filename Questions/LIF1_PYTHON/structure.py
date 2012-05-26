@@ -48,14 +48,14 @@ add(name="créer classe",
     et <tt>imaginaire</tt> initialisé à 0&nbsp;?""",
     nr_lines = 3,
     tests = (
-        Good(Replace((('.',''),),
-                     P(Equal('class Complexe:\n reel=0\n imaginaire=0')
-                       |Equal('class Complexe:\n imaginaire=0\n reel=0')
-                       ))),
+        Good(P_AST( Equal('class Complexe:\n reel=0\n imaginaire=0')
+                   |Equal('class Complexe:\n imaginaire=0\n reel=0')
+                   |Equal('class Complexe:\n imaginaire=0.\n reel=0.')
+                   |Equal('class Complexe:\n reel=0.\n imaginaire=0.')
+                   )),
         P(expects(('class', 'Complexe', 'reel', 'imaginaire', '0', '=', ':',
-                   'class Complexe', 'reel=0', 'imaginaire=0')))
+                   'class Complexe', 'reel=0', 'imaginaire=0'))),
         ),
-
     good_answer = """La valeur par défaut peut être le résultat d'un calcul.
     Par exemple <tt>1024 * a</tt>""",
     )

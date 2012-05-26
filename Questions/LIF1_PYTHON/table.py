@@ -102,12 +102,12 @@ add(name="accès négatif",
     tests = (
         Reject("len", "Sans utiliser <tt>len</tt> bien sûr"),
         Reject("*", "Sans utiliser <tt>*</tt> s'il vous plaît."),
-        Good(P(Equal('for i in range(10):\n print(a[-i-1])'))),
-        Good(P(Equal('for i in range(10):\n print(a[-1-i])'))),
-        Good(P(Equal('for i in range(10):\n print(a[-(1+i)])'))),
-        Good(P(Equal('for i in range(10):\n print(a[-(i+1)])'))),
-        Good(P(Equal('for i in range(1,11):\n print(a[-i])'))),
-        Good(P(Equal('for i in range(-1,-11,-1):\n print(a[i])'))),
+        Good(P_AST(Equal('for i in range(10):\n print(a[-i-1])'))),
+        Good(P_AST(Equal('for i in range(10):\n print(a[-1-i])'))),
+        Good(P_AST(Equal('for i in range(10):\n print(a[-(1+i)])'))),
+        Good(P_AST(Equal('for i in range(10):\n print(a[-(i+1)])'))),
+        Good(P_AST(Equal('for i in range(1,11):\n print(a[-i])'))),
+        Good(P_AST(Equal('for i in range(-1,-11,-1):\n print(a[i])'))),
         ),
     bad_answer = """Le plus simple est de compléter le code suivant&nbsp;:
     <pre>for i in range(10):
@@ -256,7 +256,7 @@ add(name="empiler",
                         dans votre réponse&nbsp;: une fois comme indice
                         de boucle et une fois comme argument de
                         la fonction <tt>append</tt>""")),
-        Good(P(Equal("for element_de_a in a:\n b.append(element_de_a)"))),
+        Good(P_AST(Equal("for element_de_a in a:\n b.append(element_de_a)"))),
         ),
     good_answer = """Il est évidemment beaucoup plus rapide d'écrire
                      <tt>b = b + a</tt>""",
