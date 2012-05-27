@@ -225,7 +225,7 @@ class P_AST(TestUnary):
     To see it :
 
     import ast
-    ast.dump(ast.parse('def f(x): return x**2'))
+    ast.dump(ast.parse('def f(x): return x**2'), annotate_fields=False)
     """
     def canonize(self, student_answer, state=None):
         if re.match('.*;[ \t]*$', student_answer):
@@ -240,7 +240,7 @@ class P_AST(TestUnary):
             return (False,
                     'Message de Python : <b>' + cgi.escape(str(e)) + '</b><br>'
                     )
-        return ast.dump(CanonisePython().visit(ast_tree))
+        return ast.dump(CanonisePython().visit(ast_tree),annotate_fields=False)
         
     
 def python_color(txt):

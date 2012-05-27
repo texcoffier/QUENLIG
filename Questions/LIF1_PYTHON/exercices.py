@@ -102,7 +102,7 @@ add(name="ajoute complexe",
     required = ["control:def", "structure:attributs"],
     before = """En Python il n'y a pas de procédures, seulement des fonctions.
     <p>
-    Si il n'y a pas de <tt>return<tt> dans une fonction alors
+    S'il n'y a pas de <tt>return</tt> dans une fonction alors
     la valeur <tt>None</tt> est automatiquement retournée
     <p>
     On peut considérer qu'une procédure est une fonction sans <tt>return<tt>
@@ -212,7 +212,7 @@ add(name="racine carré",
     <li> On initialise la racine courante avec le nombre divisé par 2.
     <li> Tant que la valeur absolue (fonction <tt>abs</tt>)
          de la différence entre la racine précédente
-         et la nouvelle racine est supérieure à un millième&nbsp;:
+         et la racine courante est supérieure à un millième&nbsp;:
     <ul>
          <li> La racine précédente prend la valeur de la racine courante.
          <li> La racine courante prend pour valeur la moyenne de

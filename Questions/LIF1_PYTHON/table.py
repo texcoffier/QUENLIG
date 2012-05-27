@@ -68,8 +68,8 @@ add(name="accès",
     <p>
     Comme en langage C, la position du premier élement est <tt>0</tt>
     """,
-    question = """La variable <tt>t</tt> contient un tableau,
-    comment stockez vous dans la variable <tt>i5</tt> le cinquième
+    question = """La variable <tt>t</tt> est un tableau,
+    comment stockez-vous dans la variable <tt>i5</tt> le cinquième
     élement du tableau <tt>t</tt>&nbsp;?""",
     tests = (
         Good(P(Equal('i5 = t[4]'))),

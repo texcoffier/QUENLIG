@@ -487,7 +487,7 @@ add(name="inférieur",
 add(name="inférieur ou égal",
     required = ["inférieur"],
     question = """Que tapez-vous pour savoir si le contenu de la variable
-    « d » est plus petit ou égale à <tt>2</tt>&nbsp;?""",
+    « d » est plus petit ou égal à <tt>2</tt>&nbsp;?""",
     tests = (
         Reject('< =', "Il ne doit pas y avoir d'espace entre le &lt; et le ="),
         Good(P(Equal("d <= 2"))),
@@ -542,7 +542,7 @@ add(name="commentaire",
     )
 
 add(name="abs",
-    required=["control:if", "inférieur"],
+    required=["control:if", "inférieur", "opposé 2"],
     before="""La fonction <tt>abs</tt> est définie en Python, elle retourne
               la valeur absolu de son paramètre entier ou flottant.
               <p>
@@ -555,6 +555,7 @@ add(name="abs",
    absolue du nombre.""",
     nr_lines = 5,
     tests = (
+        # XXX P_AST
         Good(P(Replace((('>=','>'), ('<=', '<'), (';else:', '')),
                        Equal("""def mon_abs(nombre):
                                  if nombre > 0:

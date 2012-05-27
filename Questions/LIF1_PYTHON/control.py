@@ -23,6 +23,10 @@
 Les structures de contrôle Python
 """
 
+attention = """<p>Ne recopiez pas les <tt>&gt;&gt;&gt;</tt> et <tt>...</tt>,
+    mais seulement ce que <b>vous</b> avez tapé.
+    N'oubliez pas les espaces pour décaler à droite."""
+
 from questions import *
 from check import *
 
@@ -50,12 +54,8 @@ add(name="for",
     """,
     question="""Faites une boucle avec <tt>i</tt> comme indice de boucle,
     qui parcourt l'ensemble des nombre entiers de 0 à 9 inclus et
-    qui affiche chacun des nombre.
-    <p>
-    Ne recopiez pas les <tt>&gt;&gt;&gt;</tt> et <tt>...</tt>,
-    mais seulement ce que <b>vous</b> avez tapé.
-    N'oubliez pas les espaces pour décaler à droite.
-    """,
+    qui affiche chacun des nombres.
+    """ + attention,
     nr_lines = 3,
     tests = (
         Good(P_AST(Equal('''
@@ -210,7 +210,7 @@ add(name="def",
     question = """La réponse à cette question est la définition de la fonction
    <tt>carre</tt> qui a un paramètre nommé <tt>x</tt> et qui retourne le carré
    du nombre passé en paramètre.
-   """,
+   """ + attention,
     tests = (
         Reject("=", """Vous n'avez pas besoin de passer par une
         variable intermédiaire, retournez directement la bonne valeur."""),
