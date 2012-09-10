@@ -126,6 +126,9 @@ def get_file(filename):
     return cache[filename]
     
 class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
+
+    timeout = 0.3 # Some bugged browser do not send the GET
+    
     def send_head(self, type, modif_time=None,content_length=None,cached=True):
         if modif_time == None:
             modif_time = self.date_time_string()
@@ -138,6 +141,7 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
             self.send_header('Cache-Control', 'private')
             self.send_header('Cache-Control', 'no-store')
         self.send_header('Last-Modified', modif_time)
+        self.send_header('Connection', 'close')
         if content_length != None:
             self.send_header('Content-Length', content_length)
         self.end_headers()

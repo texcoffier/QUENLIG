@@ -1,11 +1,5 @@
-
-Ameliorer AST pour transformer a = a + 1 an a += 1
-
-
 An extended Equal so it is possible to write
-
    Equal("{{{[A-Z_][A-Z_0-9]}}}=5 ; echo ${{{\\1}}}")
-
 So the student can use any legal variable name
 
 
