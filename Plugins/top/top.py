@@ -146,6 +146,11 @@ def generate_javascript(state):
     
 
 def display(plugin, s):
+    if plugin.current_acls['hide']:
+        plugin.value = '???'
+        plugin.content = []
+        s.append('<!-- HIDDEN -->')
+        return
     if not hasattr(plugin, 'value'):
         plugin.value = '???'
     if not hasattr(plugin, 'content'):
