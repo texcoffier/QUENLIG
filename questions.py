@@ -19,6 +19,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+import time
 import types
 import os
 import utilities
@@ -132,6 +133,7 @@ class Question:
         self.evaluate_answer = current_evaluate_answer
         self.highlight = arg.get("highlight", False)
         self.maximum_bad_answer = int(arg.get("maximum_bad_answer", "0"))
+        self.maximum_time = int(arg.get("maximum_time", "0"))
 
         for test in self.tests:
             if hasattr(test, 'initialize'):
@@ -212,6 +214,17 @@ class Question:
         return os.path.join(configuration.root, configuration.questions,
                             self.world + ".py")
 
+    def answerable(self, student):
+        if (self.maximum_bad_answer
+            and student.bad_answer_question(self.name)
+            >= self.maximum_bad_answer):
+            return False
+        time_first = student.time_first(self.name)
+        if (self.maximum_time and time_first
+            and time.time() - time_first >= self.maximum_time):
+            return False
+        return True
+
 
 questions = {}
 previous_question = ""
@@ -232,6 +245,7 @@ def add(**arg):
     "default_answer": "Reponse par defaut",
     "highlight": "Question à mettre en évidence",
     "maximum_bad_answer": "Nombre maximum de mauvaises réponse",
+    "maximum_time": "Temps maximum pour répondre en secondes",
     }
 
     # sys.stdout.write("*")
@@ -265,10 +279,10 @@ def answerable(answered, student):
     """
     answerable = []
     for q in questions.values():
-        if not answered.get(q.name,False) and q.required.answered(answered):
-            if (q.maximum_bad_answer == 0
-                or student.bad_answer_question(q.name) < q.maximum_bad_answer):
-                answerable.append(q)
+        if answered.get(q.name,False) or not q.required.answered(answered):
+            continue
+        if q.answerable(student):
+            answerable.append(q)
 
     return answerable
 

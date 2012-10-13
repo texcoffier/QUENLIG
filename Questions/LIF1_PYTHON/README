@@ -50,7 +50,7 @@ do
     echo "'$I': ('!executable',),"
 done
 echo '}'
-) >Students/lif1_python/Logs/Default/acls
+) >Students/lif1_python/Logs/Student/acls
 
 ##########################################
 # Lancer le questionnaire :

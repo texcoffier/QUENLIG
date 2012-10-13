@@ -171,7 +171,9 @@ class Student:
                     for a in self.answers.values() if a.answered]) / len(t)
                 ) ** 0.5
 
-    def time_first(self):
+    def time_first(self, question=None):
+        if question:
+            return self.answer(question).first_time
         first_times = [a.first_time
                        for a in self.answers.values() if a.nr_asked]
         if first_times:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,24 +21,32 @@
 
 """Display the mean time used by student to answer the current question."""
 
-import statistics
-import utilities
+import time
 
-priority_display = 'title'
-text_align = 'right'
+priority_display = 'title_time'
+priority_execute = 'question_answer'
 acls = { 'Default': ('executable',) }
+css_attributes = (
+    "#ttl { font-size: 70%; font-weight: bold }",
+    )
 
 def execute(state, plugin, argument):
-    if not state.question:
-        return
-    
-    stats = statistics.question_stats()
-    if state.question.student_given > 2:
-        t = state.question.student_time / state.question.student_given
-        return utilities.duration(t)
-
-
-
-
-    
-
+    if (state.question
+        and state.question.maximum_time
+        and not state.student.answered_question(state.question.name)
+        ):
+        if not state.question.answerable(state.student):
+            return
+        t = state.student.time_first(state.question.name)
+        if t:
+            t = time.time() - t # Used time
+            return '''<var id="ttl">%d</var>
+<script><!--
+setInterval(
+function() {
+    var t = document.getElementById("ttl") ;
+    t.innerHTML = Number(t.innerHTML) - 1 ;
+}, 1000) ;
+--></script>
+''' % (state.question.maximum_time - t)
+        

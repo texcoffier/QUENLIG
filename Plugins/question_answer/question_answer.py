@@ -79,8 +79,7 @@ def execute(state, plugin, argument):
                                                       argument):
                 state.student.bad_answer(state.question.name,argument)
 
-    if (state.question.maximum_bad_answer
-        and state.student.bad_answer_question(state.question.name) >= state.question.maximum_bad_answer):
+    if not state.question.answerable(state.student):
         state.question = None
         return '<p class="maximum_bad_answer">'
 
