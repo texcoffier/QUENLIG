@@ -19,32 +19,58 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
+height = 400
 container = 'statmenu'
 priority_execute = 'autoeval'
 acls = { }
+css_attributes = (
+    "{ position: relative; height: 35em }",
+    "DIV { position: absolute; font-family: monospace }",
+    ".me { background: green; color:white  }",
+    )
 
 import questions
 import statistics
 
-def execute(state, plugin, argument):
+def px(v, vmin, vmax, size):
+    return str( int( size * (v-vmin) / (vmax-vmin) ) ) + 'px'
+
+def pos(y, x, text):
+    return ('<div style="left:' + px(60+x, pos.xmin, pos.xmax, 100)
+            + ';top:' + px((pos.ymin+ pos.ymax)-y, pos.ymin, pos.ymax, height) + '">'
+            + text + '</div>')
+
+def execute(state, dummy_plugin, dummy_argument):
     stats = statistics.question_stats()
-    t = ['Q']
+    t = []
     for q in questions.questions.values():
-        print q.name, getattr(q, 'autoeval_level', 999), getattr(q, 'student_given', False)
         if not hasattr(q, 'autoeval_level'):
             continue
         if not getattr(q, 'student_given', False):
             continue
-        t.append('%s %s %s' % (
-                q.name, q.autoeval_level, q.student_time / q.student_given))
+        t.append((q.autoeval_level,
+                  q.student_time / q.student_given,
+                  'x'))
 
-    t.append('S')
     for s in stats.all_students:
         if not hasattr(s, 'autoeval_level'):
             continue
         if s.the_number_of_given_questions == 0:
             continue
-        t.append('%s %s %s' % (s.name, s.autoeval_level,
-                  s.the_time_searching / s.the_number_of_given_questions))
+        t.append((s.autoeval_level,
+                  s.the_time_searching / s.the_number_of_given_questions,
+                  s is state.student and '<var class="me">·</var>'
+                  or '·'))
 
-    return '<br>\n'.join(t)
+    pos.ymin = min(i[0] for i in t)
+    pos.ymax = max(i[0] for i in t)
+    pos.xmin = min(i[1] for i in t)
+    pos.xmax = max(i[1] for i in t)
+
+    s = []
+    for i in range(int(pos.ymin), int(pos.ymax)+1):
+        s.append(pos(i, -60, ("%2d" % i).replace(' ', '&nbsp;')))
+    for i in t:
+        s.append(pos(*i))
+
+    return '\n'.join(s) + '<br>'*35

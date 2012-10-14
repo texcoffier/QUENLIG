@@ -272,7 +272,10 @@ class State(object):
             self.question = None
 
         if form.get("question", ""):
-            self.question = questions.questions[self.form["question"]]
+            if self.form["question"] == "None":
+                self.question = None
+            else:
+                self.question = questions.questions[self.form["question"]]
 
         sort_column = form.get("sort_column", "").split(' ')
         if len(sort_column) == 2:            

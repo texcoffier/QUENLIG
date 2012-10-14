@@ -117,8 +117,6 @@ def execute(state, dummy_plugin, argument):
             if last_asked_question != "None":
                 state.question = questions.questions[last_asked_question]
         state.student.autoeval = True
-    if argument == 'stop':
-        state.question = None
     if state.question:
         if not state.question.answerable(state.student):
             state.question = None
@@ -154,7 +152,7 @@ def execute(state, dummy_plugin, argument):
         if not question_done:
             return '''
 <p class="give_solution"></p>
-<form method="GET" action="autoeval=stop">
+<form method="GET" action="question=None">
 <button type="submit">
 <p class="giveup_problem"></p>
 </button>

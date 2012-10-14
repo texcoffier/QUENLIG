@@ -111,6 +111,7 @@ A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {
   padding:0.2em;
   display:block;
   white-space:normal;
+  z-index: 10;
 }
 
 /* Only here to fix a Chrome bug */
