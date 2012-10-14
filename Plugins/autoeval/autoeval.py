@@ -148,7 +148,8 @@ def execute(state, dummy_plugin, argument):
         state.autoeval_question = state.question.name
     else:
         state.autoeval_question = None
-    
+
+    before = '<p class="intro_problem"></p>'
     if state.question:
         if not question_done:
             return '''
@@ -159,8 +160,10 @@ def execute(state, dummy_plugin, argument):
 </button>
 </form>
 '''
-    
-    return '''<p class="intro_problem"></p>
+        else:
+            before = '<p class="autoeval_good"></p>'
+
+    return before + '''
 <form method="GET" action="question=%s">
 <button type="submit">
 <p class="start_problem"></p>

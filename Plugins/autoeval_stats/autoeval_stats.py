@@ -20,16 +20,17 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 container = 'statmenu'
-priority_execute = 'question_answer'
+priority_execute = 'autoeval'
 acls = { }
 
 import questions
 import statistics
-import cgi
 
 def execute(state, plugin, argument):
+    stats = statistics.question_stats()
     t = ['Q']
     for q in questions.questions.values():
+        print q.name, getattr(q, 'autoeval_level', 999), getattr(q, 'student_given', False)
         if not hasattr(q, 'autoeval_level'):
             continue
         if not getattr(q, 'student_given', False):
@@ -38,7 +39,6 @@ def execute(state, plugin, argument):
                 q.name, q.autoeval_level, q.student_time / q.student_given))
 
     t.append('S')
-    stats = statistics.question_stats()
     for s in stats.all_students:
         if not hasattr(s, 'autoeval_level'):
             continue
