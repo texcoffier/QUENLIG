@@ -154,7 +154,7 @@ class Student:
         return sum([a.indice+1 for a in self.answers.values()])
 
     def number_of_given_questions(self):
-        return len([s for s in self.answers.values() if s.nr_asked]) - 1
+        return len([s for s in self.answers.values() if s.nr_asked])
 
     def time_searching(self):
         return sum([a.time_searching for a in self.answers.values()])

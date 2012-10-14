@@ -47,7 +47,6 @@ Must be set to :
 'session_duration': ('!executable',),
 'session_start': ('!executable',),
 'session_stop': ('!executable',),
-'statmenu': ('!executable',),
 'statmenu_bad': ('!executable',),
 'statmenu_good': ('!executable',),
 'statmenu_indice': ('!executable',),
@@ -57,6 +56,7 @@ Must be set to :
 'statmenu_time': ('!executable',),
 'comment': ('hide',),
 'autoeval': ('executable',),
+'autoeval_stats': ('executable',),
 }
 
 
@@ -65,14 +65,50 @@ Must be set to :
 
 container = 'heart'
 priority_display = 'question_answer'
-priority_execute = '-question'
+priority_execute = 'question_answer'
 acls = { }
+
+N = 2
+P = 1.1
 
 import questions
 
-def execute(state, plugin, argument):
+def autoeval(question, student):
+    """Update student en question level"""
+    if not hasattr(question, 'autoeval_level'):
+        question.autoeval_level = 0
+    if not hasattr(student, 'autoeval_level'):
+        student.autoeval_level = 0
+
+    d = P**(question.autoeval_level - student.autoeval_level)
+    if student.answered_question(question.name):
+        d = (N-1) * d
+    else:
+        d = -P**(-d)
+    student.autoeval_level += d
+    question.autoeval_level -= d
+
+def recompute_levels():
+    """Replay all in order to recompute levels"""
+    import student
+    t = []
+    for s in student.all_students():
+        for a in s.answers.values():
+            if a.question != 'None':
+                t.append((a, s))
+    t.sort(key=lambda x: x[0].first_time)
+    for answer, a_student in t:
+        if answer.question in questions.questions:
+            autoeval(questions.questions[answer.question], a_student)
+    recompute_levels.done = True
+
+recompute_levels.done = False
+
+def execute(state, dummy_plugin, argument):
     if not hasattr(state.student, "autoeval"):
-        # Restore the current question if the TOMUSS server
+        if not recompute_levels.done:
+            recompute_levels()
+        # Restore the current question because the TOMUSS server
         # has been restarted.
         first_times = [(a.first_time, a.question)
                        for a in state.student.answers.values()]
@@ -87,17 +123,35 @@ def execute(state, plugin, argument):
         if not state.question.answerable(state.student):
             state.question = None
 
-    if state.question is None:
+    if state.question:
+        question_done = state.student.answered_question(state.question.name)
+    else:
+        question_done = False
+
+    if state.question is None or question_done:
+        if getattr(state, 'autoeval_question', None):
+            # The previous question was answered or givenup.
+            # So we update statistics
+            q = questions.questions[state.autoeval_question]
+            autoeval(q, state.student)
+        
         # FINIR CHOIX QUESTION APPROPRIEE
         for q in state.student.answerables():
             a = state.student.answer(q.name)
             if a.nr_asked == 0:
                 break
         else:
+            state.autoeval_question = None
             return '<p class="nomore_problem"></p>'
+
+    if state.question:
+        state.autoeval_question = state.question.name
+    else:
+        state.autoeval_question = None
     
     if state.question:
-        return '''
+        if not question_done:
+            return '''
 <p class="give_solution"></p>
 <form method="GET" action="autoeval=stop">
 <button type="submit">
