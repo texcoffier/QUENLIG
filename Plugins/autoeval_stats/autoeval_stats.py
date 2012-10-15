@@ -27,6 +27,8 @@ css_attributes = (
     "{ position: relative; height: 35em }",
     "DIV { position: absolute; font-family: monospace }",
     ".me { background: green; color:white  }",
+    "A.tips:hover TT { left: 0em; top: -3em; font-size: 100% }",
+    "SPAN { top: 5em; left: 20em; width: 20em }",
     )
 
 import math
@@ -36,10 +38,13 @@ import statistics
 def px(v, vmin, vmax, size):
     return str( int( size * (v-vmin) / (vmax-vmin) ) ) + 'px'
 
-def pos(y, x, text):
-    return ('<div style="left:' + px(2+x, pos.xmin, pos.xmax, 100)
-            + ';top:' + px((pos.ymin+ pos.ymax)-y, pos.ymin, pos.ymax, height) + '">'
-            + text + '</div>')
+def pos(y, x, text, tip=""):
+    v = ('<div style="left:' + px(2+x, pos.xmin,pos.xmax,100)
+         + ';top:' + px((pos.ymin+ pos.ymax)-y, pos.ymin, pos.ymax, height)
+         + '">' + text + '</div>' )
+    if tip:
+        v = '<div class="tips">' + v + '<tt>' + tip + '</tt></div>'
+    return v
 
 def execute(state, dummy_plugin, dummy_argument):
     stats = statistics.question_stats()
@@ -52,7 +57,7 @@ def execute(state, dummy_plugin, dummy_argument):
         if q.student_time:
             t.append((q.autoeval_level,
                       math.log(3 + q.student_time / q.student_given),
-                      'x'))
+                      'x', q.name))
 
     for s in stats.all_students:
         if not hasattr(s, 'autoeval_level'):
@@ -64,7 +69,8 @@ def execute(state, dummy_plugin, dummy_argument):
                       math.log(3 + s.the_time_searching
                                / s.the_number_of_given_questions),
                       s is state.student and '<var class="me">·</var>'
-                      or '·'))
+                      or '·',
+                      s is state.student and state.student.name or ''))
 
     pos.ymin = min(i[0] for i in t)
     pos.ymax = max(i[0] for i in t)
