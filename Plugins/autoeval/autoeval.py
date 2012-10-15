@@ -19,9 +19,6 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-# A FINIR : mettre a jour le niveau des gens/question
-#           afficher les niveaux personnes et questions
-
 """
 This plugin allow to do an autoevaluation of questions and students.
 
@@ -72,13 +69,14 @@ N = 2
 P = 1.1
 
 import questions
+import student
+
+questions.Question.autoeval_level = 0
+student.Student.autoeval_level = 0
+student.Student.autoeval_init = False
 
 def autoeval(question, student):
     """Update student en question level"""
-    if not hasattr(question, 'autoeval_level'):
-        question.autoeval_level = 0
-    if not hasattr(student, 'autoeval_level'):
-        student.autoeval_level = 0
 
     d = P**(question.autoeval_level - student.autoeval_level)
     if student.answered_question(question.name):
@@ -90,7 +88,6 @@ def autoeval(question, student):
 
 def recompute_levels():
     """Replay all in order to recompute levels"""
-    import student
     t = []
     for s in student.all_students():
         for a in s.answers.values():
@@ -104,8 +101,8 @@ def recompute_levels():
 
 recompute_levels.done = False
 
-def execute(state, dummy_plugin, argument):
-    if not hasattr(state.student, "autoeval"):
+def execute(state, dummy_plugin, dummy_argument):
+    if not state.student.autoeval_init:
         if not recompute_levels.done:
             recompute_levels()
         # Restore the current question because the TOMUSS server
@@ -116,7 +113,7 @@ def execute(state, dummy_plugin, argument):
             last_asked_question = max(first_times)[1]
             if last_asked_question != "None":
                 state.question = questions.questions[last_asked_question]
-        state.student.autoeval = True
+        state.student.autoeval_init = True
     if state.question:
         if not state.question.answerable(state.student):
             state.question = None
@@ -133,14 +130,19 @@ def execute(state, dummy_plugin, argument):
             q = questions.questions[state.autoeval_question]
             autoeval(q, state.student)
         
-        # FINIR CHOIX QUESTION APPROPRIEE
-        for q in state.student.answerables():
-            a = state.student.answer(q.name)
-            if a.nr_asked == 0:
-                break
-        else:
+        # Possible questions
+        can = [q
+               for q in state.student.answerables()
+               if state.student.answer(q.name).nr_asked == 0
+               ]
+        if len(can) == 0:
             state.autoeval_question = None
             return '<p class="nomore_problem"></p>'
+        # The question level nearest to the student level
+        q = min(can,
+                 key=lambda x: abs(x.autoeval_level
+                                   - state.student.autoeval_level)
+                 )
 
     if state.question:
         state.autoeval_question = state.question.name

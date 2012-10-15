@@ -29,6 +29,7 @@ css_attributes = (
     ".me { background: green; color:white  }",
     )
 
+import math
 import questions
 import statistics
 
@@ -36,7 +37,7 @@ def px(v, vmin, vmax, size):
     return str( int( size * (v-vmin) / (vmax-vmin) ) ) + 'px'
 
 def pos(y, x, text):
-    return ('<div style="left:' + px(60+x, pos.xmin, pos.xmax, 100)
+    return ('<div style="left:' + px(2+x, pos.xmin, pos.xmax, 100)
             + ';top:' + px((pos.ymin+ pos.ymax)-y, pos.ymin, pos.ymax, height) + '">'
             + text + '</div>')
 
@@ -48,28 +49,31 @@ def execute(state, dummy_plugin, dummy_argument):
             continue
         if not getattr(q, 'student_given', False):
             continue
-        t.append((q.autoeval_level,
-                  q.student_time / q.student_given,
-                  'x'))
+        if q.student_time:
+            t.append((q.autoeval_level,
+                      math.log(3 + q.student_time / q.student_given),
+                      'x'))
 
     for s in stats.all_students:
         if not hasattr(s, 'autoeval_level'):
             continue
         if s.the_number_of_given_questions == 0:
             continue
-        t.append((s.autoeval_level,
-                  s.the_time_searching / s.the_number_of_given_questions,
-                  s is state.student and '<var class="me">·</var>'
-                  or '·'))
+        if s.the_time_searching:
+            t.append((s.autoeval_level,
+                      math.log(3 + s.the_time_searching
+                               / s.the_number_of_given_questions),
+                      s is state.student and '<var class="me">·</var>'
+                      or '·'))
 
     pos.ymin = min(i[0] for i in t)
     pos.ymax = max(i[0] for i in t)
-    pos.xmin = min(i[1] for i in t)
+    pos.xmin = 0
     pos.xmax = max(i[1] for i in t)
 
     s = []
     for i in range(int(pos.ymin), int(pos.ymax)+1):
-        s.append(pos(i, -60, ("%2d" % i).replace(' ', '&nbsp;')))
+        s.append(pos(i, -2, ("%2d" % i).replace(' ', '&nbsp;')))
     for i in t:
         s.append(pos(*i))
 
