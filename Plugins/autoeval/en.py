@@ -5,6 +5,6 @@ translations = {
     'start_problem': "Start a new problem",
     'giveup_problem': "I give up: I will never see again this problem.",
     'nomore_problem': "No more problem to do.",
-    'give_solution': "Give your answer above et strike 'Enter'.",
+    'give_solution': "Give your answer above and strike 'Enter'.",
     'autoeval_good': "Congratulation! You can continue if you want:",
 }

@@ -135,6 +135,10 @@ def execute(state, plugin, argument):
         
     s += '<script type="text/javascript">document.getElementById(2).focus();</script>'
     s += '</FORM>'
+    if state.question.maximum_bad_answer:
+        s += '<p class="nr_try">%d</p>' % (
+            state.question.maximum_bad_answer
+            - state.student.bad_answer_question(state.question.name))
     return s
 
 
