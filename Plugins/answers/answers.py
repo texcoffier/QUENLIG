@@ -21,27 +21,39 @@
 
 """Display all the questions definition."""
 
+import random
 import statistics
 import questions
 
 container = 'action'
 link_to_self = True
 priority_execute = '-question_answer'
-acls = { 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',), 'Author': ('executable',) }
 css_attributes = ('TABLE { border: 1px solid black ; }',
                   )
 
 def execute(state, plugin, argument):
     if argument:    
-        s = ""
-        for question in questions.sorted_questions:
-            s += '<table><caption>' + question.name + '</caption>'
+        s = []
+        for question in sorted(questions.questions.values(),
+                               key=lambda q: q.name):
+            random.seed(state.student.seed)
+            s.append('<strong>' + question.name + '</strong>')
+            if question.maximum_time:
+                s.append(' maximum_time:%d' % question.maximum_time)
+            if question.maximum_bad_answer:
+                s.append(' maximum_bad_answer:%d'%question.maximum_bad_answer)
+            
+            s.append('<br>' + question.question(state))
+            s.append('<table>')
             for t in question.tests:
                 if 'good' in t.__class__.__name__.lower():
-                    s += t.html(state=state) + '<br>'
-            s += '</table>'
+                    s.append(t.html(state=state) + '<br>')
+                else:
+                    s.append('<small>' + t.html(state=state) + '</small><br>')
+            s.append('</table><hr>')
 
-        plugin.heart_content = s
+        plugin.heart_content = '\n'.join(s)
         state.question = None
     return ''
 
