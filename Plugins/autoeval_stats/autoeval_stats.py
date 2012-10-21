@@ -55,9 +55,9 @@ def execute(state, dummy_plugin, dummy_argument):
         if not getattr(q, 'student_given', False):
             continue
         if q.student_time:
-            t.append((q.autoeval_level,
+            t.append((q.autoeval_level_average,
                       math.log(3 + q.student_time / q.student_given),
-                      'x', q.name))
+                      'x', q.name + repr(q.autoeval_level)))
 
     for s in stats.all_students:
         if not hasattr(s, 'autoeval_level'):
@@ -72,6 +72,8 @@ def execute(state, dummy_plugin, dummy_argument):
                       or '·',
                       s is state.student and state.student.name or ''))
 
+    if not len(t):
+        return ''
     pos.ymin = min(i[0] for i in t)
     pos.ymax = max(i[0] for i in t)
     pos.xmin = 0
