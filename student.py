@@ -417,10 +417,6 @@ class Student:
         """Last question displayed to the student"""
         if self.last_asked_question == question:
             return
-        if self.last_asked_question \
-           and self.answer(self.last_asked_question).answered == False:
-            self.answer(self.last_asked_question).resign = True
-        self.last_asked_question = question
         self.log(question, "asked")
 
     def good_answer(self, question, text):

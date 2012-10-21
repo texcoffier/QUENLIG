@@ -51,6 +51,12 @@ class Answer:
             self.bad_answers.append(value)
         elif command == "asked" :
             self.nr_asked += 1
+            student = self.student
+            if (student.last_asked_question
+                and student.answer(student.last_asked_question
+                                   ).answered == False):
+                student.answer(student.last_asked_question).resign = True
+            student.last_asked_question = self.question
         elif command == "comment" :
             self.comments.append((action_time, value))
         elif command == "login" :
