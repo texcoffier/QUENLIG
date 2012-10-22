@@ -81,13 +81,17 @@ import student
 # Must be greater then 1.4 to avoid problems
 time_slot_power = 1.5
 
-# The time slots are in minutes :
+# The minimum time slot in seconds
+time_slot_base = 15
+
+# The time slots are multiple of time_slot_base :
+#                     less than 1
 #    1                  ... time_slot_power
 #    time_slot_power    ... time_slot_power**2
 #    time_slot_power**2 ... time_slot_power**3
 # ...
-# With time_slot_power = 1.5 and 12 slots,
-# the maximum answer time is 129 minutes
+# With time_slot_power=1.5, time_slot_base=15 and 20 slots,
+# the maximum answer time is 554 minutes
 questions.Question.autoeval_level = None
 questions.Question.autoeval_level_average = 0
 student.Student.autoeval_level = 0
@@ -95,9 +99,9 @@ student.Student.autoeval_init = False
 
 def autoeval(question, a_student, answer_time):
     """Update student en question level"""
-    answer_time /= 15
+    answer_time /= time_slot_base
     if question.autoeval_level is None:
-        question.autoeval_level = [0]*16
+        question.autoeval_level = [0]*20
 
     answered = a_student.answered_question(question.name)
     student_level = a_student.autoeval_level
