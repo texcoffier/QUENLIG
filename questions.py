@@ -1449,7 +1449,7 @@ class Grade(TestUnary):
 
 
 
-if True:
+def regression_tests():
     # Regression test on new tests.
     def create(txt):
         o = eval(txt)
@@ -1735,3 +1735,6 @@ if True:
     assert( grades == {} )
     assert( a('a',st) == (True, '') )
     assert( grades == {'x':'john,4'} )
+
+if True:
+    regression_tests()

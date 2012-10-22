@@ -26,6 +26,7 @@ As the answer may modify the question list, it must be executed
 before the question list computation.
 """
 
+import random
 import configuration
 import cgi
 import utilities
@@ -105,6 +106,7 @@ def execute(state, plugin, argument):
     last_answer_html = last_answer.replace("%","&#37;").replace("'", "&#39;").\
                   replace('"', '&#34;')
 
+    random.seed(state.student.seed)
     question = state.question.question(state)
     if '{{{' in question:
         t = question.split('{{{')[1:]
