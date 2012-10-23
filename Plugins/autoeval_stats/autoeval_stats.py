@@ -19,7 +19,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-height = 400
+height = 30
 container = 'statmenu'
 priority_execute = 'autoeval'
 acls = { }
@@ -27,8 +27,8 @@ css_attributes = (
     "{ position: relative; height: 35em }",
     "DIV { position: absolute; font-family: monospace }",
     ".me { background: green; color:white  }",
-    "A.tips:hover TT { left:30em; width:20em; top: -3em; font-size: 100% }",
-    "SPAN { top: 5em; left: 20em; width: 20em }",
+    "A.tips:hover TT { left:30em; width:24em; top: -3em; font-size: 100% }",
+    "SPAN { top: 5em; left:20em; width:20em }",
     )
 
 import Plugins.autoeval.autoeval
@@ -38,33 +38,33 @@ javascript = """
 function histogram(t)
 {
   var s = '' ;
-  for(var i=0; i<17; i++)
-     s += '&nbsp;<br>' ;
-  var m = 17 ;
-  var h = 200 ;
-  var mx = 17 ;
-  var dx = 30 ;
+  var h = 17 ;
+  var m = 1.7 ;
+  var mx = 1 ;
+  var dx = 3 ;
   var x ;
+  for(var i=5; i<2*h; i++)
+     s += '&nbsp;<br>' ;
   for(var i in t)
     {
-      s += '<div style="height:' + Math.abs(m*t[i]).toFixed(0)
-           + 'px;left:' + (dx+mx*i).toFixed(0)
-           + 'px;top:' + Math.min(h-m*t[i], h).toFixed(0)
-           + 'px;border:1px solid black">'
+      s += '<div style="height:' + Math.abs(m*t[i]).toFixed(1)
+           + 'em;left:' + (dx+mx*i).toFixed(1)
+           + 'em;top:' + Math.min(h-m*t[i], h).toFixed(1)
+           + 'em;border:1px solid black">'
            + '&nbsp;'
            + '</div>' ;
     }
   for(var i=-9; i<=9; i++)
     {
-      s += '<div style="font-size:60%%;font-family:monospace;left:0px;top:' + (h-m*i-5).toFixed(0)
-           + 'px">'
+      s += '<div style="left:0px;top:' + (h-m*i-0.5).toFixed(1)
+           + 'em">'
            + (i >= 0 ? '&nbsp;' + i : i )
            + '</div>' ;
     }
   for(var i=1; i<200; i*=5)
     {
       x = dx + mx * Math.log((i*60)/%d) / Math.log(%f) ;
-      s += '<div style="font-size:60%%;left:' + x.toFixed(0) + 'px;top:' + (2*h-10) + 'px">'
+      s += '<div style="left:' + x.toFixed(0) + 'em;top:' + (2*h) + 'em">'
            + i
            + 'min.</div>' ;
     }
@@ -79,10 +79,10 @@ import questions
 import statistics
 
 def px(v, vmin, vmax, size):
-    return str( int( size * (v-vmin) / (vmax-vmin) ) ) + 'px'
+    return str( int( size * (v-vmin) / (vmax-vmin) ) ) + 'em'
 
 def pos(y, x, text, tip=""):
-    v = ('<div style="left:' + px(2+x, pos.xmin,pos.xmax,100)
+    v = ('<div style="left:' + px(x, pos.xmin,pos.xmax,10)
          + ';top:' + px((pos.ymin+ pos.ymax)-y, pos.ymin, pos.ymax, height)
          + '">' + text + '</div>' )
     if tip:
@@ -99,8 +99,9 @@ def execute(state, dummy_plugin, dummy_argument):
             continue
         if q.student_time:
             t.append((q.autoeval_level_average,
-                      math.log(3 + q.student_time / q.student_given),
-                      'x', q.name
+                      math.log(1 + q.student_time / q.student_given),
+                      q is state.question and '<var class="me">x</var>'
+                      or 'x', q.name
                       + '<script>histogram('
                       + repr(q.autoeval_level) + ')</script>'))
 
@@ -111,7 +112,7 @@ def execute(state, dummy_plugin, dummy_argument):
             continue
         if s.the_time_searching:
             t.append((s.autoeval_level,
-                      math.log(3 + s.the_time_searching
+                      math.log(1 + s.the_time_searching
                                / s.the_number_of_given_questions),
                       s is state.student and '<var class="me">·</var>'
                       or '·',
@@ -126,8 +127,8 @@ def execute(state, dummy_plugin, dummy_argument):
 
     s = []
     for i in range(int(pos.ymin), int(pos.ymax)+1):
-        s.append(pos(i, -2, ("%2d" % i).replace(' ', '&nbsp;')))
+        s.append(pos(i, 0, ("%2d" % i).replace(' ', '&nbsp;')))
     for i in t:
         s.append(pos(*i))
 
-    return '\n'.join(s) + '<br>'*35 + '&nbsp;'*40
+    return '\n'.join(s) + '<br>'*height + '&nbsp;'*40
