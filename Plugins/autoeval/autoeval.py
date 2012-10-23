@@ -190,7 +190,7 @@ def execute(state, dummy_plugin, dummy_argument):
             return '''
 <p class="give_solution"></p>
 <form method="GET" action="question=None">
-<button type="submit">
+<button type="submit" style="background: #FBB">
 <p class="giveup_problem"></p>
 </button>
 </form>

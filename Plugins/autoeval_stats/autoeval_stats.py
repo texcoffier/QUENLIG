@@ -30,6 +30,9 @@ css_attributes = (
     "A.tips:hover TT { left:30em; width:20em; top: -3em; font-size: 100% }",
     "SPAN { top: 5em; left: 20em; width: 20em }",
     )
+
+import Plugins.autoeval.autoeval
+
 javascript = """
 
 function histogram(t)
@@ -38,27 +41,38 @@ function histogram(t)
   for(var i=0; i<17; i++)
      s += '&nbsp;<br>' ;
   var m = 17 ;
+  var h = 200 ;
+  var mx = 17 ;
+  var dx = 30 ;
+  var x ;
   for(var i in t)
     {
-      s += '<div style="height:'     + Math.abs(m*t[i]).toFixed(0)
-           + 'px;left:' + (30+17*i).toFixed(0)
-           + 'px;top:' + Math.min(200-m*t[i], 200).toFixed(0)
+      s += '<div style="height:' + Math.abs(m*t[i]).toFixed(0)
+           + 'px;left:' + (dx+mx*i).toFixed(0)
+           + 'px;top:' + Math.min(h-m*t[i], h).toFixed(0)
            + 'px;border:1px solid black">'
            + '&nbsp;'
            + '</div>' ;
     }
-  for(var i=-10; i<=10; i++)
+  for(var i=-9; i<=9; i++)
     {
-      s += '<div style="left:0px;top:' + (200-m*i-10).toFixed(0)
+      s += '<div style="font-size:60%%;font-family:monospace;left:0px;top:' + (h-m*i-5).toFixed(0)
            + 'px">'
-           + i
+           + (i >= 0 ? '&nbsp;' + i : i )
            + '</div>' ;
+    }
+  for(var i=1; i<200; i*=5)
+    {
+      x = dx + mx * Math.log((i*60)/%d) / Math.log(%f) ;
+      s += '<div style="font-size:60%%;left:' + x.toFixed(0) + 'px;top:' + (2*h-10) + 'px">'
+           + i
+           + 'min.</div>' ;
     }
   document.write(s) ;
 }
-
-
-"""
+""" % (Plugins.autoeval.autoeval.time_slot_base,
+       Plugins.autoeval.autoeval.time_slot_power,
+       )
 
 import math
 import questions
@@ -116,4 +130,4 @@ def execute(state, dummy_plugin, dummy_argument):
     for i in t:
         s.append(pos(*i))
 
-    return '\n'.join(s) + '<br>'*35
+    return '\n'.join(s) + '<br>'*35 + '&nbsp;'*40
