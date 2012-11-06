@@ -26,7 +26,9 @@ acls = { }
 css_attributes = (
     "{ position: relative; height: 35em }",
     "DIV { position: absolute; font-family: monospace }",
-    ".me { background: green; color:white  }",
+    ".me { background: #FF0; }",
+    ".bad { color:red }",
+    ".ok { color:green  }",
     "A.tips:hover TT { left:30em; width:24em; top: -3em; font-size: 100% }",
     "SPAN { top: 5em; left:20em; width:20em }",
     )
@@ -35,7 +37,12 @@ import Plugins.autoeval.autoeval
 
 javascript = """
 
-function histogram(t)
+function time_to_slot(x)
+{
+  return Math.log(x/%d) / Math.log(%f) ;
+}
+
+function histogram(t, time_searching)
 {
   var s = '' ;
   var h = 17 ;
@@ -43,6 +50,7 @@ function histogram(t)
   var mx = 1 ;
   var dx = 3 ;
   var x ;
+  var slot = time_to_slot(time_searching).toFixed(0) ;
   for(var i=5; i<2*h; i++)
      s += '&nbsp;<br>' ;
   for(var i in t)
@@ -50,7 +58,9 @@ function histogram(t)
       s += '<div style="height:' + Math.abs(m*t[i]).toFixed(1)
            + 'em;left:' + (dx+mx*i).toFixed(1)
            + 'em;top:' + Math.min(h-m*t[i], h).toFixed(1)
-           + 'em;border:1px solid black">'
+           + 'em;border:1px solid black'
+           + (i == slot ? ';background:green' : '')
+           + '">'
            + '&nbsp;'
            + '</div>' ;
     }
@@ -63,7 +73,7 @@ function histogram(t)
     }
   for(var i=1; i<200; i*=5)
     {
-      x = dx + mx * Math.log((i*60)/%d) / Math.log(%f) ;
+      x = dx + mx * time_to_slot(i*60) ;
       s += '<div style="left:' + x.toFixed(0) + 'em;top:' + (2*h) + 'em">'
            + i
            + 'min.</div>' ;
@@ -79,7 +89,7 @@ import questions
 import statistics
 
 def px(v, vmin, vmax, size):
-    return str( int( size * (v-vmin) / (vmax-vmin) ) ) + 'em'
+    return '%6.2fem' % ( size * (v-vmin) / (vmax-vmin) )
 
 def pos(y, x, text, tip=""):
     v = ('<div style="left:' + px(x, pos.xmin,pos.xmax,10)
@@ -98,12 +108,24 @@ def execute(state, dummy_plugin, dummy_argument):
         if not getattr(q, 'student_given', False):
             continue
         if q.student_time:
+            d = 'x'
+            time_searching = -1
+            if q is state.question:
+                d = '<var class="me">x</var>'
+            elif q.name in state.student.answers:
+                a = state.student.answers[q.name]
+                if a.answered:
+                    d = '<var class="ok">x</var>'
+                    time_searching = a.time_searching
+                else:
+                    if a.nr_asked:
+                        d = '<var class="bad">x</var>'
             t.append((q.autoeval_level_average,
                       math.log(1 + q.student_time / q.student_given),
-                      q is state.question and '<var class="me">x</var>'
-                      or 'x', q.name
+                      d, q.name
                       + '<script>histogram('
-                      + repr(q.autoeval_level) + ')</script>'))
+                      + repr(q.autoeval_level)
+                      + ',' + repr(time_searching) + ')</script>'))
 
     for s in stats.all_students:
         if not hasattr(s, 'autoeval_level'):
