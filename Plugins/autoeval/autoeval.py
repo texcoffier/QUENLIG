@@ -119,8 +119,17 @@ def autoeval(question, a_student, answer_time):
             a_student.autoeval_level += d
         question.autoeval_level[i] -= d
         t *= time_slot_power
-    question.autoeval_level_average = sum(question.autoeval_level) / len(question.autoeval_level)
-    #print  '\t', ','.join("%4.1f" % i for i in question.autoeval_level), a_student.autoeval_level
+    question.autoeval_level_average = (sum(question.autoeval_level)
+                                       / len(question.autoeval_level))
+
+def time_to_answer(question, student_level):
+    """Returns the predicted time slot for a student with 'level'"""
+    if question.autoeval_level is None:
+        return -1
+    for i, level in enumerate(question.autoeval_level):
+        if student_level > level:
+            return i
+    return 1000 # Here if the question is impossible for this level
 
 def recompute_levels():
     """Replay all in order to recompute levels"""
@@ -173,11 +182,14 @@ def execute(state, dummy_plugin, dummy_argument):
         if len(can) == 0:
             state.autoeval_question = None
             return '<p class="nomore_problem"></p>'
-        # The question level nearest to the student level
-        q = min(can,
-                 key=lambda x: abs(x.autoeval_level_average
-                                   - state.student.autoeval_level)
-                 )
+
+        can.sort(key = lambda q:
+                     time_to_answer(q, state.student.autoeval_level))
+        if can[0].autoeval_level < 0:
+            # Never asked question
+            q = can[0]
+        else:
+            q = can[len(can)//2]
 
     if state.question:
         state.autoeval_question = state.question.name
