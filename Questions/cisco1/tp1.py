@@ -35,6 +35,7 @@ add(name="intro",
     <p>
     Vous aprendrez à configurer les liaisons séries et ethernet
     des routeurs ainsi que de votre PC.
+<!--
     <p>
     L'ensemble des réponses que vous allez donner seront analysées
     afin de définir votre note de TP, le calcul ressemblera à :
@@ -43,12 +44,19 @@ add(name="intro",
     En répondant à toutes les questions vous avez donc 12/20 au minimum.
     En répondant à la moitié des questions sans faire aucune erreur
     et sans demander d'indice, vous avez au mieux 5/20.
+-->
+<p><b>
+A la fin de la deuxième séance, vous rendez les feuilles MANUSCRITES
+sur lesquelles vous avez pris vos notes au cours des 2 séances de TP.
+On ne vous demande pas un compte rendu de TP.
+Vous serez noté en fonction de la pertinence de vos notes.
+</b>
 
     <p>
     En dehors des séances vous ne pourrez plus continuer ce TP,
     vous avez donc tout intérêt à vous dépêcher.
     <p>
-    Le plan du réseau à monter est dans le menu de gauche&nbsp;:
+    Il y a des informations utiles dans le menu de gauche&nbsp;:
     <em>Aide/Explications</em>
     <p>
     ATTENTION, durant ce TP on configure peu à peu le réseau,
@@ -112,8 +120,8 @@ add(name="nom routeur",
     """,
     tests = (
         good("{C0.remote_port.host.name}", parse_strings=host),
-        Bad(Comment(UpperCase(HostReplace(Equal('{C0.remote_port.host.name}'))),
-                    """Dans la question en <b>gras</b> on vous dit de
+        Bad(Comment(HostReplace(UpperCase(Equal('{C0.remote_port.host.name}'))),
+                    """Dans la question, en <b>gras</b> on vous dit de
                     respecter la casse (différence majuscule/minuscule)""")),
         ),
     good_answer = """Vérifiez bien que le routeur posé à gauche

@@ -203,7 +203,7 @@ add(name="initialiser",
     """,
     question="""
       Si durant la procédure on vous demande un mot de passe,
-      essayez 'cisco', 'class', 'classe', 'cisco2', '&lt;cisco&gt;'...
+      essayez """ + mots_de_passe + """
     <p>
       Voici la liste de choses à taper (ne faites pas un copier/coller
       de l'ensemble des lignes).
@@ -228,7 +228,10 @@ add(name="aide commande",
     un nom de paramètre&nbsp;;</li>
     <li> Les valeurs possibles pour un paramètre si le nom
     du paramètre est complet.</li>
-    </ul>""",
+    </ul>
+    <p>ATTENTION : si votre prompt se termine par '#' vous devez
+    taper 'exit' pour revenir dans un mode normal.
+""",
     question = "Combien de commandes ont un nom qui commence par 's'&nbsp;?",
     tests = (
     require_int(),
