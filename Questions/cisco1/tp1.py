@@ -124,7 +124,7 @@ add(name="nom routeur",
                     """Dans la question, en <b>gras</b> on vous dit de
                     respecter la casse (différence majuscule/minuscule)""")),
         ),
-    good_answer = """Vérifiez bien que le routeur posé à gauche
+    good_answer = """Vérifiez bien que le routeur posé à coté
     de votre ordinateur porte bien ce nom.
     Si ce n'est pas le cas, trouvez le bon routeur et mettez le
     à sa place.""",

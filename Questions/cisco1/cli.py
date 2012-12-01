@@ -34,6 +34,9 @@ add(name="cable console",
     qui est une prise <a href="http://fr.wikipedia.org/wiki/Image:Sub-D_male_9p.jpg">DB9</a> qui contient 9 broches sur 2 rangées.
     La première sortie RS232C s'appelle <tt>/dev/ttyS0</tt> sous Linux
     et <tt>COM1</tt> sous windows.
+    <p>
+    <b>S'il y a 2 connecteurs RS232C à l'arrière du PC,
+    alors utilisez celui qui a une étiquette CE.</b>
     </li>
     <li> sur le routeur CISCO, il est branché sur la RS232C,
     qui est une prise RJ45 <b>à ne pas confondre avec une prise Ethernet</b>.
@@ -84,7 +87,7 @@ add(name="minicom",
     <b>En cas d'interdiction d'acces, passez <tt>root</tt>
        avant de lancer minicom</b>
     """,
-    question = """Ouvrez un terminal et lancez <tt>minicom</tt>.
+    question = """Ouvrez un terminal et lancez <tt>minicom -D /dev/ttyS1</tt>.
     Que devez-vous taper pour avoir l'aide sur <tt>minicom</tt>&nbsp;?
     <p>
     Attention : ne lancez pas <tt>minicom</tt> en arrière plan,
@@ -433,7 +436,7 @@ add(name="fin édition",
     indiquer est la fonction associée à la touche."""),
     require(('SHIFT', 'SHFT', 'MAJ'), uppercase=True, all_agree=True),
     require(('PAGE', 'PG', 'CTRL'), uppercase=True, all_agree=True),
-    require(('UP', 'HAUT'), uppercase=True, all_agree=True),
+    require(('UP', 'HAUT', 'PRECEDENTE', 'PRÉCÉDENTE'), uppercase=True, all_agree=True),
     # Fait planter
     # require(('B', 'U'), "Ceci ne fonctionne que dans <tt>minicom</tt>", uppercase=True),
     good_if_contains(''),

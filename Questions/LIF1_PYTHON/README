@@ -32,7 +32,6 @@ nohup ./main.py lif1_python start >/dev/null 2>&1 </dev/null &
 ##########################################
 
 # Sur demo710.univ-lyon1.fr :
-
 cd QUENLIG
 ./main.py lif1_python create Questions/LIF1_PYTHON 2222 \
 	       admin thierry.excoffier \
@@ -42,8 +41,9 @@ cd QUENLIG
                admin mathieu.barnachon \
 	       url http://demo710.univ-lyon1.fr/LIF1_PYTHON
 
-(
 set +H
+(
+mkdir Students/lif1_python/Logs/Student
 echo "{"
 for I in session_start session_stop session_duration statmenu_smiley statmenu_rank action_help questions_shuffle statmenu_indice
 do
