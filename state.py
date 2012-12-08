@@ -51,6 +51,8 @@ def the_service(server):
     if len(path) < 3:
         return configuration.url
     else:
+        if path[-1] == '':
+            return configuration.url
         path[-1] = re.sub('&ticket=[^&]*','',path[-1])
         return configuration.url + '/' + '/'.join(path[-2:])
 
