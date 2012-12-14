@@ -23,6 +23,7 @@
 
 import utilities
 import statistics
+import cgi
 
 priority_display = 'question_required'
 sort_column = 3
@@ -41,7 +42,7 @@ def execute(state, plugin, argument):
             if a.question != state.question.name:
                 continue
             for c in a.comments:
-                comments.append( [c[1],
+                comments.append( [cgi.escape(c[1]),
                                   s.mailto(body=str(a.question) + "  " + c[1]),
                                   utilities.date_format(c[0])])
 

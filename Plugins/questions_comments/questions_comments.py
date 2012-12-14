@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007,2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 import utilities
 import statistics
 import questions
+import cgi
 
 container = 'analyse'
 link_to_self = True
@@ -43,7 +44,7 @@ def execute(state, plugin, argument):
             for c in a.comments:
                 comments.append( [
                     q,
-                    c[1],
+                    cgi.escape(c[1]),
                     s.mailto(body=str(a.question) + "  " + c[1]),
                     utilities.date_format(c[0]).replace(' ','&nbsp;')])
 
@@ -56,9 +57,4 @@ def execute(state, plugin, argument):
     state.questions = None
 
     return ''
-
-
-
-
-
 

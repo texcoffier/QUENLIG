@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007,2012 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 
 """Allow the students to leave a comment about the question."""
 
+import cgi
+
 priority_display = 'analyse'
 css_attributes = (
     "TEXTAREA { font-size: 80% ; }",
@@ -38,7 +40,7 @@ def execute(state, plugin, argument):
         state.student.add_a_comment(q, argument)
         
         s = '<div class="comment_given">' \
-            + argument + '</div>'
+            + cgi.escape(argument) + '</div>'
     else:
         s = ''
 
