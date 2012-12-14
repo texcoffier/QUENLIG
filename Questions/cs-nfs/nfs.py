@@ -26,8 +26,8 @@ from check import *
 add(name="install-paquet",
     required=["intro:avantages", "intro:inconvénients"],
     before = """Pour éviter tout problèmes, tapez les commandes&nbsp;:
-    <pre>cp ­a /etc /tmp/etc
-cp ­a /home /tmp/home</pre>
+    <pre>cp -a /etc /tmp/etc
+cp -a /home /tmp/home</pre>
     Ce sont ces répertoires que vous exporterez via NFS.
     """,
     question = """Comment vérifiez-vous que les paquets
@@ -54,7 +54,7 @@ add(name="install-export",
 
 add(name="exportfs",
     required=["install-paquet"],
-    question = "Que fait la commande <tt>exportfs ­rv</tt>",
+    question = "Que fait la commande <tt>exportfs -rv</tt>",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )

@@ -37,7 +37,7 @@ add(name="domaine",
 add(name="purge",
     required=["domaine"],
     before = """Effacez les installations précédentes du package NIS
-    afin de partir d'une configuration propre : <pre>dpkg -­purge nis</pre>""",
+    afin de partir d'une configuration propre : <pre>dpkg --purge nis</pre>""",
     question = "C'est fait&nbsp;?",
     tests = (good_if_contains(''),),
     )
