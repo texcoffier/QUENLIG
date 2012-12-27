@@ -46,7 +46,9 @@ add(name="install-export",
     <li> le répertoire <tt>/tmp/home</tt> en lecture-écriture
     à l'ensemble des machines de votre salle
     ayant une adresse IP supérieure à .128.
-    </ul>""",
+    </ul>
+<p><b>INDIQUEZ BIEN L'OPTION <tt>root_squash</tt> POUR LES DEUX EXPORTS
+""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -113,16 +115,19 @@ add(name="partitions",
     required=["démarrage"],
     question = """Quelle commande (sur le client ou le serveur&nbsp;?)
     permet de connaître l'ensemble des systèmes de fichier NFS
-    actuellement exportées par votre serveur&nbsp;?""",
+    actuellement <b>exportés</b> par votre serveur
+    (mais qui ne sont pas obligatoirement utilisés par les clients)&nbsp;?
+    """,
     tests = (good_if_contains(''),),
     )
+
 
 add(name="mount-test",
     required=["rpc", "nfs", "partitions"],
     before = """Puisque vous aurez besoin de changer d'adresse IP cliente
     pour faire vos tests, vous utiliserez comme client NFS une machine qui
     n'est ni serveur NFS, ni serveur NIS, ni serveur DNS, ni
-    serveur LDAP (donc une machine inoccupée !).
+    serveur LDAP (donc une machine inoccupée&nbsp;!).
     <p>
     Sur le serveur NFS, vous taperez la commande&nbsp;:
     <pre>chmod 600 /tmp/etc/passwd</pre>
@@ -130,7 +135,11 @@ add(name="mount-test",
     fichier ou non à partir du client NFS.""",
     question = """Quelle ligne de commande tapez-vous
     pour faire une montage du <tt>/tmp/etc</tt> sur le serveur
-    sur <tt>/nfsetc</tt> sur la machine locale&nbsp;?""",
+    sur <tt>/nfsetc</tt> sur la machine locale&nbsp;?
+<p>
+    Attention, on considère que le système n'est pas encore configuré
+    pour faire le montage au démarrage du client.
+""",
     tests = (good_if_contains(''),),
     )
 
@@ -182,7 +191,7 @@ add(name="mount",
 add(name="root_lit",
     required=["client"],
     question = """Sur le client, en tant qu'utilisateur <tt>root</tt>,
-    quels fichiers de <tt>/tmp/etc</tt> sont lisibles&nbsp;?""",
+    quels fichiers de <tt>/nfsetc</tt> sont lisibles&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -190,7 +199,7 @@ add(name="root_lit",
 add(name="moi_lit",
     required=["client"],
     question = """Sur le client, en tant qu'utilisateur <tt>moi</tt>,
-    quels fichiers de <tt>/tmp/etc</tt> sont lisibles&nbsp;?""",
+    quels fichiers de <tt>/nfsetc</tt> sont lisibles&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -198,7 +207,7 @@ add(name="moi_lit",
 add(name="root_ecrit",
     required=["client"],
     question = """Sur le client, en tant qu'utilisateur <tt>root</tt>,
-    quels fichiers de <tt>/tmp/etc</tt> et <tt>/tmp/home</tt>
+    quels fichiers de <tt>/nfsetc</tt> et <tt>/nfshome</tt>
     sont modifiables&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
@@ -207,7 +216,7 @@ add(name="root_ecrit",
 add(name="moi_ecrit",
     required=["client"],
     question = """Sur le client, en tant qu'utilisateur <tt>moi</tt>,
-    quels fichiers de <tt>/tmp/home</tt> sont modifiables&nbsp;?""",
+    quels fichiers de <tt>/nfshome</tt> sont modifiables&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -215,15 +224,16 @@ add(name="moi_ecrit",
 add(name="lecture",
     required=["root_lit", "moi_lit"],
     question = """Expliquez les différences d'accès en lecture
-    pour <tt>root</tt> et </tt>moi</tt>&nbsp;?""",
+    pour <tt>root</tt> et <tt>moi</tt>&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
 
 add(name="superroot",
     required=["lecture"],
-    question = """Comment modifier la configuration du serveur pour lire
-    tous les fichiers en tant que <tt>root</tt>&nbsp;?""",
+    question = """Comment modifier la configuration du serveur pour que
+    le <tt>root</tt> du client
+    puisse lire tous les fichiers sans exception&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -327,7 +337,7 @@ add(name="verrous",
     <p>
     Utilisez la commande <tt>flock</tt> pour verrouiller le fichier.
     <p>
-    Quel processus gère les verrous&nbsp;?
+    Sur le serveur quel processus gère les verrous&nbsp;?
     """,
     tests = (good_if_contains(''),),
     )

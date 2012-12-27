@@ -61,11 +61,8 @@ def duration(t):
     return s
 
 def answer_format(t):
-    t = str(t)
-    if t.find("\n") != -1:
-        return '<pre class="an_answer">' + cgi.escape(t) + "</pre>"
-    else:
-        return '<tt class="an_answer">' + cgi.escape(t) + "</tt>"
+    t = cgi.escape(str(t)).replace("\n","<p>")
+    return '<tt class="an_answer">' + t + "</tt>"
 
 def list_format(t):
     s = "<ul>"

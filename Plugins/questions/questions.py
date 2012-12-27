@@ -36,11 +36,20 @@ css_attributes = (
     )
 acls = { 'Default': ('executable',), 'Admin': ('!executable',) }
 
-def execute(state, plugin, argument):
+def option_set(plugin, value):
+    plugin.state.use_select = int(value)
+
+option_name = 'use-select'
+option_help = '''"integer"
+        If the number of questions in the menu is greater than
+        this number, then pulldown menus are used.'''
+option_default = "50" 
+
+def execute(state, plugin, dummy_argument):
 
     answerables = state.student.answerables_typed()
 
-    if len(answerables) < 50:
+    if len(answerables) < plugin.state.use_select:
 
         if len(answerables) == 0:
             return ''
