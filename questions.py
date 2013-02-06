@@ -1475,6 +1475,57 @@ class GRADE(Grade):
     """
     stop_eval = False
 
+def random_chooser(state, key, values):
+    if state:
+        return values[(state.student.seed + hash(key)) % len(values)]
+    else:
+        return values[0]
+
+def random_replace(state, string, values):
+    for k, v in values.items():
+        if k in string:
+            string = string.replace(k, random_chooser(state, k, v))
+    return string
+
+def random_question(question, choices):
+    def f(state):
+        return random_replace(state, question, choices)
+    return f
+
+class Random(TestUnary):
+    """The first argument is a dictionnary as in the example.
+    
+       In all the strings, the dictionnary key is replaced by one
+       of the values in the right part.
+       The replacement is random, but stay the same for each student.
+
+       An helper function 'random_replace' is provided to apply the same
+       replacement in the question text.
+
+    Examples:
+       choices = {'$dir$' : ("usr", "tmp", "bin"),
+          '$file$': ("x", "y", "z"),
+         }
+       ...
+       question = random_question("How to delete /$dir$/$file$?",
+                                  choices),
+       tests = ( Good(Random(choices,Shell(Equal("rm /$dir$/$file$")))),
+                 Random(choices, Expect("$dir$")),
+                 Random(choices, Expect("$file$")),
+               ),
+                                                 
+    """
+    def __init__(self, values, content):
+        TestExpression.__init__(self, content)
+        self.values = values
+
+    def canonize(self, string, state):
+        return random_replace(state, string, self.values)
+
+    def source(self, state=None, format=None):
+        return (self.test_name(format) + '(' + repr(self.values) + ',' +
+                self.children[0].source(state, format) + ')' )
+
 
 def regression_tests():
     # Regression test on new tests.
@@ -1763,5 +1814,13 @@ def regression_tests():
     assert( a('a',st) == (True, '') )
     assert( grades == {'x':'john,4'} )
 
+    a = create("Good(Random({'$a$': ('x', 'x')},Equal('[$a$]')))")
+    assert( a('x', st) == (None, '') )
+    assert( a('[x]', st) == (True, '') )
+
+    a = create("Random({'$a$': ('x', 'x')},Expect('[$a$]'))")
+    assert( a('x', st)
+            == (False, '<p class="string_expected">\'<b>[x]</b>\'</p>') )
+    
 if True:
     regression_tests()
