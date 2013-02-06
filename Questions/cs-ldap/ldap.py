@@ -182,12 +182,12 @@ add(name="log",
 add(name="gq",
     required=["log"],
     before = """Pour voir si votre serveur LDAP fonctionne,
-    essayez de vous y connecter avec l'utilitaire <tt>gq</tt>.
+    essayez de vous y connecter avec l'utilitaire <tt>lima</tt>.
     <p>
     Pour savoir comment configurer un client LDAP,
     vous pouvez consulter la page de manuel de <tt>ldap.conf</tt>.
     """,
-    question = "Donnez les paramètres de connexion avec <tt>gq</tt>&nbsp;:",
+    question = "Donnez les paramètres de connexion avec <tt>lima</tt>&nbsp;:",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -195,15 +195,15 @@ add(name="gq",
 
 add(name="contenu",
     required=["gq"],
-    question = "Quelles sont les entrées dans l'annuaire&nbsp;?",
+    question = "Quelles sont les entrées présentes dans l'annuaire juste après l'installation (c'est-à-dire avant d'ajouter des entrées)&nbsp;?",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
 
 add(name="ldif",
     required=["gq"],
-    question = """Ecrivez un fichier au format LDIF qui contienne
-    les descriptions d'une entrée de chacun des types.
+    question = """Ecrivez un fichier au format LDIF
+    contenant la description d'une entrée pour chaque type de feuilles
     <p>
     Vous aurez 0 points si vous dépassez 50 lignes dans la réponse.
     """,
@@ -229,7 +229,7 @@ add(name="tester",
 
 add(name="ajout binome",
     required=["tester"],
-    before = """Avec l'utilitaire <tt>gq</tt>
+    before = """Avec l'utilitaire <tt>lima</tt>
     et en vous appuyant sur les entrées précédentes,
     ajoutez dans l'annuaire une entrée par binôme présent
     dans votre salle de TP et un groupe correspondant à l'ensemble de ces
@@ -370,7 +370,7 @@ add(name="autorisation",
     <li> ne soit lisible que par les utilisateurs authentifiés.
     </ul>
     Testez si vos modifications sont bien entrées en vigueur
-    (vous pourrez utiliser <tt>gq</tt> pour tenter de
+    (vous pourrez utiliser <tt>lima</tt> pour tenter de
     changer la valeur de l'attribut).
     """,
     question = """Quelles sont vos modifications dand <tt>slapd.conf</tt>

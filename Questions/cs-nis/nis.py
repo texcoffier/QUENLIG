@@ -185,7 +185,8 @@ add(name="client",
     pour faire vos tests, vous utiliserez comme client NIS une machine
     qui n'est ni serveur NFS, ni serveur NIS, ni serveur DNS, ni
     serveur LDAP (donc une machine inoccupée !).""",
-    question = "Configurez un client NIS sur une autre machine. Manipulations effectuées&nbsp;",
+    question = """Configurez un client NIS sur une autre machine.
+    Quelles sont les manipulations effectuées&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -230,8 +231,7 @@ add(name="bind",
 add(name="serveur",
     required=["client"],
     question = """Quelle commande permet de connaître, à partir d'une machine
-    cliente, le serveur NIS auquel elle est associée&nbsp;?
-    <p>Indiquez sur quelle machine vous faites tourner la commande.""",
+    cliente, le serveur NIS auquel elle est associée&nbsp;?""",
     nr_lines = 2,
     tests = (good_if_contains(''),),
     )
@@ -271,7 +271,7 @@ add(name="utilisateur",
     required=["affiche carte"],
     question = """
 Sur le serveur NIS, ajoutez un utilisateur <tt>titi</tt> et donnez un nom
- votre machine cliente (<tt>nisclient_xxxx</tt> où <tt>xxxx</tt> sont
+à votre machine cliente (<tt>nisclient_xxxx</tt> où <tt>xxxx</tt> sont
 les initiales du binôme).
 <p>
 Indiquez ce qu'il faut faire pour
@@ -283,7 +283,8 @@ soient accessibles depuis le client NIS.""",
 
 add(name="filtre",
     required=["affiche carte"],
-    question = "Echanges entre le client et le serveur NIS. Quel filtre de capture utilisez vous&nbsp;?",
+    question = """Echanges entre le client et le serveur NIS.
+    Quel filtre de capture utilisez-vous dans <tt>wireshark</tt>&nbsp;?""",
     tests = (good_if_contains(''),),
     )
 
@@ -301,7 +302,7 @@ add(name="telnet",
     required=["filtre"],
     question = """Résumé des échanges observés (nombre de messages,
     noms et paramètres des procédures distantes exécutées, ...)
-    suite à la commande <tt>telnet nisclient_xxxx</tt>""",
+    suite à la commande <tt>ssh nis<b>client</b>_xxxx</tt>""",
     tests = (good_if_contains(''),),
     nr_lines = 5,
     )
