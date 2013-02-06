@@ -30,7 +30,8 @@ add(name="compte",
     sur un flux de données.
     Elle est très performante, mais il n'est pas recommandé de l'utiliser
     pour faire de gros programmes.""",
-    question="""La réponse est ce qu'affiche la commande suivante :
+    question="""La réponse à cette question est ce qu'affiche
+    la commande suivante&nbsp;:
     <pre>echo 'un
 deux
 trois

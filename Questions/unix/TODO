@@ -4,21 +4,28 @@ tage XML vide : prereauis \1
 \ seul ou \ espace en fin de ligne shell
 Faire un message d'erreur plus joli
 
+-E pour sed
+; en fin de ligne et autres erreur de syntaxe shell
+mettre les questions faciles en haut
+fonte fixe pour la rï¿½ï¿½ponse
+
+bleu pour le remplacement
 
 
-Réécrire complètement le parser shell sans faire d'analyse lexicale/syntaxique
+
+RÃ©Ã©crire complÃ¨tement le parser shell sans faire d'analyse lexicale/syntaxique
 car le shell n'est pas facilement parsable.
 
-Faire en sorte que la canonisation shell fonctionne réellement,
-des substitution de chaines de caractères ne sont pas suffisantes.
-C'est shellSyntax qui doit réécrire les options longues en courtes.
+Faire en sorte que la canonisation shell fonctionne rÃ©ellement,
+des substitution de chaines de caractÃ¨res ne sont pas suffisantes.
+C'est shellSyntax qui doit rÃ©Ã©crire les options longues en courtes.
 
 
-Faire une question : echo $SDFSFD | sed   et la mettre en prérequis
+Faire une question : echo $SDFSFD | sed   et la mettre en prÃ©requis
 
 Faire plus d'exercices avec les guillemets autour des variables.
 
-Faire des exercices sur /etc/passwd ? Ou les fichiers tabulés en général
+Faire des exercices sur /etc/passwd ? Ou les fichiers tabulÃ©s en gÃ©nÃ©ral
 
 Faire des exercices niveau console : edition ligne par exemple.
 

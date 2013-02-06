@@ -1,4 +1,4 @@
-p.shell_syntax_error:before{content:"Ce que vous avez tapé ne respecte pas la syntaxe du shell : Un ';' complètement inutile à la fin de la ligne. Des guillemets ou apostrophes ne se fermant pas. Des parenthèses mals équilibrées. Des parenthèses non protégées dans les paramètres. Une redirection de fichier dans un endroit non spécifié...";}
+div.shell_syntax_error:before{content:"Ce que vous avez tapé ne respecte pas la syntaxe du shell : Un ';' complètement inutile à la fin de la ligne. Des guillemets ou apostrophes ne se fermant pas. Des parenthèses mals équilibrées. Des parenthèses non protégées dans les paramètres. Une redirection de fichier dans un endroit non spécifié...";}
 
 /*
  *****************************************************************************
@@ -40,7 +40,7 @@ u\:FILDES:before                     {content:"Redirection :"            ;}
 u\:SUBSHELL:before                   {content:"Regroupement de commandes";}
 u\:CASE:before                       {content:"case :"                   ;}
 u\:SELECTOR:before                   {content:"Sélecteur(s) :"           ;}
-u\:AFFECTATION:before                {content:"Affectation temporaire :" ;}
+u\:AFFECTATION:before                {content:"Affectation locale :" ;}
 u\:REPLACEMENT:before                {content:"Remplace la commande par sa sortie standard" }
 
 

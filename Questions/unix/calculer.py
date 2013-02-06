@@ -98,11 +98,11 @@ add(name="longueur",
     la longueur de la chaine de caractères contenue dans
     la variable shell <tt>PATH</tt>""",
     tests=(
-    shell_bad("echo \"$PATH\" | wc -c",
-              """Cette commande est juste...<br>
-              Mais on veut que vous utilisez <tt>expr</tt>
-              au lieu de <tt>wc</tt>""",
-              replace=(('-m', '-c'),)
+    reject("wc",
+           """Il ne faut pas utiliser <tt>wc</tt> car cette commande
+              va compter la fin de ligne envoyée par <tt>echo</tt>.
+              Vous devez obligatoirement utiliser <tt>expr</tt>
+              au lieu de <tt>wc</tt>"""
               ),
     reject('${#PATH}',
            """Cela marche peut-être, mais ce n'est pas du shell

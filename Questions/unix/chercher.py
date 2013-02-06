@@ -46,13 +46,13 @@ find_required = require("find",
 find_dot_required = require("find .",
                             """On demande à <tt>find</tt> de chercher partout
                             dans le répertoire courant.
-                            <p>
+                            <br>
                             Les premiers arguments de <tt>find</tt> sont
                             les endroits où l'on cherche.
                             Il est possible de chercher à un seul endroit.
-                            <p>
-                            Ne pas indiquer l'endroit ou l'on cherche
-                            fonctionne peut-être sous linux,
+                            <br>
+                            Ne pas indiquer l'endroit où l'on cherche
+                            fonctionne peut-être sous Linux,
                             mais pour beaucoup d'autres systèmes UNIX
                             cela ne fonctionnera pas.
                             """)
@@ -106,7 +106,7 @@ add(name="simple",
     shell_bad(("find toto", "find ./toto"),
               """<tt>toto</tt> est la hiérarchie ou la commande <tt>find</tt>
               va lister tous les fichiers quelque soit leurs noms.
-              <p>
+              <br>
               Elle ne va donc pas chercher les fichiers nommés
               <tt>toto</tt> dans le répertoire courant"""),
     shell_bad("find -name toto",
@@ -117,6 +117,9 @@ add(name="simple",
     reject("-iname",
            """On ne veut pas trouver les fichiers TOTO en majuscule.
            Il ne faut donc pas utiliser <tt>-iname</tt>"""),
+    reject(" /*", "<tt>/*</tt> représente toutes les entités à la racine"),
+    reject(" .*", """<tt>.*</tt> représente toutes les entités dont le nom
+    commence par <tt>.</tt> dans le répertoire courant"""),
     find_required, find_dot_required, find_name_required,
     reject("*",
            """On veut les fichiers qui se nomment <tt>toto</tt>
@@ -339,18 +342,19 @@ add(name="pattern",
     reject("*.*",
            """Vous n'allez pas trouver les fichiers dont
            le nom ne contient pas de caractère '<tt>.</tt>'"""),
-    reject('\\~', """Pas la peine de protéger le tilde
-    il est spécial seulement en première lettre"""),
-    reject('[~]', """Pourquoi mettre le tilde entre crochets,
-    c'est un caractère qui n'a pas de signification
-    pour les <em>patterns</em>"""),
-    require("*~", """Je ne vois pas le <em>pattern</em> indiquant
-    que le nom du fichier se termine par <tt>~</tt>"""),
+    reject(('\\~', '[~]'),
+           """Pas la peine de protéger le tilde
+           il est spécial seulement en première lettre du <em>pattern</em>"""),
     reject('[*~]', """Le <em>pattern</em> indique que c'est une étoile
     ou un tilde"""),
     number_of_is('.',1, """Votre commande n'a besoin que d'un seul point,
-    celui qui indique ou chercher"""),
-                 
+    celui qui indique où chercher"""),
+    Bad(Comment(Shell(~Contain('<argument>*~</argument>', canonize=False)),
+                """Je ne vois pas le <em>pattern</em> indiquant
+                   que le nom du fichier se termine par <tt>~</tt>""")),
+    reject("-type",
+           """On veut les fichiers, répertoires...
+              donc pas besoin de <tt>-type</tt>"""),
     shell_display,
     ),
     indices=("""N'oubliez pas que le shell remplace

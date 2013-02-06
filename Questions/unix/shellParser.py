@@ -27,7 +27,7 @@ import tpg
 import types
 import re
 
-parse_error = '<p class="shell_syntax_error">'
+parse_error = '<div class="shell_syntax_error"></div>'
 
 def canonise_option(xml, short_opt, long_opt, take_argument):
     """Replace long options by short one

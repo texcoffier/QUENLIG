@@ -83,6 +83,14 @@ add(name="création",
                En effet, si c'est le cas, alors sans le <tt>/</tt>
                c'est le lien qui serait sauvez et non le répertoire pointé.""",
                dumb_replace=dumb_replace),
+    Good(Comment(Replace(dumb_replace,Shell(
+                        Equal("tar -f PratiqueUnix.tar -c PratiqueUnix")
+                        | Equal("tar -c PratiqueUnix -f PratiqueUnix.tar")
+                        )),
+                 """Cela fonctionne, mais la commande est généralement écrite :
+<tt>tar -cf PratiqueUnix.tar PratiqueUnix</tt>
+"""
+                 )),
     number_of_is('PratiqueUnix', 2,
                  """Je ne vois pas deux fois le mot <tt>PratiqueUnix</tt>
                  dans votre réponse"""),
@@ -112,6 +120,8 @@ add(name="extraction",
     en le mettant dans le répertoire courant.""",
     tests=(
     require('tar', "On utilise <tt>tar</tt>"),
+    require('-', """Même si la commande accepte que l'on ne mette
+    pas le tiret devant les options il est conseillé de le mettre."""),
     require('-x', """Vous devez utiliser l'option <tt>x</tt> pour
     indiquer que c'est une extraction d'archive"""),
     require('f', """Il faut l'option <tt>f</tt> pour indiquer
