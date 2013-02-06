@@ -193,7 +193,8 @@ class Question:
         if a[0]:
             return "*" # Correct answer, so commented.
         c = a[1]
-        c = re.sub("<sequence.*</sequence>", "", c.replace("\n",""))
+        # XXX Remove parsed unix answer
+        c = re.sub("<u:sequence.*</u:sequence>", "", c.replace("\n",""))
         if c == ' ':
             c = ''
         return c
@@ -450,7 +451,7 @@ def replace_strings(replace, string):
 ###############################################################################
 ###############################################################################
 
-class Test:
+class Test(object):
     comment = ''
     replace = ()
     replacement = ()
@@ -1080,7 +1081,7 @@ class UpperCase(TestUnary):
       # To replace both 'a' and 'A' per 'X' the good order is:
       # So 'a', 'A', 'x' and 'X' are good answers.
       Good(UpperCase(Replace((('A','X'),),
-                             Equal('a'))
+                             Equal('a'), canonize=True)
                     )
           )
       # A more straightforward and intuitive coding is:
@@ -1419,6 +1420,14 @@ class Grade(TestUnary):
        Grade always returns the value returned by the first expression.
        The grades are summed per teacher when exporting all the grades.
 
+       BEWARE :
+           Grades are computed only when the student answer.
+           If formula change, they will not be recomputed.
+
+       It is done so because recomputing every grade on server start
+       can be long if there is many students.
+          
+
     Examples:
        # If the student answers:
        #   * '2' or 'two'    then 'point'       is set to 1.
@@ -1430,6 +1439,7 @@ class Grade(TestUnary):
            ),
        Bad(Grade(~Int(1), "calculus", -2))
     """
+    stop_eval = True
     def __init__(self, expression, teacher, grade):
         self.teacher = teacher
         self.grade = '%g' % float(grade)
@@ -1441,12 +1451,29 @@ class Grade(TestUnary):
                 + self.children[0].source(state, format) + ','
                 + repr(self.teacher) + ',' + self.grade + ')')
     def do_test(self, student_answer, state=None):
-        bool, comment = self.children[0](student_answer, state)
-        if state.question and bool is True:
+        goodbad, a_comment = self.children[0](student_answer, state)
+        if state.question and goodbad is True:
             state.student.set_grade(
                 state.question.name, self.teacher + ',' + self.grade)
-        return bool, comment
+        else:
+            state.student.set_grade(
+                state.question.name, self.teacher + ',0')
+        if self.stop_eval:
+            return goodbad, a_comment
+        else:
+            return None, a_comment
 
+class GRADE(Grade):
+    """As Grade, but return None to not stop the tests after the first grade.
+
+    Examples:
+       # Every answer is good, but grades are stored.
+       # If 'fast and hot' is answered, 2 grades will be made.
+       GRADE(Contain("fast", "understand speed", 1)),
+       GRADE(Contain("hot", "understand energy", 1)),
+       Good(Contain("")),    
+    """
+    stop_eval = False
 
 
 def regression_tests():
@@ -1732,7 +1759,7 @@ def regression_tests():
         question = Q()
     st = St()
     assert( a('b',st) == (False, '') )
-    assert( grades == {} )
+    assert( grades == {'x':'john,0'} )
     assert( a('a',st) == (True, '') )
     assert( grades == {'x':'john,4'} )
 
