@@ -1195,7 +1195,7 @@ class Expect(TestString):
             if self.comment:
                 return False, self.comment
             else:
-                return False, '<p class="string_expected">\'<b>' + self.string + '</b>\'</p>'
+                return False, '<p class="string_expected">\'<b>' + self.string_canonized + '</b>\'</p>'
 
 def expects(expected, comment=None):
     a = Expect(expected[0], comment)
