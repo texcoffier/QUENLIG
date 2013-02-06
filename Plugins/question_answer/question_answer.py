@@ -91,7 +91,7 @@ def execute(state, plugin, argument):
             s = state.student.last_answer(state.question.name)
             return utilities.answer_format(s)
 
-    s = '<FORM CLASS="questionanswer" METHOD="GET" ACTION="#">'
+    s = '<FORM CLASS="questionanswer" accept-charset="utf-8" METHOD="GET" ACTION="#">'
 
     last_answer = state.student.last_answer(state.question.name)
     if last_answer == "":
