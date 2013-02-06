@@ -1503,15 +1503,15 @@ class Random(TestUnary):
        replacement in the question text.
 
     Examples:
-       choices = {'$dir$' : ("usr", "tmp", "bin"),
-          '$file$': ("x", "y", "z"),
+       choices = {'dirname' : ("usr", "tmp", "bin"),
+          'filename': ("x", "y", "z"),
          }
        ...
-       question = random_question("How to delete /$dir$/$file$?",
+       question = random_question("How to delete /dirname/filename ?",
                                   choices),
-       tests = ( Good(Random(choices,Shell(Equal("rm /$dir$/$file$")))),
-                 Random(choices, Expect("$dir$")),
-                 Random(choices, Expect("$file$")),
+       tests = ( Good(Random(choices,Shell(Equal("rm /dirname/filename")))),
+                 Random(choices, Expect("dirname")),
+                 Random(choices, Expect("filename")),
                ),
                                                  
     """
@@ -1520,7 +1520,14 @@ class Random(TestUnary):
         self.values = values
 
     def canonize(self, string, state):
-        return random_replace(state, string, self.values)
+        """Do not canonize the student answer, but the tests themselve"""
+        if state:
+            self.children[0].initialize(
+                lambda string, a_state:
+                    random_replace(a_state, string, self.values),
+                state
+                )
+        return string
 
     def source(self, state=None, format=None):
         return (self.test_name(format) + '(' + repr(self.values) + ',' +
@@ -1801,6 +1808,7 @@ def regression_tests():
     a = create("Grade(Equal('a'),'john',4)")
     grades = {}
     class S:
+        seed = 0
         def set_grade(self, q, tg):
             grades[q] = tg
     class Q:
