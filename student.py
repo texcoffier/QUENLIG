@@ -389,9 +389,9 @@ class Student:
             return
         action_time = time.time()
         answer = self.answer(question_name)
-        answer.eval_action(action_time, command, value)
+        if answer.eval_action(action_time, command, value):
+            return
         self.update_time(action_time, answer, command)
-        
         if value != None:
             value = '' + quote(value)
         else:

@@ -1416,7 +1416,8 @@ class Grade(TestUnary):
     """If the first expression is True:
        Set a grade for the student+question+teacher.
        The grade can be a positive or negative number.
-       The 'teacher' can be the name of a knowledge.
+       The 'teacher' can be the name of a knowledge,
+       use only ONE 'teacher' per question.
        Grade always returns the value returned by the first expression.
        The grades are summed per teacher when exporting all the grades.
 

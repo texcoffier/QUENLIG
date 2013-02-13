@@ -38,6 +38,7 @@ class Answer:
         self.why = {}             # The teachers comments on answer
 
     def eval_action(self, action_time, command, value):
+        """Return True if the action do not need to be recorded in log"""
         self.last_time = action_time
         if self.first_time == 0:
             self.first_time = action_time
@@ -63,6 +64,8 @@ class Answer:
             self.student.logs.append((action_time,value.split(' ')[0]))
         elif command == "grade" :
             teacher, grade = value.split(',')
+            if self.grades.get(teacher, None) == grade:
+                return True
             self.grades[teacher] = grade
         elif command == "why" :
             teacher, comment = value.split('\002')
