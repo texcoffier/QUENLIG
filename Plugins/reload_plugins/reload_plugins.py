@@ -23,10 +23,11 @@
 It is currently not working nicely, do not try to use.
 """
 
-import plugins
+
 import os
-import utilities
 import sys
+import plugins
+import utilities
 
 priority_execute = 1000000000
 container = 'action'
@@ -48,7 +49,10 @@ def execute(state, plugin, argument):
             plugins.Plugin.plugins_dict[plugin.plugin.name] = plugins.Plugin(utilities.load_module(plugin.plugin.name))
     # Keep the current state on screen
     plugin.link = "?reload_plugins=1&" + '&'.join(
-        ['%s=%s' % (k, v)
+        ['%s=%s' % (k,
+                    v.replace("+","%2B")
+                    .replace("?","%3F")
+                    .replace("&","%26"))
          for k, v in state.form.items()
          if k not in ('number', 'ticket', 'reload_plugins')
          ])
