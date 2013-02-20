@@ -44,6 +44,7 @@ add(name="nommé",
     question="""Donnez la commande permettant de lister les noms des fichiers (et répertoires) qui se trouvent dans <tt>/usr</tt>""",
     tests=(
     shell_good("ls /usr"),
+    shell_good("ls -a /usr"),
     shell_bad("ls /usr/",
               "Cela fonctionne mais, on peut faire un caractère plus court"),
     shell_bad("ls usr",
@@ -152,9 +153,8 @@ add(name="spécial",
     """,
     tests=(
     reject('--',
-           """Le -- n'est pas standard, on ne le trouve que dans
-           les commandes créées par la FSF (GNU).
-           Trouver une autre astuce portable."""),
+           """L'utilisation de '--' permet de répondre à la question,
+mais essayez plutôt d'y répondre sans cette astuce."""),
     shell_good("ls -l ./-z"),
     reject((" '-z'", ' "-z"', ' \\-z'),
            """Les \" ou ' ou \\ ne changent pas le fait que <tt>-z</tt>

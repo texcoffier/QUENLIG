@@ -155,6 +155,11 @@ add(name="espaces multiples",
               """L'espace n'est pas un caractère spécial pour les expressions
               régulière, donc pas besoin de le protéger""",
                dumb_replace=remplacer.dumb_replace),
+    require('[', "Vous devez faire un pipeline"),
+    Bad(Comment(~End('5'),
+                 """Dans la commande <tt>cut</tt>, il est plus intuitif
+                    d'indiquer le séparateur de champs avant d'indiquer
+                    le numéro du champ à extraire""")),
     shell_display,
     ),
     indices=(

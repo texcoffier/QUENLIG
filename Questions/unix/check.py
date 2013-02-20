@@ -36,6 +36,15 @@ class TestShell(Test):
     def answer_processing(self, answer):
         return parse(answer, self.replacement) # (uncommented,commented)
 
+    def canonize(self, answer, dummy_state):
+        try:
+            return parse_only_not_commented(answer)
+        except ValueError:
+            return answer
+        
+    def search_a_canonizer(self):
+        return self.canonize
+
 
 def shellparse(test, state):
     if not test.parsed_strings:

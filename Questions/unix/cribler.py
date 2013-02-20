@@ -140,7 +140,7 @@ add(name="attention spécial 2",
     dans le fichier <tt>/etc/passwd</tt>""",
     tests=(
     grep_required,
-    require("/etc/passwd", "Et <tt>/etc/passwd</tt> ou est-il&nbsp;?"),
+    require("/etc/passwd", "Et <tt>/etc/passwd</tt> où est-il&nbsp;?"),
     reject('\\-',
            """Il est possible que cette commande fonctionne
            car '\\-' est actuellement remplacé par un tiret

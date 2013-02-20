@@ -530,7 +530,7 @@ add(name="fiable",
                dumb_replace=dumb_replace,
                ),
     require(">yyy", """Je ne vois pas comment vous faites pour créer
-            le fichier temporaire"""),
+            le fichier temporaire""", replace=((" ",""),)),
     shell_display,
     ),
     indices=("""Utilisez <tt>mv</tt> pour remplacer <tt>xxx</tt> par
@@ -716,9 +716,17 @@ add(name="garde slash",
     required=["mot", "slash"],
     question="""Donner la commande lisant son entrée standard
     et affichant sur sa sortie standard que les <tt>/</tt>.
-    <p>
-    Si l'on met <tt>/usr/include</tt> dans l'entrée standard,
-    il en sort : <tt>//</tt>""",
+<table><tr><th>Entrée<th>Sortie</tr>
+<tr><td><pre>/usr/include
+/tmp
+
+a/a/a/a/a</pre>
+ <td><pre>//
+/
+
+////</pre>
+</tr></table>
+    """,
     tests=(
     reject('*', "Pourquoi utilisez-vous une répétition de caractères&nbsp;?"),
     reject('-r', "Pas besoin d'expression régulière étendue"),

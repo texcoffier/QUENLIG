@@ -312,8 +312,11 @@ add(name="xargs rm",
     Donnez la ligne de commande détruisant tous les fichiers du répertoire
     courant, même s'il y en a beaucoup&nbsp;:""",
     tests = (
-        Good(Shell(Equal("echo * | xargs rm"))),
-        Good(Shell(Equal("ls | xargs rm"))),
+        Good(Shell(
+                Equal("echo * | xargs rm")
+                | Equal("ls | xargs rm")
+                | Equal("ls -a | xargs rm")
+                )),
         Bad(Comment(Contain("rm *"),
                           "On vous a dit que <tt>rm *</tt> cela ne fonctionnait pas!")),
         Expect('rm'),

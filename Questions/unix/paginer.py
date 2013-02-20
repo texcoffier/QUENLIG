@@ -26,8 +26,9 @@ more_required = require("more", "On utilise la commande <tt>more</tt>")
 
 add(name="intro",
     required=["sh:console"],
-    question="""Quelle commande permet d'afficher sur la sortie standard
-    (l'écran) le contenu d'un ou plusieurs fichiers, page par page&nbsp;?
+    question="""Quelle commande standard permet d'afficher sur la sortie
+    standard (l'écran) le contenu d'un ou plusieurs fichiers,
+    page par page&nbsp;?
     <p>
     Elle permet aussi de faire des recherches dans le texte
     qui est en train d'être affiché.""",

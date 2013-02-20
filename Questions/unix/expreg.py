@@ -116,7 +116,8 @@ add(name="ligne de A",
 
 add(name="un spécial",
     required=["intro"],
-    question="""Quelle expression représente le caractère point (<tt>.</tt>)
+    question="""Quelle expression régulière représente
+    le caractère point (<tt>.</tt>)
     au lieu de représenter un caractère quelconque&nbsp;?""",
     tests=(
     good( ("\\.", "[.]") ),
