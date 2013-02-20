@@ -60,8 +60,10 @@ def duration(t):
         s = str(t) + "s" + s
     return s
 
-def answer_format(t):
+def answer_format(t, space=False):
     t = cgi.escape(str(t)).replace("\n","<p>")
+    if space:
+        t = t.replace(" ","&#9251;")
     return '<tt class="an_answer">' + t + "</tt>"
 
 def list_format(t):

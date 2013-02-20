@@ -36,7 +36,6 @@ is_comment = '\001'
 is_good = '\002'
 is_first = '\003'
 is_done = '\004'
-re_clean = re.compile('  +')
 re_comment = re.compile('    *')
 
 def execute(state, dummy_plugin, dummy_argument):
@@ -44,6 +43,8 @@ def execute(state, dummy_plugin, dummy_argument):
         return
 
     stats = statistics.question_stats()
+
+    uncanonize = {}
     
     arcs = collections.defaultdict(lambda: collections.defaultdict(int))
     for s in stats.all_students:
@@ -51,18 +52,20 @@ def execute(state, dummy_plugin, dummy_argument):
             continue
         a = s.answers[state.question.name]
         last_comment = is_first + state.question.question(state)
-        for c in a.bad_answers:
-            c = re_clean.sub('', c.strip())
-            commented = is_comment + re_comment.sub("\n", s.answer_commented(a.question ,c))
+        for c_orig in a.bad_answers:
+            c = state.question.canonize(c_orig, state)
+            uncanonize[c] = c_orig
+            commented = is_comment + re_comment.sub("\n", s.answer_commented(a.question ,c_orig))
             arcs[last_comment][c] += 1
             arcs[c][commented] += 1
             last_comment = commented
         if a.answered:
-            c = is_good + re_clean.sub('', a.answered.strip())
+            c = is_good + state.question.canonize(a.answered, state)
             commented = is_done + re_comment.sub("\n", s.check_answer(state.question , a.answered, state)[1])
             commented = re.sub("(?s)<u:sequence.*", "", commented)
             arcs[last_comment][c] += 1
             arcs[c][commented] += 1
+            uncanonize[c] = is_good + a.answered
         else:
             arcs[last_comment][a.answered] += 1
 
@@ -76,9 +79,10 @@ graph[charset="Latin1", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
         for other in others:
             nodes.add(other)
     for node in nodes:
-        str_node = str(node).replace('\\', '\\\\'
-                                     ).replace('"', '\\"'
-                                               ).replace('\n', '\\n')
+        str_node = str(uncanonize.get(node,node)
+                       ).replace('\\', '\\\\'
+                                 ).replace('"', '\\"'
+                                           ).replace('\n', '\\n')
                                      
         if str(node).startswith(is_comment):
             s += '%s [ label="%s"];\n' % (
@@ -108,11 +112,12 @@ graph[charset="Latin1", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
     f.close()
     p = subprocess.Popen(["dot", "-Tsvg", "xxx.dot"], stdout=subprocess.PIPE)
     svg = p.communicate()[0]
+    
     try:
-        svg = unicode(svg, "utf-8").encode("latin-1")
+        svg = unicode(svg, "utf-8", 'ignore').encode("latin-1").replace("UTF-8", "ISO-8859-1")
     except UnicodeDecodeError:
-        pass
+        print "SVG: UnicodeDecodeError"
     except UnicodeEncodeError:
-        pass
+        print "SVG: UnicodeEncodeError"
         
-    return svg
+    return '<div style="width:80em;overflow:auto">' + svg + '</div>'

@@ -135,9 +135,14 @@ class Question:
         self.maximum_bad_answer = int(arg.get("maximum_bad_answer", "0"))
         self.maximum_time = int(arg.get("maximum_time", "0"))
 
+        self.canonize = None
         for test in self.tests:
             if hasattr(test, 'initialize'):
                 test.initialize(lambda string, state: string, None)
+            if not self.canonize and hasattr(test, 'search_a_canonizer'):
+                self.canonize = test.search_a_canonizer()
+        if self.canonize is None:
+            self.canonize = lambda string, state: string
 
     def answers_html(self, state):
         s = ""
@@ -802,6 +807,16 @@ class TestExpression(Test):
                                  self.canonize(parser(string,a_state),a_state),
                              state
                              )
+            
+    def search_a_canonizer(self):
+        if self.__class__.canonize != TestExpression.canonize:
+            return self.canonize
+        
+        for child in self.children:
+            c = child.search_a_canonizer()
+            if c:
+                return c
+        return
 
 class TestNAry(TestExpression):
     """Base class for tests with a variable number of test as arguments."""

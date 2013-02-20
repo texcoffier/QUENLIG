@@ -43,9 +43,9 @@ def execute(state, plugin, argument):
         for a in s.answers.values():
             if a.question != state.question.name:
                 continue
-            for c in a.bad_answers:
-                commented = s.answer_commented(a.question ,c)
-                c = utilities.answer_format(c)
+            for answer in a.bad_answers:
+                commented = s.answer_commented(a.question, answer)
+                c = utilities.answer_format(answer)
                 if not commented:
                     # Uppercase in order to display them first when sorted
                     c = "<SPAN class=\"uncommented\">" + c + "</span>"
@@ -59,26 +59,26 @@ def execute(state, plugin, argument):
                     name = "<b>" + name + "</b>"
                 if a.indice != -1:
                     name = "<em>" + name + "</em>"
-                ba.append( [c, name] )
-
-    # Fusion of same bad answers
-    ba.sort()
-    new_ba = []
-    for x in ba:
-        if new_ba and x[0] == new_ba[-1][0]:
-            new_ba[-1][1] += ", " + x[1]
-        else:
-            new_ba.append(x)
-    ba = new_ba
+                ba.append( [state.question.canonize(answer,state), c, name,
+                            answer] )
 
     if len(ba) == 0:
         return
-    return utilities.sortable_table(plugin.sort_column, ba,
+                
+    # Fusion of bad answers with identical canonization
+    ba.sort(key=lambda x: (x[0], len(x[3])))
+    new_ba = []
+    last = False
+    for x in ba:
+        if x[0] == last:
+            if x[3] != last_orig:
+                x[2] += '<a class="tips"><SPAN style="white-space: normal">' +  utilities.answer_format(x[3], space=True) + '</SPAN>+</a>'
+            new_ba[-1][1] += ", " + x[2]
+        else:
+            new_ba.append([x[1], x[2]])
+            last = x[0]
+            last_orig = x[3]
+
+    return utilities.sortable_table(plugin.sort_column, new_ba,
                                     url=plugin.plugin.css_name
                                     )
-
-
-
-
-
-
