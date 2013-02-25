@@ -21,7 +21,8 @@
 
 """display the 'before answering' informations box."""
 
-import cgi
+import utilities
+import statistics
 
 priority_display = 'question_stat'
 acls = { 'Author': ('executable',), 'Grader': ('executable',) }
@@ -29,8 +30,25 @@ acls = { 'Author': ('executable',), 'Grader': ('executable',) }
 def execute(state, plugin, argument):
     if not state.question:
         return
-    grades = {}
-    for k, v in state.student.answer(state.question.name).grades.items():
-        if v != '0':
-            grades[k] = v
-    return cgi.escape(repr(grades))
+    stats = statistics.question_stats()
+    columns = set()
+    for s in stats.all_students:
+        a = s.answer(state.question.name)
+        if a.answered:
+            for k in a.grades:
+                if a.grades[k] != '0':
+                    columns.add(k)
+    columns = sorted(columns)
+
+    table = []
+    for s in stats.all_students:
+        a = s.answer(state.question.name)
+        if not a.answered:
+            continue
+        table.append([utilities.answer_format(a.answered)]
+                     + [a.grades.get(c, '') for c in columns])
+
+    return utilities.sortable_table(plugin.sort_column, table,
+                                    url=plugin.plugin.css_name,
+                                    titles=['X'] + columns
+                                    )
