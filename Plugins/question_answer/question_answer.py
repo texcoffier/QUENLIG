@@ -98,9 +98,11 @@ def execute(state, plugin, argument):
         last_answer = cgi.escape(state.question.default_answer)
         style = ''
     else:
-        if state.student.current_role != 'Teacher':
+        if state.student.bad_answer_yet_given(state.question.name,
+                                              last_answer):
             style = 'background:#FAA'
         else:
+            # Assume it was a correct answer
             style = ''
 
     last_answer_html = last_answer.replace("%","&#37;").replace("'", "&#39;").\
@@ -126,7 +128,8 @@ def execute(state, plugin, argument):
             state.question.name,
             #
             configuration.nr_columns, last_answer_html,
-            last_answer_html, style)
+            style and last_answer_html or '',
+            style)
     else:
         s += '<TEXTAREA NAME="%s" ID="2" COLS="%d" ROWS="%d" onkeypress="return disable_tab(event)">%s</TEXTAREA>' % (
             plugin.plugin.css_name,
