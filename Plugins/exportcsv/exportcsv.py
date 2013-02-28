@@ -24,6 +24,7 @@ the normalized number of good/bad answers and indices.
 There is also the work time in hours."""
 
 import statistics
+import configuration
 
 container = 'statmenu'
 link_to_self = True
@@ -54,7 +55,7 @@ def execute(state, plugin, argument):
     teachers = set()
     for s in stats.all_students:
         teachers.update(s.grading_teachers())
-        
+
     for s in stats.all_students:
         grades = s.grades()
         content.append(
@@ -75,7 +76,9 @@ def execute(state, plugin, argument):
     header += list(teachers)
     formater = "%s" + ", %5.3f" * (len(header)-1)
 
-    t = [','.join(header)]
+    t = [','.join(header),
+         ','.join(configuration.explain_grade.get(i,'') for i in header)
+         ]
     for c in content:
         t.append(formater % c)
         

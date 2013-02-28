@@ -18,6 +18,9 @@ statistics_cpu_allocation = 1 # % of time used to compute statistics
 # For INPUT / TEXTAREA
 nr_columns = 60
 
-
+# For export CSV
+# Expand the short grade name to an explanation.
+# It is useful for 'Grade' tests.
+explain_grade = {}
 
 
