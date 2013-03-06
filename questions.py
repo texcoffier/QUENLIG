@@ -24,7 +24,6 @@ import types
 import os
 import utilities
 import inspect
-import sys
 import cgi
 import re
 import configuration
@@ -1121,6 +1120,13 @@ class RemoveSpaces(TestUnary):
         # character at the left of the run.
         string = re.sub('([a-zA-Z0-9_])[ \t]+([^a-zA-Z0-9_])', r'\1\2', string)
         return string
+
+class RMS(TestUnary):
+    """Replace multiple spaces/tabs by only one.
+    Remove spaces from lines begin and end.
+    """
+    def canonize(self, string, state):
+        return re.sub('( $|^ )', '', re.sub('[ \t]+', ' ', string))
 
 class SortLines(TestUnary):
     """The lines of the student answer are sorted and child test value
