@@ -337,6 +337,7 @@ class Sh(tpg.VerboseParser):
         token open_brace: '\(';
         token close_brace: '\)';
         token diese: '#';
+        token equal: '=';
         token other: '[-+/:.!,{}?\200-\377]|]' ;
         token for: 'for';
         token done: 'done' ;
@@ -380,6 +381,7 @@ class Sh(tpg.VerboseParser):
             | background_separator/x $ d+=escape(x) $
             | selector_end/x $ d+=x $
             | diese/x $ d+=x $
+            | equal/x $ d+=x $
             | REPLACEMENT/x $ x.double_quoted=1 ; d+=str(x) $
             | VARIABLE/x $ x.double_quoted=1 ; d+=str(x) $
             | dollar/x $ d+=x $
@@ -414,7 +416,7 @@ class Sh(tpg.VerboseParser):
             | DOUBLE_QUOTED/x
             | QUOTED/x
             | diese/x
-            | '='/x
+            | equal/x
             | '~'/x
             | '\\\\'/x $ x ='\\' $
             | other/x
@@ -428,7 +430,7 @@ class Sh(tpg.VerboseParser):
 
         WORD/$word(w)$ -> $ w="" $ ((TILDE/x$w+=x$)? (PART/x $ w+=x $)+) | TILDE/w ;
 
-        AFFECTATION/$Affectation(v,w)$ -> VARIABLE_NAME/v '=' WORD/w ;
+        AFFECTATION/$Affectation(v,w)$ -> VARIABLE_NAME/v equal WORD/w ;
 
         REDIRECTION/$redirection(r,w)$ -> redirect/r (word_separator? WORD/w | fildes/w) ;
 
@@ -618,6 +620,7 @@ def test():
 ('echo $1', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>1</variable></argument></command></pipeline></sequence>"),
 ('echo $*', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument><variable double_quoted='0'>*</variable></argument></command></pipeline></sequence>"),
 ('echo "$/"', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>echo</argument><argument>$/</argument></command></pipeline></sequence>"),
+('grep "="', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument>grep</argument><argument>=</argument></command></pipeline></sequence>"),
 # Do not work... it should
 # ('"\'" \'\'', ""),
 ]:
