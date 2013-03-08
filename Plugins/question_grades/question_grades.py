@@ -19,7 +19,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-"""display the 'before answering' informations box."""
+"""Display the students grades for a question sorted by answer"""
 
 import utilities
 import statistics

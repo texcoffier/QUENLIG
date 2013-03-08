@@ -65,6 +65,7 @@ def execute(state, plugin, argument):
     if state.question.tests == ():
         return
     if argument:
+        argument = unicode(argument, "utf-8").encode("latin-1")
         # Fill 'last_answer' attribute
         state.student.bad_answer_yet_given(state.question.name, argument)
         # Check the answer even if it is a known one because
