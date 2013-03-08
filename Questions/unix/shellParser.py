@@ -88,6 +88,7 @@ def real_parse(answer, replacement=(), dumb_replace=()):
         ("-c", "--bytes"             , 0, "wc"   ),
         ("-f", "--fields"            , 1, "cut"  ),
         ("-f", "--force"             , 0, "rm"   ),
+        ("-r", "-R"                  , 0, "rm"   ),
         ("-h", "--no-filename"       , 0, "grep" ),
         ("-i", "--ignore-case"       , 0, "grep" ),
         ("-u", "--unique"            , 0, "sort" ),
@@ -126,8 +127,9 @@ def parse(answer, replacement=(), dumb_replace=()):
 def parse_only_not_commented(answer):
     commented, uncommented = parse(answer)
     if commented == parse_error:
-        print '\n' + answer + '\n'
-        raise ValueError("Parse error in shell answer checking")
+        return "Shell Parse Error"
+        # print '\n' + answer + '\n'
+        # raise ValueError("Parse error in shell answer checking")
     return uncommented
 
 if __name__ == "__main__":
