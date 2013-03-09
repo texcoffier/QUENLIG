@@ -96,7 +96,7 @@ def execute(state, plugin, argument):
 
     last_answer = state.student.last_answer(state.question.name)
     if last_answer == "":
-        last_answer = cgi.escape(state.question.default_answer)
+        last_answer = state.question.default_answer
         style = ''
     else:
         if state.student.bad_answer_yet_given(state.question.name,
@@ -106,8 +106,10 @@ def execute(state, plugin, argument):
             # Assume it was a correct answer
             style = ''
 
-    last_answer_html = last_answer.replace("%","&#37;").replace("'", "&#39;").\
-                  replace('"', '&#34;')
+    last_answer_html = (cgi.escape(last_answer)
+                        .replace("%","&#37;")
+                        .replace("'", "&#39;")
+                        .replace('"', '&#34;'))
 
     random.seed(state.student.seed)
     question = state.question.question(state)
