@@ -70,9 +70,7 @@ def execute(state, plugin, argument):
         state.student.bad_answer_yet_given(state.question.name, argument)
         # Check the answer even if it is a known one because
         # the question tests may have been updated in live
-        number, message = state.student.check_answer(state.question,
-                                                     argument,
-                                                     state)
+        number, message = state.student.check_answer(argument, state)
         if number:
             state.student.good_answer(state.question.name,argument)
         else:

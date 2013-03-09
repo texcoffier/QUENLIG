@@ -55,13 +55,14 @@ def execute(state, dummy_plugin, dummy_argument):
         for c_orig in a.bad_answers:
             c = state.question.canonize(c_orig, state)
             uncanonize[c] = c_orig
-            commented = is_comment + re_comment.sub("\n", s.answer_commented(a.question ,c_orig))
+            commented = is_comment + re_comment.sub("\n", s.answer_commented(a.question ,c_orig, state))
             arcs[last_comment][c] += 1
             arcs[c][commented] += 1
             last_comment = commented
         if a.answered:
             c = is_good + state.question.canonize(a.answered, state)
-            commented = is_done + re_comment.sub("\n", s.check_answer(state.question , a.answered, state)[1])
+            commented = is_done + re_comment.sub(
+                "\n", s.check_answer(a.answered, state)[1])
             commented = re.sub("(?s)<u:sequence.*", "", commented)
             arcs[last_comment][c] += 1
             arcs[c][commented] += 1

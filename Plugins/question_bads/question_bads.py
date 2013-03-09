@@ -44,7 +44,7 @@ def execute(state, plugin, argument):
             if a.question != state.question.name:
                 continue
             for answer in a.bad_answers:
-                commented = s.answer_commented(a.question, answer)
+                commented = s.answer_commented(a.question, answer, state)
                 c = utilities.answer_format(answer)
                 if not commented:
                     # Uppercase in order to display them first when sorted

@@ -46,7 +46,7 @@ def execute(state, plugin, argument):
             if a.answered and a.question in questions.questions:
                 state.student = s
                 state.question = questions.questions[a.question]
-                s.check_answer(state.question, a.answered, state)
+                s.check_answer(a.answered, state)
     state.student = me
     state.question = None
     plugin.heart_content = '<p class="grade_recompute"></p>'

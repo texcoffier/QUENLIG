@@ -43,7 +43,7 @@ def execute(state, plugin, argument):
     if not s:
         return
 
-    number, message = state.student.check_answer(state.question, s, state)
+    dummy_number, message = state.student.check_answer(s, state)
 
     if state.question.bad_answer:
         if message:

@@ -422,9 +422,13 @@ def display_no_more_valid_answers():
     Function called when running: 'main.py session problems'
     """
     import sys
+    class X:
+        pass
+    X = X()
     stats = question_stats()
     messages = {}
     print
+    
     for s in stats.all_students:
         sys.stdout.write('*')
         sys.stdout.flush()
@@ -435,7 +439,8 @@ def display_no_more_valid_answers():
                 continue
             if not answer.answered:
                 continue
-            ok, comment = s.check_answer(q,answer.answered,None)
+            X.question = q
+            ok, comment = s.check_answer(answer.answered, X)
             if not ok:
                 if answer.question not in messages:
                     messages[answer.question] = {}

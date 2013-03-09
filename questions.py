@@ -192,8 +192,8 @@ class Question:
     # Comments starting by a white space are not
     # considered as usefull for the student.
     # It is used by questions.py/comment function.
-    def answer_commented(self, answer):
-        a = self.check_answer(answer, None)
+    def answer_commented(self, answer, state):
+        a = self.check_answer(answer, state)
         if a[0]:
             return "*" # Correct answer, so commented.
         c = a[1]

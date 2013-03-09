@@ -59,7 +59,7 @@ class Student:
         """Initialise student data or read the log file"""
         self.filename = name.translate(utilities.safe_ascii)
         self.seed = 1
-        for c in name:
+        for c in name: # + configuration.session.name:
             self.seed *= ord(c)
         self.name = name.title()
         self.answers = {}
@@ -313,6 +313,7 @@ class Student:
         
         s = ''
         none = None
+        saved_question = state.question
         for a in t:
             if a.question == "None":
                 none = a
@@ -321,6 +322,7 @@ class Student:
                 continue
             try:
                 q = questions.questions[a.question]
+                state.question = q
             except KeyError:
                 continue
             import Plugins.question_change_answer.question_change_answer
@@ -332,7 +334,7 @@ class Student:
                 s += utilities.list_format(q.indices[:a.indice+1])
 
             for b in a.bad_answers:
-                number, message = self.check_answer(q, b, state)
+                number, message = self.check_answer(b, state)
                 if message:
                     message = "<br>" + message
                 s += utilities.div("bad_answer",
@@ -341,8 +343,8 @@ class Student:
 
             if a.answered:
                 try:
-                    number, message = self.check_answer(q, a.answered, state)
-                except:
+                    number, message = self.check_answer(a.answered, state)
+                except IOError:
                     message = '???BUG???'
                 if message:
                     message = "<br>" + message
@@ -356,6 +358,7 @@ class Student:
 
             import Plugins.question_correction.question_correction
             s += Plugins.question_correction.question_correction.add_a_link(state, q)
+        state.question = saved_question
 
                 
         if none and none.comments:
@@ -446,14 +449,14 @@ class Student:
     # All about the question contextual to the student.
     ####################################################
 
-    def check_answer(self, question, answer, state):
+    def check_answer(self, answer, state):
         "'state' is a parameter needed for some questions"
         random.seed(self.seed)
-        return question.check_answer(answer, state)
+        return state.question.check_answer(answer, state)
 
-    def answer_commented(self, question_name, answer):
+    def answer_commented(self, question_name, answer, state):
         random.seed(self.seed)
-        return questions.questions[question_name].answer_commented(answer)
+        return questions.questions[question_name].answer_commented(answer,state)
 
     def mailto(self, subject=None, body=""):
         if subject == None:

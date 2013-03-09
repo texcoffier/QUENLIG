@@ -30,7 +30,7 @@ background = '#CFC'
 title_background = '#8F8'
 acls = { 'Default': ('executable',) }
 
-def execute(state, plugin, argument):
+def execute(state, dummy_plugin, dummy_argument):
     if state.question == None:
         return
     if state.question.tests == ():
@@ -40,7 +40,7 @@ def execute(state, plugin, argument):
 
     s = state.student.last_answer(state.question.name)
 
-    number, message = state.student.check_answer(state.question, s, state)
+    number, message = state.student.check_answer(s, state)
 
     if number != True:
         return
