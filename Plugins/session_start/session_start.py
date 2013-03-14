@@ -33,7 +33,7 @@ priority_execute = "-question_answer"
 date_format = "%H:%M %d/%m/%Y"
 
 def parse_date(value, student, default):
-    value = value.strip()
+    value = value.strip().replace('\n', ' ').replace('\r',' ')
     if value.startswith('{'):
         value = eval(value)
     else:
