@@ -109,7 +109,7 @@ add(name="paquet",
     )
 
 add(name="fiabilité",
-    required=["affiche"],
+    required=["premiere"],
     before=rien_de_branche,
     question="""Quelle est la fiabilité de la première ligne série&nbsp;?""",
     tests=(

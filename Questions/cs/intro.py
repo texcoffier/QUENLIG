@@ -30,10 +30,10 @@ Pour démarrer le TP :
    /home/exco/lance-quenlig-cs
 
 Pour que les étudiants puissent saisir les réponses :
-   NFS  : http://10.0.0.1:4001/
-   NIS  : http://10.0.0.1:4002/
-   DNS  : http://10.0.0.1:4003/
-   LDAP : http://10.0.0.1:4004/
+   NFS  : http://demo710.univ-lyon1.fr:4001/
+   NIS  : http://demo710.univ-lyon1.fr:4002/
+   DNS  : http://demo710.univ-lyon1.fr:4003/
+   LDAP : http://demo710.univ-lyon1.fr:4004/
 
 Si jamais l'authentification ne fonctionne pas, ajouter 'guest.html' à la fin.
 
@@ -72,11 +72,6 @@ for I in nfs nis dns ldap ; do gv Students/cs-$I/HTML/xxx_graphe.ps & done
 
 
 #####################################
-Create HTML page for corrections
-#####################################
-./corrections.py
-
-#####################################
 PROBLEMS
 #####################################
 
@@ -91,8 +86,8 @@ from check import *
 def q():
     import configuration
     return """<h2>TP : %s</h2>
-    ATTENTION vous ne pourrez pas revenir en arrière
-    sur une réponse déjà donnée.
+    ATTENTION vous avez une heure pour modifier une réponse,
+    vous le faites en passant par le travail fait.
     <p>
     Vous avez choisi le sujet : <big><b>%s</b></big>
     <p>

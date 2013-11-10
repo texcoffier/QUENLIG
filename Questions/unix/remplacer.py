@@ -294,7 +294,7 @@ add(name="ajouter fin",
     
 add(name="enlève mot",
     required=["intro", "expreg:négation"],
-    question="""Quelle filtre (commande lisant son entrée standard
+    question="""Quel filtre (commande lisant son entrée standard
     et écrivant sur sa sortie standard) permet de remplacer tous
     les caractères du début de la ligne jusqu'au premier espace (inclu)
     par rien du tout.

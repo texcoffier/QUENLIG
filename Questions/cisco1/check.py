@@ -23,6 +23,7 @@ from questions import *
 import configuration
 import questions
 import re
+import sys
 
 def filter_student_answer(answer, state=None):
     answer = re.sub(' +', ' ', answer)

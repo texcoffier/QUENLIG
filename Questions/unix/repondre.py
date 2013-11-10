@@ -66,16 +66,14 @@ add(name="bonjour",
 
 add(name="intro",
     required=["bonjour"],
-    question="""Si les enseignants se rendent compte que
-    vous avez triché en utilisant une liste de bonnes réponses
-    ne serait-ce qu'une fois
-    vous aurez 0 (zéro) comme note de TP.
+    question="""Ces exercices ne sont pas notés.
+    Néanmoins, si vous trichez en utilisant une liste de bonnes réponses
+    vous n'apprendrez rien du tout.
     <p>
-    Répondez OUI si vous êtes d'accord.
+    Répondez OUI si vous avez compris.
     """,
     tests = (
-    yes("""Si vous ne renoncez pas à tricher vous ne pourrez pas
-    faire le TP et vous aurez 0 quand même."""),
+    yes("""Alors appelez un enseignant pour qu'il vous explique."""),
     ),
     )
 

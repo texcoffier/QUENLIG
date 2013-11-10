@@ -79,6 +79,8 @@ def real_parse(answer, replacement=(), dumb_replace=()):
         ("-e", "-A"                  , 0, "ps"   ),
         ("-l", "--files-with-matches", 0, "grep" ),
         ("-n", "--numeric-sort"      , 0, "sort" ),
+        ("-n", "-g"                  , 0, "sort" ),
+        ("-n", "-h"                  , 0, "sort" ),
         ("-t", "--field-separator"   , 1, "sort" ),
         ("-k", "--apropos"           , 0, "man"  ),
         ("-k", "--key"               , 1, "sort" ),
