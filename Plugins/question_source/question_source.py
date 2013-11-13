@@ -91,7 +91,7 @@ def execute(state, dummy_plugin, argument):
 
     before = ''
     if argument:
-        source = unicode(argument,'utf-8').encode('latin-1')
+        source = unicode(argument,'utf-8').encode('latin-1', 'replace')
         try:
             compiler.parse(source)
         except SyntaxError, e:

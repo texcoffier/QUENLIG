@@ -61,7 +61,7 @@ def execute(state, plugin, argument):
         the_student, grade = argument.split(',')
         if the_student.startswith('*'):
             the_student = the_student[1:]
-            comment = unicode(grade,'utf-8').encode('latin-1')
+            comment = unicode(grade,'utf-8').encode('latin-1','replace')
             student.students[the_student].set_why(
                 state.question.name,
                 teacher + '\002' + comment) # \001 is yet used
