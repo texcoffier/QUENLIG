@@ -30,7 +30,17 @@ acls = { 'Teacher': ('executable',), 'Grader': ('executable',),
 
 import time
 
+option_name = 'change-allowed-timeout'
+option_help = '''"integer"
+        Define the time in seconds allowed to modify an answer
+        once it has be accepted.
+        The plugin 'question_change_answer' must be activated.'''
+option_default = "3600"
 change_allowed_timeout = 3600
+
+def option_set(dummy_plugin, value):
+    global change_allowed_timeout
+    change_allowed_timeout = int(value)
 
 def execute(state, dummy_plugin, dummy_argument):
 
