@@ -19,7 +19,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-""""Allow to display plugin definition in tips from the plugin interface"""
+"""Allow to display plugin definition in tips from the plugin interface"""
 
 import plugins
 import cgi

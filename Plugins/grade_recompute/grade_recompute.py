@@ -20,7 +20,10 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 """
-
+DANGEROUS: allow to recompute all the automatic computed grades.
+DO NOT USE if the grading is contextual to the student.
+It is only useful if the grading functions are modified after
+the examination.
 """
 
 acls = { 'Author': ('executable',),  }
