@@ -17,7 +17,7 @@
       <li> <a href="#run">Running Quenlig</a></li>
       <li> <a href="#create">Questionnary Creation</a></li>
       <li> <a href="#question_creation">Question Creation</a></li>
-      <li> <a href="#question_reference">Question Reference</a></li>
+      <li> <a href="#question_reference">Question Reference</a>
       <ul>
       <li> <a href="#name"><tt>name</tt></a></li>
       <li> <a href="#required"><tt>required</tt></a></li>
@@ -33,22 +33,24 @@
       <li> <a href="#good_answer"><tt>good_answer</tt></a></li>
       <li> <a href="#bad_answer"><tt>bad_answer</tt></a></li>
       </ul>
-
+      </li>
       <li> <a href="#session_management">Session Management</a></li>
       <li> <a href="#student_management">Student Management</a></li>
       <li> <a href="#access_rights">Access rights</a></li>
       <li> <a href="#author_work">Author work</a></li>
-      <li> <a href="#test_creation">Test creation</a></li>
+      <li> <a href="#test_creation">Test creation</a>
       <ul>
       <li> <a href="#leaves">Leaves</a></li>
       <li> <a href="#canonizers">Canonizers</a></li>
       </ul>
-      <li> <a href="#plugin_creation">Plugin creation</a></li>
+      </li>
+      <li> <a href="#plugin_creation">Plugin creation</a>
       <ul>
       <li><a href="#trigger">What is triggering ?</a></li>
       <li><a href="#evaluation">Evaluation</a></li>
       <li><a href="#display">What is displayed ?</a></li>
       </ul>
+      </li>
 
       <li> <a href="#developper_tools">Developper tools</a></li>
     </ul>
@@ -383,6 +385,28 @@ add(name="age",
 	   ),
     )
 </pre>
+     <p>
+       It is possible to display and check random questions:
+     </p>
+     <pre>
+choices = {'VARIABLE' : ("a", "b", "c"),
+           'VALUE'    : ("100", "2", "333", "42"),
+          }
+add(name="affectation",
+    question=random_question("How to store VALUE in the variable VARIABLE?",
+                             choices),
+    tests=(Good(Random(choices,
+                       Replace(((' ',''),),
+                               Equal("VARIABLE=VALUE;")))
+                      )
+               ),
+           Random(choices, Expect("VARIABLE")),
+           Random(choices, Expect("VALUE")),
+           Expect("="),
+           Expect(";"),
+          ),
+    )
+</pre>
       
     <h2><a name="question_reference">Question reference</a></h2>
 
@@ -520,7 +544,8 @@ add(name="age",
 	    <a href="tests.html#RemoveSpace">RemoveSpaces</a>,
 	    <a href="tests.html#Replace">Replace</a>,
 	    <a href="tests.html#SortLines">SortLines</a>,
-	    <a href="tests.html#UpperCase">UpperCase</a>.
+	    <a href="tests.html#UpperCase">UpperCase</a>,
+	    <a href="tests.html#Random">Random</a>.
 	    Specific canonizers are defined in the questionnaries
 	    for specific languages: Shell, Python, C, Cisco...
 

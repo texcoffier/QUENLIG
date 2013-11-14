@@ -1063,7 +1063,7 @@ class Bad(TestUnary):
         Bad(   Comment(Contain('x'),'x')  &amp;  Comment(Contain('y'),'y'))   )
         
         # The next test will be bad if the answer contains 'x' or 'y'
-        # Beware of the And evaluation shortcut, the second test will not
+        # Beware of the Or evaluation shortcut, the second test will not
         # be evaluated if the answer does contains 'x'
         # The comments for the student are:
         #   x  : bad with comment 'x'

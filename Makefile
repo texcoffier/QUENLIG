@@ -4,7 +4,7 @@ help:
 	@echo "QUENLIG version $(V)"
 	@echo "Makefile Goals:"
 	@echo " - plots          : Generate all questions graphs"
-	@echo " - regtests       : Run the regression tests"
+	@echo " - regtest        : Run the regression tests"
 	@echo " - clean          : Remove not necessary files"
 	@echo " - figures        : run 'make' on all 'Questions/*/HTML' dirs"
 	@echo " - stats          : Statistics on the source code"
@@ -109,6 +109,7 @@ doc:
 	cd Documentation ; $(MAKE)
 
 git-commited:
+	git checkout master
 	@if [ "$$(git ls-files -m)" != '' ] ; \
 	      then echo 'GIT COMMIT PLEASE' ; exit 1 ; fi
 
