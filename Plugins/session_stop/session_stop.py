@@ -22,7 +22,6 @@
 """It rejects any work after the session stop."""
 
 import utilities
-import time
 import Plugins.session_start.session_start
 
 priority_display = 'session_start'
