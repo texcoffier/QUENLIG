@@ -91,6 +91,8 @@ class StudentAcls:
     def append_an_acl(self, plugin, key):
         """Change the ACL without checking"""
         if plugin in self.acls:
+            if isinstance(self.acls[plugin], tuple):
+                self.acls[plugin] = list(self.acls[plugin])
             self.acls[plugin].append(key)
         else:
             self.acls[plugin] = [key]
