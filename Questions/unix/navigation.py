@@ -40,7 +40,7 @@ add(name="intro",
     tests=(
     good("11"),
     bad(("6","7"),
-        "Vous avez compté que les répertoires directement sous la racines"),
+        "Vous avez compté que les répertoires directement sous la racine"),
     bad("10", "Avez-vous compté le répertoire racine&nbsp;?"),
     bad("12", "Presque !"),
     require_int(),
