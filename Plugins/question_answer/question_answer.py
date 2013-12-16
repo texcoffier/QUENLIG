@@ -94,7 +94,10 @@ def execute(state, plugin, argument):
 
     last_answer = state.student.last_answer(state.question.name)
     if last_answer == "":
-        last_answer = state.question.default_answer
+        try:
+            last_answer = state.question.default_answer(state)
+        except TypeError:
+            last_answer = state.question.default_answer
         style = ''
     else:
         if state.student.bad_answer_yet_given(state.question.name,
