@@ -237,13 +237,15 @@ else:
 import plugins
 plugins.init()
 
+import state
+
+class FakeServer:
+    headers = {"X-Forwarded-For":'IP?', "User-Agent": 'UI?',
+               'accept-language': 'en;fr'}
+
 if 'plugins.html' in sys.argv:
     # These lines are here to create a fake environnement.
     # because the initialisation methods need an environnement to run.
-    import state
-    class FakeServer:
-        headers = {"X-Forwarded-For":'IP?', "User-Agent": 'UI?',
-                   'accept-language': 'en;fr'}
     configuration.url = 'fake'
     for i in ('Logs', os.path.join('Logs', 'nostudent')):
         try:
@@ -465,6 +467,9 @@ SET PERSISTENT SESSION OPTIONS FOR PLUGINS:
     'problems'
         Show the good answers given by the students that are no more
         valid because the question testing was modified.
+    'execute plugin-name'
+        The plugin is executed, the output is printed and the program stops
+        It is useful for the 'exportcsv' plugin.
 SET TEMPORARY SESSION OPTIONS:
      'nocache'
          Does not cache HTML, CSS, PS, ... files
@@ -553,6 +558,18 @@ if __name__ == "__main__":
             session.check_questions()
         elif action == 'question-stats':
             session.question_stats()
+        elif action == 'execute':
+            session.init()
+            os.chdir(session.dir)
+            s = state.State(FakeServer(), "noticket", "Default")
+            p = s.plugins_dict[args.pop()]
+            out = p.plugin.plugin.execute(s, p, '1')
+            if isinstance(out, tuple):
+                out = out[1]
+            else:
+                out = p.heart_content
+            print out
+            sys.exit(0)
         elif action == 'stop-loading':
             # DO NOT USE WHEN THE SESSION IS NOT FULLY TERMINATED.
             # Usage example, to stop loading after one hour of student time.
