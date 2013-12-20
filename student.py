@@ -352,6 +352,9 @@ class Student:
                                    utilities.answer_format(a.answered) + \
                                    '<br>' + q.good_answer + message)
 
+                if state.student.current_role == 'Grader':
+                    s += '<br>' + repr(a.grades)
+
             for comment_time, comment_text in a.comments:
                 s += utilities.div('comment',"<PRE>" + \
                                    cgi.escape(comment_text) + "</PRE>")
