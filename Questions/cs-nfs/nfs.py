@@ -249,7 +249,7 @@ add(name="protocole",
 
 add(name="filtre",
     required=["protocole"],
-    question = """Visualisation des échanges entre le client et le serveur NFS.
+    question = """Visualisation des échanges NFS entre le client et le serveur NFS.
     Quel filtre de capture utilisez vous ?""",
     tests = (good_if_contains(''),),
     )
@@ -259,7 +259,10 @@ r = """Résumé (nombre de messages, noms et paramètres des procédures distantes e
 
 add(name="mkdir",
     required=["filtre"],
-    question = r + "<tt>mkdir /nfshome/moi/TMP</tt>",
+    question = r + """<tt>mkdir /nfshome/moi/TMP</tt>
+<p>
+C'est l'utilisateur 'moi' qui lance cette commande
+""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )

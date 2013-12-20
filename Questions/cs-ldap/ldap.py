@@ -40,9 +40,7 @@ general = """
 add(name="informations",
     required=["intro:avantages", "intro:inconvénients"],
     before = general,
-    question = """Réflexions sur le modèle d'information&nbsp;:
-    Pour chaque type d'objet que vous allez stocker indiquez
-    ce qu'ils contiennent et à quoi cela sert.""",
+    question = """Quels sont les types d'objets que vous allez stocker ? Indiquez pour chaque type, le nom officiel de l'objet.""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -122,7 +120,7 @@ Schéma(s) Nécessaire(s) :""",
 
 add(name="schéma",
         required=["le DIT", "schema ?"],
-        question = "Comment voir dans quel schéma un objet est stocké&nbsp;?",
+        question = "En n'utilisant aucun client LDAP, comment voir dans quel schéma un objet est stocké ?&nbsp;?",
         nr_lines = 5,
         tests = (good_if_contains(''),),
         )
@@ -136,7 +134,7 @@ add(name="pre-installation",
     vous pouvez reconfigurer votre serveur LDAP avec la commande
     <tt>dpkg-reconfigure slapd</tt>""",
     question = """Quelles informations avez-vous données lors de
-    l'installation des <em>packages</em>)&nbsp;?""",
+    l'installation des <em>packages</em>&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -152,7 +150,7 @@ add(name="configuration",
     before = """Configurez votre machine pour qu'elle devienne serveur LDAP.
     Prenez garde à modifier, si nécessaire, les champs déjà
     pré-remplis lors de l'installation des packages.""",
-    question = """Quelles modifications avez-vous faites dans le
+    question = """Avez-vous fait des modifications dans le
     fichier de configuration du serveur&nbsp;?""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
@@ -187,7 +185,7 @@ add(name="gq",
     Pour savoir comment configurer un client LDAP,
     vous pouvez consulter la page de manuel de <tt>ldap.conf</tt>.
     """,
-    question = "Donnez les paramètres de connexion avec <tt>lima</tt>&nbsp;:",
+    question = "Donnez vos paramètres de connexion (ceux que vous avez mis dans la configuration de <tt>lima</tt>)&nbsp;:",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )

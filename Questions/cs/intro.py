@@ -107,7 +107,7 @@ add(name="intro",
 c = Choices("SIR", "SIRapp", "TIpro", "TIrechLyon1", "TIrechINSA")
 add(name="formation",
     required = ["intro"],
-    question="Vous êtes dans quelle formation" + c.html(),
+    question="Vous êtes dans quelle formation&nbsp;?" + c.html(),
     tests = c.test(),
     )
 
@@ -135,21 +135,21 @@ add(name="séance",
 
 add(name="service",
     required=["séance", "salle", "identité", "formation"],
-    question="Quel est le service rendu par le protocole que vous allez installer",
+    question="Quel est le service rendu par le protocole que vous allez installer&nbsp;?",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
 
 add(name="avantages",
     required=["service"],
-    question="Quels sont les principaux avantages de ce service",
+    question="Quels sont les principaux avantages de ce service&nbsp;?",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
 
 add(name="inconvénients",
     required=["service"],
-    question="Quels sont les principaux inconvénients de ce service",
+    question="Quels sont les principaux inconvénients de ce service&nbsp;?",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )

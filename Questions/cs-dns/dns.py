@@ -41,7 +41,7 @@ add(name="zone",
    <p>
    Par exemple, les machines de la salle TPR1 seront dans la
    zone <tt>.tpR1.</tt> et seront référencées dans le serveur DNS
-   de la façon suivante&nbsp;;:
+   de la façon suivante&nbsp;:
    <ul>
    <li> <tt>m1.tpR1</tt> pour <tt>192.168.1.1</tt>
    <li> <tt>m10.tpR1</tt> pour <tt>192.168.1.10</tt>
@@ -49,7 +49,7 @@ add(name="zone",
    <p>
    Si plusieurs binômes mettent en place un serveur DNS dans la même salle,
    mettez en place une zone par binôme en vous répartissant les plages
-   d'adresses IP gérées de manière équitable.
+   d'adresses IP gérées de manière équilibrée.
    <p>
    Si par exemple deux binômes sont en charge du DNS dans la salle TPR2&nbsp;:
    <ul>
@@ -67,7 +67,7 @@ add(name="zone",
 
 add(name="plage",
     required=["intro:avantages", "intro:inconvénients"],
-    question = "Quelle est votre plage d'adresse IP&nbsp;?",
+    question = "Quelle est la plage d'adresses IP que votre serveur doit référencer ? (Lisez bien le sujet avant de répondre à cette question)",
     tests = (good_if_contains(''),),
     )
 
@@ -82,7 +82,7 @@ add(name="install",
 
 add(name="named.conf",
     required=["install"],
-    question = """Que modifiez-vous dans le fichier <tt>named.conf</tt>
+    question = """Que modifiez-vous dans le fichier <tt>named.conf.local</tt>
     pour configurer votre machine afin qu'elle soit un serveur DNS&nbsp;?
     <p>
     Vous aurez 0 points si vous dépassez 10 lignes dans la réponse.
@@ -93,7 +93,7 @@ add(name="named.conf",
 
 add(name="zones",
     required=["install"],
-    question = """Que modifiez-vous dans les fichiers de zone.
+    question = """Que mettez-vous dans vos fichiers de zone ?
     Donnez uniquement pour chaque fichier de zone <b>un ou deux</b>
     exemples de chaque type de RR (<em>Resource Record</em>) utilisé.
     <p>
@@ -111,8 +111,8 @@ add(name="creation zone",
     <p>
     N'oubliez pas de renseigner la zone inverse.""",
     question = """Expliquez comment vous générez les fichiers de zone,
-    donnez l'algorithme ou le programme.""",
-    nr_lines = 10,
+    donnez l'essentiel de l'algorithme ou du programme. (Vous aurez 0 points si vous dépassez 15 lignes dans la réponse. Le corps de la boucle suffit.)""",
+    nr_lines = 15,
     tests = (good_if_contains(''),),
     )
 
@@ -145,7 +145,7 @@ add(name="noms logiques",
     """,
     question = """Comment procédez vous&nbsp;?
     <p>
-    Mettez en place cettenouvelle configuration.
+    Mettez en place cette nouvelle configuration.
     <p>
     Vous aurez 0 points si vous dépassez 10 lignes dans la réponse.
     """,
@@ -190,7 +190,7 @@ add(name="connue",
     required=["dig"],
     question = """Quelle ligne de commande permet de vérifier que votre
     machine cliente est bien enregistrée dans le serveur DNS
-    de votre zone&nbsp;?""",
+    de votre zone&nbsp;? Vous utiliserez la commande host et vous montrerez le résultat de l'exécution. La réponse doit faire 3 lignes maximum.""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -198,7 +198,7 @@ add(name="connue",
 add(name="inverse",
     required=["dig"],
     question = """Quelle ligne de commande permet de vérifier que votre
-    machine cliente est bien enregistrée dans la zone inverse&nbsp;?""",
+    machine cliente est bien enregistrée dans la zone inverse&nbsp;? Vous utiliserez la commande host et vous montrerez le résultat de l'exécution. La réponse doit faire 5 lignes maximum.""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -206,7 +206,7 @@ add(name="inverse",
 add(name="serveurs",
     required=["dig"],
     question = """Quelle ligne de commande permet de lister les serveurs
-    primaire et secondaires de votre zone&nbsp;?""",
+    primaire et secondaires de votre zone&nbsp;? (et uniquement eux) Vous utiliserez la commande host et vous montrerez le résultat de l'exécution. La réponse doit faire 5 lignes maximum.""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -222,7 +222,7 @@ add(name="contact",
 add(name="alias",
     required=["dig"],
     question = """Quelle ligne de commande permet de lister tous les alias
-    de votre zone (et uniquement eux)&nbsp;?""",
+    de votre zone (et uniquement eux)&nbsp;? Vous utiliserez la commande host et vous montrerez le résultat de l'exécution. La réponse doit faire 10 lignes maximum.""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )
@@ -238,7 +238,7 @@ add(name="tout",
 
 add(name="commentaire",
     required=["connue", "inverse", "serveurs", "contact", "alias", "tout"],
-    question = """Pour les différentes commandes que vous avez essayé
+    question = """Pour les différentes commandes que vous avez essayées
     (elles sont listées sur cette page)
     indiquez si vous avez bien obtenu le résultat escompté&nbsp;:""",
     nr_lines = 5,
@@ -262,8 +262,7 @@ add(name="racine",
     Vous prendrez comme passerelle la machine à côté
     du switch central avec les adresses IP 192.168.1.1 et 192.168.2.1
     """,
-    question = """Indiquez les zones DNS, machines et adresses IP pour
-    l'enseble des deux salles&nbsp;:""",
+    question = """Indiquez pour chaque zone DNS présente dans l'ensemble des deux salles, le nom de la zone, le nom du serveur DNS et son adresse IP :""",
     nr_lines = 20,
     tests = (good_if_contains(''),),
     )
@@ -339,8 +338,8 @@ add(name="racines",
     <li> 192.168.2.19 (ou .18) si vous êtes dans la salle TPR1
     <li> 192.168.1.19 (ou .18) si vous êtes dans la salle TPR2.
     </ul>""",
-    question = """Pour votre serveur racine primaire ou secondaire
-    indiquez l'adresse IP et les modifications faites dans <tt>named.conf</tt>.
+    question = """Indiquez si vous êtes serveur racine primaire ou secondaire
+    ainsi que son adresse IP et les modifications faites dans <tt>named.conf.local</tt>.
     <p>
     Vous aurez 0 points si vous dépassez 10 lignes dans la réponse.
     """,
@@ -352,7 +351,7 @@ add(name="racines zone",
     required=["racines"],
     before = """Mettez à jour le fichier de zone racine de votre serveur DNS
     primaire et relancez le.""",
-    question = """Contenu du fichier de la zone racine&nbsp;:
+    question = """Que vous soyez serveur racine primaire ou secondaire, quel est le contenu du fichier de la zone racine sur votre serveur ?&nbsp;
     <p>
     Vous aurez 0 points si vous dépassez 20 lignes dans la réponse.
     """,
@@ -398,7 +397,7 @@ add(name="directe2",
 add(name="débranche",
     required=["imaginaire2", "autre2", "directe2"],
     question = """Que se passe t-il si vous débranchez le câble réseau
-    du serveur racine primaire et que vous essayez des requêtes&nbsp;:""",
+    du serveur racine primaire et que vous essayez des requêtes&nbsp;?""",
     nr_lines = 10,
     tests = (good_if_contains(''),),
     )
