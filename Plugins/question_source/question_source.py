@@ -22,7 +22,6 @@
 """Displays the question Python source."""
 
 import os
-import configuration
 import cgi
 import compiler
 
@@ -57,12 +56,16 @@ def extract_question(c, question):
     return c[start:end]
 
 def replace_question(c, question, source, state):
+    # Save old file
+    f = open(question.python_file() + '.old', 'w')
+    f.write(''.join(c))
+    f.close()
+
     start, end = question_lines(c, question)
-    f = open(question.python_file() + '.new', 'w')
+    f = open(question.python_file(), 'w')
     f.write(''.join(c[:start]) + source + ''.join(c[end:]))
     f.close()
-    os.rename(question.python_file(), question.python_file() + '.old')
-    os.rename(question.python_file() + '.new', question.python_file())
+
     import plugins
     reload_questions = plugins.Plugin.plugins_dict['reload_questions']
     try:
