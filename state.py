@@ -135,7 +135,7 @@ class StatePlugin:
 
 class State(object):
     def __init__(self, server, ticket, student_name):
-        self.student = student.student(student_name)
+        self.student = self.student_real = student.student(student_name)
         self.ticket = ticket
         statistics.forget_stats()
         self.history = []

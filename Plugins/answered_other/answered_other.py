@@ -36,10 +36,9 @@ def execute(state, plugin, argument):
     if argument not in student.students:
         return
 
-    save = state.student
     state.student = student.students[argument]
     try:
         Plugins.answered.answered.execute(state, plugin, argument)
     finally:
-        state.student = save
+        state.student = state.student_real
     
