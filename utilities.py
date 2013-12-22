@@ -61,7 +61,7 @@ def duration(t):
     return s
 
 def answer_format(t, space=False):
-    t = cgi.escape(str(t)).replace("\n","<p>")
+    t = cgi.escape(str(t)).replace("\n","<br>")
     if space:
         t = t.replace(" ","&#9251;")
     return '<tt class="an_answer">' + t + "</tt>"

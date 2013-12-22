@@ -329,18 +329,29 @@ class Student:
             more = Plugins.question_change_answer.question_change_answer.add_a_link(state, q)
             s += "<h3 class=\"short\">" + q.name + more + "</h3>"
             random.seed(self.seed)
-            s += q.question(state).split('{{{')[0]
+            question_text = q.question(state)
+            s += question_text.split('{{{')[0]
 
             if a.indice >= 0 and a.indice < len(q.indices):
                 s += utilities.list_format(q.indices[:a.indice+1])
 
+            def answer_format(answer):
+                if '{{{' in question_text:
+                    ss = ''
+                    for i in question_text.split('{{{')[1:]:
+                        j = i.split('}}}')
+                        if j[0] in answer:
+                            ss += '<br>' + utilities.answer_format(j[1])
+                else:
+                    ss = utilities.answer_format(answer)
+                return ss
+                
             for b in a.bad_answers:
                 number, message = self.check_answer(b, state)
                 if message:
                     message = "<br>" + message
                 s += utilities.div("bad_answer",
-                                   utilities.answer_format(b) + \
-                                   message)
+                                   answer_format(b) + message)
 
             if a.answered:
                 try:
@@ -349,8 +360,9 @@ class Student:
                     message = '???BUG???'
                 if message:
                     message = "<br>" + message
+                    
                 s += utilities.div("good_answer",
-                                   utilities.answer_format(a.answered) + \
+                                   answer_format(a.answered) + \
                                    '<br>' + q.good_answer + message)
                 if state.student_real.current_role == 'Grader':
                     s += '<br>' + repr(a.grades)
