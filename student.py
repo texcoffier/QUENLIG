@@ -328,7 +328,8 @@ class Student:
             import Plugins.question_change_answer.question_change_answer
             more = Plugins.question_change_answer.question_change_answer.add_a_link(state, q)
             s += "<h3 class=\"short\">" + q.name + more + "</h3>"
-            s += q.question(state)
+            random.seed(self.seed)
+            s += q.question(state).split('{{{')[0]
 
             if a.indice >= 0 and a.indice < len(q.indices):
                 s += utilities.list_format(q.indices[:a.indice+1])
