@@ -570,6 +570,34 @@ class Cisco(Node):
     dot_shape = "rectangle"
     dot_shape_file = "icon-routeur.png"
 
+class Cisco2900(Cisco):
+    names = ('2900', '2901')
+    interfaces_name = {'C0': 'console',
+                       'S0': 'serial 0/0/0', 'S1': 'serial 0/0/1',
+                       'E0': 'gigabitethernet 0/0','E1': 'gigabitethernet 0/1'}
+    ram = 1024*512
+    nvram = 255
+    flash = 250880
+    conf_register = '0x2102'
+    conf_register2 = '0x2142'
+    interrupteur_on_off = True
+    version_bootstrap="15.0(1r)"
+    version_IOS="15.2(4)"
+
+class Cisco2800(Cisco):
+    names = ('2800', '2811')
+    interfaces_name = {'C0': 'console',
+                       'S0': 'serial 0/0/0', 'S1': 'serial 0/0/1',
+                       'E0': 'fastethernet 0/0', 'E1': 'fastethernet 0/1'}
+    ram = 1024*256
+    nvram = 239
+    flash = 62720
+    conf_register = '0x2102'
+    conf_register2 = '0x2142'
+    interrupteur_on_off = True
+    version_bootstrap="12.4(1r)"
+    version_IOS="12.4(3e)"
+
 class Cisco1800(Cisco):
     names = ('1800', '1841')
     interfaces_name = {'C0': 'console',
