@@ -1447,19 +1447,19 @@ class Grade(TestUnary):
            If formula change, they will not be recomputed.
 
        It is done so because recomputing every grade on server start
-       can be long if there is many students.
+       can be long if there are many students.
           
 
     Examples:
        # If the student answers:
        #   * '2' or 'two'    then 'point'       is set to 1.
        #   *        'two'    then 'see_student' is set to 1
-       #   * another integer then 'calculus'    is set to -2
+       #   * integer != 2    then 'calculus'    is set to -2
        #   * not in integer then no grades are changed.
        Good(Grade(Grade(Equal('two'), "see_student", 1)  |  Int(2),
                   "point", 1)
            ),
-       Bad(Grade(~Int(1), "calculus", -2))
+       Bad(Grade(~Int(2), "calculus", -2))
     """
     stop_eval = True
     def __init__(self, expression, teacher, grade):

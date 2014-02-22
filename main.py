@@ -257,7 +257,7 @@ if 'plugins.html' in sys.argv:
     # Now the plugin tree is working
     def display(f, plugin):
         f.write('<tr><td>')
-        f.write(plugin.plugin.doc_html())
+        f.write(unicode(plugin.plugin.doc_html(), 'latin-1').encode('utf-8'))
         f.write('<table class="plugin">')
         for p in plugin.full_content:
             display(f, p)
@@ -290,6 +290,7 @@ if 'plugins.html' in sys.argv:
         
     f = open(os.path.join('Documentation', 'plugins.html'), 'w')
     f.write('''<html>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <script src="doc.js"></script>
 <body onload="make_style()" onclick="setTimeout('make_style()',100)">
 <style>

@@ -20,9 +20,9 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 """
-This plugin allow to do an autoevaluation of questions and students.
+This plugin allow to do an autoevaluation of questions and students level.
 
-These is no more question choice for students.
+There is no more question choice for students.
 
 To make it work, the ACLS: Students/SESSION/Logs/Student/acls
 Must be set to :
