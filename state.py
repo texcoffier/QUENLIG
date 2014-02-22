@@ -144,15 +144,18 @@ class State(object):
         self.client_ip = None
         self.client_browser = None
         self.update(server)
-        lang = server.headers.get('accept-language','')
+        self.option = None
+        self.update_language(server)
+        self.update_plugins()
+
+    def update_language(self, server):
+        self.lang = lang = server.headers.get('accept-language','')
         lang = lang.lower().replace(';',',').replace('-','_')
         lang = [x for x in lang.split(',')
                 if len(x) == 2] # XXX Should test if the translation exists
         if 'fr' not in lang:
             lang.append('fr')
         self.localization = tuple(lang)
-        self.option = None
-        self.update_plugins()
 
     def init_option(self, plugin):
         option = plugin.plugin[self.localization, "option_name"]
@@ -362,6 +365,10 @@ def get_state(server, ticket):
 
     if ticket in states: # The ticket is known
         if states[ticket].ticket_valid(server): # The ticket is valid
+            if states[ticket].lang != server.headers.get('accept-language',''):
+                states[ticket].update_language(server)
+                states[ticket].old_role = ''
+                states[ticket].update_plugins()
             return states[ticket]
         print 'Ticket no more valid (too old or other changes), forget it.'
         # del states[ticket]
