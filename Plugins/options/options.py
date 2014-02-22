@@ -40,8 +40,11 @@ def the_options(state, m_plugin):
         a_plugin = plugin.plugin
         name = a_plugin["", "option_name"]
         if name:
+            hlp = a_plugin[state.localization, "option_help"]
+            hlp = hlp.split('\n',1)
+            hlp = '<b>' + hlp[0] + '</b><br>' + hlp[1]
             t.append( ['<b>' + name + '</b><br><small>' + a_plugin.css_name,
-                       a_plugin[state.localization, "option_help"],
+                       hlp,
                        a_plugin[state.localization, "option_default"],
                        '<TEXTAREA name="option__%s">' % a_plugin.css_name
                        + cgi.escape(plugin.option)

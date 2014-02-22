@@ -29,7 +29,8 @@ priority_execute = '-question' # Check before displaying question
 acls = { 'Student': ('executable',) }
 
 option_name = 'max-thinking-time'
-option_help = """A Python dictionnary with the maximum number of minutes
+option_help = """"{'':60, 'student1': 90}"\n
+        A Python dictionnary with the maximum number of minutes
  	of work time per student. The key is the student ID.
 	The '' key indicates the default time."""
 option_default = "{'':100*60, 'guest_john_doe': 60}"

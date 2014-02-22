@@ -50,7 +50,7 @@ def option_set(plugin, value):
     plugin.state.single_session = value == 'single'
 
 option_name = 'session'
-option_help = '''single or multiple
+option_help = '''"single" or "multiple"
         If 'single', a user can have one one session active at a time.
         So it is not possible to have 2 roles on 2 web pages.
         But time accounting is better because students can not
