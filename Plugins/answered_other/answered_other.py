@@ -41,4 +41,5 @@ def execute(state, plugin, argument):
         Plugins.answered.answered.execute(state, plugin, argument)
     finally:
         state.student = state.student_real
+        state.current_role = state.role_real
     

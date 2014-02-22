@@ -45,7 +45,7 @@ def option_set(dummy_plugin, value):
 def execute(state, dummy_plugin, dummy_argument):
 
     state.student.allowed_to_change_answer = False
-    if state.student.current_role == 'Teacher':
+    if state.current_role == 'Teacher':
         state.student.allowed_to_change_answer = True
         return ''
     if state.question is None:

@@ -150,7 +150,7 @@ def update_role(state, astudent, role):
     # Update current_acls from the parent
     if role_student != astudent:
         # If not the tree root, update from parent value
-        astudent.old_role = astudent.current_role
+        state.old_role = state.current_role
         assert(len(role_student.roles) == 1)
         update_role(state, role_student, role_student.current_role)
 
@@ -188,7 +188,7 @@ def update_role(state, astudent, role):
     return True
 
 def update_my_role(state):
-    if state.student.current_role == state.student.old_role:
+    if state.current_role == state.old_role:
         return False
 
     # Clear the plugin ACLS
@@ -198,7 +198,7 @@ def update_my_role(state):
         else:
             plugin.current_acls.reset()
 
-    c = update_role(state, state.student, state.student.current_role)
+    c = update_role(state, state.student, state.current_role)
 
     return c
 
@@ -228,11 +228,15 @@ def execute(state, plugin=None, argument=None):
 def reload():
     """Reinitialize all the ACLS"""
 
-    for a_student in student.students.values():
+    import state
+    for s in state.states.values():
         try:
             # del a_student.roles
-            a_student.old_role = 'non existent role'
-            del a_student.acls # Must recompute ACLS
+            s.old_role = 'non existent role'
+            try:
+                del s.acls # Must recompute ACLS
+            except KeyError:
+                pass
         except AttributeError:
             pass
 
@@ -245,7 +249,6 @@ def reload():
     #    An user update the plugins and so call 'acls.reload()'
     #    The user change of role
     # The permanent rights are lost, so we compute them here in case
-    import state
     for a_state in state.states.values():
         execute(a_state)
 

@@ -28,4 +28,3 @@ acls = { 'Default': ('executable',) }
 
 def execute(state, plugin, argument):
     return configuration.version
-

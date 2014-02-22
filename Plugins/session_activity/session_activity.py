@@ -25,19 +25,19 @@ currently in this role."""
 import collections
 import time
 import statistics
+import state
 
 priority_display = 'role'
 # font_size = "70%"
 # color = "#999"
 acls = { 'Teacher': ('executable',) }
 
-def execute(state, plugin, argument):
-    stats = statistics.question_stats()
+def execute(the_state, plugin, argument):
     roles = collections.defaultdict(int)
     t = time.time()
 
-    for s in stats.all_students:
-        if t - s.the_time_last < 10 * 60:
+    for s in state.states.values():
+        if t - s.start < 10 * 60:
             try:
                 roles[s.current_role] += 1
             except AttributeError:

@@ -136,6 +136,8 @@ class StatePlugin:
 class State(object):
     def __init__(self, server, ticket, student_name):
         self.student = self.student_real = student.student(student_name)
+        self.current_role = self.role_real = 'Student'
+        self.old_role = ''
         self.ticket = ticket
         statistics.forget_stats()
         self.history = []
@@ -301,7 +303,6 @@ class State(object):
                 plugin.value = None
                 continue
 
-
             # Dans ACLS le plugin content est mis a jours
             plugin_argument = self.form.get(plugin.plugin.css_name, None)
             try:
@@ -335,7 +336,7 @@ class State(object):
         return 'text/html', self.full_page
 
     def close(self):
-        self.student.old_role = None
+        self.old_role = None
         del states[self.ticket]
 
 
@@ -374,15 +375,16 @@ def get_state(server, ticket):
     except IOError:
         return get_state(server, "") # Invalid ticket, ask a new one
     
-    # Search if it is a new ticket for an existing student
-    for s in states.values():
-        if s.student.filename == student_name:
-            print 'Affect the new ticket to an existing session.'
-            del states[s.ticket]
-            states[ticket] = s
-            s.ticket = ticket
-            s.update(server)
-            return s
+    if getattr(plugins.Plugin.plugins_dict['role'], 'single_session', False):
+        # Search if it is a new ticket for an existing student
+        for s in states.values():
+            if s.student.filename == student_name:
+                print 'Affect the new ticket to an existing session.'
+                del states[s.ticket]
+                states[ticket] = s
+                s.ticket = ticket
+                s.update(server)
+                return s
 
     print 'Session created for ticket', ticket
     

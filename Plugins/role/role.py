@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2014 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -45,6 +45,18 @@ default_roles = {
     'Admin'     : ["Default"],
     'Developer' : ["Default"],
     }
+
+def option_set(plugin, value):
+    plugin.state.single_session = value == 'single'
+
+option_name = 'session'
+option_help = '''single or multiple
+        If 'single', a user can have one one session active at a time.
+        So it is not possible to have 2 roles on 2 web pages.
+        But time accounting is better because students can not
+        open multiple questions at the same time.
+'''
+option_default = "multiple" 
     
 def update_roles(astudent):
     """Initialize the role list for the student and its 'ancestors'""" 
@@ -69,20 +81,19 @@ def update_roles(astudent):
     for role in astudent.roles:
         update_roles( student.student(role) )
 
-
 def execute(state, plugin, argument):
     state.start = time.time()
 
     update_roles(state.student)
 
     if argument in state.student.roles: # Change the role if possible
-        state.student.current_role = argument
-        state.student.old_role = None
+        state.current_role = argument
+        state.old_role = None
     s = []
     for role in state.student.roles:
         if role in ('Default', 'Wired'):
             continue
-        if role == state.student.current_role:
+        if role == state.current_role:
             selected = 'selected'
         else:
             selected = ''
@@ -94,10 +105,3 @@ def execute(state, plugin, argument):
     return '''
 <select onChange="window.location = '%s?%s=' + value ;">
 ''' % (state.url_base_full, plugin.plugin.css_name) + '\n'.join(s) + '</select>'
-    
-
-    
-
-
-    
-
