@@ -35,7 +35,7 @@ function encode_uri(t)
 {
   return encodeURI(t).replace(/\?/g, "%3F").replace(/#/g, "%23")
     .replace(/[.]/g, "%2E").replace(/;/g, "%3B").replace(/&/g, "%26")
-    .replace(/\//g, "%2F").replace(/,/g, "%2C").replace('+', '%2B') ;
+    .replace(/\//g, "%2F").replace(/,/g, "%2C").replace(/[+]/g, '%2B') ;
 }
 '''
 
