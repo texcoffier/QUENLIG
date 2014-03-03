@@ -1499,7 +1499,7 @@ class GRADE(Grade):
 
 def random_chooser(state, key, values):
     if state:
-        return values[(state.student.seed + hash(key)) % len(values)]
+        return values[(state.student.seed + abs(hash(key))) % len(values)]
     else:
         return values[0]
 
