@@ -1105,6 +1105,8 @@ afsdfsf
                     utilisez un groupe""")),
         Reject("$", """Pas besoin d'indiquer de fin de ligne, puisque
                seul le début vous intéresse"""),
+        Reject("-e", """Pas besoin d'indiquer de l'option <tt>-e</tt>
+               car il n'y a qu'une seule commande"""),
         Good(Shell(Equal("sed 's/.*X/ &/'"))),
         Good(Shell(Equal("sed -r 's/(.*X)/ \\1/'"))),
         shell_display,
