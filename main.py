@@ -573,9 +573,13 @@ if __name__ == "__main__":
             sys.exit(0)
         elif action == 'stop-loading':
             # DO NOT USE WHEN THE SESSION IS NOT FULLY TERMINATED.
+            
             # Usage example, to stop loading after one hour of student time.
             # stop-loading 'lambda s:s.time_searching()+s.time_after()>3600'
             # I use it to know student rank after one hour of work
+
+            # To have a session snapshot at a fixed time
+            # stop-loading "lambda s:s.logs and s.logs[-1][0] > 1393400000"
             import student
             student.stop_loading_default = eval(args.pop())
         else:
