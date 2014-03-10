@@ -30,7 +30,8 @@ import state
 priority_display = 'role'
 # font_size = "70%"
 # color = "#999"
-acls = { 'Teacher': ('executable',) }
+acls = { 'Teacher': ('executable',), 'Admin': ('executable',),
+         'Developer': ('executable',), 'Author': ('executable',), }
 
 def execute(the_state, plugin, argument):
     roles = collections.defaultdict(int)
