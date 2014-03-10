@@ -36,5 +36,5 @@ add(name="intro",
     avec comme proxy&nbsp;: <tt>%(proxy)s</tt>
     """ % conf,
     question = "Combien de <em>modules</em> CCNA trouve-t-on sur la page web&nbsp;?",
-    tests = ( require_int(), good("4") ),
+    tests = ( require_int(), good("4"), good('5') ),
     )

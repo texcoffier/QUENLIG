@@ -84,7 +84,7 @@ add(name="minicom",
     Si <tt>minicom</tt> proteste à cause d'un verrou et qu'il
     est lancé une seule fois alors détruisez le verrou (<tt>/var/lock/...</tt>)
     <p>
-    <b>En cas d'interdiction d'acces, passez <tt>root</tt>
+    <b>En cas d'interdiction d'accès, passez <tt>root</tt>
        avant de lancer minicom</b>
     """,
     question = """Ouvrez un terminal et lancez <tt>minicom -D /dev/ttyS1</tt>.
@@ -329,7 +329,7 @@ add(name="commande incomplète",
     tests = ( yes("Montrez cela à un enseignant"), ),
     good_answer = """Cela fonctionne car vous avez tapez suffisemment
     de lettres de la commande pour qu'il n'y ai pas d'ambiguïté.
-    Cette pratique est déconseillée quand on fait des script.
+    Cette pratique est déconseillée quand on fait des scripts.
     <p>
     <b>DANS LA SUITE DU TP, TOUTE COMMANDE INCOMPLÈTE SERA REFUSÉE</b>
     """,

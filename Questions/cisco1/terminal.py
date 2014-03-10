@@ -104,9 +104,7 @@ add(name="quitter",
 add(name="password enable",
     required=["intro", "doc:intro"],
     before = """La documentation concernant les mots de passe
-    est dans le 'module 2'.
-    Une fois dans le module 2, allez dans le menu déroulant
-    et prenez le troisième choix.
+    est dans le module 1 chapitre 11.
     <p>""" + en_mode_config,
     question="""Quelle commande tapez-vous pour assigner le mot de passe
     <tt>cisco</tt> au passage en mode privilégié

@@ -45,12 +45,14 @@ add(name="intro",
     En répondant à la moitié des questions sans faire aucune erreur
     et sans demander d'indice, vous avez au mieux 5/20.
 -->
+<!--
 <p><b>
 A la fin de la deuxième séance, vous rendez les feuilles MANUSCRITES
 sur lesquelles vous avez pris vos notes au cours des 2 séances de TP.
 On ne vous demande pas un compte rendu de TP.
 Vous serez noté en fonction de la pertinence de vos notes.
 </b>
+-->
 
     <p>
     En dehors des séances vous ne pourrez plus continuer ce TP,
