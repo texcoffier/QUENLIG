@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2010 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2010-2014 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
+#    Contact: Thierry.EXCOFFIER@univ-lyon1.fr
 
 """Display the questions and answers of any student.
 This plugin link is not visible on the web page.
@@ -37,9 +37,10 @@ def execute(state, plugin, argument):
         return
 
     state.student = student.students[argument]
+    saved_role = state.current_role
     try:
         Plugins.answered.answered.execute(state, plugin, argument)
     finally:
         state.student = state.student_real
-        state.current_role = state.role_real
+        state.current_role = saved_role
     

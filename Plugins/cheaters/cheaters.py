@@ -23,7 +23,6 @@
 
 import utilities
 import statistics
-import questions
 
 container = 'analyse'
 priority_execute = '-question_answer'
