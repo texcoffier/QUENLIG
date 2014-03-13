@@ -55,6 +55,28 @@ class Student:
     """Student work log"""
     writable = True
 
+    def read_log(self):
+        # Read log file
+        try:
+            f = open(os.path.join(self.file, 'log'), "r")
+            content = f.readlines()
+            f.close()
+        except IOError:
+            content = ()
+                            
+        for c in content:
+            c = c[:-1].split("")
+            decal = int(len(c) == 5) # In order to read old log files
+
+            question_name = c[0]
+            action_time = float(c[1])
+            command = c[2+decal]
+            try:
+                value = unquote(c[3+decal])
+            except:
+                value = None
+            yield question_name, action_time, command, value
+
     def __init__(self, name, stop_loading=lambda x: False):
         """Initialise student data or read the log file"""
         self.filename = name.translate(utilities.safe_ascii)
@@ -75,25 +97,7 @@ class Student:
 
         self.answerables_cache = None
 
-        # Read log file
-        try:
-            f = open(os.path.join(self.file, 'log'), "r")
-            content = f.readlines()
-            f.close()
-        except IOError:
-            content = ()
-                            
-        for c in content:
-            c = c[:-1].split("")
-            decal = int(len(c) == 5) # In order to read old log files
-
-            question_name = c[0]
-            action_time = float(c[1])
-            command = c[2+decal]
-            try:
-                value = unquote(c[3+decal])
-            except:
-                value = None
+        for question_name, action_time, command, value in self.read_log():
             answer = self.answer(question_name)
             answer.eval_action(action_time, command, value)
             self.update_time(action_time, answer, command)
