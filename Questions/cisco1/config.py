@@ -30,7 +30,8 @@ add(name="version",
     derrière.
     """,
     tests = (
-    good_if_contains("{C0.remote_port.host.version_IOS}", parse_strings=host ),
+    #good_if_contains("{C0.remote_port.host.version_IOS}", parse_strings=host),
+    HostCiscoIOS(),
     reject("{C0.remote_port.host.version_bootstrap}",
         """Non c'est la version du programme qui charge l'IOS
         dans la mémoire du routeur&nbsp;: c'est l'équivalent

@@ -219,6 +219,7 @@ add(name="initialiser",
     tests = ( yes("Répondez OUI s'il vous plait"), ),
     )
 
+# XXX : paramètre dépendant du routeur
 add(name="aide commande",
     required=['initialiser'],
     before = """Quand vous tapez une commande, vous pouvez à n'importe
@@ -240,7 +241,8 @@ add(name="aide commande",
     require_int(),
     good("3"),
     good("4"),
-    bad("5", """Non, il y a la même commande deux fois.
+    good("5"),
+    bad("6", """Non, il y a la même commande deux fois.
     En effet <tt>*s=show</tt> indique que vous pouvez taper <tt>s</tt>
     au lieu de <tt>show</tt>"""),
     ),

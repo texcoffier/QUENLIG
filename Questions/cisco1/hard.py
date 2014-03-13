@@ -134,8 +134,7 @@ add(name="ram",
     """,
     tests=(
     require_int(),
-    good("{C0.remote_port.host.ram}", parse_strings=host,
-         replace=((' ',''), ('k',''), ('o',''), ('K',''))),
+    HostCiscoRAM(),
     ),
     indices = (
     """Dans la ligne indiquant la quantité de mémoire,
@@ -155,7 +154,7 @@ add(name="nvram",
     y-a-t-il dans le routeur CISCO&nbsp;?""",
     tests=(
     require_int(),
-    good("{C0.remote_port.host.nvram}", parse_strings=host),
+    HostCiscoNVRAM(),
     ),    
     )
 add(name="flash",
@@ -176,7 +175,7 @@ add(name="flash",
     y-a-t-il dans le routeur CISCO&nbsp;?""",
     tests=(
     require_int(),
-    good("{C0.remote_port.host.flash}", parse_strings=host),
+    HostCiscoFlash(),
     ),    
     )
 

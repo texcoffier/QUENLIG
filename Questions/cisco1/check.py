@@ -575,56 +575,57 @@ class Cisco2900(Cisco):
     interfaces_name = {'C0': 'console',
                        'S0': 'serial 0/0/0', 'S1': 'serial 0/0/1',
                        'E0': 'gigabitethernet 0/0','E1': 'gigabitethernet 0/1'}
-    ram = 1024*512
-    nvram = 255
-    flash = 250880
+    ram = (1024*512,)
+    nvram = (255,)
+    flash = (250880,)
     conf_register = '0x2102'
     conf_register2 = '0x2142'
     interrupteur_on_off = True
     version_bootstrap="15.0(1r)"
-    version_IOS="15.2(4)"
+    version_IOS = ("15.2(4)",)
 
 class Cisco2800(Cisco):
     names = ('2800', '2811')
     interfaces_name = {'C0': 'console',
                        'S0': 'serial 0/0/0', 'S1': 'serial 0/0/1',
                        'E0': 'fastethernet 0/0', 'E1': 'fastethernet 0/1'}
-    ram = 1024*256
-    nvram = 239
-    flash = 62720
+    ram = (1024*256,1024*128)
+    nvram = (239,191)
+    flash = (62720,)
     conf_register = '0x2102'
     conf_register2 = '0x2142'
     interrupteur_on_off = True
     version_bootstrap="12.4(1r)"
-    version_IOS="12.4(3e)"
+    version_IOS = ("12.4(3e)", "12.4(18e)", "12.4(18r)",
+                   "12.4(1c)")
 
 class Cisco1800(Cisco):
     names = ('1800', '1841')
     interfaces_name = {'C0': 'console',
                        'S0': 'serial 0/0/0', 'S1': 'serial 0/0/1',
                        'E0': 'fastethernet 0/0', 'E1': 'fastethernet 0/1'}
-    ram = 1024*128
-    nvram = 191
-    flash = 31360
+    ram = (1024*128,)
+    nvram = (191,)
+    flash = (31360,)
     conf_register = '0x2102'
     conf_register2 = '0x2142'
     interrupteur_on_off = True
     version_bootstrap="12.3(8r)"
-    version_IOS="12.4(1c)"
+    version_IOS = ("12.4(1c)", )
 
 class Cisco1700(Cisco):
     names = ('1700', '1721')
     interfaces_name = {'C0': 'console',
                        'S0': 'serial 0', 'S1': 'serial 1',
                        'E0': 'fastethernet 0'}
-    ram = 1024*64
-    nvram = 32
-    flash = 32768
+    ram = (1024*64,)
+    nvram = (32,)
+    flash = (32768,)
     conf_register = '0x2102'
     conf_register2 = '0x2142'
     interrupteur_on_off = True
     version_bootstrap="12.2(7r)"
-    version_IOS="12.2(11)"
+    version_IOS = ("12.2(11)", )
 
 class Cloud(Node):
     dot_shape = "none"
@@ -970,6 +971,33 @@ class HostCiscoModele(HostTest):
         if student_answer in host.C0.remote_port.host.names :
             return True
 
+class HostCiscoRAM(HostTest):
+    def test_host(self, student_answer, string, state, host):
+        if int(student_answer) in host.C0.remote_port.host.ram:
+            return True
+        
+class HostCiscoNVRAM(HostTest):
+    def test_host(self, student_answer, string, state, host):
+        if int(student_answer) in host.C0.remote_port.host.nvram:
+            return True
+        
+class HostCiscoFlash(HostTest):
+    def test_host(self, student_answer, string, state, host):
+        if int(student_answer) in host.C0.remote_port.host.flash:
+            return True
+        
+class HostCiscoIOS(HostTest):
+    def test_host(self, student_answer, string, state, host):
+        if ('(' not in student_answer
+            or ')' not in student_answer
+            or '.' not in student_answer
+            ):
+            return False, "On vous a dit que le numéro de version était de la forme : <b>???.???(???)</b>"
+        student_answer = student_answer.split(')')[0] + ')'
+        for ios in host.C0.remote_port.host.version_IOS:
+            if ios == student_answer:
+                return True
+
 class HostCiscoNrSerials(HostTest):
     def test_host(self, student_answer, string, state, host):
         if int(student_answer) == len(
@@ -1043,8 +1071,8 @@ postes = (
 
 import socket
 
-if socket.gethostname() == 'lirispaj':
+if 'lirispaj' in socket.gethostname():
     postes[0][0] = "134.214.142.30"
-elif socket.gethostname() == 'pundit':
+elif 'pundit' in socket.gethostname():
     postes[1][0] = "127.0.1.1"
 
