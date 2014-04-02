@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2014 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,14 @@ content_is_title = True
 container = 'menu'
 acls = { 'Wired': ('executable',) }
 
-def execute(state, plugin, argument):
-    return state.student.name
+def execute(state, plugin, dummy_argument):
+    s = state.student.name
+    firstname = state.student.informations.get('firstname', '')
+    surname = state.student.informations.get('surname', '')
+    if firstname:
+        if (firstname.lower() not in s.lower()
+            and surname.lower() not in s.lower()
+            ):
+            s += '<br>' + firstname.title() + ' ' + surname
+    return s
 

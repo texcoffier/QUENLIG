@@ -29,7 +29,7 @@ import student
 
 prototype = 'answered' # Same plugin
 acls = { 'Teacher': ('executable',), 'Grader': ('executable',),
-         'Admin': ('executable',) }
+         'Admin': ('executable',), 'Author': ('executable',)}
 link_to_self = False
 
 def execute(state, plugin, argument):

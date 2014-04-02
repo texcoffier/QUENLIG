@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007,2010 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007,2014 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,11 +21,9 @@
 
 """Display all the questions and answer given by the connected student."""
 
-import statistics
-
 container = 'action'
 link_to_self = True
-priority_execute = '-question_answer'
+priority_execute = 10 # to be sure that the plugin retrieving mail is executed
 acls = { 'Default': ('executable',), 'Admin': ('!executable',) }
 
 css_attributes = (
@@ -39,6 +37,10 @@ css_attributes = (
 def execute(state, plugin, argument):
     if argument and state.student:
         if argument != '1':
+            mail = state.student.informations.get('mail')
+            if mail:
+                argument += ' <small><a href="mailto:%s">%s</a></small>' % (
+                    mail, mail)
             s = '<h2 class="answered_by">%s</h2>' % argument
         else:
             s = ''

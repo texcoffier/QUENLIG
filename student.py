@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2006 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2014 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,15 +30,14 @@ are destroyed and recreated.
 
 import time
 import os
+import cgi
+import random
+import collections
 import questions # Only for nr_indices and any_questions
 import utilities
 import answer
-import cgi
 import configuration
 import statistics
-import sys
-import random
-import collections
 
 def unquote(s):
     "Anybody has a better idea for this complex function?"
@@ -90,6 +89,11 @@ class Student:
         self.last_asked_question = ""
         self.answerable_any = False
         self.logs = []
+        # The informations dict is filled by your plugins.
+        # Do not fill it here.
+        # Recommended keys : mail, firstname, surname
+        # The mail will be automaticaly used if found.
+        self.informations = {}
         try:
             os.mkdir(self.file)
         except OSError:
@@ -306,7 +310,7 @@ class Student:
             if a.grades:
                 p += repr(a.grades)
             for teacher, grade in a.grades.items():
-                summed[teacher] += int(grade)
+                summed[teacher] += float(grade)
         return summed
 
     def answered_page(self, state):
@@ -479,7 +483,7 @@ class Student:
         if subject == None:
             subject = configuration.questions
         return "<A HREF=\"mailto:%s?subject=%s&body=%s\">%s</A>" % (
-            '????',
+            self.informations.get('mail', self.filename),
             subject.replace("\"",'%27'),
             body.replace("\"",'%27').replace('\n','%0A'),
             self.name

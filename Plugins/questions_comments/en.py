@@ -11,7 +11,7 @@ translations = {
     '//c3': 'Date',
     '//c0>SPAN': "The commented question. It's None if there was no active question",
     '//c1>SPAN': "The comment",
-    '//c2>SPAN': "The student login, you can click on it to send a mail",
+    '//c2>SPAN': "Display the student answers",
     '//c3>SPAN': "The comment date",
     '//CAPTION': 'The students comments',
     }
