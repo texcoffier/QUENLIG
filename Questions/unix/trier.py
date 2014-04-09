@@ -46,6 +46,7 @@ add(name="simple",
     de trier les lignes du fichier <tt>/etc/passwd</tt>
     dans l'ordre standard (celui des codes ASCII)""",
     tests=(
+    reject((';','|'), "Vous n'avez besoin que d'une seule commande."),
     shell_good("sort /etc/passwd"),
     shell_bad("sort </etc/passwd",
               "Ça marche, mais il y a un poil plus simple"),
@@ -183,9 +184,9 @@ add(name="uid passwd",
     shell_display,
     ),
     indices=(
-    """Il faut faire un pipeline""",
-    """Pour extraire les UID on utilise la commande permettant d'extraire
-    une colonne d'un fichier""",
+        """Pour extraire les UID on utilise la commande permettant d'extraire
+           une colonne d'un fichier""",
+        """La colonne contenant les UID est indiquée dans le manuel.""",
     ),
     )
 
@@ -291,12 +292,13 @@ add(name="longueur",
     </ul>
     """,
     tests=(
+    Reject("(while", """La boucle <tt>while</tt> défini un bloc d'instruction,
+    pas besoin d'ajouter des parenthèses."""),
     shell_good( 'while read A ; do echo "$(expr length "$A") $A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace_sed),
     shell_good( 'while read A ; do echo $(expr length "$A")" $A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace_sed),
     shell_good( 'while read A ; do echo $(expr length "$A") "$A" ; done | sort -n | sed "s/[^ ]* //"', dumb_replace=dumb_replace_sed),
     shell_display,
         ),
     )
-    
  
 

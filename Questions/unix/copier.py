@@ -45,15 +45,17 @@ add(name="simple",
     question="""Donnez la ligne de commande permettant de copier le fichier
     texte <tt>A</tt> dans le fichier texte <tt>B</tt>""",
     tests=(
+    shell_bad("cat A >B",
+              """Cela fonctionne, mais on vous demande d'utiliser
+              la commande de copie"""),
     shell_good("cp A B"),
     shell_bad("cp a b",
               """<tt>A</tt> dans <tt>B</tt>, pas <tt>a</tt> dans <tt>b</tt>.
               Avec unix, minuscules et majuscules sont différentes."""),
     expect(('cp', 'A', 'B')),
-    shell_bad("cat A >B",
-              """Cela fonctionne, mais on vous demande d'utiliser
-              la commande de copie"""),
     reject("./", "Le <tt>./</tt> est inutile"),
+    Reject(">", """On a pas besoin de rediriger la sortie standard de la
+           commande 'cp', d'ailleur 'cp' n'affiche rien sur cell-ci."""),
     shell_display,
     ),
     )

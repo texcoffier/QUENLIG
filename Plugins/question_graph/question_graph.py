@@ -123,4 +123,4 @@ graph[charset="Latin1", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
     except UnicodeEncodeError:
         print "SVG: UnicodeEncodeError"
         
-    return '<div style="width:40em;overflow:auto">' + svg + '</div>'
+    return '<div style="text-align:left; width:100%">' + svg + '</div>'

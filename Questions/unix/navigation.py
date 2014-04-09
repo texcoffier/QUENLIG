@@ -241,7 +241,7 @@ add(name="répertoire courant",
     """ + image,
     question="""Si <tt>/usr</tt> est le répertoire courant,
     quel est le chemin relatif le plus court indiquant
-    <tt>/usr/bin</tt>""",
+    <tt>/usr/bin</tt>&nbsp?""",
     tests=(
     good("bin"),
     require_relative_name,

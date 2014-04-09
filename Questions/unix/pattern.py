@@ -33,7 +33,7 @@ add(name="intro",
     commence par la lettre 'a'""",
     tests=(
     shell_good("echo /etc/a*"),
-    shell_bad("echo /etc/*a",
+    shell_bad(("echo /etc/*a", "echo /etc/*a*"),
               "On vous a dit : <b>commence par la lettre <tt>a</tt></b>"),
     etc_required, echo_required,
     reject('|', """On utilise que la commande <tt>echo</tt>, aucune autre
@@ -168,6 +168,7 @@ add(name="sous répertoires",
               "Cela affiche aussi les fichiers dans <tt>/etc</tt>"),
     shell_bad("echo /etc/.", "Cela affiche <tt>/etc/.</tt>"),
     reject('ls', 'On a pas besoin de <tt>ls</tt>'),
+    reject('-', "On a pas besoin d'option"),
     ),
     indices=("Seul un répertoire peut contenir un fichier nommé '.'",
              """On peut mettre une étoile entre deux <tt>/</tt> elle
@@ -182,6 +183,8 @@ add(name="fini par tilde",
     répertoires contenus dans le répertoire courant dont le nom se
     termine par <tt>~</tt> (tilde)""",
     tests=(
+    reject('echo ~',
+           'Dans le répertoire courant, pas le répertoire de connexion'),
     shell_good("echo *~"),
     echo_required,
     require_star,

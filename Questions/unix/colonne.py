@@ -48,6 +48,7 @@ add(name="extraire",
         """Cette commande ne comprend pas la notion de champs et de
         délimiteurs. Elle travaille seulement avec des caractères."""),
     bad("column", "Cette commande recrée un tableau à partir de colonnes"),
+    reject("-", "Juste le nom de la commande sans option"),
     good("cut"),
     ),
     indices=("C'est le verbe 'couper' en anglais",
@@ -85,6 +86,8 @@ add(name="utilisateurs",
     dans la variable <tt>A</tt> la liste des logins
     d'utilisateurs définis dans <tt>/etc/passwd</tt>.""",
     tests=(
+    require('/etc/passwd',
+            'Ou avez-vous indiqué le nom du fichier à traiter&nbsp;?'),
     reject("<", "Ne faites pas de redirections inutiles"),
     require("1", "Vous n'indiquez pas que la colonne des utilisateurs est la première"),
     require("$", """Les prérequis vous indiquent
@@ -155,7 +158,7 @@ add(name="espaces multiples",
               """L'espace n'est pas un caractère spécial pour les expressions
               régulière, donc pas besoin de le protéger""",
                dumb_replace=remplacer.dumb_replace),
-    require('[', "Vous devez faire un pipeline"),
+    require('|', "Vous devez faire un pipeline"),
     Bad(Comment(~End('5'),
                  """Dans la commande <tt>cut</tt>, il est plus intuitif
                     d'indiquer le séparateur de champs avant d'indiquer

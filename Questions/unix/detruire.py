@@ -71,13 +71,9 @@ add(name="problèmes",
     fichiers (pas répertoire) nommés <tt>*</tt> et <tt>-z</tt>""",
     tests=(
     shell_good("rm '*' -z"),
-    shell_good("rm '*' ./-z",
-               """Le <tt>./</tt> devant <tt>z</tt>
-               est inutile car on considère qu'il n'y a plus d'options
-               après la première chose qui n'est pas une option (<tt>*</tt>
-               dans cet exemple)"""),
+    shell_good("rm '*' ./-z"),
     shell_good("rm ./-z '*'",
-               "La réponse attendue était <tt>rm '*' -z</tt>"),
+               "La réponse attendue était <tt>rm '*' ./-z</tt>"),
     expect('rm'),
     number_of_is('rm', 1, "On lance la commande une seule fois."),
     shell_reject("<argument>./*</argument>",
@@ -114,8 +110,8 @@ add(name="pattern",
            """L'option <tt>f</tt> de <tt>rm</tt> est dangereuse.
            Il faut l'utiliser en connaissance de cause."""),
     reject('-', "On a besoin d'aucune option pour répondre."),
-    reject('/', """Le caractère <tt>/</tt> indique que l'on
-    indique un nom dans un autre répertoire, hors les fichiers à détruire
+    reject('/', """Le caractère <tt>/</tt> signifie que
+    que le nom est dans un autre répertoire, or les fichiers à détruire
     sont dans le répertoire courant, ce n'est donc pas la peine"""),
     answer_length_is(6, "La réponse à cette question est en 6 caractères"),
     expect('rm'),
@@ -132,7 +128,10 @@ add(name="pattern arbre",
     question="""Donnez la ligne de commande permettant de détruire
     tous les fichiers texte dont le nom se termine par <tt>.o</tt>
     dans le répertoire courant et toute la hiérarchie de répertoires
-    au dessous.""",
+    au dessous.
+<p>
+La réponse est la plus simple possible (sans pipe).
+""",
     tests=(
     reject('-delete',
            """On vous demande de répondre à cette question sans l'option
@@ -144,6 +143,8 @@ add(name="pattern arbre",
             "On cherche les fichiers dans la hiérarchie avec <tt>find</tt>"),
     reject('~', "Pourquoi y-a-t-il un tilde dans votre réponse&nbsp;?"),
     reject('|', "On ne veut pas faire de <em>pipe</em>"),
+    reject('./*', """En indiquant './*' vous oubliez les fichiers cachés.
+           Vous devez simplement utiliser '.'"""),
     shell_good("find . -name '*.o' -exec rm {} \;",
                dumb_replace=dumb_replace),
     shell_good( ( "rm $(find . -name '*.o')",

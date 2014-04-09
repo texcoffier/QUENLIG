@@ -369,6 +369,7 @@ add(name="show liste",
     tests = ( require_int(),
               good("4"),
               good("3"),
+              good("5"),
               good("2"), # Anciens IOS
               ),
     )

@@ -54,7 +54,11 @@ un</pre></tr></table>
     tests = (
         Reject('text', """Le texte « Ceci est un texte court, très court. »
                ne fait pas parti de votre réponse, c'était un exemple."""),
-        Expect('sort'),
+        Reject('tr -',
+               "Pas besoin d'indiquer d'option à la commande <tt>tr</tt>"),
+        Reject('[', "Il ne faut pas indiquer les crochets !"),
+        Expect('sort', """On veut la liste des mots utilisés, il faut donc
+        trier la liste"""),
         Expect('tr'),
         Expect('|',
                """Il faut combiner la commande <tt>tr</tt>

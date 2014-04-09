@@ -47,6 +47,8 @@ add(name="intro",
     tests=(
     reject('move', """Généralement, les noms des commandes les plus utilisées
     sont sur 2 caractères pour être plus rapide à taper."""),
+    reject('/', """Les fichiers à manipuler sont dans le répertoire courant,
+    Il n'y a donc pas besoin d'indiquer un chemin avec '/'"""),
     shell_good("mv a b"),
     shell_good( ("mv ./a ./b", "mv a ./b", "mv ./a b"),
                 "<tt>mv a b</tt> est plus simple et plus court"),

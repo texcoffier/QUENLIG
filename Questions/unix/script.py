@@ -89,7 +89,7 @@ add(name="shift",
 add(name="ifrm",
     required=["paramètre", "test:intro", "sh:si", "detruire:simple"],
     question = """Quel est le script d'une seule ligne qui détruit
-    le fichier dont le nom est passé en deuxième paramètre
+    le fichier (pas répertoire) dont le nom est passé en deuxième paramètre
     seulement si le fichier dont le nom qui est passé en premier
     paramètre existe.
     <pre>ifrm dessin.svg dessin.pdf</pre>
@@ -155,7 +155,7 @@ deux
                     """)),
         Bad(Comment(~ NumberOfIs('"', 4),
                     """Cela ne fonctionnera pas dans tous les cas, s'il manque
-                    les guillemets autour des deux variables utilisées.""")),
+                    les guillemets autour des variables.""")),
         Good(Shell(Equal('for I in "$@";do echo "$I" ; done'))),
         shell_display,
         ),

@@ -246,7 +246,7 @@ répondez quand même à la question)</small>.
 
 add(name="branchement",
     required=["genre", "serie:affiche", "routeur série 0",
-              "routeur série 1"],
+              "routeur série 1", 'tp1:arrêt marche'],
     before="""Branchez les cables séries entre votre routeur
     et les deux autres.
     <p>

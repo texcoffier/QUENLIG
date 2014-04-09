@@ -75,7 +75,7 @@ add(name="simple",
               """Les premiers arguments de shell sont les <em>patterns</em>
               et les dernier les noms de fichier"""),
     reject('*', """Pas besoin d'indiquer qu'il y a n'importe quoi avant et
-    après, par défaut cherche l'expression n'importe où dans la ligne"""),
+  après, par défaut 'grep' cherche l'expression n'importe où dans la ligne"""),
     shell_good("grep /var /etc/passwd"),
     expect('/var'),
     shell_display,
@@ -237,6 +237,11 @@ add(name="source",
     reject('/',
            "Il n'y a pas de <tt>/</tt> dans la réponse la plus courte."
            ),
+    Bad(Comment(Contain('sqrt*') | Contain('sqrt.'),
+                """Pas besoin d'indiquer qu'il y a n'importe quoi
+                   avant et après 'sqrt',
+                   par défaut 'grep' cherche l'expression n'importe où
+                   dans la ligne""")),
     shell_display,
     ),
     )
@@ -317,6 +322,8 @@ add(name="casse",
     require('-i', """L'option pour indiquer que l'on ne tiens pas compte
     de la casse n'est pas présente dans la ligne"""),
     reject('|', "On a besoin que d'une seule commande"),
+    reject('passwd', """Vous devez cribler l'entrée standard, pas le fichier
+           'passwd' !"""),
     shell_display,
     ),
     indices=("""En anglais 'casse' se dit 'case' comme dans 'upercase' et
@@ -337,8 +344,15 @@ add(name="lister",
     Si le fichier contient 10 fois <tt>a4</tt> son nom ne
     devra être listé qu'une seule fois.""",
     tests=(
+    Bad(Comment(Contain('|') | Contain(';') | Contain('$'),
+                """La réponse est une simple commande, pas besoin
+                de pipeline, point-virgule, remplacement...""")),
     shell_good("grep -l a4 /etc/*"),
     grep_required,
+    Bad(Comment(Contain('4*') | Contain('4.*'),
+                """La commande 'grep' cherche l'expression quelque part
+                dans la ligne, pas besoin de dire qu'il y a n'importe quoi
+                avant ou après""")),
     reject('find',
            """On n'a pas besoin de <tt>find</tt> car on veut chercher
            les fichiers dans le répertoire, pas dans la hiérarchie
@@ -376,8 +390,8 @@ add(name="lister",
 
 add(name="lister sans erreur",
     required=["lister", "sh:redirection erreur", "device:poubelle"],
-    question="""Complétez la commande suivante
-    pour que les messages d'erreur existant ne s'affiche pas.
+    question="""Que faut-il <b>ajouter</b> à la commande suivante
+    pour que les messages d'erreur ne s'affiche pas.
     <pre>grep -l a4 /etc/*</pre>
     """,
     tests=(

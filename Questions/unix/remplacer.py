@@ -34,7 +34,7 @@ add(name="intro",
     Par défaut le fichier est lu sur l'entrée standard
     et la nouvelle version est écrite sur la sortie standard.
     La syntaxe de base est la substitution&nbsp;:
-    <pre>sed -e 's/ancien texte/nouveau texte/g'</pre>
+    <pre>sed -e 's/<b>ancien texte</b>/<b>nouveau texte</b>/g'</pre>
     Le <tt>g</tt> de la fin indique que l'on remplace
     toutes les occurrences qui sont dans la ligne
     et pas seulement la première.""",
@@ -67,6 +67,7 @@ add(name="slash",
     par des <tt>:</tt> (deux points) sur la sortie standard.""",
     tests=(
     require('/g', """N'oubliez pas le <tt>/g</tt> !"""),
+    reject('[', "N'utilisez pas les crochets pour faire l'échappement"),
     reject("s///",
               """Vous n'avez pas essayé la commande....
               <tt>sed</tt> fait une erreur car il croit qu'on
@@ -107,9 +108,10 @@ add(name="dans fichier",
     fichier <tt>xxx</tt>, remplaçant tous les <tt>a</tt> par des <tt>b</tt>
     et stockant le résultat dans le fichier <tt>yyy</tt>""",
     tests=(
-    reject(('tr', 'cat'),
+    reject(('tr', 'cat', '|'),
            """La seule commande qui vous est nécessaire est <tt>sed</tt>"""),
     require('sed', """Il faut utiliser <tt>sed</tt> pour la substitution"""),
+    reject("$(", "Pas besoin de remplacement, c'est hors-sujet"),
     require('s/a/b/g',
             """Il faut indiquer à <tt>sed</tt>
             que l'on veux remplacer tous les <tt>a</tt> par des <tt>b</tt>"""),
@@ -119,6 +121,8 @@ add(name="dans fichier",
             """Il faut rediriger l'entrée
             et la sortie standard de <tt>sed</tt>"""),
     reject("-r", "À quoi sert le <tt>-r</tt>&nbsp;?"),
+    Expect('xxx'),
+    Expect('yyy'),
     shell_display,
     ),
     indices=("Il faut rediriger l'entrée et la sortie standard",),
@@ -148,9 +152,12 @@ a</pre>
             une chaine de caractère quelconque pour indiquer
             ce qu'il y a après le <tt>//</tt>."""),
     reject("^", "Un commentaire ne commence pas forcément en début de ligne"),
+    reject("[", """N'utilisez pas les crochets pour annuler la signification
+           du '/' mais échappez le."""),
     reject("/g", """L'option <tt>g</tt> de <tt>sed</tt>
     est inutile car il n'y a qu'une seule substitution à faire dans
     la ligne"""),
+    Reject('|', 'La réponse est en une seule commande, pas de pipeline'),
     reject("$", """Le <tt>$</tt> est inutile car le <tt>.*</tt>
     prend le maximum de caractères possible,
     il va donc jusqu'à la fin de la ligne"""),    
@@ -195,6 +202,8 @@ add(name="enlever dernier",
     require('.',
             """Je ne vois pas le <tt>.</tt> représentant un
             caractère quelconque"""),
+    Bad(Comment(Contain('-r') | Contain('\\1') | Contain('('),
+                "Pas besoin d'expression régulière étendue")),
     shell_good("sed 's/.$//'", dumb_replace=dumb_replace),
     shell_bad("sed 's/.$//g'",
               """Le <tt>g</tt> est inutile car il n'y a qu'une seule
@@ -228,12 +237,15 @@ add(name="TAG XML vides",
     les marqueurs ne contenant rien.""",
     tests = (
         Expect('sed'),
+        Expect('+',
+             """Les noms de TAG font plusieurs caractères et ne sont pas vide.
+                Il doit donc y avoir une répétition non vide."""),
+        Reject("</", """Vous devez échapper le / de fin de TAG pour qu'il
+               ne soit pas interprété par <tt>sed</tt>"""),
         Good(Replace(dumb_replace, Shell(
-            Equal("sed -r 's/<([^>]*)><\\/\\1>//g'")))),
-        Bad(Comment(Replace(dumb_replace, Shell(
-            Equal("sed -r 's/<(.*)><\\/\\1>//g'"))),
-                    "Le <tt>.*</tt> va <em>avaler</em> le symbole &lt;"),
-            ),
+            Equal("sed -r 's/<([^>]+)><\\/\\1>//g'")))),
+        Reject('.+',
+              "Le <tt>.</tt> répété va <em>avaler</em> le symbole &lt;"),
         Good(Replace(dumb_replace, Shell(
             Equal("sed -r 's/<([^>]+)><\\/\\1>//g'")))),
         Bad(Comment(Replace(dumb_replace, Shell(
@@ -244,7 +256,8 @@ add(name="TAG XML vides",
                il faut donc faire plusieurs remplacements"""),
         Expect('(', """Vous devez définir un groupe pour vérifier que le TAG
         fermant est du même type que le TAG ouvrant."""),
-        Expect('-r', """Pour que le groupes fonctionnent, il faut utiliser
+        Expect('-r', """Pour que le groupes fonctionnent, il mettre l'option
+        de <tt>sed</tt> pour lui dire d'utiliser
         une expression régulière étendue."""),
         shell_display,
         ),
@@ -301,15 +314,20 @@ add(name="enlève mot",
     <p>
     Et ceci pour toutes les lignes.
     <p>
-    La ligne <tt>ggg jjj</tt> devient <tt>jjj</tt>
+    La ligne <tt>ggg jjj kkk</tt> devient <tt>jjj kkk</tt>
     """,
     tests=(
+        Bad(Comment(Contain("-r") | Contain("+") | Contain('('),
+                    "Pas besoin d'expression régulière étendue")),
         shell_good( "sed 's/[^ ]* //'", dumb_replace=dumb_replace),
         shell_bad( "sed 's/.* //'",
 		"Essayez avec une phrase contenant plusieurs mots",
 		 dumb_replace=dumb_replace),
         reject('g', "On veut faire la substitution qu'une seule fois"),
         reject('/^',"Pas besoin de préciser que c'est le premier de la ligne"),
+        Expect('//', "Je ne trouve pas le remplacement pas rien du tout"),
+        Expect('[^ ]', """Un mot est une répétition de caractères qui
+        ne sont pas des espaces"""),
         shell_display,
         ),
     )
@@ -350,7 +368,7 @@ add(name="mot",
            """<tt>.*</tt> prend la plus grande chaine possible
            il va donc contenir des espaces, ce n'est donc pas un mot"""),
     require("[^ ]",
-            """Je ne vois pas le <em>pattern</em> représentant
+            """Je ne vois pas l'expression régulière représentant
             un caractère qui n'est pas un espace"""),
     shell_require("[^ ]+",
                   """Je ne vois pas le <em>pattern</em> représentant
@@ -460,6 +478,7 @@ VANDORPE&#9251;
     reject('+', "N'oubliez pas que l'on accepte les noms et prénoms vides"),
     require('-r', """Comme on utilise les groupes des expressions régulières,
     il faut indiquer la bonne option à <tt>sed</tt>"""),
+    Reject('\\(', 'Il ne faut pas échapper les parenthèses'),
     reject(('^', '$'),
            """<tt>^</tt> et <tt>$</tt> ne sont pas nécessaires pour
            répondre à cette question"""),
@@ -827,10 +846,11 @@ add(name="profondeur wc",
     require('s/[^/]//g', """Je ne vois pas la substitution qui enlève
     tous les caractères qui ne sont pas des slash."""),
     reject('-m', """Utilisez plutôt <tt>-c</tt> à la place de <tt>-m</tt>"""),
-    shell_bad("pwd | sed -e 's/[^/]//g' -e 's/^\/$//g' | wc -c",
-              """Ne fonctionne pas dans le premier niveau (<tt>/etc</tt>
-              par exemple.)""",
-              ),
+    Bad(Comment(Replace((('-e', ''), ("'", ""), ('"', '')),
+                        RMS(Contain("s/[^/]//g s/^\\/$//"))),
+                            """L'ordre des substitutions est important.
+                            Votre version ne marchera pas pour le
+                            premier niveau (<tt>/etc</tt> par exemple.)""")),
     reject('s/^\/$//g', """À quoi sert l'option <tt>g</tt> s'il n'y
     a qu'une seule substitution à faire sur la ligne&nbsp;?"""),
     number_of_is('|', 2, "Il y a 3 commandes à faire donc il faut 2 pipe."),
@@ -864,6 +884,11 @@ add(name="profondeur expr",
     reject('=', "Vous n'avez pas besoin de =&nbsp;!"),
     expect('pwd'),
     expect("length"),
+    expect("expr"),
+    Bad(Comment(Start('pwd'),
+                """Votre solution fonctionne peut-être, mais pour qu'elle
+                soit acceptée, il faut qu'elle commence
+                par <tt>expr</tt>""")),
     require('1', "Il faut ajouter 1 au nombre de <em>slash</em> présent"),
     shell_display,               
     ),
@@ -887,13 +912,28 @@ add(name="basename",
     indice de boucle.
     """,
     tests=(
+    reject('|', 'Pas besoin de pipe pour cette question'),
     reject("sed",
            """Utilisez la commande <tt>basename</tt>, pas <tt>sed</tt>
            qui était là seulement pour vous expliquer."""),
+    Bad(Comment(RMS(~Contain('do mv')),
+                "La boucle ne contient qu'une seule commande : <tt>mv</tt>")
+        ),
+    Bad(Comment(RMS(~Contain('mv $I') & ~Contain('mv "$I"')),
+                """Le premier argument de <tt>mv</tt> est le nom fichier
+                à déplacer, donc le contenu de la variable de boucle""")
+        ),
     reject('echo', "On n'a pas besoin de la commande <tt>echo</tt>"),
     require("mv", "On renomme avec la commande <tt>mv</tt>"),
     require("for", "On doit faire une boucle <tt>for</tt>"),
     require("basename", "On veut utiliser la commande <tt>basename</tt>"),
+    reject((" c).xc", ' c)".xc'),
+           "Le fichier <tt>to.c</tt> va être renommé en <tt>to..xc</tt>."),
+    reject((" .c)xc", ' .c)"xc'),
+           "Le fichier <tt>to.c</tt> va être renommé en <tt>toxc</tt>."),
+    reject("./", """S'il vous plaît, n'utilisez pas <tt>./</tt> dans votre
+            réponse. Bien que cela soit pratique si le nom du fichier
+            commence par un tiret."""),
     shell_require("<replacement",
                   """Je ne vois pas de 'remplacement'.
                   La commande <tt>mv</tt> a besoin du résultat
@@ -903,10 +943,7 @@ add(name="basename",
     shell_bad(('for I in *.c ; do mv "$I" $(basename "$I" c)xc ; done',
                'for I in *.c ; do mv "$I" "$(basename $I c)"xc ; done'),
               """Presque&nbsp;! Il manque encore des guillemets."""),
-    reject(" c",
-           """Le fichier <tt>toc</tt> va être renommé en <tt>tocpp</tt>,
-           mettez le point."""),
-    require(".xc", "On veut ajouter le suffixe <tt>.xc</tt>"),
+    require("xc", "On veut ajouter le suffixe <tt>xc</tt>"),
     require('"',
             """N'oubliez pas le cas où le nom du fichier contient un espace,
             il faut protéger l'accès au variables."""),
@@ -926,6 +963,8 @@ add(name="basename",
                   considérée comme une vrai étoile et non
                   un élément de <em>pattern</em>"""),
     require("I", "Je ne vois pas le nom de la variable qui est l'indice"),
+    Expect(" *.c", """Je ne vois pas le pattern représentant les fichiers
+             <tt>.c</tt> du répertoire courant."""),
     shell_display,               
     ),
     good_answer="""
@@ -953,10 +992,18 @@ truc
 tar
 gz</pre></tr></table>""",
     tests = (
+        Bad(Comment(Contain('-r') | Contain('(') | Contain('\\1'),
+            "Pas besoin d'expression régulière étendue.")),
         Expect('sed'),
+        Reject("$", "On a pas besoin de faire référence à la fin de ligne"),
         Expect('*', """Le remplacement ce fait avec des suites de plusieurs
         caractères. Votre réponse ne contient rien dans ce sens..."""),
-        Reject('/g', "Une seule substitution est nécessaire"),
+        Reject('/^', """Pas besoin de '^' car l'expression cherchée est celle
+        qui est le plus au début possible"""),
+        Expect('/.*', """Le début de ce que l'on cherche est une chaine de
+        caractères quelconques."""),
+        Reject('/g', "Une seule substitution est nécessaire donc pas de /g"),
+        Expect('//', 'Je ne vois pas le remplacement par un chaine vide'),
         
         Good(Replace(dumb_replace,Shell(
             Equal("sed 's/.*\\.//'") | Equal("sed 's/.*[.]//'") ))),
@@ -983,6 +1030,10 @@ truc.tar
 truc.tar.gz</pre></tr></table>""",
     tests = (
         Expect('sed'),
+        Reject("\\.]", """On a pas besoin d'échapper le point quand il
+               est entre les crochets"""),
+        Reject(".*", """<tt>.*</tt> peut contenir des '.' donc ils peuvent
+               être effacés."""),
         Bad(Comment(Replace(dumb_replace + (('/g','/'),),Shell(
             Equal("sed 's/[^.]//'") | Equal("sed 's/[^.]*//'")
             )),
@@ -1020,6 +1071,10 @@ c
 tar
 gz</pre></tr></table>""",
     tests = (
+        Reject("|", """Une seule commande est nécessaire, pas besoin de pipe
+               ni d'expression régulière étendues"""),
+        Bad(Comment(Contain("-r") | Contain("("),
+                    """Pas besoin d'expression régulière étendues""")),
         Good(Shell(Equal("sed -e 's/^[^.]*$//' -e 's/.*\\.//'"))),
         shell_display,
         ),
@@ -1075,16 +1130,19 @@ sdfffs
 dsffsdXsdafsdf
 ----X-----X----
 afsdfsf
+X
 (XXX)</pre><td><pre>sdfafs
 sdfffs
  dsffsdXsdafsdf
  ----X-----X----
 afsdfsf
+ X
  (XXX)</pre></tr></table>""",
     tests = (
         Expect('sed'),
         Expect('X'),
         Reject('+',"Vous n'avez pas besoin de <tt>+</tt> pour cette question"),
+        Reject("[", "Pas besoin de crochets pour répondre à cette question"),
         Expect(".*", """Pour insérer un espace en début de ligne il faut
         que votre expression trouve tous les caractères qui sont à gauche
         du <tt>X</tt>. Vous devez donc indiquer cette suite de caractères
@@ -1093,9 +1151,9 @@ afsdfsf
         indiquer le début de ligne. En effet, la suite de caractères
         quelconques étant la plus longue possible, elle arrivera forcément
         jusqu'au début de ligne."""),
-        Bad(Comment(NumberOfIs(".*",2),
-                    """Cela n'a aucun intérêt d'indiquer la chaine de
-                    caractères quelconques à droite, cela ne fait
+        Bad(Comment(~Contain("X/") & ~Contain("X)/"),
+                    """Cela n'a aucun intérêt d'indiquer qu'il y a quelque
+                    chose à droite du <tt>X</tt>, cela ne fait
                     que rallonger votre commande.""")),
         Bad(Comment(Contain('-r') & ~Contain('('),
                     """Pas besoin d'expression régulière étendue si
@@ -1107,8 +1165,10 @@ afsdfsf
                seul le début vous intéresse"""),
         Reject("-e", """Pas besoin d'indiquer de l'option <tt>-e</tt>
                car il n'y a qu'une seule commande"""),
-        Good(Shell(Equal("sed 's/.*X/ &/'"))),
-        Good(Shell(Equal("sed -r 's/(.*X)/ \\1/'"))),
+        Good(Replace(dumb_replace,Shell(
+                    Equal("sed 's/.*X/ &/'")
+                    | Equal("sed -r 's/(.*X)/ \\1/'")
+                    ))),
         shell_display,
         ),
     )

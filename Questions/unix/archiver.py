@@ -27,7 +27,7 @@ add(name="intro",
     question="""Quel est le nom de la commande permettant d'archiver
     une hiérarchie de fichier dans un seul fichier&nbsp;?""",
     tests=(
-    reject('cp', """<tt>cp</tt> copier des fichiers, il ne permet
+    reject('cp', """<tt>cp</tt> permet de copier des fichiers, il ne permet
     pas de transformer un hiérarchie en un seul fichier."""),
     reject(' ', "On veut seulement un nom de commande, pas d'argument"),
     good("tar"),
@@ -81,7 +81,7 @@ add(name="création",
                """Le <tt>/</tt> final n'est utile que dans le cas
                ou le répertoire <tt>PratiqueUnix</tt> est un lien symbolique.
                En effet, si c'est le cas, alors sans le <tt>/</tt>
-               c'est le lien qui serait sauvez et non le répertoire pointé.""",
+               c'est le lien qui serait sauvé et non le répertoire pointé.""",
                dumb_replace=dumb_replace),
     Good(Comment(Replace(dumb_replace,Shell(
                         Equal("tar -f PratiqueUnix.tar -c PratiqueUnix")
@@ -157,6 +157,7 @@ add(name="copie distante",
                 "tar -cf - . | ssh b201pc34 cd /tmp/toto\;tar -xf -"
                 ),
                dumb_replace=dumb_replace),
+    reject("$(", "Utiliser $(...) est hors-sujet"),
     reject('.tar', """Vous n'avez pas besoin de passer par un fichier
     <tt>.tar</tt> puisque vous utilisez un pipeline"""),
     reject(('scp', 'rcp'), """Avec <tt>scp</tt> ou <tt>rcp</tt> c'est bien,
@@ -168,7 +169,8 @@ add(name="copie distante",
     utilisez ce que vous connaissez déjà&nbsp; la commande <em>builtin</em>
     <tt>cd</tt> permet de changer de répertoire."""),
     require(';', """Sur la machine distante il faut faire exécuter
-    deux commandes&nbsp;: le <tt>cd</tt> et le <tt>tar</tt>"""),
+    deux commandes&nbsp;: le <tt>cd</tt> et le <tt>tar</tt>.
+    Ces 2 commandes sont donc séparées par un..."""),
     require('tar',
             "Il faut utiliser <tt>tar</tt> pour copier une hiérarchie"),
     number_of_is('tar', 2,
@@ -187,6 +189,7 @@ add(name="copie distante",
             """Je ne vois pas le <tt>tar</tt> qui extrait l'archive
             ou bien il est faux.""",
             replace=dumb_replace),
+    Expect('/tmp/toto'),
     require('cd /tmp/toto',
             """Je ne vois pas le changement de répertoire.""",
             replace=dumb_replace),

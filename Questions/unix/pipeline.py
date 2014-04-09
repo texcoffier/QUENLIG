@@ -89,6 +89,8 @@ add(name="extensions",
     
     shell_good(("find ~ -name '*.*' | sed 's/.*\\.//' | sort -u",
                 "find ~ -name '[!.]*.*' | sed 's/.*\\.//' | sort -u",
+                "find ~ -name '*.*' | sed 's/.*\\.//' | sort | uniq",
+                "find ~ -name '[!.]*.*' | sed 's/.*\\.//' | sort | uniq",
                 ),
                dumb_replace = list(chercher.dumb_replace) \
                + list(remplacer.dumb_replace)),

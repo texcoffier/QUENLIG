@@ -60,6 +60,10 @@ add(name="ligne",
     shell_bad("wc -l /etc/passwd", red),
     shell_good("wc -l </etc/passwd"),
     reject('|', "On n'utilise pas d'autres commandes que <tt>wc</tt>"),
+    Expect('-l', """Je ne vois pas l'option de 'wc' indiquant que l'on
+           veut compter le nombre de ligne"""),
+    Reject(">", """La commande que vous avez donné n'affiche rien
+           car vous avez redirigé sa sortie standard."""),
     shell_display,
     ),
     indices=(ind, ),
@@ -119,6 +123,17 @@ add(name="compte C",
         Good(Shell(Equal('find . -name "*.c" -exec wc {} \\;'))),
         Good(Shell(Equal('find . -name "*.c" | xargs wc'))),
         Good(Shell(Equal('find . -name "*.c" -print0 | xargs -0 wc'))),
+        Bad(Comment(~Contain('-exec') & ~Contain('xargs') & ~Contain('$('),
+                    """Les 3 méthodes acceptées comme réponse sont :
+<ul>
+<li> Utiliser l'action 'exec' de find
+<li> Utiliser la commande 'xargs' pour traiter la sorte de 'find'
+<li> Utiliser un remplacement de commande
+</ul>""")),
+        Bad(Comment(Contain('-exec') & ~Contain('\\;'),
+                    "Ou est le ';' terminant la commande à exécuter ?")),
+        Bad(Comment(Contain('-exec') & ~Contain('{}'),
+                    "Ou est le '{}' indiquant le fichier à traiter ?")),
         shell_display,
         ),
     good_answer = """La version la plus efficace et fiable est la suivante :
@@ -154,7 +169,8 @@ add(name="compte tout C",
             Ce n'est donc pas efficace""")),
         Bad(Comment(
             Shell(Equal('cat $(find . -name "*.c") | wc -l')),
-            """Cette ligne ne fonctionnera pas s'il y a trop de fichiers""")),
+            """Cette ligne ne fonctionnera pas s'il y a trop de fichiers
+            car la commande 'cat' aura trop d'argument.""")),
         Bad(Comment(
             Shell(Equal('find . -name "*.c" -print0 | xargs -0 wc -l')
                   | Equal('wc -l $(find . -name "*.c")')
@@ -166,6 +182,15 @@ add(name="compte tout C",
         Expect('-print0',
                """Il faut utiliser <tt>-print0</tt> (problèmes des
                retours à la ligne dans les noms de fichier)"""),
+        Expect('cat', """Il faut utiliser la command 'cat' pour concaténer
+        tous les fichiers avec de compter les lignes"""),
+        Expect("wc"),
+        Expect("-l", """Vous avez oublié l'option de 'wc' qui indique que
+               l'on veut compter le nombre de lignes"""),
+        Bad(Comment(Contain('-print0') & Contain('xargs') & ~Contain('-0'),
+                    """Il manque l'option de 'xargs' indiquant que le
+                    séparateur sur l'entrée standard est le code NULL et
+                    non le retour à la ligne.""")),
         shell_display,
         ),
     )

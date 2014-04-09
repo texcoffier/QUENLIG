@@ -33,6 +33,8 @@ add(name="intro",
     question="""Commande <tt>test</tt> retournant vrai si <tt>toto</tt>
     est un fichier texte (pas un répertoire) qui existe.""",
     tests = (
+        Reject("-d", """Il ne faut pas tester si ce n'est pas un répertoire
+        mais tester si c'est un simple fichier texte"""),
         Bad(Comment(~Contain('test') & ~Contain('['),
                     "Il manque la commande <tt>test</tt>"
                     )),

@@ -36,6 +36,8 @@ add(name="intro",
     <tt>liste</tt>""",
     default_answer = "ls -R ",
     tests=(
+        Reject('>', """On a pas besoin de rediriger la sortie standard,
+        puisque l'on veut afficher sur l'écran."""),
         Expect('tee'),
         Expect('liste'),
         Expect('ls -R '),

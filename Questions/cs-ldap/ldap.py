@@ -213,7 +213,7 @@ add(name="ldapadd",
     required=["ldif"],
     before = """Utilisez la commande <tt>ldapadd</tt> pour ajouter dans
     l'annuaire les entrées que vous venez de décrire dans le fichier LDIF.""",
-    question = """Ligne de commande que vous avez utilisé&nbsp;:""",
+    question = """Ligne de commande que vous avez utilisée&nbsp;:""",
     tests = (good_if_contains(''),),
     )
 
@@ -345,7 +345,7 @@ add(name="mot de passe admin",
 add(name="mot de passe b1",
     required=["mot de passe"],
     question = """Qu'affiche la commande <tt>ldapsearch</tt> que vous avez
-    donné quand elle est exécutée en tant qu'utilisateur <tt>b1</tt>&nbsp;:""",
+    donnée quand elle est exécutée en tant qu'utilisateur <tt>b1</tt>&nbsp;:""",
     nr_lines = 5,
     tests = (good_if_contains(''),),
     )

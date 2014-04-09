@@ -61,7 +61,7 @@ add(name="comprimons",
     tests=(
     reject(("<",">"), "On veut la version simple sans redirection"),
     reject('tar', """On ne veut pas créer une archive contenant
-    plusieurs fichiers mais simplement comrpimer un fichier"""),
+    plusieurs fichiers mais simplement comprimer un fichier"""),
     require("gzip",
             """Je ne trouve pas le nom du compresseur dans votre réponse.
             Pourtant vous l'avez donné dans une question précédente"""),
@@ -123,6 +123,7 @@ add(name="garde le compressé",
     le fichier <tt>toto.gz</tt> mais en gardant l'original
     et en stockant le résultat dans <tt>toto</tt>.""",
     tests=(
+    Reject(";", "Une seule commande est nécessaire, donc pas de ';'"),
     expect('toto.gz'),
     reject("-c",
               """Pourquoi s'embêter à apprendre toutes les options&nbsp;?
@@ -161,6 +162,7 @@ add(name="comp. archive",
     <li> Vous ne devez pas stocker un fichier non comprimé sur le disque.
     <li> Vous n'avez pas besoin de chercher une nouvelle option
     dans la documentation car vous connaissez déjà tout ce qui est nécessaire.
+    <b>Surtout pas l'option 'z' qui n'est pas standard</b>
     </ul>
     """,
     tests=(
@@ -209,7 +211,7 @@ add(name="decomp. archive",
     reject("gunzip PratiqueUnix.tar.gz",
               """Cela ne fonctionne pas, vous venez de décomprimer
               l'archive dans le répertoire courant sans l'extraire.
-              En effet, la commande <tt>gunzip</tt> n'écrit rien
+              En effet, la commande <tt>gunzip xxx.gz</tt> n'écrit rien
               sur la sortie standard.
               """,
               ),

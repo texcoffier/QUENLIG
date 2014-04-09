@@ -83,6 +83,8 @@ add(name="compte",
     qu'affiche <tt>ps</tt>
     """,
     tests=(
+    reject('$(', """Expliquez à votre enseignant pourquoi vous utilisez $(...)
+    C'est hors sujet"""),
     shell_good("ps -e | wc -l",dumb_replace=dumb_replace),
     shell_bad("ps -e | wc",
                """Il manque une option à <tt>wc</tt> pour qu'il n'affiche
@@ -165,6 +167,10 @@ add(name="sauve pid",
     'Y=$(ps -e | grep xeyes | (read A B ; echo "$A"))',
     'Y=$(ps -e | grep xeyes | (read A Y ; echo "$A"))',
     'Y=$(ps -e | grep xeyes | (read Y A ; echo "$Y"))',
+    "Y=\"$(ps -e | grep xeyes | (read A B ; echo $A))\"",
+    'Y=\"$(ps -e | grep xeyes | (read A B ; echo "$A"))\"',
+    'Y=\"$(ps -e | grep xeyes | (read A Y ; echo "$A"))\"',
+    'Y=\"$(ps -e | grep xeyes | (read Y A ; echo "$Y"))\"',
                 ), dumb_replace=dumb_replace),
     reject(('cut', 'head', 'sed'),
            """La réponse attendue est composée de morceaux venant
@@ -173,14 +179,19 @@ add(name="sauve pid",
            <p>
            Votre réponse est peut-être juste, je ne peux pas
            vérifier tous les cas possibles."""),
+    expect('Y'),
+    expect('Y='),
+    expect('grep'),
+    expect('ps'),
+    expect('echo'),
+    Bad(Comment(~Contain(' $') & ~Contain(' "$'),
+                 "Je ne trouve pas l'accès au contenu de la variable lue")),
     require(('B', '-e'),
            """La réponse attendue est composée de morceaux venant
            des deux questions indiquées auxquelles vous avez déjà répondu.
            <p>
            Votre réponse est peut-être juste, je ne peux pas
            vérifier tous les cas possibles."""),
-    expect('Y'),
-    expect('Y='),
     shell_display,
     ),
     )
@@ -312,16 +323,22 @@ add(name="utilisateurs",
     default_answer="ps -fe | ",
     tests=(
     reject('/g',
-           "Il n'y a qu'une seule substitution à faire, donc d'option 'g'"),
+           "Il n'y a qu'une seule substitution à faire, donc pas d'option 'g'"),
     reject("$", """La plus grande chaine est prise, elle ira donc jusqu'au
     bout. Le <tt>$</tt> est donc inutile"""),
     reject('uniq', """La commande <tt>uniq</tt> n'a pas été utilisées
     pour répondre aux question précédentes, utilisez <tt>sort -u</tt>"""),
+    reject('^', "Pas besoin du caractère '^' pour répondre"),
+    reject('[', "Pas besoin du caractère '[' pour répondre"),
     shell_good("ps -fe | sed 's/ .*//' | sort -u",
                replace=remplacer.dumb_replace),
     shell_good("ps -fe | sed -e 's/ .*//' | sort -u",
                replace=remplacer.dumb_replace),
-    shell_good("ps -fe | cut -d' ' -f1 | sort -u",
+    shell_good(("ps -fe | cut -d' ' -f1 | sort -u",
+                "ps -fe | cut -d ' ' -f1 | sort -u",
+                "ps -fe | cut -d' ' -f 1 | sort -u",
+                "ps -fe | cut -d ' ' -f 1 | sort -u"
+                ),
                "On pouvait le faire sans <tt>cut</tt> mais avec <tt>sed</tt>"),
     shell_good("ps -fe | tail +2 | sed 's/ .*//' | sort -u",
                replace=remplacer.dumb_replace),

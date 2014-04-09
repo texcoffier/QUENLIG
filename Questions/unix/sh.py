@@ -566,6 +566,8 @@ add(name="remplacement",
     de stocker la liste des noms des fichiers et répertoires
     courant dans la variable <tt>A</tt>.""",
     tests=(
+    Bad(Comment(RemoveSpaces(Contain('ls') & ~Contain('ls)')),
+                "Si vous utilisez <tt>ls</tt>, pas besoin d'argument")),
     shell_good(("A=$(echo *)", 'A="$(echo *)"')),
     shell_good(("A=$(ls)", 'A="$(ls)"'),
                """On préfere utiliser <tt>echo</tt>
@@ -608,6 +610,10 @@ add(name="deuxième mot",
     Si vous avez besoin de variables, appelez les <tt>A</tt>, <tt>B</tt>, ...
     """,
     tests=(
+    Bad(Comment(RemoveSpaces(Contain('<date')),
+                """Vous demander à lire le contenu d'un fichier qui
+                s'appelle <tt>date</tt> au lieu de lire le sorte standard
+                de la commande <tt>date</tt>""")),
     shell_good((
     "Z=$(date | (read A B C ; echo $B))",
     "Z=$(date | (read A Z C ; echo $Z))",
@@ -629,7 +635,7 @@ add(name="deuxième mot",
                """J'attendais <tt>read</tt> et <tt>echo</tt>,
                mais votre réponse fonctionne"""),
     expect('Z='),
-    reject(('>','<'), "Pas besoin de redirections"),
+    reject(('>','<'), "Pas besoin de redirections autre que le pipeline"),
     shell_bad(("Z=$(date | read A B C ; echo $B)",
     "Z=$(date | read A Z C ; echo $Z)",
     "Z=$(date | read A Z B ; echo $Z)",),
@@ -639,9 +645,17 @@ add(name="deuxième mot",
     non de la commande <tt>read</tt>"""),
     reject('cut', """N'utilisez pas <tt>cut</tt> mais <tt>read</tt>
     comme dans les questions précédentes."""),
-    
+    Bad(Comment(~Start('Z='),
+                 """La réponse doit commencer par <tt>Z=</tt> si l'on ne
+                 veux pas perdre la valeur de Z à la fin du processus""")),
     shell_display,
     ),
+    indices=('''Pour afficher le deuxième mot,
+    On doit faire un pipeline entre la commande <tt>date</tt>
+    et un groupe de 2 commandes lisant le deuxième mot et l'affichant.''',
+             '''Pour le stocker dans la variable, on fait un remplacement
+    de commande.'''
+             ),
     )
 
 
@@ -836,6 +850,9 @@ add(name="fiable",
     reject("(", "Pas besoin de regroupement"),
     reject('/', "Pourquoi avez-vous besoin de <tt>/</tt>&nbsp;?"),
     expect('toto'),
+    expect("cd"),
+    expect("ls"),
+    expect(".."),
     shell_display,
     ),
     )
@@ -951,6 +968,7 @@ add(name="longueurs",
     en la précédent par sa longueur suivi d'un espace&nbsp;:
         <pre>1 x
 2 yy
+6 a    b
 0</pre>
     <p>
     Vous devez utiliser la variable nommée <tt>A</tt>
@@ -962,11 +980,15 @@ add(name="longueurs",
     reject('-', "Pas besoin d'options pour cette commande"),
     reject(("$A ", "$A)"),
            "N'oubliez pas les guillemets quand vous accédez aux variables"),
+    expect("$(", """Vous devez utiliser le remplacement de commande afin
+    d'inclure la sortie standard de <tt>expr</tt> comme paramètre de
+    <tt>echo</tt>"""),
     shell_good('while read A;do echo "$(expr length "$A") $A" ; done'),
     shell_good('while read A;do echo $(expr length "$A") "$A" ; done'),
     shell_good('while read A;do echo $(expr length "$A")" $A" ; done'),
     shell_bad('while read A;do echo "$(expr length "$A")" "$A" ; done',
               "Vous enlevez 2 caractères et vous avez trouvé."),
+    reject('""', "Pourquoi il y a 2 guillemets à la suite ?"),
     shell_display,
     ),
     )
@@ -1028,15 +1050,17 @@ add(name="valeur de retour",
 
 add(name="grep trouve",
     required=["valeur de retour", "cribler:simple"],
-    question="""Quelle est la valeur retournée par la commande
-    <pre>grep -q b /etc/passwd</pre>""",
+    question="""Quelle est la valeur retournée par le processus
+    <pre>grep -q b /etc/passwd</pre>
+    Rien n'est affiché sur l'écran, c'est normal.
+    """,
     tests = (
     Int(0),
     ))
     
 add(name="grep trouve pas",
     required=["valeur de retour", "cribler:simple"],
-    question="""Quelle est la valeur retournée par la commande
+    question="""Quelle est la valeur retournée par le processus
     <pre>grep coucou /etc/passwd &gt;/dev/null</pre>""",
     tests = (
     Int(1),
@@ -1051,6 +1075,9 @@ add(name="si",
     tests = (
     reject('<', "On a pas besoin de rediriger l'entrée standard"),
     reject('[', "On a pas besoin la commande <tt>test</tt> (<tt>[</tt>)"),
+    Reject('expr'),
+    Reject('$?'),
+    Reject("$(", "Pas besoin de remplacement avec $(...)"),
     expect('if'),
     expect('/etc/passwd'),
     expect('OUI'),
@@ -1095,6 +1122,7 @@ OUI</pre>
     reject('<'),
     expect('for'),
     expect('F'),
+    expect('$F'),
     expect('in'),
     expect('*.c'),
     expect('do'),
@@ -1106,11 +1134,13 @@ OUI</pre>
     expect('OUI'),
     expect('NON'),
     expect('done'),
+    expect('grep'),
     reject(' $F', """Cette commande ne fonctionne pas quand il y des espaces
            dans les noms de fichier."""),
     shell_good(('for F in *.c ; do if grep -q Copyright "$F" ; then echo OUI ; else echo NON ; fi ; done',
     'for F in *.c ; do if grep Copyright "$F" >/dev/null ; then echo OUI ; else echo NON ; fi ; done')),
-  
+    Bad(Comment(~Contain('-q') & ~Contain('/dev/null'),
+                "Votre commande affiche des choses en plus de OUI et NON")),
     shell_display,
     ),
     

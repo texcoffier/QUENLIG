@@ -138,6 +138,8 @@ add(name="fichier",
     ni des liens symboliques, ni des périphériques...)
     dans la hiérarchie dont la racine est le répertoire courant&nbsp;?""",
     tests=(
+    reject("name", """On a pas besoin d'indiquer une condition sur le nom
+    puisque celui-ci peut être quelconque"""),
     shell_good("find . -type f", dumb_replace=dumb_replace),
     find_required, find_dot_required, find_dash_required,
     require("-type",
@@ -372,7 +374,7 @@ add(name="et",
     partagées du système. Comment faire&nbsp;?""",
     question="""Quelle ligne de commande permet d'afficher
     les noms des fichiers qui respectent les critères suivants
-    (dans l'ordre)&nbsp;:
+    (<b>dans l'ordre</b>)&nbsp;:
     <ul>
     <li> dans la hiérarchie <tt>/usr/lib</tt>
     <li> Des vrais fichiers : de type fichier texte, pas les liens symboliques
@@ -444,6 +446,9 @@ add(name="casse insensible",
     """,
     tests=(
     reject('-type', "Réessayez sans donner l'option <tt>-type</tt>"),
+    reject(' -o ', 'On a pas besoin de faire un OU'),
+    Bad(Comment(Contain(' name') | Contain(' iname'),
+                "N'oubliez pas le tiret simple avec l'option")),
     shell_good("find ~ -iname '*.gif'", dumb_replace=dumb_replace),
     shell_bad("find ~ -name '*.[gG][iI][fF]'",
               "Cela fonctionne, mais il y a plus simple (<tt>-iname</tt>)",
@@ -499,6 +504,8 @@ add(name="ou simple",
     tests=(
     reject('(-', "Il manque un espace après la parenthèse ouvrante"),
     reject(('"\\)',"'\\)"), "La parenthèse fermante est un paramètre. Il manque un espace quelque part..."),
+    reject('[', """Les crochets permettent de remplacer un seul et unique
+    caractère. Ils sont donc hors sujet pour répondre à cette question"""),
     shell_good(("find . -name '*.sh' -o -name '*.pl' -o -name '*.py'",
                 "find . \\( -name '*.sh' -o -name '*.pl' -o -name '*.py' \\)",
                 ),
@@ -565,14 +572,14 @@ add(name="images",
                dumb_replace=dumb_replace),
     reject("-name", "On va a dit de ne pas tenir compte de la casse"),
     require('-iname', """On a vu dans un exercice précédent comment
-    test sans tenir compte de la casse"""),
+    tester sans tenir compte de la casse"""),
     find_tilde_required,
     require(('*.gif', '*.jpg', '*.png'),
                  """Je ne vois pas les 3 <em>pattern</em> testant
                  les 3 extensions""",
             replace=dumb_replace),
     number_of_is('-iname',3,"Je ne vois pas 3 tests sur les noms de fichiers"),
-    number_of_is('-o',2, "Je ne vois pas 2 <tt>ou</tt>"),
+    number_of_is(' -o ',2, "Je ne vois pas 2 <tt>ou</tt>"),
     reject('(-', "N'auriez-vous pas oublié un espace après la parenthèse ouvrante&nbsp;?"),
     shell_display,
     ),

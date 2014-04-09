@@ -147,6 +147,7 @@ add(name="deux spécial",
         on vous demande un <tt>2</tt> suivi d'une étoile."""),
     require('2', 'Je ne vois pas de 2 dans votre réponse&nbsp;!'),
     require('*', 'Je ne vois pas de * dans votre réponse&nbsp;!'),
+    reject('(', 'On a pas besoin de groupe pour cette expression'),
     reject(('"',"'"),
            """Guillemets et apostrophes sont reconnus par le shell
            pas par les expressions régulières,
@@ -172,6 +173,7 @@ add(name="spécial",
     contenant un caractère <tt>.</tt> quelque part&nbsp;?
     """,
     tests=(
+    reject('(', 'Pas besoin de groupe pour répondre, donc pas de parenthèses'),
     good( (".*\\..*", ".*[.].*") ),
     bad( ("\\.","[.]"),
          """L'expression représente le <tt>.</tt> pas la ligne complète"""),
@@ -209,7 +211,7 @@ add(name="spécial",
              ),
     )
 
-add(name='négation',
+add(name="négation",
     before=aide,
     required=["intro"],
     question="""Quelle expression régulière représente un caractère qui ne soit
@@ -220,7 +222,7 @@ add(name='négation',
            """Vous n'avez pas besoin du caractère '<tt>.</tt>',
            il n'y a aucun caractère quelconque ici."""),
     reject(('(', ')'), "Vous n'avez pas besoin de parenthèses"),
-    reject('A', "Pas en minuscule, j'ai pas dis pas en majuscule"),
+    reject('A', "La question dit : 'pas en minuscule'"),
     reject("^[a", """La négation est le premier caractère après
     le crochet. Sinon elle indique un début de ligne."""),
     reject(' ', "Attention, les espaces sont significatifs"),
@@ -250,7 +252,7 @@ add(name='négation',
     ),
     )
 
-add(name='suite de chiffres',
+add(name="suite de chiffres",
     before=aide,
     required=["intro"],
     question="""Quelle expression représente des suites de chiffres
@@ -274,7 +276,7 @@ add(name='suite de chiffres',
            En effet votre expression décrit deux suites de chiffres
            l'un collée à l'autre"""),
     good( "[0-9]+",
-    "C'est un expression réguière étendue car vous utilisez <tt>+</tt>"),
+    "C'est un expression régulière étendue car vous utilisez <tt>+</tt>"),
     good( "[0-9][0-9]*" ),
     good( "[0-9]*[0-9]", "On écrit plutôt <tt>[0-9][0-9]*</tt>" ),
     require(('*','+'), """Je ne vois pas le symbole indiquant que l'on répète
@@ -282,7 +284,7 @@ add(name='suite de chiffres',
     ),
     )
 
-add(name='entier positif',
+add(name="entier positif",
     before=aide,
     required=["suite de chiffres"],
     question="""Quelle expression régulière étendue représente
@@ -322,6 +324,7 @@ add(name='entier positif',
     chiffre après le premier (y compris aucun)"""),
 
     good( "0|[1-9][0-9]*" ),
+    good( "[1-9][0-9]*|0" ),
     bad( "0|([1-9][0-9]*)",
          "Cela fonctionne, mais les parenthèses ne sont pas au bon endroit"),
     good( "(0|[1-9][0-9]*)" ),
@@ -363,7 +366,7 @@ class test_nombre_entier(bad):
     
     
 
-add(name='nombre entier',
+add(name="nombre entier",
     required=["entier positif"],
     before=aide,
     question="""Quelle expression régulière étendue représente les nombres
@@ -399,6 +402,8 @@ add(name="identique",
     de la ligne.
     """,
     tests=(
+    reject("(.)*", """<tt>(.)*</tt> indique la même chose que <tt>.*</tt>&nbsp;:
+    une répétition de caractères quelconques."""),
     reject(('a','A'),
            "Que vient faire un <tt>a</tt> dans votre réponse&nbsp;?"),
     require(('(',')'),
@@ -408,6 +413,9 @@ add(name="identique",
             """Vous devez indiquer le début et la fin de ligne sinon
             l'expression pourra correspondre à une suite de caractères
             identiques en plein milieu"""),
+    Reject("\\(", """Dans une expression régulière étendue, quand
+           vous mettez un backslash avant la parenthèse, cela annulle
+           sa signification"""),
     require('\\1', """Vous devez utiliser les caractères trouvés par le groupe
             pour indiquer que le reste de la ligne est identique"""),
     good('^(.)\\1*$'),

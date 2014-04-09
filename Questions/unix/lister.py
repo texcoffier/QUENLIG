@@ -71,7 +71,11 @@ add(name="affichage long",
     question="""Quelle ligne de commande utilisant <tt>ls</tt>
     permet d'afficher plus d'informations sur les fichiers&nbsp;?""",
     tests=(
+    reject('ls -all', """Cela ne sert à rien d'indiquer deux fois l'option 'l',
+           d'autre part, on a pas besoin de l'option 'a'"""),
     shell_good("ls -l"),
+    shell_good("ls -al"),
+    shell_good("ls -la"),
     reject("a",
            """L'option <tt>-a</tt> permet de voir les fichiers
            cachés, cela permet de voir plus de fichier mais ne permet pas
@@ -264,6 +268,7 @@ add(name="trié par date",
     shell_bad('ls', "Sans options ils sont triés dans l'ordre alphabétique"),
     reject('--sort', """Les options longues (avec 2 tirets) ne sont pas
     standards."""),
+    require("ls -", "Il faut indiquer une option à la commande <tt>ls</tt>"),
     shell_display,
     ),
     indices=("""Pour s'en rappeler&nbsp;: c'est pour
@@ -279,11 +284,13 @@ add(name="trié par taille",
     tests=(
     shell_good( ("ls -S",) ),
     ls_is_required,
+    reject("|", "Pas besoin de pipe ! Juste une option pour <tt>ls</tt>"),
     reject("-t", """L'option <tt>-t</tt> trie par date, pas par taille"""),
     reject("-l", """On ne vous demande pas d'afficher plein d'information
     sur les fichiers, seulement de les trier par taille"""),
     shell_bad("ls -s", "Cela affiche la taille mais ne trie rien"),
     reject('--size', """Les options longues (avec 2 tirets) ne sont pas
+    require('-', 'Je ne vois aucune option pour <tt>ls</tt>'),
     standards."""),
     shell_display,
     ),

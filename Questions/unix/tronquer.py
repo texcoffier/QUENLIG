@@ -96,6 +96,8 @@ add(name="moitié",
     <p>
     Votre commande ne devra pas utiliser de variable shell.""",
     tests=(
+    reject("tail -l",
+           "N'auriez-vous pas confondu le chiffre 1 et la lettre l ?"),
     reject('|', "Pas besoin de pipeline pour cette question"),
     reject('=', "Pas besoin d'affection et de variables pour cette question"),
     reject('"', "Pas besoin de guillemets pour cette question"),

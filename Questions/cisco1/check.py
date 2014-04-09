@@ -611,7 +611,7 @@ class Cisco1800(Cisco):
     conf_register2 = '0x2142'
     interrupteur_on_off = True
     version_bootstrap="12.3(8r)"
-    version_IOS = ("12.4(1c)", )
+    version_IOS = ("12.4(1c)", "12.4(18e)")
 
 class Cisco1700(Cisco):
     names = ('1700', '1721')

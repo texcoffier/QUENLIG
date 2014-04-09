@@ -123,6 +123,7 @@ add(name="longueur",
               """Cela ne fonctionnera pas si la variable
               contient des espaces."""),
     reject('-', "Vous n'avez pas besoin de '-' pour répondre"),
+    reject('$(', "Pourquoi utilisez-vous $(....) ?"),
     shell_display,
     ),
     )
@@ -137,16 +138,19 @@ add(name="somme",
     <p>
     On supposera que chaque ligne du fichier contient un nombre unique.
     <p>
-    Vous n'avez pas besoin de faire de boucles ou
+    Vous n'avez pas besoin de variables, de faire de boucles ou
     d'utiliser d'autres commandes que <tt>expr</tt> et <tt>sed</tt>.
     """,
     tests=(
+    reject("=", """Vous n'avez pas besoin de l'affectation pour répondre
+                à cette question"""),
     reject('&',
            """Vous avez utilisé un '&' pour ajouter en fin/début de lignes.
            Pourquoi ne pas utiliser la méthode que vous avez déjà employée
            dans une question précédente&nbsp;?
            Un petit '^' ou '$' par exemple..."""),
-           
+    reject('\\+', """Pas besoin d'échapper le '+' car il n'est pas spécial
+                     pour une expression régulière non-étendue"""),
     shell_good("expr 0 $(sed <xxx 's/^/+ /')"),
     shell_good(("expr 0 $(sed 's/^/+ /') <xxx",
                 "expr $(sed 's/$/ +/') 0 <xxx"

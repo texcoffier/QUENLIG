@@ -122,7 +122,7 @@ add(name="ajouter",
     chmod_required,
     require("essai.sh",
             """Vous voulez changer le mode de <tt>essai.sh</tt>
-            le minimum est de l'indiquer"""),
+            le minimum est d'indiquer son nom."""),
     reject('[', """Les crochets utilisés pour donner la syntaxe de la commande.
     indiquent que le contenu est facultatif.
     Vous ne devez pas avoir de crochets dans votre réponse."""),
@@ -194,7 +194,7 @@ add(name="exec pattern",
 add(name="exec pattern 2",
     required=["exec pattern"],
     before=b,
-    question="""Quel ligne de commande permet <b>d'ajouter</b>
+    question="""Quelle ligne de commande permet <b>d'ajouter</b>
     le mode 'w' pour l'utilisateur, le groupe et les autres
     à tous les fichiers du répertoire courant dont
     le nom se termine par <tt>.sh</tt>,

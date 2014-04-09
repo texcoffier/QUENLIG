@@ -60,7 +60,7 @@ add(name="simple",
     shell_bad("cat /etc/group | more",
               """Il y a une solution beaucoup plus simple qui
               n'utilise pas de <em>pipe</em> ni de commande
-              suplémentaire"""),
+              supplémentaire"""),
     shell_good("more /etc/group"),
     reject("cat", """C'est <tt>more</tt> qui affiche page par page,
     c'est pas <tt>cat</tt>"""),
@@ -78,13 +78,14 @@ add(name="simple",
     
 add(name="navigation",
     required=["simple"],
-    before="""Une fois la commande <tt>more</tt> lancée l'invite de commande
+    before="""Une fois la commande <tt>more</tt> lancée, l'invite de commande
     ne revient pas car cette commande est interactive.
     Vous pouvez utilisez les touches page précédente/suivante
     pour vous promener dans le fichier.
     Comme pour beaucoup de commande interactive,
     on peut lui demander de l'aide en tapant 'h' ou '?'""",
-    question="""Comment terminer cette commande sans taper <tt>^C</tt>&nbsp;?
+    question="""Comment terminer la commande <tt>more /etc/*</tt>
+    sans taper <tt>^C</tt>&nbsp;?
     Indiquez simplement le caractère à taper.
     """,
     tests=(
@@ -117,7 +118,7 @@ add(name="multiple",
            """On a pas besoin de mettre <tt>./</tt> devant
            le nom d'un fichier pour indiquer qu'il est
            dans le répertoire courrant"""),
-    reject((';','&'), "On veut lancer qu'une seule fois la commande."),
+    reject((';','&','|'), "On veut lancer qu'une seule commande."),
     require(("A", "B"),
             """Comment la commande sait de quels fichiers
             vous parlez&nbsp;?"""),

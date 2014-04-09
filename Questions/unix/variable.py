@@ -86,6 +86,9 @@ add(name="concatenation",
     tests=(
     shell_good(("PATH=$PATH:.", 'PATH="$PATH:."')),
     expect('PATH'),
+    Bad(Comment(NumberOfIs(':', 2),
+                """Pourquoi on trouve 2 fois le symbole ':' dans votre
+                   réponse ?""")),
     require(":.",
             "Ou est le '<tt>:.</tt>' que je vous demande d'ajouter&nbsp;?"),
     require("=",
@@ -117,6 +120,8 @@ add(name="lire ligne",
                 "A=$(head -n1 /etc/passwd)",
                 ),
                "La réponse attendue était <tt>read A &lt;/etc/passwd</tt>"),
+    reject("$", """On a pas besoin de '$' dans la réponse car on regarde
+           pas le contenu des variables."""),
     reject(("head",'='),
            """Il y a des réponses qui utilisent <tt>head</tt>
            ou l'affectation avec <tt>=</tt>
@@ -183,6 +188,8 @@ add(name="toutes",
         pas celles du shell"""),
     bad("export", "Cela n'affiche que les variables exportées"),
     bad('cat', "Cela affiche le contenu de fichiers"),
+    Reject("@", """$@ représente tous les paramètres d'un script
+    shell, pas toutes les variables"""),
     ),
     indices=("""Cette commande est listée quand vous tapez 'help'
     car c'est une commande <em>builtin</em>""",
