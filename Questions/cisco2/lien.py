@@ -95,8 +95,8 @@ for i in (0,1):
 for i in (0,1):
     add(name="remote s%d" % i,
         required=["serial%d ?" % i],
-        question="""Donnez la commande complète permettant de pinguer
-        le routeur distant via la liaison série %d.
+        question="""Donnez la commande complète à taper sur votre routeur
+        permettant de pinguer le routeur distant via la liaison série %d.
         <p>
         Donnez votre réponse même si le ping échoue.
         """ % i,

@@ -28,6 +28,7 @@ import Plugins.answered.answered
 import student
 
 prototype = 'answered' # Same plugin
+priority_execute = '-question_answer'
 acls = { 'Teacher': ('executable',), 'Grader': ('executable',),
          'Admin': ('executable',), 'Author': ('executable',)}
 link_to_self = False
