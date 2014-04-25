@@ -370,7 +370,7 @@ class Student:
                 s += utilities.div("good_answer",
                                    answer_format(a.answered) + \
                                    '<br>' + q.good_answer + message)
-                if state.role_real == 'Grader':
+                if state.current_role == 'Grader':
                     s += '<br>' + repr(a.grades)
 
             for comment_time, comment_text in a.comments:
