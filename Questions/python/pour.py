@@ -31,12 +31,12 @@ add(name="feuilleter un classeur",
     En français on dirait&nbsp;:<br>
     <em>Pour chaque <tt>page</tt> dans le classeur <tt>['Un', 'grand', 'chien']</tt> : dis-moi '(' et <tt>page</tt> et ')'</em><br>
     <ul>
-    <li> <em>Pour chaque</em> se dit <tt>for</tt> en Python.
-    <li> <em>dans le classeur</em> se dit <tt>in</tt> en Python.
-    <li> <em>:</em> se dit <tt>:</tt> en Python.
+    <li> «<em>Pour chaque</em>» se dit <tt>for</tt> en Python.
+    <li> «<em>dans le classeur</em>» se dit <tt>in</tt> en Python.
+    <li> «<em>:</em>» se dit <tt>:</tt> en Python.
     </ul>
     <p>
-    La phrase traduite ne Python devient&nbsp;:<br>
+    La phrase traduite en Python devient&nbsp;:<br>
     <tt>for page in ['Un', 'grand', 'chien']: print '(', page, ')'</tt>
     <p>
     Le Python affichera&nbsp;:
@@ -181,11 +181,13 @@ def dd():
 
 add(name='imbriqués',
     required=['multi lignes', 'un dé'],
-    before="""Dans un <em>pour</em> on peut tout mettre, on peut donc mettre
-    un autre <em>pour</em>.
+    before="""Dans un «<em>pour</em>» on peut tout mettre, on peut donc mettre
+    un autre «<em>pour</em>».
     On appelle cela des boucles imbriquées.""",
     question="""On lance 2 dés, fait afficher tous les tirages
     et pour chaque tirage la somme des 2 dés.
+    <p>
+    Voici ce que tu dois lui faire afficher :
     <pre>
     1 + 1 = 2
     1 + 2 = 3
@@ -233,7 +235,7 @@ def dd7():
 add(name="dé + dé = 7",
     required=['cherche 72', 'imbriqués'],
     question="""Trouver toutes les sommes de deux dés qui donnent 7.
-    Il suffit d'ajouter un <em>si</em> au programme Python
+    Il suffit d'ajouter un «<em>si</em>» au programme Python
     affichant toutes les sommes.
     """,
     nr_lines=5,

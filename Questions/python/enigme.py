@@ -71,7 +71,7 @@ add(name='10001 = ? * ?',
                        C'est très facile, il faut que la deuxième boucle
                        s'arrête avant de dépassé la première.
 <pre>for d1 in range(200):
- for d2 in range(d1):
+ for d2 in range(d1+1):
    if d1 * d2 == 10001:
      print d1, d2</pre>
      Cette boucle affiche <tt>137 73</tt>contrairement
@@ -97,7 +97,7 @@ def pm(number, prod, summ, n):
 add(name="multiplier = sommer",
     required=['pour:dé + dé = 7'],
     question="""Fais afficher par Python le
-    <b>plus grand</b> nombre de 3 chiffres qui à
+    <b>plus grand</b> nombre de 3 chiffres qui a
     la particularité d'avoir la somme de ses 3 chiffres égale
     au produit de ses trois chiffres.
     <p>
@@ -156,7 +156,7 @@ add(name="intersection ensembliste",
     </ul>
     <p>
     Fais afficher à Python les livres que possède Jean et que Jacques
-    possède aussi (un livre par ligne).""",
+    possède aussi. <b>Un livre par ligne</b>.""",
     nr_lines = 4,
     tests=(
     print_required,

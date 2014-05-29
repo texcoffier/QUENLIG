@@ -28,7 +28,7 @@ add(name='intro',
     <p>
     La phrase française : <em>Si tu as froid alors tu met un manteau</em>
     est traduite en Python en remplaçant
-    le <em>si</em> par <tt>if</tt> et le <em>alors</em> par <tt>:</tt>.
+    le «<em>si</em>» par <tt>if</tt> et le «<em>alors</em>» par <tt>:</tt>
     <p>
     On peut d'ailleur utiliser le <tt>:</tt> à la place du <em>alors</em>
     dans la phrase en français.
@@ -66,6 +66,8 @@ print 'après'</pre>
 """,
     question="""Traduis en Python la phrase&nbsp;:
     <em>si 1+1==2 alors affiche <tt>'1+1=='</tt> et affiche <tt>'2'</tt></em>
+    <p>
+    Si la condition est vrai, il y a 2 <tt>print</tt> à faire.
     """,
     nr_lines=4,
     tests=(
@@ -92,9 +94,8 @@ add(name='cherche',
     space_required,
     apostrophe_required,
     if_required,
-    require(("'un grand chat'",
-             "'un grand chat.'"), """Je ne trouve pas le grand chat dans
-    ta réponse"""),
+    require("un grand chat", """Je ne trouve pas le grand chat dans
+ ta réponse"""),
     require("'a'", """Je ne trouve pas <tt>'a'</tt> dans ta réponse"""),
     python_answer_good('vrai\nvrai\n'),
     ),    

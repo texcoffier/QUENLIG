@@ -86,7 +86,7 @@ add(name='ordre des calculs',
     question="""Dans chacune des trousses de la classe
     il y a 2 feutres bleus et 3 rouges.
     Fait calculer à Python le nombre de feutres
-    que l'on trouverais si l'on vidait les 10 trousses de la classe""",
+    que l'on trouverait si l'on vidait les 10 trousses de la classe""",
     tests=(
     print_required,
     space_required,

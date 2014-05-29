@@ -720,6 +720,18 @@ class UpperCase(TestUnary):
       Quand <tt>add</tt> est appelé, il stocke la valeur courante
       de cette variable dans la question elle même,
       cela évite de redonner ce paramètre à chaque <tt>add</tt>.
+      <p>
+	Cette fonction transforme systématiquement la réponse
+	de l'étudiant.
+    <pre>
+def filter_student_answer(answer, state=None):
+    answer = re.sub(' +', ' ', answer)
+    answer = re.sub(' \n', '\n', answer)
+    answer = re.sub('\n\n*', '\n', answer)
+    return answer
+ </pre>
+<!--
+    <h3>Variable : <tt>questions.current_evaluate_answer</tt></h3>
     <p>
       Cette variable contient une fonction paramétrée par
       la réponse de l'utilisateur et <tt>state</tt>.
@@ -736,6 +748,7 @@ class UpperCase(TestUnary):
       Cette fonctionnalité n'est pas utilisée dans le questionnaire
       <tt>unix</tt> c'est pour cela qu'il y a <tt>shell_display</tt>
       presque systématiquement à la fin de la liste des tests.
+-->
 
     <h2><a name="admin">Administration du système.</a></h2>
 

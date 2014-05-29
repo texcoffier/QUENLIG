@@ -29,6 +29,8 @@ import re
 import configuration
 
 current_evaluate_answer = None
+current_eval_after = None
+
 class Required:
     def __init__(self, world, string):
         w = string.split(":")
@@ -134,6 +136,7 @@ class Question:
         self.maximum_bad_answer = int(arg.get("maximum_bad_answer", "0"))
         self.maximum_time = int(arg.get("maximum_time", "0"))
 
+        self.eval_after = current_eval_after
         self.canonize = None
         for test in self.tests:
             if hasattr(test, 'initialize'):
@@ -186,7 +189,12 @@ class Question:
             if comment not in full_comment:
                 full_comment.append(comment)
             if result != None:
+                if self.eval_after:
+                    full_comment.append(self.eval_after(answer, state))
                 return result, ''.join(full_comment)
+
+        if self.eval_after:
+            full_comment.append(self.eval_after(answer, state))
         return False, ''.join(full_comment)
 
     # Comments starting by a white space are not

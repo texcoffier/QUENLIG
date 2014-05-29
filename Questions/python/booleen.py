@@ -243,7 +243,7 @@ add(name='dans',
     en Python on dit <tt>truc in machin</tt>
     On a pas besoin du point d'interrogation.
     <pre>5 in [7,6,5,7]</pre>
-    L'expression est vrai car <tt>5</tt> est dnas le classeur.    
+    L'expression est vrai car <tt>5</tt> est dans le classeur.
     """,
     question="""Fais écrire à Python s'il trouve <tt>'a'</tt>
     dans le classeur <tt>'un grand chat'</tt>""",

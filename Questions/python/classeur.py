@@ -43,7 +43,7 @@ add(name='intro',
     <li> On indique le devant de la couverture par <tt>[</tt>
     <li> À la place des pages tu peux mettre tout ce que
     le python comprend&nbsp;: textes, nombres, ...
-    <li> Le <em>et</em> s'écrit virgule comme d'habitude
+    <li> Le «<em>et</em>» s'écrit virgule comme d'habitude
     <li> L'arrière de la couverture s'écrit <tt>]</tt>
     </ul>
     <p>

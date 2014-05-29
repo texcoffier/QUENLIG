@@ -52,9 +52,13 @@ add(name="remplace",
     required=['texte:remplacer', 'pour:compter de 2 en 2'],
     question="""Fais afficher par python la phrase
     <tt>Un * qui aime les *s et les *tons</tt>
-    en remplaçant le caractère <tt>*</tt> par <tt>chat</tt>,
-    puis par <tt>chien</tt> puis par <tt>ours</tt>""",
-    default_answer="print 'Un * qui aime les *s et les *tons'",
+<ul>
+    <li> la première fois en remplaçant le caractère <tt>*</tt> par <tt>chat</tt>,
+    <li> la deuxième fois en remplaçant le caractère <tt>*</tt> par <tt>chien</tt>
+    <li> la troisème fois en remplaçant le caractère <tt>*</tt> par par <tt>ours</tt>
+</ul>
+""",
+    default_answer="for...... : print 'Un * qui aime les *s et les *tons'....",
     tests=(
     do_not_cheat(rejected='chats'),
     replace_required,

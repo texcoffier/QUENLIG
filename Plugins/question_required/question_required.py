@@ -21,12 +21,16 @@
 
 """Display the informations about the required questions."""
 
-import utilities
+import cgi
 import questions
 
 priority_display = 'question_indices'
 priority_execute = 'question_answer' # We need to know if the answer was answered
 acls = { 'Default': ('executable',) }
+
+css_attributes = (
+    "/DIV.answeruser { white-space: pre; margin-left: 2em; background: #FFE }",
+    )
 
 def execute(state, plugin, argument):
     if state.question == None:
@@ -38,8 +42,8 @@ def execute(state, plugin, argument):
     for p in state.question.required.names():
         s.append( questions.questions[p].question(state) )
         try:
-            s[-1] += '<br><tt class="answer">%s</tt>' % \
-                     utilities.answer_format(state.student.answers[p].answered)
+            s[-1] += '<br><tt class="answer"></tt><div class="answeruser">%s</div>' % \
+                     cgi.escape(state.student.answers[p].answered.strip())
                      
         except KeyError:
             pass

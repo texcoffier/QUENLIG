@@ -299,7 +299,8 @@ add(name='coordonnées',
     tu te trouve sur terre.
     """,
     question = """Modifie le programme qui affiche la table de multiplication
-    et affiche <tt>'(x=',x,'y=',y,')',</tt> à la place du produit.""",
+    et affiche <tt>'(x=',x,'y=',y,')',</tt> à la place du produit.
+<p>N'oublie pas la virgule à la fin du <tt>print</tt>""",
     nr_lines = 5,
     default_answer = """for y in range(6):
     for x in range(6):

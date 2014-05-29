@@ -16,26 +16,17 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
+#    Contact: Thierry.EXCOFFIER@univ-lyon1.fr
 
 import os
 import sys
 from questions import *
 import questions
 import cgi
+import subprocess
 
-if not hasattr(questions, 'silent'):
-    f = os.popen('sudo -u nobody echo ok', 'r')
-    if f.read() != 'ok\n':
-        sys.stderr.write("""Please use the command 'visudo' to add the line:
-
-    login_name_of_the_user_running_the_server   ALL=(nobody)   NOPASSWD: ALL
-
-    This allow the server to use 'sudo nobody'
-    """)
-        sys.exit(1)
-    f.close()
-
+preamble = subprocess.check_output(['pypy-sandbox', '--', '-c', '0'],
+                                   stderr=subprocess.STDOUT)
 
 global_evals = {}
 
@@ -43,14 +34,17 @@ def python_eval(v):
     """Eval a python with a cache"""
     if global_evals.has_key(v):
         return global_evals[v]
-    
-    f = open("xxx.py", "w")
+
+    if not os.path.isdir('XXX-PYPY'):
+        os.mkdir('XXX-PYPY')
+    f = open("XXX-PYPY/xxx.py", "w")
     f.write("""# -*- coding: latin-1 -*-\n""")
     f.write(v)
     f.close()
     # sudo :                              exco ALL=(nobody) NOPASSWD: ALL
-    f = os.popen('ulimit -t 1 ; ulimit -v 10000 ; sudo -u nobody python xxx.py 2>&1', 'r')
-    displayed = f.read()
+    f = os.popen('ulimit -t 1 ; ulimit -v 100000 ; pypy-sandbox --tmp XXX-PYPY xxx.py 2>&1',
+                 'r')
+    displayed = f.read().replace(preamble, '')
     f.close()
 
     global_evals[v] = displayed
@@ -67,10 +61,12 @@ def answer_cleaning(v, remove_spaces=False, remove_newline=False):
 def python_answer(v, comment=''):
     if comment:
         comment = comment + "</p><p>"
+    else:
+        comment += '<br>'
     return comment + "Le Python répond : <pre>" + cgi.escape(v).replace('\n', '&nbsp;\n') + '</pre>'
 
 # With this the Python answer good or bad is always displayed.
-questions.current_evaluate_answer = lambda answer, state: python_answer(python_eval(answer))
+questions.current_eval_after = lambda answer, state: python_answer(python_eval(answer))
 
 
 class TestPython(Test):
@@ -134,7 +130,7 @@ multiply_required = require(
 
 comma_required = require(
     ',',
-    "Tu as oublié la virgule qui veut dire <em>et</em>")
+    "Tu as oublié la virgule qui veut dire «<em>et</em>»")
 
 comma_rejected = reject(
     ',',

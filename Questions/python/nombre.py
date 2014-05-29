@@ -25,7 +25,10 @@ add(name='nombre',
     required=['texte:un chat'],
     before="""Le Python comprend les nombres comme tu les écris habituellement,
     mais attention si tu met des apostrophes autour du nombre pour
-    lui cela ne sera pas un nombre.""",
+    lui cela ne sera pas un nombre.
+    <p>
+    <em>1+1 donne 2, mais '1'+'1' donne '11'</em>
+    """,
     question="""Fais écrire <em>18</em> à Python""",
     tests=(
     print_required,
@@ -44,7 +47,8 @@ Il suffit d'écrire ce que tu veux lui faire calculer et il le fait."""
 add(name='addition',
     required=['nombre:nombre'],
     before=before_operation,
-    question="""Fais écrire à Python le résultat de l'opération 2 + 3""",
+    question="""Fais afficher à Python le résultat de l'opération 2 + 3,
+    c'est lui qui doit faire le calcul, pas toi.""",
     tests=(
     print_required,
     space_required,

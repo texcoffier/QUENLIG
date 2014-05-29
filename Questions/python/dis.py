@@ -26,9 +26,9 @@ from check import *
 
 add(name='multiple',
     required=['texte:un chat', 'nombre:nombre'],
-    before="""Quand on veut dire <em>et</em> comme dans la phrase
-    <em>un chat et un chien</em> on remplace le mot
-    <em>et</em> par une virgule pour que le Python comprenne""",
+    before="""Quand on veut dire «<em>et</em>» comme dans la phrase
+    «<em>un chat et un chien</em>» on remplace le mot
+    «<em>et</em>» par une virgule pour que le Python comprenne""",
     question="Dis à python d'écrire <em>5 et 'bonbons'</em>.",
     tests=(
     print_required,
@@ -110,6 +110,9 @@ add(name='rien',
     question="""Dis à Python de faire <tt>print 'a',</tt> dix fois
     puis de faire faire <tt>print 'b',</tt> dix fois.
     <p>
+    Attention, on veut afficher les 'a' et les 'b' sur la même ligne,
+    il ne faut pas oublier la virgule.
+    <p>
     Regarde le résultat (ta réponse est refusée),
     normalement c'est une ligne contenant 10 <tt>a</tt>
     puis 10 <tt>b</tt>
@@ -130,7 +133,7 @@ add(name='rien',
 add(name='espace',
     required=['même ligne', 'intro:multi lignes'],
     nr_lines = 4,
-    question="""Fais écrire un <tt>un  chat</tt>,
+    question="""Fais écrire un <tt>un&nbsp;&nbsp;chat</tt>,
      utilisant 3 <tt>print</tt> et avec 2 espaces entre
      <tt>un</tt> et <tt>chat</tt>""",
     default_answer = """print 'un',
