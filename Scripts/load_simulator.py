@@ -47,6 +47,7 @@ import time
 import re
 import sys
 import cgi
+import urllib
 
 load_map = False # to load te question map picture
 load_map = True # to load te question map picture
@@ -186,13 +187,13 @@ class Student:
     def do_action(self):
         action = self.action
         if action.action == 'asked':
-            self.get('?question=%s' % cgi.urllib.quote(action.question))
+            self.get('?question=%s' % urllib.quote(action.question))
         elif action.action == 'good' or action.action == 'bad':
-            self.get('?question_answer=%s' % cgi.urllib.quote(action.value).replace('/','%2F'))
+            self.get('?question_answer=%s' % urllib.quote(action.value).replace('/','%2F'))
         elif action.action == 'indice':
             self.get('?question_indice=1')
         elif action.action == 'comment':
-            self.get('?comment=%s#' % cgi.urllib.quote(action.value))
+            self.get('?comment=%s#' % urllib.quote(action.value))
         elif action.action == 'None':            
             pass
         else:

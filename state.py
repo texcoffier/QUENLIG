@@ -17,17 +17,18 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-import casauth
 import cgi
+import urllib
 import time
+import re
+import sys
+import os
+import casauth
 import questions
 import student
 import statistics
 import configuration
-import re
 import plugins
-import sys
-import os
 import utilities
 
 ###############################################################################
@@ -293,7 +294,7 @@ class State(object):
         self.analyse_form(form)
 
         self.url_base_full = "%s/%s/%d/" % (self.url_base,
-                                            cgi.urllib.quote(self.ticket),
+                                            urllib.quote(self.ticket),
                                             len(self.history))
 
         self.full_page = "No presentation plugin"
@@ -346,7 +347,7 @@ class State(object):
 states = {}
 
 def get_state(server, ticket):
-    service = cgi.urllib.quote(the_service(server))
+    service = urllib.quote(the_service(server))
 
     if ticket == "": # No ticket, so redirect to the CAS service
         print 'No ticket, redirect to authentication service'

@@ -23,11 +23,12 @@ import socket
 import BaseHTTPServer
 import time
 import cgi
-import state
+import urllib
 import os
+import sys
+import state
 import configuration
 import utilities
-import sys
 
 cache = None # Do not cache files
 cache = {}   # Allow file caching
@@ -178,7 +179,7 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
             path[0] = 'guest' + form['guest']
 
         if not form.has_key('ticket'):
-            form['ticket'] = cgi.urllib.unquote(path[0])
+            form['ticket'] = urllib.unquote(path[0])
 
         # Get the number
         try:

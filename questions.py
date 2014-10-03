@@ -22,11 +22,12 @@
 import time
 import types
 import os
-import utilities
 import inspect
 import cgi
+import urllib
 import re
 import configuration
+import utilities
 
 current_evaluate_answer = None
 current_eval_after = None
@@ -212,7 +213,7 @@ class Question:
         return c
 
     def url(self):
-        return "?question=%s" % cgi.urllib.quote(self.name)
+        return "?question=%s" % urllib.quote(self.name)
 
     def a_href(self):
         return "<A HREF=\"%s\">%s</A>" % (self.url(), cgi.escape(self.name))
