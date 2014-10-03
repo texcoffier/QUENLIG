@@ -17,6 +17,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 import urllib2
+import urllib
 import configuration
 
 # To make casauth work we should not use a proxy
@@ -35,7 +36,8 @@ def get_name(ticket, service):
     print 'Get user name for service', service, 'and ticket', ticket
     checkparams = "?service=" + service + "&ticket=" + ticket
     casdata = urllib2.urlopen("%s/validate?service=%s&ticket=%s" % (
-        configuration.CAS, service, ticket))
+        configuration.CAS, service, urllib.quote(ticket)
+    ))
     
     test = casdata.readline().strip()
     if test == 'yes':
