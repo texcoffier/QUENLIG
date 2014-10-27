@@ -347,6 +347,10 @@ class State(object):
 states = {}
 
 def get_state(server, ticket):
+    if (configuration.only_from
+        and server.client_address[0] != configuration.only_from):
+        return None
+
     service = urllib.quote(the_service(server))
 
     if ticket == "": # No ticket, so redirect to the CAS service

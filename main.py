@@ -55,6 +55,7 @@ class Session:
         self.cache = {}
         self.nr_requests = 0
         self.percentage_time_for_stat = None
+        self.only_from = ""
         self.dir = os.path.join('Students', name, '')
     def set_questions_directory(self, dirname):
         if not os.path.exists(dirname):
@@ -63,9 +64,11 @@ class Session:
         utilities.write(self.dir + 'questions', dirname)
     def set_port(self, port):
         utilities.write(self.dir + 'port', port)
+    def set_only_from(self, only_from):
+        utilities.write(self.dir + 'only_from', only_from)
     def set_url(self, url, overwrite=True):
         utilities.write(self.dir + 'url', url.strip('/'), overwrite)
-        
+
     def set_option(self, option, values):
         for plugin in plugins.Plugin.plugins_dict.values():
             if plugin["", "option_name"] == option:
@@ -95,6 +98,7 @@ class Session:
         configuration.html = os.path.join(self.dir, "HTML")
 
         configuration.url = utilities.read(self.dir + 'url')
+        configuration.only_from = utilities.read(self.dir + 'only_from')
         if configuration.url == '':
             configuration.url = 'http://%s:%d' % (socket.getfqdn(),
                                                   configuration.port)
@@ -447,6 +451,8 @@ SET PERSISTENT SESSION OPTIONS:
         Apache configuration example:
            RewriteEngine On
            RewriteRule ^/quenlig(.*) http://intranet.univ.org:7777/$1 [P]
+    'only_from IP'
+        Only requests directly from this IP are allowed (it can be a proxy)
 
 SET PERSISTENT SESSION OPTIONS FOR PLUGINS:
 """)
@@ -543,6 +549,8 @@ if __name__ == "__main__":
         elif action == 'create':
             session.set_questions_directory(args.pop())
             session.set_port(args.pop())
+        elif action == 'only_from':
+            session.set_only_from(args.pop())
         elif action == 'admin':
             user = os.path.join(session.dir, 'Logs', args.pop())
             mkdir(user)
