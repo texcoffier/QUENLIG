@@ -535,7 +535,7 @@ class Node:
         else:
             s = ''
         if self.dot_shape_file:
-            return '%s [%slabel=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0" CELLSPACING="0"><TR><TD BORDER="0" PORT="0" HEIGHT="%d" WIDTH="%d" FIXEDSIZE="true"><IMG SRC="%s"/></TD></TR><TR><TD BORDER="0" BGCOLOR="#EEEEEE80">%s</TD></TR></TABLE>>,shape=none];\n' % (
+            return '%s [%slabel=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0" CELLSPACING="0"><TR><TD BORDER="0" PORT="0" HEIGHT="%d" WIDTH="%d" FIXEDSIZE="true"><IMG SRC="%s"/></TD></TR><TR><TD BORDER="0" BGCOLOR="#EEEEEE80">%s</TD></TR></TABLE>>,shape=none,margin=0,width=0,height=0];\n' % (
         self.dot_name,
         s,
         # zoom/self.ratio(dirname)/100., zoom/100.,
@@ -547,7 +547,7 @@ class Node:
                 self.dot_name, s, self.name, self.dot_shape)
 
     def port_name(self):
-        return self.dot_name + ':0'
+        return self.dot_name # + ':0'
     
     def filter(self, name, connected=True):
         if connected:

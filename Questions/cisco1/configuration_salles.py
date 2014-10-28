@@ -106,7 +106,7 @@ def graph_dot():
     for h in hosts:
         if h.name in ('A3', 'E3', 'I3', 'M3'):
             i += 1
-            network.dot("plan%d" % i, start=20, network_nodes=True,from_node=h,
+            network.dot("plan%d" % i, start=40, network_nodes=True,from_node=h,
                         legend = h == legend)
 
 statistics.graph_dot = graph_dot

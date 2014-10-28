@@ -1,14 +1,52 @@
 
-Sur 'bat710pfg' en tant que exco :
-	- Shell/install_tp_cisco_lif8
+#
+# Archiver l'ancienne session de Students/cisco[12]
+# avec le script Students/ARCHIVAGE
+#
 
-Cela copie et lance le TP en arrière plan.
+#
+# CREATION de la session
+#
 
+set +H
+T=""
+for TP in 1 2
+  do
+  SESSION=cisco$TP
+  ./main.py $SESSION create Questions/cisco$TP 300$TP \
+    admin thierry.excoffier \
+    admin yves.caniou \
+    admin jacques.bonneville \
+    url "http://demo710.univ-lyon1.fr/LIF8TP$TP/"
+  echo 16 >Students/$SESSION/nr_hosts
+  (cd Questions/cisco$TP/HTML ; make)
+  if [ ! -d Students/$SESSION/Logs/Default ]
+  then
+    mkdir Students/$SESSION/Logs/Default
+  fi
+  if [ ! -d Students/$SESSION/Logs/Student ]
+  then
+    mkdir Students/$SESSION/Logs/Student
+  fi
+  echo "{'session_deconnection':('!executable',),
+'session_start': ('!executable',),
+'session_stop': ('!executable',),
+'session_duration':('!executable',),
+'statmenu_smiley':('!executable',),
+'statmenu_rank':('!executable',)}
+" >Students/$SESSION/Logs/Student/acls
+  T="$T
+( cd ~/QUENLIG ; nohup ./main.py $SESSION start ) &"
+  done
+echo "$T"
 
-TODO :
-	Enlever commande obsolettes
+#
+# Création du sujet de TP
+#
 
-
+./main.py cisco1 plot # TRES LENT et permet de créer les graphiques du sujet
+cp Students/cisco1/HTML/plan?.png Questions/cisco1/HTML
+firefox Questions/cisco1/HTML/sujet.html
 
 
 
