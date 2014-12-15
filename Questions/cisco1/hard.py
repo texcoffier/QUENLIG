@@ -32,7 +32,7 @@ add(name="modèle cisco",
     tests=(
     HostCiscoModele(),
     ),
-    indices = ("C'est écrit sur la face avant du routeur.", ),
+    indices = ("Vérifiez si vous n'avez pas fait une faute de typo", ),
     )
 
 add(name="nb série",

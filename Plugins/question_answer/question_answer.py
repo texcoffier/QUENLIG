@@ -36,6 +36,7 @@ priority_display = 'question'
 
 css_attributes = (
     "INPUT { width: 100% ; font-family: times; font-size:120%}",
+    "INPUT.checkbox { width: auto}",
     "TEXTAREA { width: 100% ; }",
     "FORM { margin: 0px }",
     )
@@ -122,7 +123,7 @@ def execute(state, plugin, argument):
                 checked = ' checked'
             else:
                 checked = ''
-            s += '<input type="checkbox" name="%s" value="%s"%s>' % (
+            s += '<input class="checkbox" type="checkbox" name="%s" value="%s"%s>' % (
                 plugin.plugin.css_name, j[0], checked) + j[1] + '<br>'
         s += '<br><button type="submit"><p class="answer_button"></p></button>'
     elif state.question.nr_lines == 1:
