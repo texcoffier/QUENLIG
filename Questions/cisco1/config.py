@@ -26,7 +26,7 @@ add(name="version",
     required=['cli:show liste'],
     question="""Quelle est la version de l'IOS que vous utilisez&nbsp;?
     <p>
-    Elle est de la forme <tt>???.???(???)</tt> avec peut être des caractères
+    Elle est de la forme <tt>???.???(???)</tt> avec peut-être des caractères
     derrière.
     """,
     tests = (

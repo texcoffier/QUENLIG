@@ -118,7 +118,7 @@ add(name="ram",
     before="""RAM : Random Access Memory
     <p>
     <em>Attention, ce que l'on appelle RAM n'est ni la mémoire
-    <b>flash</b> ni la mémoire non volatile</em>
+    <b>flash</b> ni la mémoire non volatile</em>.
     <p>
     Attention, le routeur CISCO n'affiche pas la quantité
     de RAM totale mais la RAM libre et la RAM utilisée.
@@ -129,7 +129,7 @@ add(name="ram",
     <tr><td>8 bits</td><td>byte</td><td>octet</td></tr>
     </table>
     """,
-    question="""Combien de RAM (en kilo-octet)
+    question="""Combien de RAM (en kilo-octets)
     y-a-t-il dans le routeur CISCO&nbsp;?
     """,
     tests=(
@@ -150,7 +150,7 @@ add(name="nvram",
     sa configuration.
     Elle s'utilise comme de la mémoire normale bien que plus lente d'accès.
     """,
-    question="""Combien de NVRAM (en kilo-octet)
+    question="""Combien de NVRAM (en kilo-octets)
     y-a-t-il dans le routeur CISCO&nbsp;?""",
     tests=(
     require_int(),
@@ -159,11 +159,11 @@ add(name="nvram",
     )
 add(name="flash",
     required=['nvram'],
-    before="""<em>Flash</em> : C'est une sorte de NVRAM qui n'est pas cher mais
+    before="""<em>Flash</em> : C'est une sorte de NVRAM qui n'est pas chère mais
     qui lorsque que l'on écrit dedans nécessite d'effacer et de réécrire
-    un gros bloc de donnée.
+    un gros bloc de données.
     <p>
-    De plus les mémoires <em>flash</em> s'usent en quelque dizaines
+    De plus les mémoires <em>flash</em> s'usent en quelques dizaines
     de milliers d'écritures.
     <p>
     De fait, dans les routeurs CISCO elles ne servent qu'à
@@ -171,7 +171,7 @@ add(name="flash",
     <p>
     <a href="http://en.wikipedia.org/wiki/Flash_memory">wikipedia:flash</a>.
     """,
-    question="""Quelle quantité de mémoire <em>flash</em> (en kilo-octet)
+    question="""Quelle quantité de mémoire <em>flash</em> (en kilo-octets)
     y-a-t-il dans le routeur CISCO&nbsp;?""",
     tests=(
     require_int(),

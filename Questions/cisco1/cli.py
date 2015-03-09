@@ -25,7 +25,7 @@ from configuration_salles import *
 
 add(name="cable console",
     required=['hard:console eth'],
-    before="""Un cable bleu ciel doit relier votre ordinateur
+    before="""Un câble bleu ciel doit relier votre ordinateur
     au routeur CISCO.
     Il permet de communiquer avec le routeur alors que celui-ci n'est
     pas encore configuré (il n'a pas d'accès réseau).
@@ -38,7 +38,7 @@ add(name="cable console",
     <b>S'il y a 2 connecteurs RS232C à l'arrière du PC,
     alors utilisez celui qui a une étiquette CE.</b>
     </li>
-    <li> sur le routeur CISCO, il est branché sur la RS232C,
+    <li> Sur le routeur CISCO, il est branché sur la RS232C,
     qui est une prise RJ45 <b>à ne pas confondre avec une prise Ethernet</b>.
     Le mot <em>console</em> est écrit à coté du connecteur.
     </li>
@@ -60,7 +60,7 @@ add(name="cable console",
     (pour la fenêtre terminal par exemple)</li>
     </ul>
     """,
-    question = """Répondez OUI quand le cable sera correctement branché.""",
+    question = """Répondez OUI quand le câble sera correctement branché.""",
     tests = (yes("Alors branchez-le&nbsp;!"),),
     )
 
@@ -137,7 +137,7 @@ add(name="minicom parameters",
 add(name="line parameters",
     required=['minicom parameters'],
     question = """Configurez la ligne série avec
-    une vitesse de 9600 baud, 8 bits de données et 1 stop bit.
+    une vitesse de 9600 bauds, 8 bits de données et 1 stop bit.
     <p>
     Répondez OUI si c'est fait.""",
     tests = (yes("Alors configurez-la correctement&nbsp;!"),),
@@ -381,7 +381,7 @@ add(name="mauvaise commande",
     Comme cela n'est pas une commande, le routeur considère que
     c'est le nom d'une machine.
     Il commence donc par essayer de trouver son adresse IP.
-    il essaie 3 fois.
+    Il essaie 3 fois.
     """,
     question="""Sans éteindre le routeur, arrivez-vous à arrêter
     le processus de recherche&nbsp;?
@@ -423,8 +423,8 @@ add(name="historique",
 
 add(name="fin édition",
     required=['historique', 'commande incomplète', '? seul', 'show liste'], # 'mauvaise commande',
-    before = """La réponse à cette question n'est pas liée à <tt>minicom</tt>
-    de plus elle fonctionne sur tous les terminaux virtuels et sur
+    before = """La réponse à cette question n'est pas liée à <tt>minicom</tt>.
+    De plus elle fonctionne sur tous les terminaux virtuels et sur
     la console Linux.""",
     question="""Sans utiliser la souris et l'ascenseur,
     que tapez-vous au clavier pour voir ce qui a défilé au dessus
@@ -434,8 +434,8 @@ add(name="fin édition",
                 """On ne vous demande pas de faire afficher quelque chose
                 de nouveau sur l'écran.
                 On veut voir ce qui a déjà été affiché et qui est
-                sortie par le haut...""")),
-    reject('9', """Le chiffre 9 ne m'intéresse pas, ce qu'il faut
+                sorti par le haut...""")),
+    reject('9', """Le chiffre 9 ne m'intéresse pas. Ce qu'il faut
     indiquer est la fonction associée à la touche."""),
     require(('SHIFT', 'SHFT', 'MAJ'), uppercase=True, all_agree=True),
     require(('PAGE', 'PG', 'CTRL'), uppercase=True, all_agree=True),

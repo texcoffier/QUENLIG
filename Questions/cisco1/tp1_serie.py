@@ -247,15 +247,15 @@ répondez quand même à la question)</small>.
 add(name="branchement",
     required=["genre", "serie:affiche", "routeur série 0",
               "routeur série 1", 'tp1:arrêt marche'],
-    before="""Branchez les cables séries entre votre routeur
+    before="""Branchez les câbles séries entre votre routeur
     et les deux autres.
     <p>
     Des messages vont apparaître automatiquement sur l'écran,
     continuez à travailler sans en tenir compte.
-    Ils indiquent qu'un cable a été branché.
+    Ils indiquent qu'un câble a été branché.
     <p>
     Attention, quand un message s'affiche alors que vous
-    êtes en train de tapez une commande,
+    êtes en train de taper une commande,
     le routeur n'a pas oublié ce que vous avez tapé avant.
     Si vous appuyez sur Return le début de la commande que
     vous avez tapé sera exécuté.
@@ -264,7 +264,7 @@ add(name="branchement",
 #     pour voir les informations sur la connexion série.
 #     <p>
 #     Qu'est-ce que le routeur CISCO vous affiche
-#     pour indiquer qu'il y a un cable branché&nbsp;?""",
+#     pour indiquer qu'il y a un câble branché&nbsp;?""",
 #     tests=(
 #    good("line protocol is up"),
     question = """Avez-vous bien branché tous les câbles en respectant
