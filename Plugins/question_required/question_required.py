@@ -29,7 +29,7 @@ priority_execute = 'question_answer' # We need to know if the answer was answere
 acls = { 'Default': ('executable',) }
 
 css_attributes = (
-    "/DIV.answeruser { white-space: pre; margin-left: 2em; background: #FFE }",
+    "/DIV.answeruser { white-space: pre; margin-left: 2em; background: #FFE; width:100%; overflow:auto }",
     )
 
 def execute(state, plugin, argument):

@@ -232,16 +232,17 @@ class Student:
         self.answerables_cache = t
         return t
 
-    def answerables_typed(self):
+    def answerables_typed(self, any=False):
         tt = []
-        for i in self.answerables():
+        for i in self.answerables(any=any):
             a = self.answer(i.name)
             info = (
                 ("", "current_question ")[ self.last_asked_question == i.name]+
                 ("", "question_given ")[ a.nr_asked != 0 ] +
                 ("", "indice_given ")[ a.indice != -1 ] +
                 ("", "bad_answer_given ")[ a.nr_bad_answer > 0 ] +
-                ("", "resigned ")[ a.resign ]
+                ("", "resigned ")[ a.resign ] +
+                ("", "not_answerable ")[i.answerable(self)]
                 )
             tt.append( (i, info) )
         tt.sort(key=lambda x: x[0].name)

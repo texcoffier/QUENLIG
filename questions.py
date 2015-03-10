@@ -175,6 +175,8 @@ class Question:
         answer = answer.strip(" \n\t\r").replace("\r\n", "\n")
         if self.nr_lines == 1 and answer.find("\n") != -1:
             return False, "VOTRE REPONSE CONTIENT DES RETOURS A LA LIGNE"
+        if ' ' in answer:
+            return False, "VOTRE REPONSE CONTIENT UN ESPACE INSÉCABLE"
         if self.evaluate_answer:
             answer = self.evaluate_answer(answer, state)
 
