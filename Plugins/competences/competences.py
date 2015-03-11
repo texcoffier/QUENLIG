@@ -44,7 +44,7 @@ css_attributes = (
     ".nice_results .good { background: #0F0; }",
     ".nice_results .bad { background: #F00; }",
     )
-acls = { 'Teacher': ('executable',) }
+acls = { }
 
 javascript = utilities.read("Plugins/competences/competences.js")
 if javascript == '':

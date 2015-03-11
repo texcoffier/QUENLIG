@@ -198,8 +198,8 @@ class Student:
         """Returns the list of questions yet answered"""
         q = {}
         for a in self.answers.values():
-            if a.answered != False:
-                q[a.question] = a.answered
+            if a.nr_good_answer != 0:
+                q[a.question] = a.answered or ""
         return q
 
     def bad_answer_yet_given(self, question, answer):
@@ -207,7 +207,7 @@ class Student:
         return answer in self.answer(question).bad_answers
 
     def answered_question(self, question):
-        return self.answer(question).answered
+        return self.answer(question).nr_good_answer != 0
 
     def nr_indices_question(self, question):
         return self.answer(question).indice+1
@@ -243,9 +243,9 @@ class Student:
                 ("", "indice_given ")[ a.indice != -1 ] +
                 ("", "bad_answer_given ")[ a.nr_bad_answer > 0 ] +
                 ("", "resigned ")[ a.resign ] +
-                (i not in answerable_set and not a.answered
+                (i not in answerable_set and a.nr_good_answer == 0
                  and "not_answerable " or "") +
-                ("", " answered ")[int(a.answered != False)]
+                ("", " answered ")[int(a.nr_good_answer != 0)]
                 )
             tt.append( (i, info, a.nr_bad_answer, a.nr_good_answer) )
         tt.sort(key=lambda x: x[0].name)
@@ -260,7 +260,7 @@ class Student:
         if q.last_answer:
             return q.last_answer
         if self.answered_question(question):
-            return q.answered
+            return q.answered or ''
         if q.bad_answers:
             return q.bad_answers[-1]
         else:
@@ -282,7 +282,7 @@ class Student:
 
     def stat(self, sort_column=0, html_class='', url=''):
         answers = [ [utilities.date_format(a.first_time),
-                     a.answered != False, a.nr_asked, a.nr_bad_answer,
+                     a.nr_good_answer != 0, a.nr_asked, a.nr_bad_answer,
                      "%d/%d" % (a.indice+1, questions.nr_indices(a.question)),
                      len(a.comments), utilities.time_format(a.time_searching),
                      questions.a_href(a.question)
@@ -295,7 +295,7 @@ class Student:
     def points(self):
         p = 0
         for a in self.answers.values():
-            if a.answered:
+            if a.nr_good_answer != 0:
                 x = 2 ** -len(a.bad_answers) - (a.indice + 1) * 0.1
                 if x > 0:
                     p += x

@@ -76,7 +76,7 @@ class Requireds:
 
     def answered(self, answered):
         for r in self.requireds:
-            if not answered.get(r.name, False):
+            if answered.get(r.name, False) is False:
                 return False
             if r.answer and not re.match(r.answer, answered[r.name]):
                 return False
@@ -309,11 +309,10 @@ def answerable(answered, student):
     """
     answerable = []
     for q in questions.values():
-        if answered.get(q.name,False) or not q.required.answered(answered):
+        if answered.get(q.name, False) or not q.required.answered(answered):
             continue
         if q.answerable(student):
             answerable.append(q)
-
     return answerable
 
 def nr_indices(question_name):

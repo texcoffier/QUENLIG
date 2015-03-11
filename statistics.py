@@ -130,9 +130,13 @@ class Stats:
 question: %s
 student: %s
 """ % (q, s.filename))
-                q.student_time_searching += answer.time_searching
+                if answer.nr_good_answer:
+                    q.student_time_searching += (answer.time_searching
+                                                 / answer.nr_good_answer)
+                else:
+                    q.student_time_searching += answer.time_searching
                 q.student_time_after += answer.time_after
-                q.student_good += answer.answered != False
+                q.student_good += answer.nr_good_answer != 0
                 q.student_nr_comment += len(answer.comments)
 
         for q in questions.questions.values():
