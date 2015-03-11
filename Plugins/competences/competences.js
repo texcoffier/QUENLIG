@@ -111,6 +111,8 @@ function update_competences()
       info = 'answered' ;
     else if ( keys['not_answerable'] == competences[competence].length )
       info = 'not_answerable' ;
+    else if ( keys['not_seen'] == competences[competence].length )
+      info = 'not_seen' ;
     else if ( keys['bad_answer_given'] >= 1 )
       info = 'bad_answer_given' ;
     else if ( keys['resigned'] == competences[competence].length )

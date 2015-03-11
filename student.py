@@ -240,6 +240,7 @@ class Student:
             info = (
                 ("", "current_question ")[ self.last_asked_question == i.name]+
                 ("", "question_given ")[ a.nr_asked != 0 ] +
+                ("", "not_seen ")[ a.nr_asked == 0 ] +
                 ("", "indice_given ")[ a.indice != -1 ] +
                 ("", "bad_answer_given ")[ a.nr_bad_answer > 0 ] +
                 ("", "resigned ")[ a.resign ] +
