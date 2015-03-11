@@ -234,6 +234,7 @@ class Student:
 
     def answerables_typed(self, any=False):
         tt = []
+        answerable_set = set(self.answerables())
         for i in self.answerables(any=any):
             a = self.answer(i.name)
             info = (
@@ -242,9 +243,11 @@ class Student:
                 ("", "indice_given ")[ a.indice != -1 ] +
                 ("", "bad_answer_given ")[ a.nr_bad_answer > 0 ] +
                 ("", "resigned ")[ a.resign ] +
-                ("", "not_answerable ")[i.answerable(self)]
+                (i not in answerable_set and not a.answered
+                 and "not_answerable " or "") +
+                ("", " answered ")[int(a.answered != False)]
                 )
-            tt.append( (i, info) )
+            tt.append( (i, info, a.nr_bad_answer, a.nr_good_answer) )
         tt.sort(key=lambda x: x[0].name)
         return tt
     

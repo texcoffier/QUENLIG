@@ -34,8 +34,8 @@ def execute(state, plugin, argument):
     q = state.plugins_dict['questions']
     try:
         questions, script = q.value.split('<!--SCRIPT-->')
-    except ValueError:
-        # For example in 'all_questions' mode
+    except (ValueError, AttributeError):
+        # For example in 'all_questions' or 'competences' mode
         return
     questions = questions.split('<A ')[1:]
     random.seed(state.shuffle_seed)

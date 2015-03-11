@@ -146,6 +146,9 @@ class Question:
                 self.canonize = test.search_a_canonizer()
         if self.canonize is None:
             self.canonize = lambda string, state: string
+        self.competences = self.get_competences(self.tests)
+        if len(self.competences) == 0:
+            self.competences = ("",)
 
     def answers_html(self, state):
         s = ""
@@ -240,6 +243,17 @@ class Question:
             and time.time() - time_first >= self.maximum_time):
             return False
         return True
+
+    def get_competences(self, tests):
+        competences = set()
+        for test in tests:
+            if isinstance(test, Grade):
+                if not test.grade.startswith("-"):
+                    if test.teacher:
+                        competences.add(test.teacher)
+            if getattr(test, 'children', None):
+                competences.update(self.get_competences(test.children))
+        return competences
 
 
 questions = {}

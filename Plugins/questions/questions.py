@@ -55,16 +55,19 @@ def execute(state, plugin, dummy_argument):
             return ''
 
         focusable_found = False
-        for q, info in answerables:
-            if info.find("resigned ") == -1:
+        for info in answerables:
+            if info[1].find("resigned ") == -1:
                 focusable_found = True
                 break
 
-        max_descendants = max([len(q.descendants) for q, info in answerables])
+        max_descendants = max([len(info[0].descendants)
+                               for info in answerables])
              
         s = ""
         focus_done = False
-        for q, info in answerables:
+        for info in answerables:
+            q = info[0]
+            info = info[1]
             focus = ''
             if not focus_done:
                 if not focusable_found or info.find("resigned ") == -1:
@@ -94,7 +97,8 @@ def execute(state, plugin, dummy_argument):
         </script>
         """
         w = ""
-        for q, info in answerables:
+        for info in answerables:
+            q = info[0]
             world = q.name.split(":",1)[0]
             if w != world:
                 w = world

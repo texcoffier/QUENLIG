@@ -25,6 +25,7 @@ class Answer:
         self.answered = False     # The question is not correctly answered
         self.indice = -1          # No indices have been asked by the student
         self.nr_bad_answer = 0    # The student did not give bad answers
+        self.nr_good_answer = 0   # Number of good answer
         self.nr_asked = 0         # The number of display of the question text
         self.time_searching = 0   # The time spend searching the answer
         self.time_after = 0       # The time spend without onscreen question
@@ -44,6 +45,7 @@ class Answer:
             self.first_time = action_time
         if command == "good":
             self.answered = value
+            self.nr_good_answer += 1
         elif command == "indice" :
             self.indice += 1
         elif command == "bad" :
