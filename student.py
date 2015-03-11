@@ -207,7 +207,7 @@ class Student:
         return answer in self.answer(question).bad_answers
 
     def answered_question(self, question):
-        return self.answer(question).nr_good_answer != 0
+        return self.answer(question).answered
 
     def nr_indices_question(self, question):
         return self.answer(question).indice+1
