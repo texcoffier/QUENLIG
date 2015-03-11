@@ -44,7 +44,7 @@ css_attributes = (
     ".nice_results .good { background: #0F0; }",
     ".nice_results .bad { background: #F00; }",
     )
-acls = { }
+acls = {}
 
 javascript = utilities.read("Plugins/competences/competences.js")
 if javascript == '':
@@ -60,5 +60,7 @@ def execute(state, plugin, dummy_argument):
         info[0] = unicode(info[0].name, 'latin-1')
         q.append(info)
     question = state.question and unicode(state.question.name, 'latin-1') or ''
-    return '<script>display_competences(%s,%s)</script>' % (
-        json.dumps(q), json.dumps(question))
+    return '<script>display_competences(%s,%s,%s)</script>' % (
+        json.dumps(q), json.dumps(question),
+        json.dumps(unicode(plugin.plugin[state.localization, 'erase_message'],
+                           'latin-1')))

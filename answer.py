@@ -37,6 +37,7 @@ class Answer:
         self.last_answer = ''     # The last student answer
         self.grades = {}          # The teachers grades
         self.why = {}             # The teachers comments on answer
+        self.nr_erase = 0         # #erase to change the question parameters
 
     def eval_action(self, action_time, command, value):
         """Return True if the action do not need to be recorded in log"""
@@ -72,6 +73,11 @@ class Answer:
         elif command == "why" :
             teacher, comment = value.split('\002')
             self.why[teacher] = comment
+        elif command == "erase" :
+            self.answered = False
+            self.indice = -1
+            self.last_answer = ''
+            self.nr_erase += 1
         else:
             raise ValueError("Unknown action %s in %s" % (command, self.student))
 

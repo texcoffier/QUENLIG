@@ -245,7 +245,7 @@ class Student:
                 ("", "resigned ")[ a.resign ] +
                 (i not in answerable_set and a.nr_good_answer == 0
                  and "not_answerable " or "") +
-                ("", " answered ")[int(a.nr_good_answer != 0)]
+                ("", " answered ")[int(a.answered != False)]
                 )
             tt.append( (i, info, a.nr_bad_answer, a.nr_good_answer) )
         tt.sort(key=lambda x: x[0].name)
@@ -469,6 +469,10 @@ class Student:
             if date_comment[1] == comment:
                 return
         self.log(question, "comment", comment)
+
+    def erase(self, question):
+        if question in self.answers:
+            self.log(question, "erase", '')
 
     ####################################################
     # All about the question contextual to the student.

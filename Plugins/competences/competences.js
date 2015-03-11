@@ -2,6 +2,7 @@
 var competences = {} ;
 var competence_names = [] ;
 var current_question = '' ;
+var question_dict = {} ;
 
 function toggle_competence(competence)
 {
@@ -43,10 +44,22 @@ function choose_question(competence)
     weight += question.weight ;
     if ( weight >= random )
       {
-	window.location = "?question=" + escape2(question[0]) ;
+	goto_question(question[0]) ;
 	return ;
       }
   }
+}
+
+function goto_question(question)
+{
+  var q = question_dict[question] ;
+  var erase = '' ;
+  if ( q[1].indexOf("answered") != -1 )
+    {
+      if ( confirm(erase_message) )
+	erase = '&erase=1' ;
+    }
+  window.location = "?question=" + escape2(question) + erase ;
 }
 
 function js(t)
@@ -118,8 +131,8 @@ function update_competences()
       {
         q_info = competences[competence][q_info] ;
         s.push(nice_results(q_info)
-               + '<a class="' + q_info[1] + '" href="?question='
-               + escape2(q_info[0]) + '">'
+               + '<a class="' + q_info[1] + '" onclick="goto_question('
+               + js(q_info[0]) + ')">'
                + q_info[0] + '</a><br>') ;
       }
     }
@@ -127,8 +140,9 @@ function update_competences()
   document.getElementById("competences").innerHTML = s.join('\n') ;
 }
 
-function display_competences(data, question)
+function display_competences(data, question, message)
 {
+  erase_message = message ;
   current_question = question ;
   for(var i in data)
     for(var q in data[i][4])
@@ -137,6 +151,7 @@ function display_competences(data, question)
     if ( competences[q] === undefined )
       competences[q] = [] ;
     competences[q].push(data[i]) ;
+    question_dict[data[i][0]] = data[i] ;
   }
   for(var competence in competences)
     competence_names.push(competence) ;
