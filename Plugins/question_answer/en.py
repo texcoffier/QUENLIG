@@ -8,5 +8,6 @@ translations = {
     'answer_button' : 'Send the answer',
     'maximum_bad_answer' : "You can no more answer to this question, choose another one",
     'nr_try': "Number of remaining answer attempts: ",
+    'missing_required': "You must answer some other questions to open this one",
 }
 

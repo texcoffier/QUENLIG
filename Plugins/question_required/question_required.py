@@ -45,7 +45,7 @@ def execute(state, plugin, argument):
             s[-1] += '<br><tt class="answer"></tt><div class="answeruser">%s</div>' % \
                      cgi.escape(state.student.answers[p].answered.strip())
                      
-        except KeyError:
+        except (KeyError, AttributeError):
             pass
     if s:
         return '<hr>'.join(s)

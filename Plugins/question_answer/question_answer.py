@@ -84,6 +84,9 @@ def execute(state, plugin, argument):
         state.question = None
         return '<p class="maximum_bad_answer">'
 
+    if not state.question.required.answered(state.student.answered_questions()):
+        return '<p class="missing_required">'
+
     if state.student.answered_question(state.question.name):
         # Value setted in question_change_answer plugin
         if (not hasattr(state.student, 'allowed_to_change_answer')
