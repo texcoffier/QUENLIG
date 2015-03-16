@@ -1484,6 +1484,18 @@ class Grade(TestUnary):
                   "point", 1)
            ),
        Bad(Grade(~Int(2), "calculus", -2))
+
+       # If the student answers:
+       #   * 'x'  then 'point' is set to 1.
+       #   * 'xy' then 'point' is set to 2.
+       # RECURSIVELY GRADING THE SAME THING DOES NOT WORKS
+       # BECAUSE THE TOP MOST WINS.
+       Good(And(Contain('x'),
+                Or(Grade(Contain('y'), "point", 2),
+                   Grade(Contain(''), "point", 1), # allow 'x' alone answer
+                  )
+               )
+           ),
     """
     stop_eval = True
     def __init__(self, expression, teacher, grade):
@@ -1582,7 +1594,9 @@ class Random(TestUnary):
 
 def regression_tests():
     # Regression test on new tests.
+    grades = {}
     def create(txt):
+        grades.clear()
         o = eval(txt)
         o.initialize(lambda string, state: string, None)
         # print o.source()
@@ -1852,7 +1866,6 @@ def regression_tests():
     assert( a('a  +   -   5') == (True, '') )
 
     a = create("Grade(Equal('a'),'john',4)")
-    grades = {}
     class S:
         seed = 0
         def set_grade(self, q, tg):
@@ -1875,6 +1888,22 @@ def regression_tests():
     a = create("Random({'$a$': ('x', 'x')},Expect('[$a$]'))")
     assert( a('x', st)
             == (False, '<p class="string_expected">\'<b>[x]</b>\'</p>') )
-    
+
+    a = create("Good(And(Contain('x'),Or(Grade(Contain('y'),'point',2),Grade(Contain(''),'point',1))))")
+    assert(a('z', st) == (None, ''))
+    assert(grades == {})
+    grades.clear()
+    assert(a('x', st) == (True, ''))
+    assert(grades == {'x': 'point,1'})
+    grades.clear()
+    assert(a('y', st) == (None, ''))
+    assert(grades == {})
+    grades.clear()
+    assert(a('xy', st) == (True, ''))
+    assert(grades == {'x': 'point,2'})
+
+    a = create("Good(And(Contain('x'),Contain('y')))")
+    assert(a('x', st) == (None, ''))
+
 if True:
     regression_tests()
