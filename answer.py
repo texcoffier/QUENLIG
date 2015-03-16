@@ -38,6 +38,7 @@ class Answer:
         self.grades = {}          # The teachers grades
         self.why = {}             # The teachers comments on answer
         self.nr_erase = 0         # #erase to change the question parameters
+        self.answer_times = []
 
     def eval_action(self, action_time, command, value):
         """Return True if the action do not need to be recorded in log"""
@@ -47,12 +48,14 @@ class Answer:
         if command == "good":
             self.answered = value
             self.nr_good_answer += 1
+            self.answer_times.append(action_time)
         elif command == "indice" :
             self.indice += 1
         elif command == "bad" :
             self.answered = False # Needed for 'any_question'
             self.nr_bad_answer += 1
             self.bad_answers.append(value)
+            self.answer_times.append(action_time)
         elif command == "asked" :
             self.nr_asked += 1
             student = self.student

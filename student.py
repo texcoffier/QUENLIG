@@ -377,6 +377,9 @@ class Student:
                                    '<br>' + q.good_answer + message)
                 if state.current_role == 'Grader':
                     s += '<br>' + repr(a.grades)
+                    s += '<br>' + ' '.join(
+                        time.strftime("%H:%M:%S", time.localtime(t))
+                        for t in a.answer_times)
 
             for comment_time, comment_text in a.comments:
                 s += utilities.div('comment',"<PRE>" + \
