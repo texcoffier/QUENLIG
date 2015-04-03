@@ -235,6 +235,7 @@ class Student:
                 ("", "not_seen ")[ a.nr_asked == 0 ] +
                 ("", "indice_given ")[ a.indice != -1 ] +
                 ("", "bad_answer_given ")[ a.nr_bad_answer > 0 ] +
+                ("", "perfect_answer ")[ a.nr_perfect_answer > 0 ] +
                 ("", "resigned ")[ a.resign ] +
                 (i not in answerable_set and a.nr_good_answer == 0
                  and "not_answerable " or "") +

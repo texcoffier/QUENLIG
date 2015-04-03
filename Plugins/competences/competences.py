@@ -35,6 +35,7 @@ css_attributes = (
     "A.bad_answer_given{color:#F00;}",
     "A.answered        {color:#0A0;}",
     "A.not_seen        {color:#00F;}",
+    "A.perfect_answer  {background:#4F4; color: black}",
     "A.indice_given    {font-style:italic;}",
     "A.current_question{text-decoration:underline;}",
     "A.not_answerable  {color:#DDD;}",

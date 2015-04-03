@@ -104,18 +104,18 @@ function update_competences()
         nb++ ;
       }
     }
-    if ( keys['answered'] == competences[competence].length )
+    if ( keys['perfect_answer'] == competences[competence].length )
+      info = 'perfect_answer' ;
+    else if ( keys['answered'] == competences[competence].length )
       info = 'answered' ;
     else if ( keys['not_answerable'] == competences[competence].length )
       info = 'not_answerable' ;
-    else if ( keys['not_seen'] == competences[competence].length )
+    else if ( keys['not_seen'] )
       info = 'not_seen' ;
-    else if ( keys['bad_answer_given'] >= 1 )
-      info = 'bad_answer_given' ;
-    else if ( keys['resigned'] == competences[competence].length )
+    else if ( keys['resigned'] )
       info = 'question_given' ;
-    else if ( keys['resigned'] == 0 )
-      info = 'not_seen' ;
+    else if ( keys['bad_answer_given'] )
+      info = 'bad_answer_given' ;
     else
       info = '' ;
     if (competence !== '')
