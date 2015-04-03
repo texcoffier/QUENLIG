@@ -33,9 +33,9 @@ def execute(state, plugin, argument):
         return
 
     random.seed(state.student.seed)
-    state.student.tell_question(q.name)
     if state.form.get('erase', False):
         state.student.erase(q.name)
+    state.student.tell_question(q.name)
 
     return q.question(state).split('{{{')[0]
 

@@ -71,19 +71,16 @@ function js(t)
 
 function nice_results(info)
 {
-  var b = info[2], g = info[3] ;
-  var n = b + g ;
-  if ( n > 6 )
-  {
-    b = Math.round((6 * b) / n) ;
-    g = n - b ;
-  }
+  var b = info[2], g = info[3], p = info[4] ;
   var s = '<div class="nice_results">' ;
   for(var i=0; i < b; i++)
     s += '<span class="bad">&nbsp;</span>' ;
   s += '<br>' ;
   for(var i=0; i < g; i++)
     s += '<span class="good">&nbsp;</span>' ;
+  s += '<br>' ;
+  for(var i=0; i < p; i++)
+    s += '<span class="perfect">&nbsp;</span>' ;
   s += '</div>' ;
   return s
 }
@@ -147,9 +144,9 @@ function display_competences(data, question, message)
   erase_message = message ;
   current_question = question ;
   for(var i in data)
-    for(var q in data[i][4])
+    for(var q in data[i][5])
   {
-    q = data[i][4][q] ;
+    q = data[i][5][q] ;
     if ( competences[q] === undefined )
       competences[q] = [] ;
     competences[q].push(data[i]) ;

@@ -103,8 +103,8 @@ class Student:
 
         for question_name, action_time, command, value in self.read_log():
             answer = self.answer(question_name)
-            answer.eval_action(action_time, command, value)
             self.update_time(action_time, answer, command)
+            answer.eval_action(action_time, command, value)
             if stop_loading(self):
                 self.writable = False
                 break
@@ -133,17 +133,9 @@ class Student:
             return a
 
     def update_time(self, time, answer, command):
-        if command == "comment":
-            return
-        dt = time - self.previous_time
-        if dt < configuration.timeout_on_question:
-            if self.previous_command in ("asked", "bad", "indice"):
-                self.previous_answer.time_searching += dt
-            else:
-                self.previous_answer.time_after += dt
-        self.previous_time = time
+        if self.previous_answer:
+            self.previous_answer.end_of_action(time, command)
         self.previous_answer = answer
-        self.previous_command = command
 
     # Returns some statistics, do not modify data structures.
 
@@ -248,7 +240,8 @@ class Student:
                  and "not_answerable " or "") +
                 ("", " answered ")[int(a.answered != False)]
                 )
-            tt.append( (i, info, a.nr_bad_answer, a.nr_good_answer) )
+            tt.append( (i, info, a.nr_bad_answer, a.nr_good_answer,
+                        a.nr_perfect_answer) )
         tt.sort(key=lambda x: x[0].name)
         return tt
     
@@ -421,9 +414,9 @@ class Student:
             return
         action_time = time.time()
         answer = self.answer(question_name)
+        self.update_time(action_time, answer, command)
         if answer.eval_action(action_time, command, value):
             return
-        self.update_time(action_time, answer, command)
         if value != None:
             value = '' + quote(value)
         else:

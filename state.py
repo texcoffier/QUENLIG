@@ -50,10 +50,10 @@ def client_ip(server):
 def the_service(server):
     path = server.path.split('/')
     if len(path) < 3:
-        return configuration.url + '/'
+        return configuration.url
     else:
         if path[-1] == '':
-            return configuration.url + '/'
+            return configuration.url
         path[-1] = re.sub('&ticket=[^&]*','',path[-1])
         return configuration.url + '/' + '/'.join(path[-2:])
 

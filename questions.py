@@ -136,6 +136,7 @@ class Question:
         self.highlight = arg.get("highlight", False)
         self.maximum_bad_answer = int(arg.get("maximum_bad_answer", "0"))
         self.maximum_time = int(arg.get("maximum_time", "0"))
+        self.perfect_time = int(arg.get("perfect_time", "10"))
 
         self.eval_after = current_eval_after
         self.canonize = None
@@ -276,6 +277,7 @@ def add(**arg):
     "highlight": "Question à mettre en évidence",
     "maximum_bad_answer": "Nombre maximum de mauvaises réponse",
     "maximum_time": "Temps maximum pour répondre en secondes",
+    "perfect_time": "Si on répond plus vite : on maîtrise la question",
     }
 
     # sys.stdout.write("*")
