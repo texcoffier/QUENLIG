@@ -76,7 +76,7 @@ function nice_results(info)
   for(var i=0; i < b; i++)
     s += '<span class="bad">&nbsp;</span>' ;
   s += '<br>' ;
-  for(var i=0; i < g; i++)
+  for(var i=0; i < g-p; i++)
     s += '<span class="good">&nbsp;</span>' ;
   s += '<br>' ;
   for(var i=0; i < p; i++)

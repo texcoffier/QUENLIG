@@ -65,10 +65,9 @@ class Answer:
             self.answered = value
             t = questions.questions[self.student.last_asked_question
                                    ].perfect_time
+            self.nr_good_answer += 1
             if action_time - max(self.first_time, self.erase_time) < t:
                 self.nr_perfect_answer += 1
-            else:
-                self.nr_good_answer += 1
             self.answer_times.append(action_time)
         elif command == "indice" :
             self.indice += 1

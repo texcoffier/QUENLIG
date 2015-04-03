@@ -128,6 +128,8 @@ class Student:
             s += 'bad_answer_given '
         if resigned:
             s += 'resigned '
+        if not viewed:
+            s += 'not_seen '
         if max_descendants:
             s += ' max_descendants'
         s += '">' + name + '</A>'

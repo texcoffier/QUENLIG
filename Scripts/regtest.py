@@ -487,16 +487,16 @@ def test_0370_choice(student):
     student.goto_question('a:b')
     student.give_answer('b')
     student.goto_question('b:choice')
-    student.expect('<input type="checkbox" name="question_answer" value="b"> B')
-    student.expect('<input type="checkbox" name="question_answer" value="c"> C')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b"> B')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c"> C')
 
     student.get('?question_answer=b')
-    student.expect('<input type="checkbox" name="question_answer" value="b" checked> B')
-    student.expect('<input type="checkbox" name="question_answer" value="c"> C')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b" checked> B')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c"> C')
 
     student.get('?question_answer=b&question_answer=c')
-    student.expect('<input type="checkbox" name="question_answer" value="b" checked> B')
-    student.expect('<input type="checkbox" name="question_answer" value="c" checked> C')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b" checked> B')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c" checked> C')
     
     student.get('?question_answer=c')
     student.expect('<p class="maximum_bad_answer">')
