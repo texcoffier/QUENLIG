@@ -50,15 +50,12 @@ function choose_question(competence)
   }
 }
 
-function goto_question(question)
+function goto_question(question, recycle)
 {
   var q = question_dict[question] ;
   var erase = '' ;
-  if ( q[1].indexOf("answered") != -1 )
-    {
-      if ( confirm(erase_message) )
-	erase = '&erase=1' ;
-    }
+  if ( recycle )
+    erase = '&erase=1' ;
   window.location = "?question=" + escape2(question) + erase ;
 }
 
@@ -132,7 +129,13 @@ function update_competences()
         s.push(nice_results(q_info)
                + '<a class="' + q_info[1] + '" onclick="goto_question('
                + js(q_info[0]) + ')">'
-               + q_info[0] + '</a><br>') ;
+               + q_info[0] + '</a>'
+	       + (q_info[1].indexOf("answered") != -1
+		  ? '<a style="font-size:130%;position:absolute;" onclick="goto_question('
+		  + js(q_info[0]) + ',true)">&#9850;</a>' // &#9851;
+		  : ""
+		  )
+	       + '<br>') ;
       }
     }
   }
