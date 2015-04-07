@@ -103,7 +103,7 @@ add(name="mini",
         Bad(Comment(Equal('255.255.255.255'),
                     """Ce réseau contient ZERO adresse IP.
                     Comment allez-vous l'utiliser&nbsp;?""")),
-        Comment(~Contain('.'), "Donnez la notation x.y.z.t"),
+        Bad(Comment(~Contain('.'), "Donnez la notation x.y.z.t")),
     ),
     )
 
