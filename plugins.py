@@ -72,6 +72,8 @@ class AttributeCSS(Attribute):
                                   cgi.escape(self.selector))
 
     def generate_css(self, name, selector, attribute, value, div='DIV.'):
+        if not isinstance(value, str):
+            return ''
         if attribute == 'content':
             value = '"' + value + '"'
         return div + name + selector + '{ %s: %s ; }' % (

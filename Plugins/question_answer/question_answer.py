@@ -86,12 +86,17 @@ def execute(state, plugin, argument):
     if not state.question.required.answered(state.student.answered_questions()):
         return '<p class="missing_required">'
 
+    if not isinstance(plugin.title, tuple):
+        plugin.title = (plugin.title, plugin.title)
+
     if state.student.answered_question(state.question.name):
         # Value setted in question_change_answer plugin
         if (not hasattr(state.student, 'allowed_to_change_answer')
             or not state.student.allowed_to_change_answer):
             s = state.student.last_answer(state.question.name)
+            plugin.value_title = plugin.title[-1]
             return utilities.answer_format(s)
+    plugin.value_title = plugin.title[0]
 
     s = '<FORM CLASS="questionanswer" accept-charset="utf-8" METHOD="GET" ACTION="#">'
 

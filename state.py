@@ -306,6 +306,7 @@ class State(object):
                 plugin.value_title = None
                 plugin.value = None
                 continue
+            plugin.value_title = ''
 
             # Dans ACLS le plugin content est mis a jours
             plugin_argument = self.form.get(plugin.plugin.css_name, None)
@@ -329,7 +330,6 @@ class State(object):
                 plugin.value = None
             else:
                 plugin.value = v
-                plugin.value_title = ''
             if isinstance(plugin.value, tuple):
                 return plugin.value
 
