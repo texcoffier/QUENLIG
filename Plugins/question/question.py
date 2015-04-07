@@ -21,20 +21,18 @@
 
 """Display the question text."""
 
-import random
-
 priority_display = 'question_before'
 acls = { 'Default': ('executable',) }
 
-def execute(state, plugin, argument):
+def execute(state, dummy_plugin, dummy_argument):
     q = state.question
 
     if q == None:
         return
 
-    random.seed(state.student.seed)
     if state.form.get('erase', False):
         state.student.erase(q.name)
+    state.student.init_seed(q.name)
     state.student.tell_question(q.name)
 
     return q.question(state).split('{{{')[0]

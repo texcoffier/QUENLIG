@@ -1537,7 +1537,9 @@ class GRADE(Grade):
 
 def random_chooser(state, key, values):
     if state:
-        return values[(state.student.seed + abs(hash(key))) % len(values)]
+        return values[(state.student.seed
+                       + state.student.answers[state.question.name].nr_erase
+                       + abs(hash(key))) % len(values)]
     else:
         return values[0]
 
@@ -1551,6 +1553,20 @@ def random_question(question, choices):
     def f(state):
         return random_replace(state, question, choices)
     return f
+
+def random_questions_answers(qa):
+    """Create two dictionaries for random functions,
+     one the random question and the other for the answers
+    q, a = random_question_answers({'XXX': (("q1", "a1"), ("q2", "a2"))})
+    The string key is the same for the 2 dictionaries because it
+    is used when computing the random number.
+    """
+    q = {}
+    a = {}
+    for k, v in qa.items():
+        q[k] = [i[0] for i in v]
+        a[k] = [i[1] for i in v]
+    return q, a
 
 class Random(TestUnary):
     """The first argument is a dictionnary as in the example.
@@ -1868,7 +1884,11 @@ def regression_tests():
     assert( a('a  +   -   5') == (True, '') )
 
     a = create("Grade(Equal('a'),'john',4)")
+    class A:
+        nr_erase = 0
     class S:
+        import collections
+        answers = collections.defaultdict(A)
         seed = 0
         def set_grade(self, q, tg):
             grades[q] = tg

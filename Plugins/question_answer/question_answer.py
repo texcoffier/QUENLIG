@@ -26,9 +26,8 @@ As the answer may modify the question list, it must be executed
 before the question list computation.
 """
 
-import random
-import configuration
 import cgi
+import configuration
 import utilities
 
 priority_execute = '-questions' # To update question list before
@@ -116,7 +115,7 @@ def execute(state, plugin, argument):
                         .replace("'", "&#39;")
                         .replace('"', '&#34;'))
 
-    random.seed(state.student.seed)
+    state.student.init_seed(state.question.name)
     question = state.question.question(state)
     if '{{{' in question:
         t = question.split('{{{')[1:]

@@ -312,6 +312,10 @@ class Student:
                 summed[teacher] += float(grade)
         return summed
 
+    def init_seed(self, question):
+        """Set the random seed for the question"""
+        random.seed(self.seed + self.answers[question].nr_erase)
+
     def answered_page(self, state):
         t = self.answers.values()
         t.sort(lambda x,y: cmp(x.last_time, y.last_time))
@@ -333,7 +337,7 @@ class Student:
             import Plugins.question_change_answer.question_change_answer
             more = Plugins.question_change_answer.question_change_answer.add_a_link(state, q)
             s += "<h3 class=\"short\">" + q.name + more + "</h3>"
-            random.seed(self.seed)
+            self.init_seed(a.question)
             question_text = q.question(state)
             s += question_text.split('{{{')[0]
 
@@ -478,11 +482,11 @@ class Student:
 
     def check_answer(self, answer, state):
         "'state' is a parameter needed for some questions"
-        random.seed(self.seed)
+        self.init_seed(state.question.name)
         return state.question.check_answer(answer, state)
 
     def answer_commented(self, question_name, answer, state):
-        random.seed(self.seed)
+        self.init_seed(state.question.name)
         return questions.questions[question_name].answer_commented(answer,state)
 
     def mailto(self, subject=None, body=""):

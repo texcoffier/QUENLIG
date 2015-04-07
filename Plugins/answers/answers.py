@@ -21,7 +21,6 @@
 
 """Display all the questions definition."""
 
-import random
 import statistics
 import questions
 
@@ -37,7 +36,7 @@ def execute(state, plugin, argument):
         s = []
         for question in sorted(questions.questions.values(),
                                key=lambda q: q.name):
-            random.seed(state.student.seed)
+            state.student.init_seed(question.name)
             s.append('<strong>' + question.name + '</strong>')
             if question.maximum_time:
                 s.append(' maximum_time:%d' % question.maximum_time)
