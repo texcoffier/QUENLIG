@@ -23,7 +23,7 @@
 
 container = 'action'
 link_to_self = True
-priority_execute = 10 # to be sure that the plugin retrieving mail is executed
+priority_execute = "-question_before"
 acls = { 'Default': ('executable',), 'Admin': ('!executable',) }
 
 css_attributes = (
