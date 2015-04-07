@@ -67,7 +67,7 @@ class Session:
     def set_only_from(self, only_from):
         utilities.write(self.dir + 'only_from', only_from)
     def set_url(self, url, overwrite=True):
-        utilities.write(self.dir + 'url', url.strip('/'), overwrite)
+        utilities.write(self.dir + 'url', url, overwrite)
 
     def set_option(self, option, values):
         for plugin in plugins.Plugin.plugins_dict.values():
