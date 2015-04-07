@@ -213,12 +213,6 @@ def update_plugin_content(state):
 def execute(state, plugin=None, argument=None):
     """Initialize the acls list for the student and its 'ancestors'"""
 
-    # XXX should be in another plugin
-    if state.question:
-        if state.question not in state.student.answerables():
-            if not hasattr(state.student, 'allowed_to_change_answer'):
-                state.question = None
-
     d1 = update_student_acls(state.student)
     d2 = update_my_role(state)
     if d1 or d2:
