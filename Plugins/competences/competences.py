@@ -61,6 +61,8 @@ def execute(state, plugin, dummy_argument):
         info.append(tuple(info[0].competences))
         info[0] = unicode(info[0].name, 'latin-1')
         q.append(info)
+    if state.question and state.student.answered_question(state.question.name):
+        state.plugins_dict['title'].value += '<a href="?erase=1">&#9850;</a>'
     question = state.question and unicode(state.question.name, 'latin-1') or ''
     return '<script>%s ;display_competences(%s,%s)</script>' % (
          utilities.read(configuration.root
