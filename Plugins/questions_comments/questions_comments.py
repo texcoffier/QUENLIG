@@ -28,7 +28,7 @@ import cgi
 
 container = 'analyse'
 link_to_self = True
-priority_execute = '-question_answer'
+priority_execute = '-question_source'
 acls = { 'Author': ('executable',), 'Grader': ('executable',) }
 
 def execute(state, plugin, argument):
@@ -54,7 +54,7 @@ def execute(state, plugin, argument):
                                       comments,
                                       url = "%s&%s=1" % (plugin.plugin.css_name, plugin.plugin.css_name)
                                       )
-    state.questions = None
+    state.question = None
 
     return ''
 
