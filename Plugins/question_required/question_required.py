@@ -39,7 +39,7 @@ def execute(state, plugin, argument):
         return
         
     s = []
-    for p in state.question.required.names():
+    for p in state.question.required.names(only_visible=True):
         s.append( questions.questions[p].question(state) )
         try:
             s[-1] += '<br><tt class="answer"></tt><div class="answeruser">%s</div>' % \

@@ -33,7 +33,11 @@ current_evaluate_answer = None
 current_eval_after = None
 
 class Required:
+    visible = True
     def __init__(self, world, string):
+        if string[-1] == '¤':
+            self.visible = False
+            string = string[:-1]
         w = string.split(":")
         if len(w) == 2:
             self.world = w[0]
@@ -82,8 +86,11 @@ class Requireds:
                 return False
         return True
 
-    def names(self):
-        return [r.name for r in self.requireds]
+    def names(self, only_visible=False):
+        return [r.name
+                for r in self.requireds
+                if not only_visible or r.visible
+            ]
 
 def transform_question(question):
     """If the question is a string, return a function
