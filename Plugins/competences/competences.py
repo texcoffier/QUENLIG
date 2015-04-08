@@ -41,7 +41,7 @@ css_attributes = (
     "A.not_answerable  {color:#DDD;}",
     "A.highlight  { background: black; color: white;text-decoration: blink; }",
     ".nice_results { width: 12em; display: inline-block; text-align: right ;  font-size: 17%; margin-right: 0.5em; vertical-align: bottom }",
-    ".nice_results SPAN { display: inline-block; width: 1em; margin: 0.5px; }",
+    ".nice_results VAR { display: inline-block; width: 1em; margin: 0.5px; }",
     ".nice_results .good    { background: #0F0 ; border: 0.5px solid #080; }",
     ".nice_results .bad     { background: #F00 ; border: 0.5px solid #800; }",
     ".nice_results .perfect { background: #FF0 ; border: 0.5px solid #880; }",
@@ -62,9 +62,7 @@ def execute(state, plugin, dummy_argument):
         info[0] = unicode(info[0].name, 'latin-1')
         q.append(info)
     question = state.question and unicode(state.question.name, 'latin-1') or ''
-    return '<script>%s ;display_competences(%s,%s,%s)</script>' % (
+    return '<script>%s ;display_competences(%s,%s)</script>' % (
          utilities.read(configuration.root
                                 + "/Plugins/competences/competences.js"),
-        json.dumps(q), json.dumps(question),
-        json.dumps(unicode(plugin.plugin[state.localization, 'erase_message'],
-                           'latin-1')))
+        json.dumps(q), json.dumps(question))

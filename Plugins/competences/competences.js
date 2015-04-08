@@ -69,18 +69,28 @@ function js(t)
 function nice_results(info)
 {
   var b = info[2], g = info[3], p = info[4] ;
-  var s = '<div class="nice_results">' ;
+  var s = '<a class="nice_results tips"><div>' ;
   for(var i=0; i < b; i++)
-    s += '<span class="bad">&nbsp;</span>' ;
+    s += '<var class="bad">&nbsp;</var>' ;
   s += '<br>' ;
   for(var i=0; i < g-p; i++)
-    s += '<span class="good">&nbsp;</span>' ;
+    s += '<var class="good">&nbsp;</var>' ;
   s += '<br>' ;
   for(var i=0; i < p; i++)
-    s += '<span class="perfect">&nbsp;</span>' ;
-  s += '</div>' ;
+    s += '<var class="perfect">&nbsp;</var>' ;
+  s += '</div><span></span></a>' ;
   return s
 }
+
+var ordered = [
+  'perfect_answer',
+  'answered',
+  'bad_answer_given',
+  'not_answerable',
+  'not_seen',
+  'resigned',
+  'question_given'
+  ] ;
 
 function update_competences()
 {
@@ -118,21 +128,28 @@ function update_competences()
     if (competence !== '')
       s.push('<var onclick="toggle_competence(' + js(competence) + ')">' 
              + (open ? '\u229f' : '\u229e') + '</var> '
-             + '<a class="' + info
+             + '<a class="tips ' + info
 	     + '" onclick="choose_question(' + js(competence) + ')">'
-	     + competence + '</a><br>') ;
+	     + competence + '<span></span></a><br>') ;
     if ( open || competence === '' )
     {
       for(var q_info in competences[competence])
       {
         q_info = competences[competence][q_info] ;
+	info = '' ;
+	for(var i in ordered)
+	  if ( q_info[1].indexOf(ordered[i]) != -1 )
+	    {
+	      info = ordered[i] ;
+	      break ;
+	    }
         s.push(nice_results(q_info)
-               + '<a class="' + q_info[1] + '" onclick="goto_question('
+               + '<a class="tips ' + info + '" onclick="goto_question('
                + js(q_info[0]) + ')">'
-               + q_info[0] + '</a>'
+               + q_info[0] + '<span></span></a>'
 	       + (q_info[1].indexOf("answered") != -1
-		  ? '<a style="font-size:130%;position:absolute;" onclick="goto_question('
-		  + js(q_info[0]) + ',true)">&#9850;</a>' // &#9851;
+		  ? '<a class="tips" style="font-size:130%;position:absolute;" onclick="goto_question('
+		  + js(q_info[0]) + ',true)">&#9850;<span class="erase"></span></a>' // &#9851;
 		  : ""
 		  )
 	       + '<br>') ;
@@ -142,9 +159,8 @@ function update_competences()
   document.getElementById("competences").innerHTML = s.join('\n') ;
 }
 
-function display_competences(data, question, message)
+function display_competences(data, question)
 {
-  erase_message = message ;
   current_question = question ;
   for(var i in data)
     for(var q in data[i][5])
