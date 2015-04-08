@@ -130,8 +130,8 @@ def execute(state, plugin, argument):
                 checked = ' checked'
             else:
                 checked = ''
-            s += '<input class="checkbox" type="checkbox" name="%s" value="%s"%s>' % (
-                plugin.plugin.css_name, j[0], checked) + j[1] + '<br>'
+            s += '<label><input class="checkbox" type="checkbox" name="%s" value="%s"%s>' % (
+                plugin.plugin.css_name, j[0], checked) + j[1] + '</label><br>'
         s += '<br><button type="submit"><p class="answer_button"></p></button>'
     elif state.question.nr_lines == 1:
         s += '<INPUT TYPE="text" ID="2" NAME="%s.%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (

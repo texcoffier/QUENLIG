@@ -40,7 +40,7 @@ css_attributes = (
     "A.current_question{text-decoration:underline;}",
     "A.not_answerable  {color:#DDD;}",
     "A.highlight  { background: black; color: white;text-decoration: blink; }",
-    ".nice_results { width: 12em; display: inline-block; text-align: right ;  font-size: 15%; margin-right: 0.5em }",
+    ".nice_results { width: 12em; display: inline-block; text-align: right ;  font-size: 17%; margin-right: 0.5em; vertical-align: bottom }",
     ".nice_results SPAN { display: inline-block; width: 1em; margin: 0.5px; }",
     ".nice_results .good    { background: #0F0 ; border: 0.5px solid #080; }",
     ".nice_results .bad     { background: #F00 ; border: 0.5px solid #800; }",
