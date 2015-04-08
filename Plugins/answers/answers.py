@@ -26,7 +26,7 @@ import questions
 
 container = 'action'
 link_to_self = True
-priority_execute = '-question_answer'
+priority_execute = '-question_source'
 acls = { 'Teacher': ('executable',), 'Author': ('executable',) }
 css_attributes = ('TABLE { border: 1px solid black ; }',
                   )

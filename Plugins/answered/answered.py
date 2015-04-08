@@ -35,8 +35,6 @@ css_attributes = (
     )
 
 def execute(state, plugin, argument):
-    if state.student.number_of_good_answers() == 0:
-        return # Hide the link to new students
     if argument and state.student:
         if argument != '1':
             mail = state.student.informations.get('mail')
