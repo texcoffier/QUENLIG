@@ -19,28 +19,34 @@ function choose_question(competence)
 {
   var questions = competences[competence] ;
   var weight = 0 ;
+  var q_sorted = [] ;
   for(var question in questions)
   {
     question = questions[question] ;
-    if (question[0] == current_question )
+    if ( question[1].indexOf("not_answerable") != -1 )
       question.weight = 0 ;
-    else if ( question[1].indexOf("not_answerable") != -1 )
-      question.weight = 0 ;
-    else if ( question[1].indexOf("question_given") == -1 )
-      question.weight = 1000 ;
-    else if ( question[2] + question[3] == 0 )
-      question.weight = 20 ;
-    else if ( question[3] == 0 )
-      question.weight = 10 ;
+    else if ( question[1].indexOf("question_given") == -1 ) // NOT GIVEN
+      question.weight = 1024 ;
+    else if ( question[2] + question[3] == 0 ) // BAD + GOOD = 0
+      question.weight = 64 ;
+    else if ( question[3] == 0 ) // GOOD = 0
+      question.weight = 16 ;
+    else if ( question[4] == 0 ) // PERFECT = 0
+      question.weight = 4 ;
     else
-      question.weight = (question[2] + 1) / (question[2] + question[3]) ;
+      question.weight = 1. / question[4] ;
+    if ( question[0] == current_question )
+      question.weight /= 10 ;
+    question.weight += Math.random() / 1000 ;
     weight += question.weight ;
+    q_sorted.push(question) ;
   }
+  q_sorted.sort(function(a,b) { return a.weight - b.weight ; }) ;
   var random = Math.random() * weight ;
   weight = 0 ;
-  for(var question in questions)
+  for(var question in q_sorted)
   {
-    question = questions[question] ;
+    question = q_sorted[question] ;
     weight += question.weight ;
     if ( weight >= random )
       {
