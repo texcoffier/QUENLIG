@@ -1,111 +1,8 @@
 /* -*- coding: latin-1 -*- */
-var competences = {} ;
-var competence_names = [] ;
+var competences = {} ; // competence name -> competence object
+var competence_names = [] ; // sorted competences names
 var current_question = '' ;
-var question_dict = {} ;
-
-function is_open(competence)
-{
-  return localStorage[competence] == '1' ;
-}
-
-function open_competence(competence)
-{
-  localStorage[competence] = '1' ;
-}
-
-function toggle_competence(competence)
-{
-  localStorage[competence] = is_open(competence) ? '0' : '1' ;
-  update_competences() ;
-}
-
-function escape2(txt)
-{
-  return escape(txt).replace(/[+]/g, "%2B") ;
-}
-
-function choose_question(competence)
-{
-  open_competence(competence) ;
-  var questions = competences[competence] ;
-  var weight = 0 ;
-  var q_sorted = [] ;
-  for(var question in questions)
-  {
-    question = questions[question] ;
-    if ( question[1].indexOf("not_answerable") != -1 )
-      question.weight = 0 ;
-    else if ( question[1].indexOf("question_given") == -1 ) // NOT GIVEN
-      question.weight = 8192 ;
-    else if ( question[2] + question[3] == 0 ) // BAD + GOOD = 0
-      question.weight = 256 ;
-    else if ( question[3] == 0 ) // GOOD = 0
-      question.weight = 32 ;
-    else if ( question[4] == 0 ) // PERFECT = 0
-      question.weight = 4 ;
-    else
-      question.weight = 1. / question[4] ;
-    if ( question[0] == current_question )
-      question.weight *= 0.9 ;
-    question.weight += Math.random() / 1000 ;
-    weight += question.weight ;
-    q_sorted.push(question) ;
-  }
-  q_sorted.sort(function(a,b) { return a.weight - b.weight ; }) ;
-  var random = Math.random() * weight ;
-  weight = 0 ;
-  if ( false )
-    {
-      var s = "" ;
-      for(var question in q_sorted)
-	s += q_sorted[question][0] + ' ' + q_sorted[question].weight + '\n' ;
-      s += random ;
-      alert(s) ;
-    }
-  for(var question in q_sorted)
-  {
-    question = q_sorted[question] ;
-    weight += question.weight ;
-    if ( weight >= random )
-      {
-	goto_question(question[0]) ;
-	return ;
-      }
-  }
-}
-
-function goto_question(question, recycle)
-{
-  var q = question_dict[question] ;
-  var erase = '' ;
-  if ( recycle )
-    erase = '&erase=1' ;
-  window.location = "?question=" + escape2(question) + erase ;
-}
-
-function js(t)
-{
-  return "'" + t.toString().replace(/\\/g,'\\\\')
-    .replace(/"/g,'\\042').replace(/'/g,"\\047").replace(/\n/g,'\\n')
-    + "'" ;
-}
-
-function nice_results(info)
-{
-  var b = info[2], g = info[3], p = info[4] ;
-  var s = '<a class="nice_results tips"><div>' ;
-  for(var i=0; i < b; i++)
-    s += '<var class="bad">&nbsp;</var>' ;
-  s += '<br>' ;
-  for(var i=0; i < g-p; i++)
-    s += '<var class="good">&nbsp;</var>' ;
-  s += '<br>' ;
-  for(var i=0; i < p; i++)
-    s += '<var class="perfect">&nbsp;</var>' ;
-  s += '</div><span></span></a>' ;
-  return s
-}
+var questions = {} ; // question name -> question object
 
 var ordered = [
   'perfect_answer',
@@ -117,29 +14,179 @@ var ordered = [
   'question_given'
   ] ;
 
-function update_competences()
+function escape2(txt)
 {
-  var s = [] ;
-  for(var competence in competence_names)
+  return escape(txt).replace(/[+]/g, "%2B") ;
+}
+
+function js(t)
+{
+  return "'" + t.toString().replace(/\\/g,'\\\\')
+    .replace(/"/g,'\\042').replace(/'/g,"\\047").replace(/\n/g,'\\n')
+    + "'" ;
+}
+
+function random_jump(question_list)
+{
+  var weight = 0 ;
+  for(var question in question_list)
+    weight += question_list[question].weight() ;
+  var random = Math.random() * weight ;
+  weight = 0 ;
+  for(var question in question_list)
   {
-    competence = competence_names[competence] ;
-    var keys = {}, nb = 0 ;
-    for(var q_info in competences[competence])
+    question = question_list[question] ;
+    weight += question.weight() ;
+    if ( weight >= random )
+      {
+	question.jump() ;
+	return ;
+      }
+  }
+}
+
+function Question(info)
+{
+  this.name        = info[0] ;
+  this.classes     = info[1] ;
+  this.nr_bad      = info[2] ;
+  this.nr_good     = info[3] ;
+  this.nr_perfect  = info[4] ;
+  this.competences = info[5] ;
+  this.current     = this.name == current_question ;
+
+  for(var competence in this.competences)
+  {
+    competence = this.competences[competence] ;
+    if ( competences[competence] === undefined )
+      competences[competence] = new Competence(competence) ;
+    competences[competence].add(this) ;
+  }
+}
+
+Question.prototype.weight = function()
+{
+  var weight ;
+  
+  if ( this.classes.indexOf("not_answerable") != -1 )
+    weight = 0 ;
+  else if ( this.classes.indexOf("question_given") == -1 ) // NOT GIVEN
+    weight = 8192 ;
+  else if ( this.nr_bad + this.nr_good == 0 )
+    weight = 256 ;
+  else if ( this.nr_good == 0 )
+    weight = 32 ;
+  else if ( this.nr_perfect == 0 )
+    weight = 4 ;
+  else
+    weight = 1. / this.nr_perfect ;
+  if ( this.current )
+    weight *= 0.9 ;
+  weight += Math.random() / 1000 ;
+  return weight ;
+} ;
+
+Question.prototype.jump = function(recycle)
+{
+  var erase = '' ;
+  if ( recycle )
+    erase = '&erase=1' ;
+  window.location = "?question=" + escape2(this.name) + erase ;
+} ;
+
+Question.prototype.nice_results = function()
+{
+  var s = '<a class="nice_results tips"><div>' ;
+  for(var i=0; i < this.nr_bad; i++)
+    s += '<var class="bad">&nbsp;</var>' ;
+  s += '<br>' ;
+  for(var i=0; i < this.nr_good - this.nr_perfect; i++)
+    s += '<var class="good">&nbsp;</var>' ;
+  s += '<br>' ;
+  for(var i=0; i < this.nr_perfect; i++)
+    s += '<var class="perfect">&nbsp;</var>' ;
+  s += '</div><span></span></a>' ;
+  return s ;
+} ;
+
+
+Question.prototype.html = function()
+{
+  var info = '' ;
+  for(var i in ordered)
     {
-      q_info = competences[competence][q_info][1].split(/  */) ;
+      if ( this.classes.indexOf(ordered[i]) != -1 )
+      {
+	info = ordered[i] ;
+	break ;
+      }
+    }
+  if ( this.current )
+    info += ' current_question' ;
+
+  return this.nice_results(q_info)
+    + '<a class="tips ' + info + '" onclick="questions['
+    + js(this.name) + '].jump()">' + this.name + '<span></span></a>'
+    + (this.classes.indexOf("answered") != -1
+       ? '<a class="tips" style="font-size:130%;position:absolute;" onclick="questions['
+       + js(this.name) + '].jump(true)">&#9850;<span class="erase"></span></a>'
+       : ""
+      ) ;
+} ;
+
+function Competence(name)
+{
+  this.name = name ;
+  this.questions = [] ;
+  competence_names.push(name) ;
+  competence_names.sort() ;
+}
+
+Competence.prototype.add = function(question)
+{
+  this.questions.push(question) ;
+} ;
+
+Competence.prototype.is_open = function()
+{
+  return localStorage[this.name] == '1' ;
+} ;
+
+Competence.prototype.open = function()
+{
+  localStorage[this.name] = '1' ;
+} ;
+
+Competence.prototype.toggle = function()
+{
+  localStorage[this.name] = this.is_open() ? '0' : '1' ;
+  update_competences() ;
+} ;
+
+Competence.prototype.choose_question = function()
+{
+  this.open() ;
+  random_jump(this.questions) ;
+}
+
+Competence.prototype.classe = function()
+{
+    var keys = {} ;
+    for(var question in this.questions)
+    {
+      q_info = this.questions[question].classes.split(/  */) ;
       for(var i in q_info)
       {
         if ( keys[q_info[i]] === undefined )
           keys[q_info[i]] = 0 ;
         keys[q_info[i]]++ ;
-        nb++ ;
       }
     }
-    if ( keys['perfect_answer'] == competences[competence].length )
+    if ( keys['perfect_answer'] == this.questions.length )
       info = 'perfect_answer' ;
-    else if ( keys['answered'] == competences[competence].length )
+    else if ( keys['answered'] == this.questions.length )
       info = 'answered' ;
-    else if ( keys['not_answerable'] == competences[competence].length )
+    else if ( keys['not_answerable'] == this.questions.length )
       info = 'not_answerable' ;
     else if ( keys['not_seen'] )
       info = 'not_seen' ;
@@ -149,37 +196,31 @@ function update_competences()
       info = 'bad_answer_given' ;
     else
       info = '' ;
-    if (competence !== '')
-      s.push('<var onclick="toggle_competence(' + js(competence) + ')">' 
-             + (is_open(competence) ? '\u229f' : '\u229e') + '</var> '
-             + '<a class="tips ' + info
-	     + '" onclick="choose_question(' + js(competence) + ')">'
-	     + competence + '<span></span></a><br>') ;
-    if ( is_open(competence) || competence === '' )
+  return info ;
+} ;
+
+Competence.prototype.html = function()
+{
+  if (this.name === '')
+    return '' ;
+  return '<var onclick="competences['+ js(this.name) +'].toggle()">' 
+    + (this.is_open ? '\u229f' : '\u229e') + '</var> '
+    + '<a class="tips ' + this.classe()
+    + '" onclick="competences[' + js(this.name) + '].choose_question()">'
+    + this.name + '<span></span></a>' ;
+} ;
+
+function update_competences()
+{
+  var s = [] ;
+  for(var competence in competence_names)
+  {
+    competence = competences[competence_names[competence]] ;
+    s.push(competence.html() +  '<br>') ;
+    if ( competence.is_open() || competence.name === '' )
     {
-      for(var q_info in competences[competence])
-      {
-        q_info = competences[competence][q_info] ;
-	info = '' ;
-	for(var i in ordered)
-	  if ( q_info[1].indexOf(ordered[i]) != -1 )
-	    {
-	      info = ordered[i] ;
-	      break ;
-	    }
-	if ( q_info[0] == current_question )
-	  info += ' current_question' ;
-        s.push(nice_results(q_info)
-               + '<a class="tips ' + info + '" onclick="goto_question('
-               + js(q_info[0]) + ')">'
-               + q_info[0] + '<span></span></a>'
-	       + (q_info[1].indexOf("answered") != -1
-		  ? '<a class="tips" style="font-size:130%;position:absolute;" onclick="goto_question('
-		  + js(q_info[0]) + ',true)">&#9850;<span class="erase"></span></a>' // &#9851;
-		  : ""
-		  )
-	       + '<br>') ;
-      }
+      for(var question in competence.questions)
+        s.push(competence.questions[question].html() + '<br>') ;
     }
   }
   document.getElementById("competences").innerHTML = s.join('\n') ;
@@ -189,18 +230,12 @@ function display_competences(data, question)
 {
   current_question = question ;
   for(var i in data)
-    for(var q in data[i][5])
-  {
-    q = data[i][5][q] ;
-    if ( competences[q] === undefined )
-      competences[q] = [] ;
-    competences[q].push(data[i]) ;
-    question_dict[data[i][0]] = data[i] ;
-  }
-  for(var competence in competences)
-    competence_names.push(competence) ;
-  competence_names.sort() ;
-
+    questions[data[i][0]] = new Question(data[i]) ;
   document.write('<div id="competences"></div>') ;
   update_competences() ;
 }
+
+document.getElementsByTagName("BODY")[0].onkeypress = function(event) {
+  if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
+    random_jump(questions) ;
+} ;

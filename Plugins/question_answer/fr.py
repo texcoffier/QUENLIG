@@ -1,7 +1,7 @@
 # -*- coding: latin-1 -*-
 
 title = ("Donnez votre réponse ici",
-         "Vous aviez répondu")
+         "Vous avez répondu")
 
 tip = "Pensez à tester votre réponse dans la réalité avant de la saisir ici, sinon vous risquez de donnez une mauvaise réponse bêtement"
 
