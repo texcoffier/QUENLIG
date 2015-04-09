@@ -37,17 +37,17 @@ function choose_question(competence)
     if ( question[1].indexOf("not_answerable") != -1 )
       question.weight = 0 ;
     else if ( question[1].indexOf("question_given") == -1 ) // NOT GIVEN
-      question.weight = 1024 ;
+      question.weight = 8192 ;
     else if ( question[2] + question[3] == 0 ) // BAD + GOOD = 0
-      question.weight = 64 ;
+      question.weight = 256 ;
     else if ( question[3] == 0 ) // GOOD = 0
-      question.weight = 16 ;
+      question.weight = 32 ;
     else if ( question[4] == 0 ) // PERFECT = 0
       question.weight = 4 ;
     else
       question.weight = 1. / question[4] ;
     if ( question[0] == current_question )
-      question.weight /= 10 ;
+      question.weight *= 0.9 ;
     question.weight += Math.random() / 1000 ;
     weight += question.weight ;
     q_sorted.push(question) ;
@@ -55,6 +55,14 @@ function choose_question(competence)
   q_sorted.sort(function(a,b) { return a.weight - b.weight ; }) ;
   var random = Math.random() * weight ;
   weight = 0 ;
+  if ( false )
+    {
+      var s = "" ;
+      for(var question in q_sorted)
+	s += q_sorted[question][0] + ' ' + q_sorted[question].weight + '\n' ;
+      s += random ;
+      alert(s) ;
+    }
   for(var question in q_sorted)
   {
     question = q_sorted[question] ;
