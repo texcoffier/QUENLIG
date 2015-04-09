@@ -4,9 +4,19 @@ var competence_names = [] ;
 var current_question = '' ;
 var question_dict = {} ;
 
+function is_open(competence)
+{
+  return localStorage[competence] == '1' ;
+}
+
+function open_competence(competence)
+{
+  localStorage[competence] = '1' ;
+}
+
 function toggle_competence(competence)
 {
-  localStorage[competence] = localStorage[competence] == '1' ? '0' : '1' ;
+  localStorage[competence] = is_open(competence) ? '0' : '1' ;
   update_competences() ;
 }
 
@@ -17,6 +27,7 @@ function escape2(txt)
 
 function choose_question(competence)
 {
+  open_competence(competence) ;
   var questions = competences[competence] ;
   var weight = 0 ;
   var q_sorted = [] ;
@@ -104,7 +115,6 @@ function update_competences()
   for(var competence in competence_names)
   {
     competence = competence_names[competence] ;
-    var open = localStorage[competence] == "1" ;
     var keys = {}, nb = 0 ;
     for(var q_info in competences[competence])
     {
@@ -133,11 +143,11 @@ function update_competences()
       info = '' ;
     if (competence !== '')
       s.push('<var onclick="toggle_competence(' + js(competence) + ')">' 
-             + (open ? '\u229f' : '\u229e') + '</var> '
+             + (is_open(competence) ? '\u229f' : '\u229e') + '</var> '
              + '<a class="tips ' + info
 	     + '" onclick="choose_question(' + js(competence) + ')">'
 	     + competence + '<span></span></a><br>') ;
-    if ( open || competence === '' )
+    if ( is_open(competence) || competence === '' )
     {
       for(var q_info in competences[competence])
       {
@@ -149,6 +159,8 @@ function update_competences()
 	      info = ordered[i] ;
 	      break ;
 	    }
+	if ( q_info[0] == current_question )
+	  info += ' current_question' ;
         s.push(nice_results(q_info)
                + '<a class="tips ' + info + '" onclick="goto_question('
                + js(q_info[0]) + ')">'
