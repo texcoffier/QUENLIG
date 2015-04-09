@@ -126,12 +126,19 @@ def execute(state, plugin, argument):
     question = state.question.question(state)
     if '{{{' in question:
         t = question.split('{{{')[1:]
+        nr_checked = 0
         for i in t:
             j = i.split('}}}')
             if j[0] in last_answer:
                 checked = ' checked'
+                if nr_checked == 0:
+                    checked += ' id="2"'
+                    nr_checked = 1
             else:
                 checked = ''
+            if nr_checked == 0 and i == t[-1]:
+                checked += ' id="2"'
+
             s += '<label><input class="checkbox" type="checkbox" name="%s" value="%s"%s>' % (
                 plugin.plugin.css_name, j[0], checked) + j[1] + '</label><br>'
         s += '<button type="submit"><p class="answer_button"></p></button>'
