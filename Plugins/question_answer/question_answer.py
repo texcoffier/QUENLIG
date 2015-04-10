@@ -129,6 +129,11 @@ def execute(state, plugin, argument):
         nr_checked = 0
         for i in t:
             j = i.split('}}}')
+            if j[0].startswith('!'):
+                j[0] = j[0][1:]
+                button_type = "radio"
+            else:
+                button_type = "checkbox"
             if j[0] in last_answer:
                 checked = ' checked'
                 if nr_checked == 0:
@@ -138,9 +143,9 @@ def execute(state, plugin, argument):
                 checked = ''
             if nr_checked == 0 and i == t[-1]:
                 checked += ' id="2"'
-
-            s += '<label><input class="checkbox" type="checkbox" name="%s" value="%s"%s>' % (
-                plugin.plugin.css_name, j[0], checked) + j[1] + '</label><br>'
+            s += '<label><input class="checkbox" type="%s" name="%s" value="%s"%s>' % (
+                button_type, plugin.plugin.css_name, j[0], checked
+            ) + j[1] + '</label><br>'
         s += '<button type="submit"><p class="answer_button"></p></button>'
     elif state.question.nr_lines == 1:
         s += '<INPUT TYPE="text" ID="2" NAME="%s.%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (
