@@ -43,6 +43,8 @@ def question_lines(c, question):
     start = question.f_lineno
     while not c[start].startswith('add('):
         start -= 1
+    while start > 0 and c[start].strip() != '':
+        start -= 1
 
     end = question.f_lineno
     while end < len(c) and not c[end].strip() == '':
