@@ -235,7 +235,8 @@ function display_competences(data, question)
   update_competences() ;
 }
 
-document.getElementsByTagName("BODY")[0].onkeypress = function(event) {
-  if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
-    random_jump(questions) ;
-} ;
+if ( document.getElementsByTagName("BODY")[0] )
+  document.getElementsByTagName("BODY")[0].onkeypress = function(event) {
+    if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
+      random_jump(questions) ;
+  } ;
