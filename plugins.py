@@ -257,10 +257,12 @@ class Plugin:
                     break
                 except ImportError:
                     pass
+            else:
+                self.lang[lang] = None
 
         try: # Get the localized value
             return self.lang[lang].__dict__[attribute]
-        except KeyError:
+        except (KeyError, AttributeError):
             pass
 
         try: # Get the default defined in the plugin file
