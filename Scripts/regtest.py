@@ -189,7 +189,7 @@ def test_0140_comment_after_good_answer(student):
     test_0020_give_good_answer(student)
     student.old_base = student.base # For reload
     student.give_comment('My-Comment')
-    minimal_tests(student, title=None, good=1)
+    minimal_tests(student, title='a:a', good=1)
     student.expect('<div class="comment_given">My-Comment</div>')
     student.old_url = student.url
     page = student.get_answered()
@@ -199,7 +199,7 @@ def test_0150_comment_after_good_answer_reload(student):
     test_0140_comment_after_good_answer(student)
     # Reload last page
     student.get(student.old_url, base=student.old_base)
-    minimal_tests(student, title=None, good=1)
+    minimal_tests(student, title='a:a', good=1)
     student.expect('<div class="comment_given">My-Comment</div>')
     student.old_url = student.url
     page = student.get_answered()
@@ -281,7 +281,7 @@ def test_0220_parallel_answer_1(student):
 
     # Forbiden
     student.give_answer('c', base=student.old_base_1)
-    minimal_tests(student, title=None, good=3)
+    minimal_tests(student, title='a:b', good=3) # XXX dangerous
     
 def test_0240_work_done(student):
     student.goto_question('a:a')
@@ -341,9 +341,9 @@ def test_0260_require_simple(student):
     student.check_question_link('b:C', default=True, max_descendants=True)
 
     student.goto_question('b:A')
-    minimal_tests(student, title=None, good=3)
+    minimal_tests(student, title='b:A', good=3)
     student.goto_question('b:B')
-    minimal_tests(student, title=None, good=3)
+    minimal_tests(student, title='b:B', good=3)
     student.goto_question('b:C')
     minimal_tests(student, title='b:C', good=3)
     
@@ -488,14 +488,14 @@ def test_0370_choice(student):
     student.give_answer('b')
     student.goto_question('b:choice')
     student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b"> B')
-    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c"> C')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c" id="2"> C')
 
     student.get('?question_answer=b')
-    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b" checked> B')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b" checked id="2"> B')
     student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c"> C')
 
     student.get('?question_answer=b&question_answer=c')
-    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b" checked> B')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b" checked id="2"> B')
     student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c" checked> C')
     
     student.get('?question_answer=c')

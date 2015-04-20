@@ -66,7 +66,13 @@ def execute(state, plugin, argument):
         return
     if state.question.tests == ():
         return
-    if argument:
+
+    if argument and (
+            state.question in state.student.answerables()
+            or hasattr(state.student, 'allowed_to_change_answer')
+            or (state.student.answer(state.question.name).nr_good_answer
+                and not state.student.answer(state.question.name).answered)
+    ):
         argument = unicode(argument, "utf-8").encode("latin-1",'replace')
         # Fill 'last_answer' attribute
         state.student.bad_answer_yet_given(state.question.name, argument)
