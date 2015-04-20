@@ -233,10 +233,11 @@ function display_competences(data, question)
     questions[data[i][0]] = new Question(data[i]) ;
   document.write('<div id="competences"></div>') ;
   update_competences() ;
+
+  if ( document.getElementsByTagName("BODY")[0] )
+    document.getElementsByTagName("BODY")[0].onkeypress = function(event) {
+      if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
+	random_jump(questions) ;
+    } ;
 }
 
-if ( document.getElementsByTagName("BODY")[0] )
-  document.getElementsByTagName("BODY")[0].onkeypress = function(event) {
-    if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
-      random_jump(questions) ;
-  } ;
