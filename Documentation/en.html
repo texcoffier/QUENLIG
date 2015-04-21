@@ -483,8 +483,12 @@ add(name="affectation",
     </p>
     <p>
       If you want to add a CSS style to your questionnary,
-      put it in 'Questions/YourQuestionnary/HTML/questions.css'
+      put it in 'Questions/YourQuestionnary/HTML/questions.css'<br>
+      You can also redefine existing translations, for example :
     </p>
+    <pre>DIV.question_good > A:first-child.content > .box_title:before {
+content: "Good! Press «Enter» to choose a random question." ;
+}</pre>
     
     <h3><a name="question">Parameter: <tt>question</tt></a></h3>
 
@@ -537,6 +541,7 @@ add(name="affectation",
 	    <a href="tests.html#Start">Start</a>,
 	    <a href="tests.html#End">End</a>,
 	    <a href="tests.html#Contain">Contain</a>,
+	    <a href="tests.html#IsInt">IsInt</a>,
 	    <a href="tests.html#Int">Int</a>,
 	    <a href="tests.html#IntLG">IntLG</a>,
 	    <a href="tests.html#IntGT">IntGT</a>,

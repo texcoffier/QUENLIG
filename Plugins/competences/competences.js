@@ -71,13 +71,13 @@ Question.prototype.weight = function()
   if ( this.classes.indexOf("not_answerable") != -1 )
     weight = 0 ;
   else if ( this.classes.indexOf("question_given") == -1 ) // NOT GIVEN
-    weight = 8192 ;
+    weight = 10000 ;
   else if ( this.nr_bad + this.nr_good == 0 )
-    weight = 256 ;
+    weight = 1000 ;
   else if ( this.nr_good == 0 )
-    weight = 32 ;
+    weight = 100 ;
   else if ( this.nr_perfect == 0 )
-    weight = 4 ;
+    weight = 10 ;
   else
     weight = 1. / this.nr_perfect ;
   if ( this.current )
@@ -126,7 +126,9 @@ Question.prototype.html = function()
 
   return this.nice_results(q_info)
     + '<a class="tips ' + info + '" onclick="questions['
-    + js(this.name) + '].jump()">' + this.name + '<span></span></a>'
+    + js(this.name) + '].jump()">' + this.name + '<span>'
+    /* + '<br>' + this.weight() */
+    + '</span></a>'
     + (this.classes.indexOf("answered") != -1
        ? '<a class="tips" style="font-size:130%;position:absolute;" onclick="questions['
        + js(this.name) + '].jump(true)">&#9850;<span class="erase"></span></a>'

@@ -1324,6 +1324,21 @@ class Replace(TestUnary):
     def canonize(self, string, state):
         return replace_strings(self.replace_canonized, string)
 
+class IsInt(TestExpression):
+    """Returns True if the student answer is an integer
+
+    Examples:
+       # Reject any number != 42
+       # If the student answer is not an integer there is no message.
+       Bad(Comment(IsInt() & ~Int(42), "The answer is 42"))
+    """
+    def do_test(self, student_answer, state):
+        try:
+            int(student_answer)
+            return True, ''
+        except:
+            return None, ''
+
 class TestInt(TestExpression):
     """Base class for integer tests."""
     def __init__(self, integer):
@@ -1936,5 +1951,8 @@ def regression_tests():
     a = create("Good(And(Contain('x'),Contain('y')))")
     assert(a('x', st) == (None, ''))
 
+    a = create("Good(IsInt())")
+    assert(a('x') == (None, ''))
+    assert(a('42') == (True, ''))
 if True:
     regression_tests()
