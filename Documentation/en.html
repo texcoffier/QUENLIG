@@ -32,6 +32,8 @@
       <li> <a href="#maximum_time"><tt>maximum_time</tt></a></li>
       <li> <a href="#good_answer"><tt>good_answer</tt></a></li>
       <li> <a href="#bad_answer"><tt>bad_answer</tt></a></li>
+      <li> <a href="#courses"><tt>courses</tt></a></li>
+      <li> <a href="#perfect_time"><tt>perfect_time</tt></a></li>
       </ul>
       </li>
       <li> <a href="#session_management">Session Management</a></li>
@@ -659,6 +661,19 @@ add(name="affectation",
       are displayed by the 'course documentation' plugin.
       To hide a question from the course documentation,
       set <tt>courses</tt> to <tt>False</tt>.
+    </p>
+
+    <h3><a name="perfect_time">Parameter: <tt>perfect_time</tt></a></h3>
+
+    <p>
+      If the question is answered in less than the specified number
+      of seconds, then the question is perfectly answered.
+      It is only useful with the <tt>competences</tt> plugin because
+      it allows to retry to answer and display the number
+      of perfect answers.
+    </p>
+    <p>
+      The default value is 10 seconds
     </p>
 
     <h2><a name="session_management">Session Management</a></h2>

@@ -396,8 +396,9 @@ class Plugin:
             if isinstance(attr_value, dict):
                 s.append(self.display_dicts(attr.name, attr_value,
                                             self[('fr',), attr.name]))
-            elif isinstance(attr_value, tuple) or isinstance(attr_value, list):
+            elif attr.name == 'css_attribute':
                 d1 = {}
+                print attr.name, attr_value
                 for v in attr_value:
                     v = v.split('{', 1)
                     d1[v[0].strip()] = v[1].strip('} ')
@@ -410,7 +411,7 @@ class Plugin:
                 fr = self[('fr',), attr.name]
                 def value_html(x):
                     v = '<td'
-                    x = str(x).replace('\\A','\n')
+                    x = cgi.escape(str(x)).replace('\\A','\n')
                     if '\n' in x:
                         v += ' class="pre"'
                     return v + '>' + x + '</td>'
