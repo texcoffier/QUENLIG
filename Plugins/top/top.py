@@ -114,6 +114,8 @@ A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {
   z-index: 10;
 }
 
+A { text-decoration: none ; }
+
 /* Only here to fix a Chrome bug */
 A { background-image: url('transparent.png'); }
 

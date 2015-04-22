@@ -35,16 +35,19 @@ css_attributes = (
     "A.bad_answer_given{color:#F00;}",
     "A.answered        {color:#0A0;}",
     "A.not_seen        {color:#00F;}",
-    "A.perfect_answer  {background:#4F4; color: black}",
+    "A.perfect_answer  {background:#CFC; color: black}",
     "A.indice_given    {font-style:italic;}",
     "A.current_question{text-decoration:underline;}",
     "A.not_answerable  {color:#DDD;}",
     "A.highlight  { background: black; color: white;text-decoration: blink; }",
-    ".nice_results { width: 12em; display: inline-block; text-align: right ;  font-size: 17%; margin-right: 0.5em; vertical-align: bottom }",
-    ".nice_results VAR { display: inline-block; width: 1em; margin: 0.5px; }",
-    ".nice_results .good    { background: #0F0 ; border: 0.5px solid #080; }",
-    ".nice_results .bad     { background: #F00 ; border: 0.5px solid #800; }",
-    ".nice_results .perfect { background: #FF0 ; border: 0.5px solid #880; }",
+    ".nice_results { display: inline-block; vertical-align: bottom; border-spacing: 1px }",
+    ".nice_results TD { width: 5px; height: 5px; padding: 0px ; }",
+    "/.title_bar DIV.competences .nice_results TD { width: 9px; height: 9px}",
+    "/.title_bar DIV.competences .nice_results { border-spacing: 2px;}",
+    ".nice_results .good    { background: #0F0 ; }",
+    ".nice_results .bad     { background: #F00 ; }",
+    ".nice_results .perfect { background: #DD0 ; }",
+    "#competences { width: 15em }",
     )
 acls = {}
 
@@ -62,7 +65,7 @@ def execute(state, plugin, dummy_argument):
         info[0] = unicode(info[0].name, 'latin-1')
         q.append(info)
     if state.question and state.student.answered_question(state.question.name):
-        state.plugins_dict['title'].value += '<a href="?erase=1">&#9850;</a>'
+        state.plugins_dict['title'].value += '<div class="competences" style="display:inline"><a class="tips" href="?erase=1">&#9850;<span class="erase"></span></a></div>'
     question = state.question and unicode(state.question.name, 'latin-1') or ''
     return '<script>display_competences(%s,%s)</script>' % (
         json.dumps(q), json.dumps(question))

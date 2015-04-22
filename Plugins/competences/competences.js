@@ -96,17 +96,28 @@ Question.prototype.jump = function(recycle)
 
 Question.prototype.nice_results = function()
 {
-  var s = '<a class="nice_results tips"><div>' ;
-  for(var i=0; i < this.nr_bad; i++)
-    s += '<var class="bad">&nbsp;</var>' ;
-  s += '<br>' ;
-  for(var i=0; i < this.nr_good - this.nr_perfect; i++)
-    s += '<var class="good">&nbsp;</var>' ;
-  s += '<br>' ;
-  for(var i=0; i < this.nr_perfect; i++)
-    s += '<var class="perfect">&nbsp;</var>' ;
-  s += '</div><span></span></a>' ;
-  return s ;
+  var cols = Math.max(this.nr_bad,
+		      this.nr_good - this.nr_perfect,
+		      this.nr_perfect,
+		     6) ;
+  var s = ['<a class="tips nice_results"><table class="nice_results">'] ;
+  function add_line(nr, cls)
+  {
+    s.push('<tr>') ;
+    for(var i=0; i < cols; i++)
+    {
+      if ( i >= cols - nr )
+	s.push('<td class="' + cls + '">') ;
+      else
+	s.push('<td>') ;
+    }
+    s.push("</tr>") ;
+  }
+  add_line(this.nr_bad, "bad") ;
+  add_line(this.nr_good - this.nr_perfect, "good") ;
+  add_line(this.nr_perfect, "perfect") ;
+  s.push("</table><span></span></a>") ;
+  return s.join('') ;
 } ;
 
 
@@ -124,13 +135,13 @@ Question.prototype.html = function()
   if ( this.current )
     info += ' current_question' ;
 
-  return this.nice_results(q_info)
+  return this.nice_results()
     + '<a class="tips ' + info + '" onclick="questions['
     + js(this.name) + '].jump()">' + this.name + '<span>'
     /* + '<br>' + this.weight() */
     + '</span></a>'
     + (this.classes.indexOf("answered") != -1
-       ? '<a class="tips" style="font-size:130%;position:absolute;" onclick="questions['
+       ? ' <a class="tips ' + info + '" style="position:absolute;" onclick="questions['
        + js(this.name) + '].jump(true)">&#9850;<span class="erase"></span></a>'
        : ""
       ) ;
@@ -228,6 +239,24 @@ function update_competences()
   document.getElementById("competences").innerHTML = s.join('\n') ;
 }
 
+function patch_title()
+{
+  var d = document.getElementsByTagName('DIV') ;
+  for(var i = 0 ; i < d.length; i++)
+    if ( d[i].className == 'title_bar' )
+      {
+	d = d[i].getElementsByTagName('TABLE')[0] ;
+	d = d.rows[0].cells[0].getElementsByTagName('DIV')[0] ;
+	var e = document.createElement('DIV') ;
+	e.className = "competences" ;
+	e.style.display = "inline" ;
+	e.innerHTML = questions[current_question].nice_results() ;
+	d.insertBefore(e, d.lastChild) ;
+	return ;
+      }
+  setTimeout(patch_title, 10) ;
+}
+
 function display_competences(data, question)
 {
   current_question = question ;
@@ -241,5 +270,6 @@ function display_competences(data, question)
       if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
 	random_jump(questions) ;
     } ;
+  patch_title() ;
 }
 
