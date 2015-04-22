@@ -141,7 +141,7 @@ Question.prototype.html = function()
     /* + '<br>' + this.weight() */
     + '</span></a>'
     + (this.classes.indexOf("answered") != -1
-       ? ' <a class="tips ' + info + '" style="position:absolute;" onclick="questions['
+       ? '&nbsp;<a class="tips ' + info + '" style="position:absolute;" onclick="questions['
        + js(this.name) + '].jump(true)">&#9850;<span class="erase"></span></a>'
        : ""
       ) ;
@@ -178,7 +178,7 @@ Competence.prototype.toggle = function()
 
 Competence.prototype.choose_question = function()
 {
-  this.open() ;
+  // this.open() ;
   random_jump(this.questions) ;
 }
 
@@ -217,7 +217,7 @@ Competence.prototype.html = function()
   if (this.name === '')
     return '' ;
   return '<var onclick="competences['+ js(this.name) +'].toggle()">' 
-    + (this.is_open ? '\u229f' : '\u229e') + '</var> '
+    + (this.is_open() ? '\u229f' : '\u229e') + '</var> '
     + '<a class="tips ' + this.classe()
     + '" onclick="competences[' + js(this.name) + '].choose_question()">'
     + this.name + '<span></span></a>' ;
