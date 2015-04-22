@@ -259,7 +259,10 @@ class Question:
             if isinstance(test, Grade):
                 if not test.grade.startswith("-"):
                     if test.teacher:
-                        competences.add(test.teacher)
+                        if isinstance(test.teacher, str):
+                            competences.add(test.teacher)
+                        else:
+                            competences.update(test.teacher)
             if getattr(test, 'children', None):
                 competences.update(self.get_competences(test.children))
         return competences
@@ -1487,8 +1490,7 @@ class Grade(TestUnary):
     """If the first expression is True:
        Set a grade for the student+question+teacher.
        The grade can be a positive or negative number.
-       The 'teacher' can be the name of a knowledge,
-       use only ONE 'teacher' per question.
+       The 'teacher' can be the name of a knowledge, or a list of knowledges.
        Grade always returns the value returned by the first expression.
        The grades are summed per teacher when exporting all the grades.
 
@@ -1537,11 +1539,15 @@ class Grade(TestUnary):
     def do_test(self, student_answer, state=None):
         goodbad, a_comment = self.children[0](student_answer, state)
         if state.question and goodbad is True:
-            state.student.set_grade(
-                state.question.name, self.teacher + ',' + self.grade)
+            grade = ',' + self.grade
         else:
-            state.student.set_grade(
-                state.question.name, self.teacher + ',0')
+            grade = ',0'
+        if isinstance(self.teacher, str):
+            teachers = [self.teacher]
+        else:
+            teachers = self.teacher
+        for teacher in teachers:
+            state.student.set_grade(state.question.name, teacher + grade)
         if self.stop_eval:
             return goodbad, a_comment
         else:
