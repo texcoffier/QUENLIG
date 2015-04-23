@@ -151,6 +151,9 @@ function Competence(name)
 {
   this.name = name ;
   this.questions = [] ;
+  this.nr_bad = 0 ;
+  this.nr_good = 0 ;
+  this.nr_perfect = 0 ;
   competence_names.push(name) ;
   competence_names.sort() ;
 }
@@ -158,6 +161,9 @@ function Competence(name)
 Competence.prototype.add = function(question)
 {
   this.questions.push(question) ;
+  this.nr_bad += question.nr_bad ;
+  this.nr_good += question.nr_good ;
+  this.nr_perfect += question.nr_perfect ;
 } ;
 
 Competence.prototype.is_open = function()
@@ -180,6 +186,15 @@ Competence.prototype.choose_question = function()
 {
   // this.open() ;
   random_jump(this.questions) ;
+}
+
+Competence.prototype.nr_questions_perfect = function()
+{
+  var nr = 0 ;
+  for(var i in this.questions)
+    if ( this.questions[i].nr_perfect )
+      nr++ ;
+  return nr ;
 }
 
 Competence.prototype.classe = function()
@@ -252,9 +267,91 @@ function patch_title()
 	e.style.display = "inline" ;
 	e.innerHTML = questions[current_question].nice_results() ;
 	d.insertBefore(e, d.lastChild) ;
+	display_ifs(d) ;
 	return ;
       }
   setTimeout(patch_title, 10) ;
+}
+
+function display_ifs(d)
+{
+  function hex2(x)
+  {
+    x = Math.floor(255*x).toString(16) ;
+    if ( x.length < 2 )
+      x = "0" + x ;
+    return x ;
+  }
+
+  function draw_ifs(ctx, depth, transformations, color, d)
+  {
+    if ( depth == 0 )
+    {
+      ctx.fillStyle = "#" + hex2(color[0]) + hex2(color[1]) + hex2(color[2]) ;
+      ctx.fillRect(0, 0, 60, 60) ;
+      return ;
+    }
+    var tr, c ;
+    d /= 2 ;
+    depth-- ;
+    for(var i in transformations)
+    {
+      ctx.save() ;
+      tr = transformations[i] ;
+      ctx.scale(tr[0], tr[0]) ;
+      ctx.rotate(tr[1]) ;
+      ctx.translate(tr[2], tr[3]) ;
+      c = [color[0] + d*tr[4], color[1] + d*tr[5], color[2] + d*tr[6]] ;
+      draw_ifs(ctx, depth, transformations, c, d) ;
+      ctx.restore() ;
+    }
+  }
+  var transformations = [] ;
+  var i = 0 ;
+  for(var competence in competences)
+    {
+      competence = competences[competence] ;
+      var s = competence.nr_bad + competence.nr_good ;
+      if ( s == 0 )
+	s = 1 ;
+      transformations.push(
+	[(1-1/(Math.log(s*3)+1.1))/1.5,
+	 (competence.questions.length - competence.nr_questions_perfect()
+	 ) / competence.questions.length,
+	 100 * Math.floor(i/2), 30 * (i % 2),
+	 competence.nr_bad / s,
+	 competence.nr_perfect / s,
+	 (competence.nr_good - competence.nr_perfect) / s
+	]) ;
+      i++ ;
+    }
+
+  var c = document.createElement('CANVAS') ;
+  if ( ! c.getContext )
+    return ;
+  var ctx = c.getContext("2d") ;
+
+  d.appendChild(c) ;
+
+  c.width = 500 ;
+  c.height = 200 ;
+  c.style.position = "absolute" ;
+  c.style.right = "0px" ;
+  c.style.top = "0px" ;
+
+  ctx.translate(50, 50);
+  ctx.scale(0.5, 0.5);
+  ctx.globalAlpha = 0.2 ;
+
+  var start = new Date() ;
+  n = 3
+  while(1)
+    {
+      t = new Date() ;
+      if ( t.getTime() - start.getTime() > 50 )
+	break ;
+      draw_ifs(ctx, n++, transformations, [0,0,0], 1) ;
+    }
 }
 
 function display_competences(data, question)

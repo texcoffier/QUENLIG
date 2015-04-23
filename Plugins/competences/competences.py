@@ -44,9 +44,9 @@ css_attributes = (
     ".nice_results TD { width: 5px; height: 5px; padding: 0px ; }",
     "/.title_bar DIV.competences .nice_results TD { width: 9px; height: 9px}",
     "/.title_bar DIV.competences .nice_results { border-spacing: 2px;}",
-    ".nice_results .good    { background: #0F0 ; }",
+    ".nice_results .good    { background: #00F ; }",
     ".nice_results .bad     { background: #F00 ; }",
-    ".nice_results .perfect { background: #DD0 ; }",
+    ".nice_results .perfect { background: #0F0 ; }",
     "#competences { width: 15em }",
     )
 acls = {}
@@ -67,5 +67,5 @@ def execute(state, plugin, dummy_argument):
     if state.question and state.student.answered_question(state.question.name):
         state.plugins_dict['title'].value += '<div class="competences" style="display:inline"><a class="tips" href="?erase=1">&#9850;<span class="erase"></span></a></div>'
     question = state.question and unicode(state.question.name, 'latin-1') or ''
-    return '<script>display_competences(%s,%s)</script>' % (
+    return '<script>display_competences(%s,%s);</script>' % (
         json.dumps(q), json.dumps(question))

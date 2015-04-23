@@ -6,7 +6,7 @@ tip = "Choose a 'competence'"
 
 translations = {
     'erase': 'Clear your answer to retry to answer more quickly in order to have a yellow square',
-    'nice_results>SPAN': "Red: bad answer\\AGreen: good answer\\AYellow : Ready for the exam",
+    'nice_results>SPAN': "Red: bad answer\\ABlue: good answer\\AGreen : Ready for the exam",
     'bad_answer_given>SPAN' : 'A bad answer was given',
     'answered>SPAN' : 'A good answer was given',
     'perfect_answer>SPAN' : "Perfect answer time: ready for the exam",
