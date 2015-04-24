@@ -65,7 +65,7 @@ def execute(state, plugin, dummy_argument):
         info[0] = unicode(info[0].name, 'latin-1')
         q.append(info)
     if state.question and state.student.answered_question(state.question.name):
-        state.plugins_dict['title'].value += '<div class="competences" style="display:inline"><a class="tips" href="?erase=1">&#9850;<span class="erase"></span></a></div>'
+        state.plugins_dict['title'].value += '<div class="competences" style="display:inline"><a class="tips" href="?erase=1"><script>document.write(char_recycle)</script><span class="erase"></span></a></div>'
     question = state.question and unicode(state.question.name, 'latin-1') or ''
     return '<script>display_competences(%s,%s);</script>' % (
         json.dumps(q), json.dumps(question))
