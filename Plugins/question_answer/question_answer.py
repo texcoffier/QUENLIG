@@ -70,7 +70,7 @@ def execute(state, plugin, argument):
 
     if argument and (
             state.question in state.student.answerables()
-            or hasattr(state.student, 'allowed_to_change_answer')
+            or configuration.allowed_to_change_answer(state)
             or (state.student.answer(state.question.name).nr_good_answer
                 and not state.student.answer(state.question.name).answered)
     ):
@@ -100,8 +100,7 @@ def execute(state, plugin, argument):
 
     if state.student.answered_question(state.question.name):
         # Value setted in question_change_answer plugin
-        if (not hasattr(state.student, 'allowed_to_change_answer')
-            or not state.student.allowed_to_change_answer):
+        if not configuration.allowed_to_change_answer(state):
             s = state.student.last_answer(state.question.name)
             plugin.value_title = plugin.title[-1]
             return utilities.answer_format(s)

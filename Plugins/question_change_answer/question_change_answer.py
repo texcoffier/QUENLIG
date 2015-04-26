@@ -29,6 +29,7 @@ acls = { 'Teacher': ('executable',), 'Grader': ('executable',),
          'Author': ('executable',) }
 
 import time
+import configuration
 
 option_name = 'change-allowed-timeout'
 option_help = '''"integer"
@@ -42,26 +43,27 @@ def option_set(dummy_plugin, value):
     global change_allowed_timeout
     change_allowed_timeout = int(value)
 
-def execute(state, dummy_plugin, dummy_argument):
-
-    state.student.allowed_to_change_answer = False
-    if state.current_role == 'Teacher':
-        state.student.allowed_to_change_answer = True
-        return ''
+def allowed_to_change_answer(state):
+    if not state.plugins_dict['question_change_answer'].current_acls['executable']:
+        return False
     if state.question is None:
-        return ''
-    t = state.student.answer(state.question.name).last_time
+        return False
     if 'question_answer' in state.form:
-        return ''        
+        return False
+    if state.current_role in acls:
+        return True # At any time
+    t = state.student.answer(state.question.name).last_time
     if time.time() - t < change_allowed_timeout:
-        state.student.allowed_to_change_answer = True
+        return True
 
-    return ''
+configuration.allowed_to_change_answer = allowed_to_change_answer
+
+# def execute(state, dummy_plugin, dummy_argument):
+#    pass
 
 def add_a_link(state, question):
     """This function is called by 'answered' plugin."""
-    
-    if not hasattr(state.student, 'allowed_to_change_answer'):
+    if not configuration.allowed_to_change_answer(state):
         return '' # Not the right to reanswer
     if not state.student.answered_question(question.name):
         return '' # Not yet answered
