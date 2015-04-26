@@ -76,12 +76,14 @@ Question.prototype.weight = function()
   if ( this.classes.indexOf("not_answerable") != -1 )
     weight = 0 ;
   else if ( this.classes.indexOf("question_given") == -1 ) // NOT GIVEN
-    weight = 10000 ;
+    weight = 100000 ;
   else if ( this.nr_bad + this.nr_good == 0 )
-    weight = 1000 ;
+    weight = 10000 ;
   else if ( this.nr_good == 0 )
-    weight = 100 ;
+    weight = 1000 ;
   else if ( this.nr_perfect == 0 )
+    weight = 100 ;
+  else if ( ! this.is_answered() )
     weight = 10 ;
   else
     weight = 1. / this.nr_perfect ;
@@ -125,6 +127,10 @@ Question.prototype.nice_results = function()
   return s.join('') ;
 } ;
 
+Question.prototype.is_answered = function()
+{
+  return this.classes.indexOf("answered") != -1 ;
+} ;
 
 Question.prototype.html = function()
 {
@@ -145,7 +151,7 @@ Question.prototype.html = function()
     + js(this.name) + '].jump()">' + this.name + '<span>'
     /* + '<br>' + this.weight() */
     + '</span></a>'
-    + (this.classes.indexOf("answered") != -1
+    + (this.is_answered()
        ? '&nbsp;<a class="tips ' + info + '" style="position:absolute;" onclick="questions['
        + js(this.name) + '].jump(true)">' + char_recycle
        + '<span class="erase"></span></a>'
