@@ -26,6 +26,7 @@ As the answer may modify the question list, it must be executed
 before the question list computation.
 """
 
+import random
 import cgi
 import configuration
 import utilities
@@ -132,6 +133,12 @@ def execute(state, plugin, argument):
     question = state.question.question(state)
     if '{{{' in question:
         t = question.split('{{{')[1:]
+        if '{{{ shuffle}}}' in question:
+            for i in t:
+                if i.startswith(" shuffle}}}"):
+                    t.remove(i)
+                    break
+            random.shuffle(t)
         nr_checked = 0
         for i in t:
             j = i.split('}}}')
