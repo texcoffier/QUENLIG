@@ -226,8 +226,6 @@ if '--silent' not in sys.argv:
                    'So no Python source highlighting for the author')
     search_command('weblint',
                    'So no HTML testing in the regression tests')
-    search_command('xvcg',
-                   'So some picture of the question graph are not computed')
     search_command('dot',
                    'So some picture of the question graph are not computed')
     search_command('hotshot2calltree',

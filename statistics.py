@@ -330,8 +330,8 @@ def graph_dot(show_stats=False):
     os.system("""
 
     (
-    dot -oHTML/xxx.png -Tpng HTML/xxx_graphe.dot && mv xxx.png xxx_graphe.png 
-    dot -oHTML/xxx.svg -Tsvg HTML/xxx_graphe.dot && mv xxx.png xxx_graphe.svg
+    dot -oHTML/xxx_graphe.png -Tpng HTML/xxx_graphe.dot
+    dot -oHTML/xxx_graphe.svg -Tsvg HTML/xxx_graphe.dot
     ) &
 
 
