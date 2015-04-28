@@ -1574,6 +1574,11 @@ def random_chooser(state, key, values):
         return values[0]
 
 def random_replace(state, string, values):
+    if not isinstance(values, dict):
+        # The values can be a list of dicts
+        values = values[(state.student.seed
+                         + state.student.answers[state.question.name].nr_erase
+                     ) % len(values)]
     for k, v in values.items():
         if k in string:
             string = string.replace(k, random_chooser(state, k, v))
