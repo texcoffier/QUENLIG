@@ -294,11 +294,15 @@ function patch_title()
       {
 	d = d[i].getElementsByTagName('TABLE')[0] ;
 	d = d.rows[0].cells[0].getElementsByTagName('DIV')[0] ;
-	var e = document.createElement('DIV') ;
-	e.className = "competences" ;
-	e.style.display = "inline" ;
-	e.innerHTML = questions[current_question].nice_results() ;
-	d.insertBefore(e, d.lastChild) ;
+	var q = questions[current_question] ;
+	if ( q )
+	  {
+	    var e = document.createElement('DIV') ;
+	    e.className = "competences" ;
+	    e.style.display = "inline" ;
+	    e.innerHTML = questions[current_question].nice_results() ;
+	    d.insertBefore(e, d.lastChild) ;
+	  }
 	display_sunburst(d) ;
 	return ;
       }
@@ -425,6 +429,12 @@ function slice(ctx, color, radius0, radius, angle1, angle2, text, x, y)
 	  radius0 *= -1 ;
 	  ctx.textAlign = "end" ;
 	}
+      if ( text.substr(0,1) == " " )
+	{
+	  // Center label
+	  text = text.substr(1) ;
+	  ctx.textAlign = "center" ;
+	}
       ctx.rotate(angle) ;
       ctx.fillStyle = "#000000" ;
       if ( inside )
@@ -471,6 +481,7 @@ function zoom_me(event)
   e.style.top = "0%" ;
   e.style.bottom = "0%" ;
   e.style.opacity = 0.9 ;
+  e.id = "competences_zoomed" ;
   e.onmousemove = zoom_me_move ;
   e.addEventListener("touchmove", zoom_me_move, false);
   e.onclick = function(event) {
@@ -479,7 +490,7 @@ function zoom_me(event)
     select = draw_sunburst_real() ;
     if ( select )
       {
-	if ( select == " " )
+	if ( select.substr(0,1) == " " )
 	  random_jump(questions) ;
 	else if ( questions[select] )
 	  questions[select].jump() ;
@@ -552,8 +563,10 @@ function draw_sunburst_real()
       nr_bad += competence.nr_bad ;
     }
   select = slice(ctx,
-		  hex_color(get_color(nr_bad, nr_good, nr_perfect)),
-		  0, center / 3. * 0.8, 0, 1, " ", x, y) || select ;
+		 hex_color(get_color(nr_bad, nr_good, nr_perfect)),
+		 0, center / 3. * 0.8, 0, 1,
+		 ' ' + Math.floor(100 * nr_perfect / (nr_bad+nr_good)) + '%',
+		 x, y) || select ;
   do_draw_sunburst = false ;
   return select ;
 }
@@ -565,12 +578,24 @@ function display_sunburst(d, width, height, x, y)
     return ;
   if ( width === undefined )
     {
+      var title_bar = d ;
+      while( title_bar.className != "title_bar" )
+	title_bar = title_bar.parentNode ;
+      var next = title_bar.nextSibling ;
+      while ( next && next.tagName != 'DIV' )
+	next = next.nextSibling ;
       width = 200 ;
       height = 100 ;
+      try {
+	height = next.getElementsByTagName('TABLE')[0].offsetTop ;
+      }
+      catch(e) { }
       c.style.position = "absolute" ;
       c.style.right = "0px" ;
       c.style.top = "0px" ;
       c.style.opacity = 0.5 ;
+      c.onmouseenter = function() { this.style.opacity = 1 ; } ;
+      c.onmouseout = function() { this.style.opacity = 0.5 ; } ;
       c.onclick = zoom_me ;
     }
   var ctx = c.getContext("2d") ;
@@ -597,6 +622,10 @@ function display_competences(data, question)
     document.getElementsByTagName("BODY")[0].onkeypress = function(event) {
       if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
 	random_jump(questions) ;
+      e = document.getElementById("competences_zoomed") ;
+      if ( e )
+	e.parentNode.removeChild(e) ;
+
     } ;
   patch_title() ;
 
