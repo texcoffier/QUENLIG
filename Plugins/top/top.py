@@ -221,13 +221,14 @@ def execute(state, plugin, argument):
     <base href="%s">
     <link rel="stylesheet" href="%s/%s.css" type="text/css">
     <link rel="stylesheet" href="%s/questions.css" type="text/css">
+    <script src="%s/questions.js"></script>
     <link REL="icon" HREF="%s/favicon.ico">
 """ % (
         state.plugins_dict['title'].the_title,
         state.url_base_full,
         state.url_base,
         ','.join(state.localization),
-        state.url_base, state.url_base) + '\n'.join( 
+        state.url_base, state.url_base, state.url_base) + '\n'.join(
         ['<link rel="stylesheet" href="%s/questions.%s.css" type="text/css">'
          % (state.url_base, x) for x in state.localization]) + """
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
