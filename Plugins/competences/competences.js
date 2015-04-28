@@ -243,10 +243,10 @@ Competence.prototype.html = function()
 {
   if (this.name === '')
     return '' ;
-  return '<var onclick="competences['+ js(this.name) +'].toggle()">' 
-    + (this.is_open() ? char_close : char_open) + '</var> '
-    + '<a class="tips ' + this.classe()
+  return '<a class="tips ' + this.classe()
     + '" onclick="competences[' + js(this.name) + '].choose_question()">'
+    +'<var onclick="competences['+ js(this.name) +'].toggle()">'
+    + (this.is_open() ? char_close : char_open) + '</var> '
     + this.name + '<span></span></a>' ;
 } ;
 
