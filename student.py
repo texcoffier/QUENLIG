@@ -104,7 +104,10 @@ class Student:
         for question_name, action_time, command, value in self.read_log():
             answer = self.answer(question_name)
             self.update_time(action_time, answer, command)
-            answer.eval_action(action_time, command, value)
+            try:
+                answer.eval_action(action_time, command, value)
+            except KeyError:
+                print "Unknown question", value
             if stop_loading(self):
                 self.writable = False
                 break
