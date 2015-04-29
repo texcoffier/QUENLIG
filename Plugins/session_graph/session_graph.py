@@ -37,7 +37,16 @@ server.do_not_cache.add('xxx_graphe.png')
 def execute(state, plugin, argument):
     if argument:
         statistics.graph_dot_minimal(True)
-        plugin.heart_content = '<A href="../../xxx_graphe.svg"><br><IMG src="../../xxx_graphe.png"></A>'
+        svg = server.get_file('xxx_graphe.svg').content
+        try:
+            svg = unicode(svg, "utf-8", 'ignore'
+                          ).encode("latin-1", 'replace'
+                                   ).replace("UTF-8", "ISO-8859-1")
+        except UnicodeDecodeError:
+            print "SVG: UnicodeDecodeError"
+        except UnicodeEncodeError:
+            print "SVG: UnicodeEncodeError"
+        plugin.heart_content = svg
         state.question = None
     return ''
 

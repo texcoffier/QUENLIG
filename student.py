@@ -107,7 +107,7 @@ class Student:
             try:
                 answer.eval_action(action_time, command, value)
             except KeyError:
-                print "Unknown question", value
+                print "Unknown question", question_name
             if stop_loading(self):
                 self.writable = False
                 break

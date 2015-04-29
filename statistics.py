@@ -299,8 +299,9 @@ def graph_dot(show_stats=False):
         if q.student_given == 0:
             q.student_given = 1
         if show_stats:
-            f.write("""%s [ label=<<TABLE BORDER="0" CELLPADDING="0"><TR><TD COLSPAN="3" BGCOLOR="blue" HEIGHT="%d"></TD></TR><TR><TD BGCOLOR="red" WIDTH="%d"></TD><TD BGCOLOR=%s>%s</TD><TD BGCOLOR="green" WIDTH="%d"></TD></TR><TR><TD COLSPAN="3" BGCOLOR="black" HEIGHT="%d"></TD></TR></TABLE>>] ;\n""" % (
+            f.write("""%s [ href="%s",label=<<TABLE BORDER="0" CELLPADDING="0"><TR><TD COLSPAN="3" BGCOLOR="blue" HEIGHT="%d"></TD></TR><TR><TD BGCOLOR="red" WIDTH="%d"></TD><TD BGCOLOR=%s>%s</TD><TD BGCOLOR="green" WIDTH="%d"></TD></TR><TR><TD COLSPAN="3" BGCOLOR="black" HEIGHT="%d"></TD></TR></TABLE>>] ;\n""" % (
                 translate_dot(q.name),
+                q.url(),
                 int(50*q.student_indice/q.student_given),
                 int(50*q.student_bad/n),
                 color,
