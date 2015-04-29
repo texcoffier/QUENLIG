@@ -102,7 +102,9 @@ class StatePlugin:
             elif line.startswith('/'):
                 s.append( line[1:] )
             else:
-                s.append( "DIV.%s %s" % (self.plugin.css_name, line) )
+                if not line.startswith(':'):
+                    line = ' ' + line
+                s.append( "DIV.%s%s" % (self.plugin.css_name, line) )
         return '\n'.join([line for line in s if line != ''])
 
     def __iter__(self):

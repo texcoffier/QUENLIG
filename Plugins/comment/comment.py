@@ -26,6 +26,8 @@ import cgi
 priority_display = 'analyse'
 css_attributes = (
     "TEXTAREA { font-size: 80% ; }",
+    "FORM { display: none }",
+    ":hover FORM { display: block }",
     "BUTTON { width: 100% ; }",
     ".comment_given { white-space: normal;}",
     )
