@@ -31,6 +31,11 @@ function js(t)
     + "'" ;
 }
 
+function stop_event(event)
+{
+  (event || window.event).cancelBubble = true ;
+}
+
 function random_jump(question_list)
 {
   var weight = 0 ;
@@ -245,7 +250,7 @@ Competence.prototype.html = function()
     return '' ;
   return '<a class="tips ' + this.classe()
     + '" onclick="competences[' + js(this.name) + '].choose_question()">'
-    +'<var onclick="competences['+ js(this.name) +'].toggle()">'
+    +'<var onclick="competences['+ js(this.name) +'].toggle();stop_event(event)">'
     + (this.is_open() ? char_close : char_open) + '</var> '
     + this.name + '<span></span></a>' ;
 } ;
