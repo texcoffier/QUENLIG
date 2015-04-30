@@ -319,11 +319,20 @@ def graph_dot(show_stats=False):
                     )
 
     for q in questions.questions.values():
-        for qq in q.required.names():
-            if not questions.questions.has_key(qq):
-                print "%s est requis par %s" % (qq, q)
+        for qq in q.required.requireds:
+            if not questions.questions.has_key(qq.name):
+                print "%s est requis par %s" % (qq.name, q)
                 raise ValueError
-            f.write("%s -> %s ;\n" % (translate_dot(qq), translate_dot(q.name)))
+            if qq.see_it_only:
+                style = "[ style=dotted ]"
+            elif not qq.visible:
+                style = "[ style=dashed ]"
+            else:
+                style = ""
+            f.write("%s -> %s%s;\n" % (translate_dot(qq.name),
+                                       translate_dot(q.name),
+                                       style
+                                     ))
 
     f.write("}\n")
     f.close()

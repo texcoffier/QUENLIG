@@ -34,9 +34,13 @@ current_eval_after = None
 
 class Required:
     visible = True
+    see_it_only = False
     def __init__(self, world, string):
         if string[-1] == '¤':
             self.visible = False
+            string = string[:-1]
+        if string[-1] == '¤':
+            self.see_it_only = True
             string = string[:-1]
         w = string.split(":")
         if len(w) == 2:
@@ -78,8 +82,10 @@ class Requireds:
     def __iter__(self):
         return self.requireds.__iter__()
 
-    def answered(self, answered):
+    def answered(self, answered, student):
         for r in self.requireds:
+            if r.see_it_only and student.given_question(r.name):
+                continue
             if answered.get(r.name, False) is False:
                 return False
             if r.answer and not re.match(r.answer, answered[r.name]):
@@ -323,7 +329,8 @@ def answerable(answered, student):
     """
     answerable = []
     for q in questions.values():
-        if answered.get(q.name, False) or not q.required.answered(answered):
+        if answered.get(q.name, False) or not q.required.answered(answered,
+                                                                  student):
             continue
         if q.answerable(student):
             answerable.append(q)
