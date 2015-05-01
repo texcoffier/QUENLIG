@@ -86,9 +86,9 @@ Question.prototype.weight = function()
     weight = 10000 ;
   else if ( this.nr_good == 0 )
     weight = 1000 ;
-  else if ( this.nr_perfect == 0 )
-    weight = 100 ;
   else if ( ! this.is_answered() )
+    weight = 100 ;
+  else if ( this.nr_perfect == 0 )
     weight = 10 ;
   else
     weight = 1. / this.nr_perfect ;
@@ -154,7 +154,7 @@ Question.prototype.html = function()
   return this.nice_results()
     + '<a class="tips ' + info + '" onclick="questions['
     + js(this.name) + '].jump()">' + this.name + '<span>'
-    /* + '<br>' + this.weight() */
+    // + '<br>' + this.weight()
     + '</span></a>'
     + (this.is_answered()
        ? '&nbsp;<a class="tips ' + info + '" style="position:absolute;" onclick="questions['
