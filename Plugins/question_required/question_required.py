@@ -40,7 +40,7 @@ def execute(state, plugin, argument):
         
     s = []
     for p in state.question.required.names(only_visible=True):
-        s.append( questions.questions[p].question(state) )
+        s.append( questions.questions[p].question(state).split("{{{")[0] )
         try:
             s[-1] += '<br><tt class="answer"></tt><div class="answeruser">%s</div>' % \
                      cgi.escape(state.student.answers[p].answered.strip())
