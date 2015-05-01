@@ -31,6 +31,46 @@ acls = { 'Default': ('executable',), }
 css_attributes = ('TABLE { border: 1px solid black ; }',
                   )
 
+javascript = """
+function add_courses_index()
+{
+  var t = document.getElementsByTagName("DIV") ;
+  var course_menu ;
+  for(var i in t)
+     if ( t[i].className == 'courses' )
+       if ( t[i].parentNode.className == "heart_content" )
+        {
+          var keys = [], q ;
+          var qs = t[i].childNodes ;
+          for(var j=1; j < qs.length; j++)
+             {
+                if ( ! qs[j].getElementsByTagName )
+                   continue ;
+                if ( qs[j].tagName == 'B' )
+                   q = qs[j].textContent ;
+                var tt = qs[j].getElementsByTagName('KEY') ;
+                for(var k=0; k < tt.length; k++)
+                   keys.push([tt[k].textContent, q]) ;
+             }
+          var s = '<br><div style="margin-left:1em; font-size: 80%">' ;
+          keys.sort() ;
+          for(var j in keys)
+             s += '<a href="?question=' + escape2(keys[j][1]) + '">'
+                      + keys[j][0] + '<br>' ;
+          s += '</div>' ;
+          course_menu.innerHTML += s ;
+          break ;
+        }
+      else
+       course_menu = t[i] ;
+
+}
+
+setTimeout(add_courses_index, 500) ;
+
+
+"""
+
 def execute(state, plugin, argument):
     if not argument:
         return ''
