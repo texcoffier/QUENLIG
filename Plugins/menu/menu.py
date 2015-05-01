@@ -26,6 +26,7 @@ container = 'top'
 css_attributes = (
     "> DIV > TABLE > TBODY > TR > TD { white-space: nowrap ; }",
     ".box_title { display: block ; }",
+    "/@media print { DIV.menu { display: none ; } ; }"
     )
 
 acls = { 'Wired': ('executable',) }
