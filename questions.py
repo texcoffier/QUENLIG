@@ -1206,35 +1206,49 @@ class Comment(TestUnary):
         # The following test will be no good nor bad but if it is evaluated
         # it will insert a comment for the student.
         Comment('An explanation')
+
+        # The comment text itself can be canonized
+        choices = {"DIRNAME": ("/etc", "/bin")}
+        Bad(Random(choices, Comment(~Contain("DIRNAME"),
+                                    "Expect DIRNAME in your answer",
+                                    canonize=True)))
         """
-    def __init__(self, *args):
-        if len(args) == 1:
-            a = ()
-            comment = args[0]
-        elif len(args) == 2:
-            a = (args[0], )
-            comment = args[1]
+    def __init__(self, child_or_comment, comment=None, canonize=False):
+        if comment is None:
+            comment = child_or_comment
+            child_or_comment = ()
         else:
-            raise ValueError("%s can have only 2 or 1 arguments" %
-                             self.__class__.__name__)
-        TestExpression.__init__(self, *a)
+            child_or_comment = (child_or_comment, )
+        TestExpression.__init__(self, *child_or_comment)
+        self.do_canonize = canonize
         self.comment = comment
 
     def source(self, state=None, format=None):
-        if self.children:
-            return self.test_name(format) + "(%s,%s)" % (
-                self.children[0].source(state,format), pf(self.comment,
-                                                               format) )
+        if self.do_canonize:
+            more = ",canonize=True"
         else:
-            return self.test_name(format) + "(%s)" % pf(self.comment, format)
-    
+            more = ""
+        if self.children:
+            return self.test_name(format) + "(%s,%s%s)" % (
+                self.children[0].source(state,format), pf(self.comment,
+                                                          format), more )
+        else:
+            return self.test_name(format) + "(%s%s)" % (pf(self.comment,
+                                                           format), more)
+
+    def canonize_test(self, parser, state):
+        if self.do_canonize:
+            self.comment_canonized = parser(self.comment, state)
+        else:
+            self.comment_canonized = self.comment
+
     def do_test(self, student_answer, state):
         if self.children:
             bool, comment = self.children[0](student_answer, state)
         else:
-            return None, self.comment
+            return None, self.comment_canonized
         if bool == True:
-            comment += self.comment
+            comment += self.comment_canonized
         return bool, comment
 
 class Expect(TestString):
@@ -1972,5 +1986,11 @@ def regression_tests():
     a = create("Good(IsInt())")
     assert(a('x') == (None, ''))
     assert(a('42') == (True, ''))
+
+    a = create("Random({'D': ('E',)},Comment('(D)'))")
+    assert( a('x',st) == (None, '(D)') )
+    a = create("Random({'D': ('E',)},Comment('(D)',canonize=True))")
+    assert( a('x',st) == (None, '(E)') )
+
 if True:
     regression_tests()
