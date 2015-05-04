@@ -434,10 +434,11 @@ function slice(ctx, color, radius0, radius, angle1, angle2, text, x, y)
 	  radius0 *= -1 ;
 	  ctx.textAlign = "end" ;
 	}
+      var display_text = text ;
       if ( text.substr(0,1) == " " )
 	{
 	  // Center label
-	  text = text.substr(1) ;
+	  display_text = text.substr(1) ;
 	  ctx.textAlign = "center" ;
 	}
       ctx.rotate(angle) ;
@@ -446,7 +447,7 @@ function slice(ctx, color, radius0, radius, angle1, angle2, text, x, y)
 	ctx.font = font_selected ;
       else
 	ctx.font = font_normal ;
-      ctx.fillText(text, radius0/scale, 0);
+      ctx.fillText(display_text, radius0/scale, 0);
       ctx.restore() ;
     }
   return inside ? text : false ;
@@ -495,14 +496,14 @@ function zoom_me(event)
     select = draw_sunburst_real() ;
     if ( select )
       {
-	if ( select.substr(0,1) == " " )
+	if ( select.substr(0, 1) == " " )
 	  random_jump(questions) ;
 	else if ( questions[select] )
 	  questions[select].jump() ;
 	else if ( competences[select] )
 	  competences[select].choose_question() ;
 	else
-	  alert("BUG") ;
+	  alert("BUG=(" + select + ')') ;
       }
     else
       e.parentNode.removeChild(e) ;
