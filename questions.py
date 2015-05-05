@@ -104,7 +104,9 @@ def transform_question(question):
     if question == None:
         return None
     q = question
-    if isinstance(question, types.FunctionType):
+    if callable(question):
+        if isinstance(question, TestExpression):
+            return question # For Choice test because it contains the question
         if 'state' not in question.func_code.co_varnames:
             def tmp(state):
                 return q()
@@ -1610,20 +1612,6 @@ def random_question(question, choices):
         return random_replace(state, question, choices)
     return f
 
-def random_questions_answers(qa):
-    """Create two dictionaries for random functions,
-     one the random question and the other for the answers
-    q, a = random_question_answers({'XXX': (("q1", "a1"), ("q2", "a2"))})
-    The string key is the same for the 2 dictionaries because it
-    is used when computing the random number.
-    """
-    q = {}
-    a = {}
-    for k, v in qa.items():
-        q[k] = [i[0] for i in v]
-        a[k] = [i[1] for i in v]
-    return q, a
-
 class Random(TestUnary):
     """The first argument is a dictionnary as in the example.
     
@@ -1665,6 +1653,69 @@ class Random(TestUnary):
         return (self.test_name(format) + '(' + repr(self.values) + ',' +
                 self.children[0].source(state, format) + ')' )
 
+
+class Choice(TestExpression):
+    """Allow to choose a random question in a list.
+
+    Examples:
+        choices = Choice(('1+1 is equal to:',
+                          Good(Int(2)),
+                          Bad(Comment(Int(10), "Decimal base please"))
+                         ),
+                         ('How do you translate 2 in french?',
+                          Good(Equal("deux")),
+                         ),
+                        )
+        add(name="stupid",
+            questions = choices,
+            tests = (choices,),
+           )
+    """
+    def __init__(self, *args):
+        self.args = args
+        for arg in args:
+            for test in arg[1:]:
+                test.initialize(lambda string, state: string, None)
+
+    def initialize(self, parser, state):
+        """The string in test description must be canonized"""
+        self.parser = parser #Store the parser for future use (See HostReplace)
+        for arg in self.args:
+            for test in arg[1:]:
+                test.initialize(lambda string, a_state:
+                                self.canonize(parser(string,a_state),a_state),
+                                state
+                            )
+
+    def choice(self, state):
+        return self.args[(state.student.seed
+                         + state.student.answers[state.question.name].nr_erase
+                      ) % len(self.args)]
+
+
+    def do_test(self, student_answer, state):
+        all_comments = ""
+        a_bool = False
+        for c in self.choice(state)[1:]:
+            a_bool, a_comment = c(student_answer, state)
+            all_comments += a_comment
+            if a_bool is not None:
+                break
+        return a_bool, all_comments
+
+    def source(self, state=None, format=None):
+        s = []
+        for arg in self.args:
+            s.append('(' + repr(arg[0]) + ','
+                     + ','.join(a.source(state, format)
+                                for a in arg[1:]) + ')')
+        return self.test_name(format) + '(' + ','.join(s) + ')'
+
+    def __call__(self, student_answer, state=False):
+        if state is False:
+            return self.choice(student_answer)[0]
+        else:
+            return self.do_test(student_answer, state)
 
 def regression_tests():
     # Regression test on new tests.
@@ -1991,6 +2042,32 @@ def regression_tests():
     assert( a('x',st) == (None, '(D)') )
     a = create("Random({'D': ('E',)},Comment('(D)',canonize=True))")
     assert( a('x',st) == (None, '(E)') )
+
+    a = create("Choice(('a',Good(Comment(Equal('1'),'U')),Bad(Comment(Equal('2'),'D'))))")
+    assert( a('x',st) == (None, '') )
+    assert( a('1',st) == (True, 'U') )
+    assert( a('2',st) == (False, 'D') )
+
+    a = create("Replace((('2', '1'),),Choice(('a',Good(Comment(Equal('1'),'U')))))")
+    assert( a('2',st) == (True, 'U') )
+
+    a = create("Choice(('a',Good(Replace((('2', '1'),),Comment(Equal('2'),'U')))))")
+    assert( a('2',st) == (True, 'U') )
+
+    a = create("Replace((('2', '1'),),Choice(('a',Good(Comment(Equal('2'),'U')))),canonize=True)")
+    assert( a('2',st) == (True, 'U') )
+
+    a = create("Grade(Good(Equal('a')),'GG1',1)")
+    assert( a('2',st) == (None, '') )
+    assert( grades['x'] == 'GG1,0' )
+    assert( a('a',st) == (True, '') )
+    assert( grades['x'] == 'GG1,1' )
+
+    a = create("Grade(Bad(Equal('a')),'GG1',2)")
+    assert( a('2',st) == (None, '') )
+    assert( grades['x'] == 'GG1,0' )
+    assert( a('a',st) == (False, '') )
+    assert( grades['x'] == 'GG1,0' )
 
 if True:
     regression_tests()
