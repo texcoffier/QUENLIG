@@ -82,8 +82,8 @@ def execute(state, plugin, argument):
         q = question.before(state)
         if q == '':
             continue
-        s.append('<hr><b><a href="%s">%s</a></b><p>%s' % (question.url(),
-                                                          question.name, q))
+        s.append('<hr><div class="question_before"><b><a href="%s">%s</a></b><p>%s</div>'
+                 % (question.url(), question.name, q))
 
     plugin.heart_content = '\n'.join(s)
     state.question = None
