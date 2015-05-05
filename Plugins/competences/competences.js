@@ -591,11 +591,19 @@ function display_sunburst(d, width, height, x, y)
       while ( next && next.tagName != 'DIV' )
 	next = next.nextSibling ;
       width = 200 ;
-      height = 100 ;
-      try {
-	height = next.getElementsByTagName('TABLE')[0].offsetTop ;
+      height = 200 ;
+      var n = 0 ;
+      for(var i = 0 ; i < next.childNodes.length; i++)
+      {
+	if ( next.childNodes[i].tagName )
+	{
+	  n++ ;
+	  if ( n == 2 )
+	  {
+	    height = Math.min(next.childNodes[i].offsetTop, 200) ;
+	  }
+	}
       }
-      catch(e) { }
       c.style.position = "absolute" ;
       c.style.right = "0px" ;
       c.style.top = "0px" ;
