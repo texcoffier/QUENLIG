@@ -115,6 +115,9 @@ A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {
 }
 
 A { text-decoration: none ; }
+A[href]:hover { text-decoration: underline ; }
+A.tips:hover { text-decoration: none ; }
+
 
 /* Only here to fix a Chrome bug */
 A { background-image: url('transparent.png'); }
