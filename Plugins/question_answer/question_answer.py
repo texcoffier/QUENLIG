@@ -41,6 +41,8 @@ css_attributes = (
     "FORM { margin: 0px }",
     "BUTTON { margin-top: 0.5em }",
     "BUTTON P { margin: 0px ; }",
+    ".show_on_hover { display: none }",
+    ":hover .show_on_hover { display: block }",
     )
 acls = { 'Wired': ('executable',) }
 
@@ -61,6 +63,21 @@ function disable_tab(event)
 
 }
 """
+
+def option_set(plugin, value):
+    if value == 'always':
+        plugin.state.answer_always_visible = True
+    elif value == 'hover':
+        plugin.state.answer_always_visible = False
+    else:
+        raise ValueError("Bad value for 'answer-visibility': " + value)
+
+option_name = 'answer-visibility'
+option_help = '''"always" or "hover"
+        When returning to an answered question the last answer is displayed
+        automaticaly or only if the mouse goes on the box title.'''
+option_default = "always"
+
 
 def execute(state, plugin, argument):
     if state.question == None:
@@ -104,7 +121,12 @@ def execute(state, plugin, argument):
         if not configuration.allowed_to_change_answer(state):
             s = state.student.last_answer(state.question.name)
             plugin.value_title = plugin.title[-1]
-            return utilities.answer_format(s)
+            if state.answer_always_visible or argument:
+                return utilities.answer_format(s)
+            else:
+                return ('<div class="show_on_hover">'
+                        + utilities.answer_format(s) + '</div>')
+
     plugin.value_title = plugin.title[0]
 
     s = '<FORM CLASS="questionanswer" accept-charset="utf-8" METHOD="GET" ACTION="#">'

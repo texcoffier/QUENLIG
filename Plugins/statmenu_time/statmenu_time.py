@@ -29,7 +29,7 @@ priority_execute = '-question' # Check before displaying question
 acls = { 'Student': ('executable',) }
 
 option_name = 'max-thinking-time'
-option_help = """"{'':60, 'student1': 90}"\n
+option_help = """"{'':60, 'student1': 90}"
         A Python dictionnary with the maximum number of minutes
  	of work time per student. The key is the student ID.
 	The '' key indicates the default time."""

@@ -51,11 +51,10 @@ def option_set(plugin, value):
 
 option_name = 'session'
 option_help = '''"single" or "multiple"
-        If 'single', a user can have one one session active at a time.
+        If 'single', a user can have one session active at a time.
         So it is not possible to have 2 roles on 2 web pages.
         But time accounting is better because students can not
-        open multiple questions at the same time.
-'''
+        open multiple questions at the same time.'''
 option_default = "multiple" 
     
 def update_roles(astudent):
