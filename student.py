@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2014 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2015 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -32,6 +31,7 @@ import time
 import os
 import cgi
 import random
+import ast
 import collections
 import questions # Only for nr_indices and any_questions
 import utilities
@@ -46,35 +46,36 @@ def unquote(s):
 def quote(s):
     return s.replace('\\', '\\\\').replace('', '\\a').replace("\n", "\\n").replace("\r", "\\r")
 
-
 def log_directory():
     return "Logs"
+
+def translate_log(filename):
+    """Translate old log format to the new one"""
+    f = open(filename, "r")
+    content = f.readlines()
+    f.close()
+    t = []
+    for c in content:
+        c = unicode(c[:-1], "latin-1").split("")
+        decal = int(len(c) == 5) # In order to read old log files
+
+        question = c[0]
+        action_time = float(c[1])
+        command = c[2+decal]
+        try:
+            value = unquote(c[3+decal])
+        except:
+            value = None
+        if question == "None" and command == "comment":
+            command = "globalcomment"
+        t.append( answer.commands[command].format(action_time,question,value) )
+    f = open(filename + '.py', "w")
+    f.write('\n'.join(t) + '\n')
+    f.close()
 
 class Student:
     """Student work log"""
     writable = True
-
-    def read_log(self):
-        # Read log file
-        try:
-            f = open(os.path.join(self.file, 'log'), "r")
-            content = f.readlines()
-            f.close()
-        except IOError:
-            content = ()
-                            
-        for c in content:
-            c = c[:-1].split("")
-            decal = int(len(c) == 5) # In order to read old log files
-
-            question_name = c[0]
-            action_time = float(c[1])
-            command = c[2+decal]
-            try:
-                value = unquote(c[3+decal])
-            except:
-                value = None
-            yield question_name, action_time, command, value
 
     def __init__(self, name, stop_loading=lambda x: False):
         """Initialise student data or read the log file"""
@@ -83,9 +84,9 @@ class Student:
         self.name = name.title()
         self.answers = {}
         self.file = os.path.join(log_directory(), self.filename)
-        self.previous_time = 0
-        self.previous_answer = 0
-        self.previous_command = ""
+        self.last_time = 0
+        self.previous_answer = self.answer('None')
+        self.last_command = ""
         self.last_asked_question = ""
         self.answerable_any = False
         self.logs = []
@@ -100,17 +101,47 @@ class Student:
             pass
 
         self.answerables_cache = None
+        self.read_log(stop_loading)
 
-        for question_name, action_time, command, value in self.read_log():
-            answer = self.answer(question_name)
-            self.update_time(action_time, answer, command)
-            try:
-                answer.eval_action(action_time, command, value)
-            except KeyError:
-                print "Unknown question", question_name
+    def read_log(self, stop_loading):
+        new_log = os.path.join(self.file, 'log.py')
+        if not os.path.exists(new_log):
+            old_log = os.path.join(self.file, 'log')
+            if os.path.exists(old_log):
+                translate_log(old_log)
+            else:
+                return
+        f = open(new_log, "r")
+        for line in f:
+            self.eval_line(line)
             if stop_loading(self):
                 self.writable = False
                 break
+        f.close()
+
+    def eval_line(self, line):
+        line = [v.encode('latin-1') for v in ast.literal_eval(line)]
+        action_time = time.mktime(time.strptime(line.pop(0), "%Y%m%d%H%M%S"))
+        command = answer.commands[line.pop(0)]
+        if command.question:
+            question_name = line.pop(0)
+            if question_name not in questions.questions:
+                return
+        else:
+            question_name = "None"
+        the_answer = self.answer(question_name)
+        command.parse(self, action_time, question_name, the_answer, *line)
+        if self.last_time:
+            dt = action_time - self.last_time
+            if dt < configuration.timeout_on_question:
+                if (self.last_command == 'good'
+                    or self.previous_answer.nr_erase != 0):
+                    self.previous_answer.time_after += dt
+                else:
+                    self.previous_answer.time_searching += dt
+        self.previous_answer = the_answer
+        self.last_command = command.name
+        self.last_time = action_time
 
     def destroy(self):
         import shutil
@@ -134,11 +165,6 @@ class Student:
         except KeyError:
             a = self.answers[question] = answer.Answer(question, self)
             return a
-
-    def update_time(self, time, answer, command):
-        if self.previous_answer:
-            self.previous_answer.end_of_action(time, command)
-        self.previous_answer = answer
 
     # Returns some statistics, do not modify data structures.
 
@@ -183,11 +209,7 @@ class Student:
             return 0
 
     def time_last(self):
-        last_times = [a.last_time for a in self.answers.values()]
-        if last_times:
-            return max(last_times)
-        else:
-            return 0
+        return self.last_time
 
     def answered_questions(self):
         """Returns the list of questions yet answered"""
@@ -321,7 +343,7 @@ class Student:
 
     def answered_page(self, state):
         t = self.answers.values()
-        t.sort(lambda x,y: cmp(x.last_time, y.last_time))
+        t.sort(lambda x,y: cmp(x.first_time, y.first_time))
         
         s = ''
         none = None
@@ -406,33 +428,18 @@ class Student:
         return "%d/%d" % (stats.sorted_students.index(self)+1,
                           len(stats.sorted_students))
 
-    def time_on_computer(self):
-         self.answers.values()
-
     # Modify data structures and log actions
-
-    # Line format in the log file :
-    #	time action parameter
-    # "indice" give the number of the question_indice_see given
-    # "good" give the correct answer number indice (starting from 1)
-    # "bad" give the bad answer itself.
 
     def log(self, question_name, command, value=""):
         if not self.writable:
             return
-        action_time = time.time()
-        answer = self.answer(question_name)
-        self.update_time(action_time, answer, command)
-        if answer.eval_action(action_time, command, value):
-            return
-        if value != None:
-            value = '' + quote(value)
-        else:
-            value = ""
-
-        f = open(os.path.join(self.file, 'log'), "a")
-        f.write( "%s%f%s%s\n" % (question_name, action_time,
-                                      command, value))
+        question_name = unicode(question_name, "latin-1")
+        value = unicode(value, "latin-1")
+        v = answer.commands[command].format(time.time(), question_name, value)
+        if self.eval_line(v):
+            return # Do not store: unchanged value
+        f = open(os.path.join(self.file, 'log.py'), "a")
+        f.write(v + "\n")
         f.close()
 
     def set_grade(self, question, grade):
@@ -473,7 +480,10 @@ class Student:
         for date_comment in self.answer(question).comments:
             if date_comment[1] == comment:
                 return
-        self.log(question, "comment", comment)
+        if question == 'None':
+            self.log(question, "globalcomment", comment)
+        else:
+            self.log(question, "comment", comment)
 
     def erase(self, question):
         if question in self.answers:

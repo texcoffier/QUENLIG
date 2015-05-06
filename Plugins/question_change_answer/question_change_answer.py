@@ -52,7 +52,7 @@ def allowed_to_change_answer(state):
         return False
     if state.current_role in acls:
         return True # At any time
-    t = state.student.answer(state.question.name).last_time
+    t = state.student.answer(state.question.name).answer_times[-1]
     if time.time() - t < change_allowed_timeout:
         return True
 
@@ -67,7 +67,7 @@ def add_a_link(state, question):
         return '' # Not the right to reanswer
     if not state.student.answered_question(question.name):
         return '' # Not yet answered
-    if (time.time() - state.student.answer(question.name).last_time
+    if (time.time() - state.student.answer(question.name).answer_times[-1]
         > change_allowed_timeout):
         return '' # Too late to change the answer
     return  '<A HREF="%s" CLASS="question_change_answer"></A>' % (

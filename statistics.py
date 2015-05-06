@@ -148,7 +148,7 @@ student: %s
             s.nr_answer_same_time = collections.defaultdict(lambda: [0,0])
             for answer in s.answers.values():
                 if answer.answered:
-                    t.append( (answer.question, answer.last_time, s) )
+                    t.append( (answer.question, answer.answer_times[-1], s) )
         t.sort()
         for i in xrange(len(t)):
             current_time = t[i][1]

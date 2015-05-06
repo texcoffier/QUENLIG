@@ -1,5 +1,5 @@
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2006 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2015 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,12 +22,9 @@ All this is not working nicely if the student use multiple tab
 on the same question.
 """
 
+import time
 import configuration
 import questions
-
-student_commands = set(("good", "indice", "bad", "asked",
-                        "comment", "login", "erase"))
-teacher_commands = set(("grade", "why"))
 
 class Answer:
     """These objects track how a student answer to the question"""
@@ -45,7 +42,6 @@ class Answer:
         self.first_time = 0       # The question first display date
         self.comments = []        # The comment sent by the student
         self.bad_answers = []     # The bad answers given by the student
-        self.last_time = 0        # The question interaction (user or teacher)
         self.resign = False       # The student saw the question in the past
         self.last_answer = ''     # The last student answer
         self.grades = {}          # The teachers grades
@@ -54,77 +50,116 @@ class Answer:
         self.erase_time = 0       # Last erase time
         self.answer_times = []
 
-    def eval_action(self, action_time, command, value):
-        """Return True if the action do not need to be recorded in log"""
-        if command in student_commands:
-            self.last_time = action_time
-            self.last_command = command
-        if self.first_time == 0:
-            self.first_time = action_time
-        if command == "good":
-            self.answered = value
-            t = questions.questions[self.student.last_asked_question
-                                   ].perfect_time
-            self.nr_good_answer += 1
-            if action_time - max(self.first_time, self.erase_time) < t:
-                self.nr_perfect_answer += 1
-            self.answer_times.append(action_time)
-        elif command == "indice" :
-            self.indice += 1
-        elif command == "bad" :
-            self.answered = False # Needed for 'any_question'
-            self.nr_bad_answer += 1
-            self.bad_answers.append(value)
-            self.answer_times.append(action_time)
-        elif command == "asked" :
-            self.nr_asked += 1
-            student = self.student
-            if (student.last_asked_question
-                and student.answer(student.last_asked_question
-                                   ).answered == False):
-                student.answer(student.last_asked_question).resign = True
-            student.last_asked_question = self.question
-        elif command == "comment" :
-            self.comments.append((action_time, value))
-        elif command == "login" :
-            self.student.logs.append((action_time,value.split(' ')[0]))
-        elif command == "grade" :
-            teacher, grade = value.split(',')
-            if self.grades.get(teacher, None) == grade: # Yet stored
-                return True
-            self.grades[teacher] = grade
-        elif command == "why" :
-            teacher, comment = value.split('\002')
-            self.why[teacher] = comment
-        elif command == "erase" :
-            self.answered = False
-            self.indice = -1
-            self.last_answer = ''
-            self.nr_erase += 1
-            self.erase_time = action_time
-            self.bad_answers = []
-        else:
-            raise ValueError("Unknown action %s in %s" % (command, self.student))
-
-    def end_of_action(self, time, command):
-        """Called on the next event.
-        So we can compute the previous one duration.
-        """
-        if command not in student_commands:
-            return
-        if self.nr_erase:
-            return # No more count time on retry
-        dt = time - self.last_time
-        if dt < configuration.timeout_on_question:
-            if self.last_command in ("asked", "bad", "indice"):
-                self.time_searching += dt
-            elif self.last_command in ("good", ):
-                self.time_after += dt
-            else:
-                # comment
-                # erase
-                # login
-                pass
-        
     def __str__(self):
         return "%d %d %d %d %g %s %d" % (self.answered != False, self.nr_asked, self.nr_bad_answer, self.indice, self.time_searching+self.time_after, self.question, len(self.comments))
+
+
+commands = {}
+
+class CreateInstance(type):
+    def __init__(cls, name, bases, dct):
+        super(CreateInstance, cls).__init__(name, bases, dct)
+        cls()
+
+class Command(object):
+    __metaclass__ = CreateInstance
+    question = True
+    def __init__(self):
+        self.name = self.__class__.__name__.split('_')[-1]
+        commands[self.name] = self
+    def args(self, question, value):
+        return (question, value)
+    def format(self, action_time, question, value):
+        return "('%s','%s',%s)" % (
+            time.strftime("%Y%m%d%H%M%S", time.localtime(action_time)),
+            self.name,
+            ','.join(repr(v)
+                     for v in self.args(question, value)
+                     ))
+
+####################
+# Question + Value
+####################
+
+class Command_good(Command):
+    def parse(self, student, action_time, question_name, answer, value):
+        answer.answered = value
+        t = questions.questions[question_name].perfect_time
+        answer.nr_good_answer += 1
+        if action_time - max(answer.first_time, answer.erase_time) < t:
+            answer.nr_perfect_answer += 1
+        answer.answer_times.append(action_time)
+
+class Command_bad(Command):
+    def parse(self, student, action_time, question_name, answer, value):
+        answer.answered = False # Needed for 'any_question'
+        answer.nr_bad_answer += 1
+        answer.bad_answers.append(value)
+        answer.answer_times.append(action_time)
+
+class Command_comment(Command):
+    def parse(self, student, action_time, question_name, answer, value):
+        answer.comments.append((action_time, value))
+
+class Command_grade(Command):
+    def args(self, question, value):
+        val = value.split(',')
+        return (question, val[0], val[1])
+    def parse(self, student, action_time, question_name, answer,
+              teacher, grade):
+        if answer.grades.get(teacher, None) == grade: # Yet stored
+            return True
+        answer.grades[teacher] = grade
+
+class Command_why(Command):
+    def args(self, question, value):
+        val = value.split('\002')
+        return (question, val[0], val[1])
+    def parse(self, student, action_time, question_name, answer,
+              teacher, comment):
+        answer.why[teacher] = comment
+
+####################
+# Only question
+####################
+
+class Command_indice(Command):
+    def args(self, question, value):
+        return (question,)
+    def parse(self, student, action_time, question_name, answer):
+        answer.indice += 1
+
+class Command_asked(Command_indice):
+    def parse(self, student, action_time, question_name, answer):
+        answer.nr_asked += 1
+        if (student.last_asked_question
+            and student.answer(student.last_asked_question
+                               ).answered == False):
+            student.answer(student.last_asked_question).resign = True
+        if answer.first_time == 0:
+            answer.first_time = action_time
+        student.last_asked_question = question_name
+
+class Command_erase(Command_indice):
+    def parse(self, student, action_time, question_name, answer):
+        answer.answered = False
+        answer.indice = -1
+        answer.last_answer = ''
+        answer.nr_erase += 1
+        answer.erase_time = action_time
+        answer.bad_answers = []
+
+####################
+# Only value
+####################
+
+class Command_globalcomment(Command_indice):
+    question = False
+    def args(self, question, value):
+        return (value,)
+    def parse(self, student, action_time, question_name, answer, value):
+        answer.comments.append((action_time, value))
+
+class Command_login(Command_globalcomment):
+    def parse(self, student, action_time, question_name, answer, val):
+        student.logs.append((action_time, val.split(' ')[0]))
