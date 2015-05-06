@@ -48,6 +48,7 @@ class Answer:
         self.why = {}             # The teachers comments on answer
         self.nr_erase = 0         # #erase to change the question parameters
         self.erase_time = 0       # Last erase time
+        self.persistent_random = None # For Random and Choice
         self.answer_times = []
 
     def __str__(self):
@@ -119,6 +120,10 @@ class Command_why(Command):
               teacher, comment):
         answer.why[teacher] = comment
 
+class Command_random(Command):
+    def parse(self, student, action_time, question_name, answer, value):
+        answer.persistent_random = int(value)
+
 ####################
 # Only question
 ####################
@@ -148,6 +153,7 @@ class Command_erase(Command_indice):
         answer.nr_erase += 1
         answer.erase_time = action_time
         answer.bad_answers = []
+        answer.persistent_random = None
 
 ####################
 # Only value

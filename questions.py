@@ -1590,18 +1590,16 @@ class GRADE(Grade):
 
 def random_chooser(state, key, values):
     if state:
-        return values[(state.student.seed
-                       + state.student.answers[state.question.name].nr_erase
-                       + abs(hash(key))) % len(values)]
+        return values[state.student.persistent_random(
+            state, state.question.name, len(values), abs(hash(key)))]
     else:
         return values[0]
 
 def random_replace(state, string, values):
     if not isinstance(values, dict):
         # The values can be a list of dicts
-        values = values[(state.student.seed
-                         + state.student.answers[state.question.name].nr_erase
-                     ) % len(values)]
+        values = values[state.student.persistent_random(
+            state, state.question.name, len(values))]
     for k, v in values.items():
         if k in string:
             string = string.replace(k, random_chooser(state, k, v))
@@ -1621,6 +1619,9 @@ class Random(TestUnary):
 
        An helper function 'random_replace' is provided to apply the same
        replacement in the question text.
+
+       To not break the session history, if you add new choices, add them
+       to the end of the list. Random choices will not change.
 
     Examples:
        choices = {'dirname' : ("usr", "tmp", "bin"),
@@ -1657,6 +1658,9 @@ class Random(TestUnary):
 class Choice(TestExpression):
     """Allow to choose a random question in a list.
 
+       To not break the session history, if you add new choices, add them
+       to the end of the list. Random choices will not change.
+
     Examples:
         choices = Choice(('1+1 is equal to:',
                           Good(Int(2)),
@@ -1688,10 +1692,8 @@ class Choice(TestExpression):
                             )
 
     def choice(self, state):
-        return self.args[(state.student.seed
-                         + state.student.answers[state.question.name].nr_erase
-                      ) % len(self.args)]
-
+        return self.args[state.student.persistent_random(
+            state, state.question.name, len(self.args))]
 
     def do_test(self, student_answer, state):
         all_comments = ""
@@ -1997,6 +1999,8 @@ def regression_tests():
         import collections
         answers = collections.defaultdict(A)
         seed = 0
+        def persistent_random(self, *args):
+            return 0
         def set_grade(self, q, tg):
             grades[q] = tg
     class Q:

@@ -485,6 +485,15 @@ class Student:
         else:
             self.log(question, "comment", comment)
 
+    def persistent_random(self, state, question, maximum, seed=0):
+        if not state:
+            return 0
+        a = self.answer(question)
+        if a.persistent_random is None:
+            a.persistent_random = (self.seed + a.nr_erase + seed ) % maximum
+            self.log(question, "random", str(a.persistent_random))
+        return a.persistent_random
+
     def erase(self, question):
         if question in self.answers:
             self.log(question, "erase", '')
