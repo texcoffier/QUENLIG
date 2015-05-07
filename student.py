@@ -130,7 +130,7 @@ class Student:
         else:
             question_name = "None"
         the_answer = self.answer(question_name)
-        command.parse(self, action_time, question_name, the_answer, *line)
+        v = command.parse(self, action_time, question_name, the_answer, *line)
         if self.last_time:
             dt = action_time - self.last_time
             if dt < configuration.timeout_on_question:
@@ -142,6 +142,7 @@ class Student:
         self.previous_answer = the_answer
         self.last_command = command.name
         self.last_time = action_time
+        return v
 
     def destroy(self):
         import shutil
