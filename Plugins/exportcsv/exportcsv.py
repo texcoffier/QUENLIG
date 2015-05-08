@@ -82,7 +82,7 @@ def execute(state, plugin, argument):
     for c in content:
         t.append(formater % c)
         
-    return 'text/csv; charset=UTF-8', '\n'.join(t)
+    return 'text/csv; charset=UTF-8', '\n'.join(t).encode('utf-8')
 
 
 

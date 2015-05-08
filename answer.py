@@ -48,7 +48,7 @@ class Answer:
         self.why = {}             # The teachers comments on answer
         self.nr_erase = 0         # #erase to change the question parameters
         self.erase_time = 0       # Last erase time
-        self.persistent_random = None # For Random and Choice
+        self.persistent_random = {} # For Random and Choice
         self.answer_times = []
 
     def __str__(self):
@@ -65,18 +65,19 @@ class CreateInstance(type):
 class Command(object):
     __metaclass__ = CreateInstance
     question = True
+    value = True
     def __init__(self):
         self.name = self.__class__.__name__.split('_')[-1]
         commands[self.name] = self
-    def args(self, question, value):
-        return (question, value)
     def format(self, action_time, question, value):
-        return "('%s','%s',%s)" % (
-            time.strftime("%Y%m%d%H%M%S", time.localtime(action_time)),
-            self.name,
-            ','.join(repr(v)
-                     for v in self.args(question, value)
-                     ))
+        t = [time.strftime("%Y%m%d%H%M%S", time.localtime(action_time)),
+             self.name]
+        if self.question:
+            t.append(question)
+        if self.value:
+            t.append(value)
+        return "(%s)" % (','.join(repr(v)
+                                  for v in t))
 
 ####################
 # Question + Value
@@ -103,39 +104,31 @@ class Command_comment(Command):
         answer.comments.append((action_time, value))
 
 class Command_grade(Command):
-    def args(self, question, value):
-        val = value.split(',')
-        return (question, val[0], val[1])
-    def parse(self, student, action_time, question_name, answer,
-              teacher, grade):
+    def parse(self, student, action_time, question_name, answer, value):
+        teacher, grade = value
         if answer.grades.get(teacher, None) == grade: # Yet stored
             return True
         answer.grades[teacher] = grade
 
 class Command_why(Command):
-    def args(self, question, value):
-        val = value.split('\002')
-        return (question, val[0], val[1])
-    def parse(self, student, action_time, question_name, answer,
-              teacher, comment):
-        answer.why[teacher] = comment
+    def parse(self, student, action_time, question_name, answer, value):
+        answer.why[value[0]] = value[1]
 
 class Command_random(Command):
     def parse(self, student, action_time, question_name, answer, value):
-        answer.persistent_random = int(value)
+        answer.persistent_random[value[0]] = value[1]
 
 ####################
 # Only question
 ####################
 
 class Command_indice(Command):
-    def args(self, question, value):
-        return (question,)
-    def parse(self, student, action_time, question_name, answer):
+    value = False
+    def parse(self, student, action_time, question_name, answer, dummy_value):
         answer.indice += 1
 
 class Command_asked(Command_indice):
-    def parse(self, student, action_time, question_name, answer):
+    def parse(self, student, action_time, question_name, answer, dummy_value):
         answer.nr_asked += 1
         if (student.last_asked_question
             and student.answer(student.last_asked_question
@@ -146,26 +139,24 @@ class Command_asked(Command_indice):
         student.last_asked_question = question_name
 
 class Command_erase(Command_indice):
-    def parse(self, student, action_time, question_name, answer):
+    def parse(self, student, action_time, question_name, answer, dummy_value):
         answer.answered = False
         answer.indice = -1
         answer.last_answer = ''
         answer.nr_erase += 1
         answer.erase_time = action_time
         answer.bad_answers = []
-        answer.persistent_random = None
+        answer.persistent_random = {}
 
 ####################
 # Only value
 ####################
 
-class Command_globalcomment(Command_indice):
+class Command_globalcomment(Command):
     question = False
-    def args(self, question, value):
-        return (value,)
     def parse(self, student, action_time, question_name, answer, value):
         answer.comments.append((action_time, value))
 
 class Command_login(Command_globalcomment):
-    def parse(self, student, action_time, question_name, answer, val):
-        student.logs.append((action_time, val.split(' ')[0]))
+    def parse(self, student, action_time, question_name, answer, value):
+        student.logs.append((action_time, value.split(' ')[0]))

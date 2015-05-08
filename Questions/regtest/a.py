@@ -25,6 +25,7 @@ add(name="a",
     question="question_a",
     tests=(
     good("a", "good_answer__a"),
+    Good(Equal("unlockCHOICES")),
     bad("a0", "bad_answer__a0"),
     bad("a1", "bad_a1"),
     bad(("a2", "a3"), "bad_a3"),

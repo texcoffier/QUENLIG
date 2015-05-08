@@ -98,7 +98,7 @@ class Command:
         s = "<command>"
         self.redirection.sort()
         for i in self.args:
-            s += str(i)
+            s += unicode(i)
         for i in self.redirection:
             s += str(i)
         for i in self.affectation:
@@ -247,7 +247,7 @@ class Pipeline:
             bg = ""
         s = "<pipeline nrchild='%d'%s>" % (len(self.command), bg)
         for i in self.command:
-            s += str(i)
+            s += unicode(i)
         s += "</pipeline>"
         return s
 
@@ -268,7 +268,7 @@ class Sequence:
     def __str__(self):
         s = "<sequence nrchild='%d'>" % (len(self.pipeline))
         for i in self.pipeline:
-            s += str(i)
+            s += unicode(i)
         s += "</sequence>"
         return s
 

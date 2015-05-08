@@ -65,7 +65,7 @@ def real_parse(answer, replacement=(), dumb_replace=()):
     except tpg.SyntacticError:
         return parse_error, parse_error
 
-    c_student = c = str(c)
+    c_student = c = unicode(c)
     for short_option, long_option, take_option in replacement:
         c = canonise_option(c, short_option, long_option, take_option)
     c = c.split('<command>')

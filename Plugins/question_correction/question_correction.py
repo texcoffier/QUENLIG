@@ -61,13 +61,11 @@ def execute(state, plugin, argument):
         the_student, grade = argument.split(',')
         if the_student.startswith('*'):
             the_student = the_student[1:]
-            student.students[the_student].set_why(
-                state.question.name,
-                teacher + '\002' + grade) # \001 is yet used
+            student.students[the_student].set_why(state.question.name,
+                                                  teacher, grade)
         else:
-            student.students[the_student].set_grade(
-                state.question.name,
-                teacher + ',' + grade)
+            student.students[the_student].set_grade(state.question.name,
+                                                    teacher, grade)
         return 'image/png', '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x01sRGB\x00\xae\xce\x1c\xe9\x00\x00\x00\x0fIDAT\x08\x1d\x01\x04\x00\xfb\xff\x00\x00\xff\x00\x02\x02\x01\x00\x0b\x0e\xaa\xaf\x00\x00\x00\x00IEND\xaeB`\x82'
 
     stats = statistics.question_stats()

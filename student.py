@@ -68,6 +68,11 @@ def translate_log(filename):
             value = None
         if question == "None" and command == "comment":
             command = "globalcomment"
+        if command == 'grade':
+            value = value.split(",")
+            value = (value[0], int(value[1]))
+        elif command == 'why':
+            value = tuple(value.split("\002"))
         t.append( answer.commands[command].format(action_time,question,value) )
     f = open(filename + '.py', "w")
     f.write('\n'.join(t) + '\n')
@@ -121,16 +126,17 @@ class Student:
 
     def eval_line(self, line):
         line = [v for v in ast.literal_eval(line)]
-        action_time = time.mktime(time.strptime(line.pop(0), "%Y%m%d%H%M%S"))
-        command = answer.commands[line.pop(0)]
+        action_time = time.mktime(time.strptime(line[0], "%Y%m%d%H%M%S"))
+        command = answer.commands[line[1]]
         if command.question:
-            question_name = line.pop(0)
+            question_name = line[2]
             if question_name not in questions.questions:
                 return
         else:
             question_name = "None"
         the_answer = self.answer(question_name)
-        v = command.parse(self, action_time, question_name, the_answer, *line)
+        v = command.parse(self, action_time, question_name, the_answer,
+                          line[-1])
         if self.last_time:
             dt = action_time - self.last_time
             if dt < configuration.timeout_on_question:
@@ -340,7 +346,7 @@ class Student:
 
     def init_seed(self, question):
         """Set the random seed for the question"""
-        random.seed(self.seed + self.answers[question].nr_erase)
+        random.seed(self.seed + self.answer(question).nr_erase)
 
     def answered_page(self, state):
         t = self.answers.values()
@@ -441,13 +447,13 @@ class Student:
         f.write(v + "\n")
         f.close()
 
-    def set_grade(self, question, grade):
+    def set_grade(self, question, teacher, grade):
         if question in self.answers:
-            self.log(question, "grade", grade)
+            self.log(question, "grade", (teacher, grade))
 
-    def set_why(self, question, comment):
+    def set_why(self, question, teacher, comment):
         if question in self.answers:
-            self.log(question, "why", comment)
+            self.log(question, "why", (teacher, comment))
             
     def login(self, value):
         self.log("None", "login", value)
@@ -484,14 +490,15 @@ class Student:
         else:
             self.log(question, "comment", comment)
 
-    def persistent_random(self, state, question, maximum, seed=0):
+    def persistent_random(self, state, question, maximum, key=''):
         if not state:
             return 0
         a = self.answer(question)
-        if a.persistent_random is None:
-            a.persistent_random = (self.seed + a.nr_erase + seed ) % maximum
-            self.log(question, "random", str(a.persistent_random))
-        return a.persistent_random
+        if key not in a.persistent_random:
+            a.persistent_random[key] = int(
+                (self.seed + a.nr_erase + abs(hash(key))) % maximum)
+            self.log(question, "random", (key,a.persistent_random[key]))
+        return a.persistent_random[key]
 
     def erase(self, question):
         if question in self.answers:

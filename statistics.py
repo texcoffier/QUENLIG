@@ -454,6 +454,7 @@ def display_no_more_valid_answers():
             if not answer.answered:
                 continue
             X.question = q
+            X.student = s
             ok, comment = s.check_answer(answer.answered, X)
             if not ok:
                 if answer.question not in messages:

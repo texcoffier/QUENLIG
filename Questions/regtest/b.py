@@ -48,3 +48,13 @@ add(name="choice",
     maximum_bad_answer = 3,
     tests=(good('a'),),
     )
+
+choices = Choice(*[ ("Question %d" % i, Good(Equal("%d" % i)))
+                   for i in range(100)
+])
+add(name="z",
+    required=["a:a(unlockCHOICES)"],
+    question = choices,
+    tests = ( choices, ),
+    )
+

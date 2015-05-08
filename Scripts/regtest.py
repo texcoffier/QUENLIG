@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2011 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2011-2015 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
+#    Contact: Thierry.EXCOFFIER@univ-lyon1.fr
 #
 
 from server import Server
@@ -42,7 +42,6 @@ def minimal_tests(student, good=0, bad=0, indice=0, title=''):
         'Questions/regtest',
          '<DIV class="title">\n<A class="content tips">\n<SPAN></SPAN>\n%s\n</A>\n</DIV>' % title
         )
-
 
 def test_0000_initial_display(student):
     minimal_tests(student, title='Guest0000_Initial_Display')
@@ -545,8 +544,29 @@ def test_0400_root_reload_questions(student):
 
     student_bad.give_answer('a')
     minimal_tests(student_bad, good=1, bad=1, title='a:a')
-    
 
+def test_0410_CHOICE(student):
+    q = '99' # For user
+    r = '38' # For root
+    student.goto_question('a:a')
+    student.give_answer('unlockCHOICES')
+    student.goto_question('b:z')
+    minimal_tests(student, title='b:z', good=1)
+    student.give_answer(q)
+    minimal_tests(student, title='b:z', good=2)
+    root = Student(
+        the_server, 'root_0410',
+        roles="['Default','Teacher','Author','Grader', 'Developer','Admin']")
+    root.goto_question('a:a')
+    root.give_answer('unlockCHOICES')
+    root.goto_question('b:z')
+    minimal_tests(root, title='b:z', good=1)
+    root.give_answer(r)
+    minimal_tests(root, title='b:z', good=2)
+    root.select_role('Teacher')
+    root.get('?answered_other=guest' + student.name)
+    assert('Question ' + q in root.page)
+    assert('class="an_answer">' + q + '<' in root.page)
 
 ############
 # TODO

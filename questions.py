@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2012 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2015 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -98,28 +98,29 @@ class Requireds:
                 if not only_visible or r.visible
             ]
 
-def transform_question(question):
-    """If the question is a string, return a function
-    returning the string"""
-    if question == None:
-        return None
-    if callable(question):
-        # Choice test because it contains the question
-        if (not isinstance(question, TestExpression)
-            and 'state' not in question.func_code.co_varnames):
-            def tmp(dummy_state):
-                return utilities.to_unicode(question())
-        else:
-            def tmp(state):
-                return utilities.to_unicode(question(state))
-    else:
-        question = utilities.to_unicode(question)
-        def tmp(dummy_state):
-            return question
-    return tmp
-
-
 class Question:
+    def transform_question(self, question):
+        """If the question is a string, return a function
+        returning the string"""
+        if question == None:
+            return None
+        if callable(question):
+            # Choice test because it contains the question
+            if (not isinstance(question, TestExpression)
+                and 'state' not in question.func_code.co_varnames):
+                def tmp(state):
+                    return utilities.to_unicode(question())
+            else:
+                def tmp(state):
+                    if state:
+                        state.current_question = self
+                    return utilities.to_unicode(question(state))
+        else:
+            question = utilities.to_unicode(question)
+            def tmp(dummy_state):
+                return question
+        return tmp
+
     def __init__(self, world, arg, previous_question=[]):
         self.name = arg["name"]
         self.path = world
@@ -131,10 +132,10 @@ class Question:
                 continue
             raise ValueError("Bad question name (%s)" % c)
 
-        self.question = transform_question(arg["question"])
+        self.question = self.transform_question(arg["question"])
 
         self.tests = arg.get("tests", ())
-        self.before = transform_question(arg.get("before", None))
+        self.before = self.transform_question(arg.get("before", None))
         self.good_answer = arg.get("good_answer", "")
         if not isinstance(self.good_answer, basestring):
             raise ValueError("good_answer must be a string")
@@ -199,6 +200,7 @@ class Question:
             return False, "VOTRE REPONSE CONTIENT DES RETOURS A LA LIGNE"
         if u' ' in answer:
             return False, u"VOTRE REPONSE CONTIENT UN ESPACE INSÉCABLE"
+        # XXX state.current_question = state.question
         if self.evaluate_answer:
             answer = self.evaluate_answer(answer, state)
 
@@ -269,7 +271,7 @@ class Question:
         competences = set()
         for test in tests:
             if isinstance(test, Grade):
-                if not test.grade.startswith("-"):
+                if test.grade > 0:
                     if test.teacher:
                         if isinstance(test.teacher, basestring):
                             competences.add(test.teacher)
@@ -1338,10 +1340,10 @@ class Replace(TestUnary):
         if self.do_canonize:
             self.replace_canonized = [
                 (parser(old, state), parser(new, state))
-                for old, new in self.replace
+                for old, new in utilities.to_unicode(self.replace)
                 ]
         else:
-            self.replace_canonized = self.replace
+            self.replace_canonized = utilities.to_unicode(self.replace)
 
     def source(self, state=None, format=None):
         if self.do_canonize:
@@ -1557,24 +1559,24 @@ class Grade(TestUnary):
     stop_eval = True
     def __init__(self, expression, teacher, grade):
         self.teacher = teacher
-        self.grade = '%g' % float(grade)
+        self.grade = grade
         TestUnary.__init__(self, expression)
     def source(self, state=None, format=None):
         return (self.test_name(format) + '('
                 + self.children[0].source(state, format) + ','
-                + repr(self.teacher) + ',' + self.grade + ')')
+                + repr(self.teacher) + ',' + repr(self.grade) + ')')
     def do_test(self, student_answer, state=None):
         goodbad, a_comment = self.children[0](student_answer, state)
         if state.question and goodbad is True:
-            grade = ',' + self.grade
+            grade = self.grade
         else:
-            grade = ',0'
+            grade = 0
         if isinstance(self.teacher, basestring):
             teachers = [self.teacher]
         else:
             teachers = self.teacher
         for teacher in teachers:
-            state.student.set_grade(state.question.name, teacher + grade)
+            state.student.set_grade(state.question.name, teacher, grade)
         if self.stop_eval:
             return goodbad, a_comment
         else:
@@ -1595,7 +1597,7 @@ class GRADE(Grade):
 def random_chooser(state, key, values):
     if state:
         return values[state.student.persistent_random(
-            state, state.question.name, len(values), abs(hash(key)))]
+            state, state.current_question.name, len(values), key)]
     else:
         return values[0]
 
@@ -1603,7 +1605,7 @@ def random_replace(state, string, values):
     if not isinstance(values, dict):
         # The values can be a list of dicts
         values = values[state.student.persistent_random(
-            state, state.question.name, len(values))]
+            state, state.current_question.name, len(values))]
     for k, v in values.items():
         if k in string:
             string = string.replace(k, random_chooser(state, k, v))
@@ -2005,18 +2007,18 @@ def regression_tests():
         seed = 0
         def persistent_random(self, *args):
             return 0
-        def set_grade(self, q, tg):
-            grades[q] = tg
+        def set_grade(self, q, t, g):
+            grades[q] = (t, g)
     class Q:
         name = 'x'
     class St:
         student = S()
-        question = Q()
+        current_question = question = Q()
     st = St()
     assert( a('b',st) == (False, '') )
-    assert( grades == {'x':'john,0'} )
+    assert( grades == {'x': ('john', 0)} )
     assert( a('a',st) == (True, '') )
-    assert( grades == {'x':'john,4'} )
+    assert( grades == {'x': ('john', 4)} )
 
     a = create("Good(Random({'$a$': ('x', 'x')},Equal('[$a$]')))")
     assert( a('x', st) == (None, '') )
@@ -2031,13 +2033,13 @@ def regression_tests():
     assert(grades == {})
     grades.clear()
     assert(a('x', st) == (True, ''))
-    assert(grades == {'x': 'point,1'})
+    assert(grades == {'x': ('point', 1)})
     grades.clear()
     assert(a('y', st) == (None, ''))
     assert(grades == {})
     grades.clear()
     assert(a('xy', st) == (True, ''))
-    assert(grades == {'x': 'point,2'})
+    assert(grades == {'x': ('point', 2)})
 
     a = create("Good(And(Contain('x'),Contain('y')))")
     assert(a('x', st) == (None, ''))
@@ -2067,15 +2069,15 @@ def regression_tests():
 
     a = create("Grade(Good(Equal('a')),'GG1',1)")
     assert( a('2',st) == (None, '') )
-    assert( grades['x'] == 'GG1,0' )
+    assert( grades['x'] == ('GG1', 0) )
     assert( a('a',st) == (True, '') )
-    assert( grades['x'] == 'GG1,1' )
+    assert( grades['x'] == ('GG1', 1) )
 
     a = create("Grade(Bad(Equal('a')),'GG1',2)")
     assert( a('2',st) == (None, '') )
-    assert( grades['x'] == 'GG1,0' )
+    assert( grades['x'] == ('GG1', 0) )
     assert( a('a',st) == (False, '') )
-    assert( grades['x'] == 'GG1,0' )
+    assert( grades['x'] == ('GG1', 0) )
 
 if True:
     regression_tests()
