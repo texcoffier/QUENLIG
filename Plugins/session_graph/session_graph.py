@@ -39,9 +39,7 @@ def execute(state, plugin, argument):
         statistics.graph_dot_minimal(True)
         svg = server.get_file('xxx_graphe.svg').content
         try:
-            svg = unicode(svg, "utf-8", 'ignore'
-                          ).encode("latin-1", 'replace'
-                                   ).replace("UTF-8", "ISO-8859-1")
+            svg = unicode(svg, "utf-8")
         except UnicodeDecodeError:
             print "SVG: UnicodeDecodeError"
         except UnicodeEncodeError:

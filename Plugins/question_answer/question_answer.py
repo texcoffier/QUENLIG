@@ -91,7 +91,6 @@ def execute(state, plugin, argument):
             or (state.student.answer(state.question.name).nr_good_answer
                 and not state.student.answer(state.question.name).answered)
     ):
-        argument = unicode(argument, "utf-8").encode("latin-1",'replace')
         # Fill 'last_answer' attribute
         state.student.bad_answer_yet_given(state.question.name, argument)
         # Check the answer even if it is a known one because
@@ -103,7 +102,7 @@ def execute(state, plugin, argument):
             # Does not count the same bad answer
             if not state.student.bad_answer_yet_given(state.question.name,
                                                       argument):
-                state.student.bad_answer(state.question.name,argument)
+                state.student.bad_answer(state.question.name, argument)
 
     if not state.question.answerable(state.student):
         state.question = None

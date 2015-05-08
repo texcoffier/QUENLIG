@@ -283,7 +283,7 @@ def graph_dot(show_stats=False):
     digraph "questions" {
     node[shape=none,margin="0",height="0.01",style="filled"];
     edge[arrowhead=empty, arrowsize="0.5",norm_width="0.5"];
-    graph[dpi=40,nodesep="0.1",ranksep="0.2",charset="Latin1", orientation="P",mclimit="10",nslimit="10"];
+    graph[dpi=40,nodesep="0.1",ranksep="0.2",charset="UTF-8", orientation="P",mclimit="10",nslimit="10"];
     """)
     nb = float(len(questions.worlds()))
     rvb = {}
@@ -360,7 +360,7 @@ def graph2_dot():
     f.write("""
     digraph "questions" {
     node[shape=none];
-    graph[charset="Latin1", size="11.50,7.5", orientation="L"];
+    graph[charset="UTF-8", size="11.50,7.5", orientation="L"];
     """)
     for w in questions.worlds():
         f.write("""subgraph cluster_%s {

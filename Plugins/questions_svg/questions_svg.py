@@ -178,7 +178,7 @@ class BarPlot:
         for i in range(len(textes)):
             if textes[i]:
                 self.svg.text(x, line_decal*(i+1),
-                              unicode(textes[i], 'latin1').encode('utf8'),
+                              textes[i].encode('utf-8'),
                               style=opacity,
                               svg_class=svg_class
                               )

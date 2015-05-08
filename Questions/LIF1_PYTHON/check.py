@@ -26,7 +26,7 @@ import compiler
 import ast
 
 def P_clean(txt):
-    if isinstance(txt, str):
+    if isinstance(txt, basestring):
         # Replace tabulations with space
         txt = txt.strip(' \n\t').replace('\t',' ').replace('\n\n', '\n').replace('\n',';')
         # A run of spaces if replaced by one space

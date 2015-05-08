@@ -61,7 +61,7 @@ def duration(t):
     return s
 
 def answer_format(t, space=False):
-    t = cgi.escape(str(t)).replace("\n","<br>")
+    t = cgi.escape(unicode(t)).replace("\n","<br>")
     if space:
         t = t.replace(" ","&#9251;")
     return '<tt class="an_answer">' + t + "</tt>"
@@ -156,25 +156,23 @@ def sortable_table(sort_column, content, html_class='', url='',
         s.append("<tr%s>" % line_attributes(line[1]))
         for cell in line[1:]:
             s.append("<td%s>" % cell_attributes(cell) \
-                 + str(cell_value(cell)) + "</td>")
+                 + unicode(cell_value(cell)) + "</td>")
         s.append("</tr>")
     s.append("</tbody></table>")
     return '\n'.join(s)
 
-flat = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f ! #$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~?\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f?????Y|?????????????'u?.????????AAAAAA?CEEEEIIIIDNOOOOOXOUUUUY?Baaaaaa?ceeeeiiiionooooo??uuuuy?y"
+flat = u"\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f ! #$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~?\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f?????Y|?????????????'u?.????????AAAAAA?CEEEEIIIIDNOOOOOXOUUUUY?Baaaaaa?ceeeeiiiionooooo??uuuuy?y"
 
 
 # Safe for use in shell scripts between ' or "
 # SAfe for a file name.
 safe_ascii = ''
 for i in range(256):
-    i = chr(i)
-    if i in " #%()*+,-.0123456789;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõöøùúûüışÿ":
+    i = unichr(i)
+    if i in u" #%()*+,-.0123456789;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõöøùúûüışÿ":
         safe_ascii += i
     else:
         safe_ascii += '?'
-
-
 
 def rewrite_string(s, parser=None):
     if not isinstance(s, tuple):
@@ -287,3 +285,27 @@ def allow_one_more_call(f):
         del f.done
     except AttributeError:
         pass
+
+def to_unicode(v):
+    if isinstance(v, unicode):
+        return v
+    if isinstance(v, str):
+        try:
+            return unicode(v, 'utf-8')
+        except UnicodeError:
+            return unicode(v, 'latin-1') # LATIN-1: OK
+    if isinstance(v, list):
+        return [to_unicode(i) for i in v]
+    if isinstance(v, tuple):
+        return tuple(to_unicode(i) for i in v)
+    if isinstance(v, dict):
+        for k in v:
+            v[k] = to_unicode(v[k])
+        return v
+    return v
+
+def get_encoding(v):
+    try:
+        return unicode(v, 'utf-8'), 'utf-8'
+    except UnicodeError:
+        return unicode(v, 'latin-1'), 'latin-1' # LATIN-1: OK

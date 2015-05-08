@@ -36,6 +36,7 @@ def execute(state, plugin, argument):
         s = []
         for question in sorted(questions.questions.values(),
                                key=lambda q: q.name):
+            state.question = question
             state.student.init_seed(question.name)
             s.append('<strong>' + question.name + '</strong>')
             if question.maximum_time:

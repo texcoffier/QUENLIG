@@ -23,7 +23,7 @@ from questions import *
 import re
 
 def C_clean(txt):
-    if isinstance(txt, str):
+    if isinstance(txt, basestring):
         # Remove last ';' and replace tabulations with space
         txt = txt.strip(' ;\n\t').replace('\t',' ').replace('\n',' ')
         # A run of spaces if replaced by one space

@@ -36,10 +36,10 @@ class Required:
     visible = True
     see_it_only = False
     def __init__(self, world, string):
-        if string[-1] == '¤':
+        if string[-1] == u'¤':
             self.visible = False
             string = string[:-1]
-        if string[-1] == '¤':
+        if string[-1] == u'¤':
             self.see_it_only = True
             string = string[:-1]
         w = string.split(":")
@@ -103,20 +103,21 @@ def transform_question(question):
     returning the string"""
     if question == None:
         return None
-    q = question
     if callable(question):
-        if isinstance(question, TestExpression):
-            return question # For Choice test because it contains the question
-        if 'state' not in question.func_code.co_varnames:
+        # Choice test because it contains the question
+        if (not isinstance(question, TestExpression)
+            and 'state' not in question.func_code.co_varnames):
+            def tmp(dummy_state):
+                return utilities.to_unicode(question())
+        else:
             def tmp(state):
-                return q()
-            return tmp                    
+                return utilities.to_unicode(question(state))
     else:
-        def tmp(state):
-            return q
-        return tmp
-    return question
-    
+        question = utilities.to_unicode(question)
+        def tmp(dummy_state):
+            return question
+    return tmp
+
 
 class Question:
     def __init__(self, world, arg, previous_question=[]):
@@ -143,7 +144,8 @@ class Question:
         self.nr_lines = int(arg.get("nr_lines", "1"))
         self.comment = []
         self.required = arg.get("required", previous_question)
-        self.required = Requireds([Required(world, i) for i in self.required])
+        self.required = Requireds([Required(world, utilities.to_unicode(i))
+                                   for i in self.required])
             
         self.indices = arg.get("indices", ())
         self.default_answer = arg.get("default_answer", "")
@@ -195,8 +197,8 @@ class Question:
         answer = answer.strip(" \n\t\r").replace("\r\n", "\n")
         if self.nr_lines == 1 and answer.find("\n") != -1:
             return False, "VOTRE REPONSE CONTIENT DES RETOURS A LA LIGNE"
-        if ' ' in answer:
-            return False, "VOTRE REPONSE CONTIENT UN ESPACE INSÉCABLE"
+        if u' ' in answer:
+            return False, u"VOTRE REPONSE CONTIENT UN ESPACE INSÉCABLE"
         if self.evaluate_answer:
             answer = self.evaluate_answer(answer, state)
 
@@ -209,11 +211,13 @@ class Question:
                     result, comment = t(answer)
             else:
                 result, comment = t(answer, state=state)
+            comment = utilities.to_unicode(comment)
             if comment not in full_comment:
                 full_comment.append(comment)
             if result != None:
                 if self.eval_after:
-                    full_comment.append(self.eval_after(answer, state))
+                    full_comment.append(utilities.to_unicode(
+                        self.eval_after(answer, state)))
                 return result, ''.join(full_comment)
 
         if self.eval_after:
@@ -235,7 +239,7 @@ class Question:
         return c
 
     def url(self):
-        return "?question=%s" % urllib.quote(self.name)
+        return "?question=%s" % urllib.quote(self.name.encode('utf-8'))
 
     def a_href(self):
         return "<A HREF=\"%s\">%s</A>" % (self.url(), cgi.escape(self.name))
@@ -267,7 +271,7 @@ class Question:
             if isinstance(test, Grade):
                 if not test.grade.startswith("-"):
                     if test.teacher:
-                        if isinstance(test.teacher, str):
+                        if isinstance(test.teacher, basestring):
                             competences.add(test.teacher)
                         else:
                             competences.update(test.teacher)
@@ -303,7 +307,8 @@ def add(**arg):
     # sys.stdout.write("*")
     # sys.stdout.flush()
     world = inspect.currentframe().f_back.f_globals["__name__"].split(".")
-    for a in arg.keys():
+    for a, v in arg.items():
+        arg[a] = utilities.to_unicode(arg[a])
         if a not in attributs.keys():
             print "'%s' n'est pas un attribut de question" % a
             print "Les attributs possibles de questions sont:"
@@ -839,7 +844,7 @@ class TestExpression(Test):
     def __call__(self, student_answer, state=None):
         """Add a compatibility layer for old tests"""
         student_answer = self.canonize(student_answer, state)
-        if isinstance(student_answer, str):
+        if isinstance(student_answer, basestring):
             return self.do_test(student_answer, state)
         else:
             return student_answer
@@ -906,7 +911,8 @@ class TestString(TestExpression):
 
     def canonize_test(self, parser, state):
         if self.do_canonize:
-            self.string_canonized = parser(self.string, state)
+            self.string_canonized = parser(utilities.to_unicode(self.string),
+                                           state)
         else:
             self.string_canonized = self.string
 
@@ -1553,8 +1559,6 @@ class Grade(TestUnary):
         self.teacher = teacher
         self.grade = '%g' % float(grade)
         TestUnary.__init__(self, expression)
-        
-        self.children = [expression]
     def source(self, state=None, format=None):
         return (self.test_name(format) + '('
                 + self.children[0].source(state, format) + ','
@@ -1565,7 +1569,7 @@ class Grade(TestUnary):
             grade = ',' + self.grade
         else:
             grade = ',0'
-        if isinstance(self.teacher, str):
+        if isinstance(self.teacher, basestring):
             teachers = [self.teacher]
         else:
             teachers = self.teacher

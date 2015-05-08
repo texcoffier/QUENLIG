@@ -44,7 +44,7 @@ def css(state):
     for p in state.plugins_dict.values():
         s.append( p.css() )
         preformatted = False
-        if '\\A' in str(p.tip):
+        if p.tip and '\\A' in p.tip:
             preformatted = True
         elif p.translations and '\\A' in ''.join(p.translations.values()):
             preformatted = True
@@ -125,7 +125,7 @@ A { background-image: url('transparent.png'); }
 
 PRE { background-color: #FF0 ; border: 1px solid black ; }
 
-""" + '\n'.join(s)
+""" + '\n'.join(s).encode('utf-8')
 
 def css_cached(state):
     try:
@@ -148,7 +148,7 @@ def generate_javascript(state):
             s.append( '/* PLUGIN: ' + p.plugin.css_name + ' */')
             s.append( p.javascript )
     utilities.write(os.path.join('HTML','quenlig.js'),
-                    '\n'.join(s))
+                    '\n'.join(s).encode('utf-8'))
     
 
 def display(plugin, s):
@@ -234,7 +234,7 @@ def execute(state, plugin, argument):
         state.url_base, state.url_base, state.url_base) + '\n'.join(
         ['<link rel="stylesheet" href="%s/questions.%s.css" type="text/css">'
          % (state.url_base, x) for x in state.localization]) + """
-    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
     <script src="%s/quenlig.js"></script>
   </head>
   <body><div class="page">
@@ -252,6 +252,10 @@ def execute(state, plugin, argument):
         state.full_page = '\n'.join(s)
     except:
         for i in s:
-            print i
+            try:
+                i.encode("utf-8")
+            except:
+                print '*'*999
+            print repr(i)
         raise
 

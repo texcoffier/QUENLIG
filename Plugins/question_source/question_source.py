@@ -24,6 +24,7 @@
 import os
 import cgi
 import compiler
+import utilities
 
 container = 'heart'
 priority_display = 10000000
@@ -45,27 +46,33 @@ def question_lines(c, question):
         start -= 1
     while start > 0 and c[start].strip() != '':
         start -= 1
+    if c[start].strip() == '':
+        start += 1
 
     end = question.f_lineno
     while end < len(c) and not c[end].strip() == '':
         end += 1
+    if c[end].strip() == '':
+        end -= 1
     return start, end
 
 def extract_question(c, question):
     """Extract a question definition from the python source.
     """
     start, end = question_lines(c, question)
-    return c[start:end]
+    return c[start:end+1]
 
-def replace_question(c, question, source, state):
+def replace_question(c, question, source, state, encoding):
     # Save old file
     f = open(question.python_file() + '.old', 'w')
-    f.write(''.join(c))
+    f.write('\n'.join(c).encode(encoding))
     f.close()
 
     start, end = question_lines(c, question)
     f = open(question.python_file(), 'w')
-    f.write(''.join(c[:start]) + source + ''.join(c[end:]))
+    f.write(('\n'.join(c[:start]) + '\n'
+             + source + '\n'
+             + '\n'.join(c[end+1:])).encode(encoding))
     f.close()
 
     import plugins
@@ -74,6 +81,7 @@ def replace_question(c, question, source, state):
         reload_questions.plugin.execute(state, reload_questions, '1')
         return 'OK'
     except Exception, e:
+        os.system("cat " + question.python_file())
         os.rename(question.python_file() + '.old', question.python_file())
         reload_questions.plugin.execute(state, reload_questions, '1')
         return '<pre class="python_error">' + cgi.escape(str(e)) + '</pre>'
@@ -91,26 +99,28 @@ def execute(state, dummy_plugin, argument):
         return
 
     f = open(state.question.python_file(), "r")
-    c = f.readlines()        
+    c, encoding = utilities.get_encoding(f.read())
+    c = c.split('\n')
     f.close()
 
     before = ''
     if argument:
-        source = unicode(argument,'utf-8').encode('latin-1', 'replace')
+        source = argument
         try:
-            compiler.parse(source)
+            compiler.parse(source.encode("utf-8"))
         except SyntaxError, e:
             before = ('<pre class="python_error">' +
                       cgi.escape(str(e)) + '</pre>')
         if before == '':
-            before = replace_question(c, state.question, source, state)
+            before = replace_question(c, state.question, source, state,
+                                      encoding)
     else:
-        source = ''.join(extract_question(c, state.question))
+        source = '\n'.join(extract_question(c, state.question))
 
 
     if False:
         f = open('xxx.source.py', 'w')
-        f.write(''.join(source))
+        f.write('\n'.join(source))
         f.close()
         f = os.popen('highlight --xhtml xxx.source.py ; grep -v "body" <highlight.css >HTML/highlight.css', 'r')
         highlighted = f.read().replace('highlight.css', '/highlight.css')

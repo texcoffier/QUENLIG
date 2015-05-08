@@ -730,11 +730,11 @@ class Network:
 
         f.write("""
         digraph "Reseau" {
-        charset="latin1";
+        charset="UTF-8";
         node[fontsize="%s"];
         edge[arrowhead=none,labelfontsize="%s", fontsize="%s", labelangle="30"%s];
 
-        graph[outputorder="edgesfirst",page="11.69,8.26",maxiter="10000",charset="Latin1",start=%d];
+        graph[outputorder="edgesfirst",page="11.69,8.26",maxiter="10000",start=%d];
         
         """ % (font_size, font_size,font_size,  label_distance, start))
 

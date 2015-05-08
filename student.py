@@ -56,7 +56,7 @@ def translate_log(filename):
     f.close()
     t = []
     for c in content:
-        c = unicode(c[:-1], "latin-1").split("")
+        c = unicode(c[:-1], "latin-1").split("") # LATIN-1: OK
         decal = int(len(c) == 5) # In order to read old log files
 
         question = c[0]
@@ -120,7 +120,7 @@ class Student:
         f.close()
 
     def eval_line(self, line):
-        line = [v.encode('latin-1') for v in ast.literal_eval(line)]
+        line = [v for v in ast.literal_eval(line)]
         action_time = time.mktime(time.strptime(line.pop(0), "%Y%m%d%H%M%S"))
         command = answer.commands[line.pop(0)]
         if command.question:
@@ -434,8 +434,6 @@ class Student:
     def log(self, question_name, command, value=""):
         if not self.writable:
             return
-        question_name = unicode(question_name, "latin-1")
-        value = unicode(value, "latin-1")
         v = answer.commands[command].format(time.time(), question_name, value)
         if self.eval_line(v):
             return # Do not store: unchanged value

@@ -72,7 +72,7 @@ def execute(state, dummy_plugin, dummy_argument):
 
     s = '''digraph "%s" {
 node[height="0.2",width="0.2",shape=rectangle, margin="0.025", label="",style="filled", fillcolor="white", fontsize="8"];
-graph[charset="Latin1", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
+graph[charset="UTF-8", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
 ''' % state.question.name
     nodes = set()
     for node, others in arcs.items():
@@ -80,21 +80,21 @@ graph[charset="Latin1", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
         for other in others:
             nodes.add(other)
     for node in nodes:
-        str_node = str(uncanonize.get(node,node)
+        str_node = unicode(uncanonize.get(node,node)
                        ).replace('\\', '\\\\'
                                  ).replace('"', '\\"'
                                            ).replace('\n', '\\n')
                                      
-        if str(node).startswith(is_comment):
+        if unicode(node).startswith(is_comment):
             s += '%s [ label="%s"];\n' % (
                 H(node), str_node[1:])
-        elif str(node).startswith(is_good):
+        elif unicode(node).startswith(is_good):
             s += '%s [ label="%s", style="filled",fillcolor="#88FF88" ];\n' % (
                 H(node), str_node[1:])
-        elif str(node).startswith(is_first):
+        elif unicode(node).startswith(is_first):
             s += '%s [ label="%s" ];\n' % (
                 H(node), str_node[1:])
-        elif str(node).startswith(is_done):
+        elif unicode(node).startswith(is_done):
             s += '%s [ label="%s", style="filled",fillcolor="#00FF00" ];\n' % (
                 H(node), str_node[1:])
         elif node is False:
@@ -107,17 +107,14 @@ graph[charset="Latin1", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
             s += '%s -> %s [penwidth="%d"];\n' % (H(node), H(arc), nb)
     s += '}'
 
-
     f = open("xxx.dot", "w")
-    f.write(s)
+    f.write(s.encode('utf-8'))
     f.close()
     p = subprocess.Popen(["dot", "-Tsvg", "xxx.dot"], stdout=subprocess.PIPE)
     svg = p.communicate()[0]
     
     try:
-        svg = unicode(svg, "utf-8", 'ignore'
-                      ).encode("latin-1", 'replace'
-                               ).replace("UTF-8", "ISO-8859-1")
+        svg = unicode(svg, "utf-8", 'ignore')
     except UnicodeDecodeError:
         print "SVG: UnicodeDecodeError"
     except UnicodeEncodeError:

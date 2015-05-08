@@ -72,7 +72,7 @@ class AttributeCSS(Attribute):
                                   cgi.escape(self.selector))
 
     def generate_css(self, name, selector, attribute, value, div='DIV.'):
-        if not isinstance(value, str):
+        if not isinstance(value, basestring):
             return ''
         if attribute == 'content':
             value = '"' + value + '"'
@@ -261,12 +261,12 @@ class Plugin:
                 self.lang[lang] = None
 
         try: # Get the localized value
-            return self.lang[lang].__dict__[attribute]
+            return utilities.to_unicode(self.lang[lang].__dict__[attribute])
         except (KeyError, AttributeError):
             pass
 
         try: # Get the default defined in the plugin file
-            return self.plugin.__dict__[attribute]
+            return utilities.to_unicode(self.plugin.__dict__[attribute])
         except KeyError:
             pass
 
@@ -277,7 +277,7 @@ class Plugin:
 
     def doc_html_item(self, item):
         v = self[('en','fr'), item]
-        if isinstance(v, str):
+        if isinstance(v, basestring):
             r = cgi.escape(v)
         elif isinstance(v, int):
             r = str(v)

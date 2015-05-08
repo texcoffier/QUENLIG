@@ -29,7 +29,7 @@ import os
 
 def indent(xml):
     f = open("xxx", "w")
-    f.write('<?xml version="1.0" encoding="latin1"?>')
+    f.write('<?xml version="1.0" encoding="UTF-8"?>')
     f.write(xml)
     f.close()
     os.system("xmllint --format xxx")

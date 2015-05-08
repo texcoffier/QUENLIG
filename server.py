@@ -97,6 +97,12 @@ class CachedFile:
                 f = open(self.full_name, "r")
                 self.content = f.read()
                 f.close()
+                if self.filename.endswith(('.html', '.css', '.js')):
+                    try:
+                        unicode(self.content, 'utf-8')
+                    except:
+                        self.content = utilities.to_unicode(self.content
+                        ).encode("utf-8")
                 self.content_length = len(self.content)
                 self.gmtime = os.path.getmtime(self.full_name)
                 self.modification_time = html_time(self.gmtime)
@@ -173,7 +179,9 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         f = cgi.parse_qs(path[-1].split('?')[-1])
         form = {}
         for i in f:
-            form[i] = ''.join(f[i]) # concatenation of parameters
+            form[i] = ''.join(
+                utilities.to_unicode(ff)
+                for ff in f[i]) # concatenation of parameters
 
         if form.has_key('guest'):
             path[0] = 'guest' + form['guest']
@@ -192,12 +200,15 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         form["number"] = number
 
         # Get the session state
+        print form['ticket']
         session = state.get_state(self, form['ticket'].translate(utilities.safe_ascii))
         if session == None:
             return
         # Execute and return page
         sys.stdout.flush() # To really log into the file for 'regtests'
         mime, content = session.execute(form)
+        if mime in ('application/x-javascript', 'text/html', 'text/css'):
+            content = utilities.to_unicode(content).encode("utf-8")
         sys.stdout.flush()
         self.send_head(mime, cached=False, content_length=len(content))
         self.wfile.write(content)

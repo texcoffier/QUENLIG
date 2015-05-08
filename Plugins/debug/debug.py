@@ -24,6 +24,7 @@
 import plugins
 import cgi
 import student
+import utilities
 
 priority_execute = '-top'
 container = 'action'
@@ -46,8 +47,12 @@ def execute(state, plugin, argument):
         s = ['<h2>' + a_plugin.plugin.css_name + '</h2>']
         for attribute in plugins.Attribute.attributes.keys():
             if a_plugin.__dict__[attribute]:
-                s.append('<b>%s</b> : %s<br>' % (
-                    attribute, cgi.escape(str(a_plugin.__dict__[attribute])).replace(',',',<br>&nbsp;&nbsp;&nbsp;&nbsp;')))
+                v = unicode(a_plugin.__dict__[attribute])
+                v = v.encode('utf-8')
+                v = cgi.escape(v)
+                v = v.replace(',', ',<br>&nbsp;&nbsp;&nbsp;&nbsp;')
+                v = utilities.to_unicode(v)
+                s.append('<b>%s</b> : %s<br>' % (attribute, v))
 
         s.append('current_acls=%s<br>' % a_plugin.current_acls)
         for stu in student.students.values():
