@@ -33,6 +33,37 @@ horizontal = True
 acls = { 'Wired': ('executable',) }
 priority_execute = priority_display = 2000000000
 
+themes = {
+    'green':
+    '''
+.box_title { background: #CFC ; }
+table.box_content { background: #EFE ; }
+    ''',
+    'gray':
+    '''
+.box_title { background: #E8E8E8 ;
+    border-top-right-radius: 0.4em ;
+    border-top-left-radius: 0.4em ;
+    }
+table.box_content { background: #EEE ; }
+    ''',
+    }
+
+def option_set(plugin, value):
+    if value in themes:
+        plugin.state.theme = value
+        css_cached.cache.clear()
+    else:
+        raise ValueError("Bad value for 'theme': " + value)
+
+option_name = 'theme'
+option_help = ' or '.join('"%s"' % t
+                          for t in themes) + '''
+        The GUI theme.
+'''
+option_default = "gray"
+
+
 import utilities
 import os
 import cgi
@@ -51,7 +82,7 @@ def css(state):
         if preformatted:
             s.append('DIV.%s A.tips > SPAN { white-space: pre ; }' % \
                      p.plugin.css_name)
-
+    s.append(themes[state.theme])
     return """
 
 body {
@@ -66,7 +97,6 @@ TT { font-weight: bold ; }
 
 .box_title {
    font-weight: bold ;
-   background: #CFC ;
    text-align: center; 
    white-space: nowrap;
    border: 1px solid black ;
@@ -76,7 +106,6 @@ TT { font-weight: bold ; }
 
 table.box_content {
    border: 1px solid black ;
-   background: #EFE ;
    width: 100% ;
    border-spacing: 0px ;
 }

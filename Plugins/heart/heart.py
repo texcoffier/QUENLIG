@@ -26,7 +26,7 @@ width = '100%'
 acls = { 'Wired': ('executable',) }
 
 css_attributes = (
-    ".box_title { background: #CFC ; padding: 2px;}",
+    ".box_title { padding: 2px;}",
     "> DIV { margin-top: 0.7em;}",
     "> DIV > TABLE.box_content { background: #EEE ; }",
 )
