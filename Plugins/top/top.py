@@ -64,6 +64,7 @@ option_help = ' or '.join('"%s"' % t
 option_default = "gray"
 
 
+import json
 import utilities
 import os
 import cgi
@@ -167,11 +168,30 @@ def css_cached(state):
     return css_cached.cache[state.localization]
 
 css_cached.cache = {}
-
                    
 @utilities.only_one_call
 def generate_javascript(state):
-    s = []
+    s = ['''
+var messages = {} ;
+
+function add_messages(lang, dict)
+{
+  for(var i in dict)
+    {
+      if ( messages[lang] === undefined )
+           messages[lang] = {} ;
+      messages[lang][i] = dict[i] ;
+    }
+}
+
+function _(message)
+{
+  for(var lang in languages)
+    if ( messages[languages[lang]][message] !== undefined )
+       return messages[languages[lang]][message] ;
+  return message ;
+}
+    ''']
     for p in state.plugins_dict.values():
         if p.javascript:
             s.append( '/* PLUGIN: ' + p.plugin.css_name + ' */')
@@ -265,10 +285,11 @@ def execute(state, plugin, argument):
          % (state.url_base, x) for x in state.localization]) + """
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
     <script src="%s/quenlig.js"></script>
+    <script>var languages = %s ;</script>
   </head>
   <body><div class="page">
   """ % (
-        state.url_base,
+        state.url_base, json.dumps(state.localization)
         )
 
     s = [body]
