@@ -1,8 +1,8 @@
 # -*- coding: latin-1 -*-
 
-title = "Les compétences"
+title = "Compétences"
 
-tip = "Cliquez sur une compétence"
+tip = "Cliquez sur une compétence au dessous,\A ou ouvrez-là ou bien cliquez sur le graphique"
 
 translations = {
     'erase': 'Effacez votre réponse et réessayez en essayant de répondre plus vite afin de faire apparaître un petit carré jaune.',

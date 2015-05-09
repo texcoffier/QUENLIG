@@ -1,11 +1,26 @@
 /* -*- coding: latin-1 -*- */
+
+add_messages('fr', {
+  "competences:center_before": "% de réponses rapides (vert)\n",
+  "competences:center_after": "\nCliquez pour avoir une question adaptée",
+  "competences:before": "",
+  "competences:after": "",
+  "competences:question_before": "",
+  "competences:question_after": "",
+  }) ;
+add_messages('en', {
+  "competences:center_before": "% of fast answers (green)\n",
+  "competences:center_after":  "\nClick to pick an adapted question",
+  }) ;
+
 var char_close = '&#9660;' ;
 var char_open = '&#9654;' ;
 var char_recycle = '&#9851;' ;
+var font_small = "6px sans-serif" ;
 var font_normal = "10px sans-serif" ;
 var font_selected = "20px sans-serif" ;
 var competences = {} ; // competence name -> competence object
-var competence_names = [] ; // sorted competences names
+var competence_names = [] ; // sorted competences
 var current_question = '' ;
 var questions = {} ; // question name -> question object
 
@@ -63,6 +78,7 @@ function Question(info)
   this.nr_good     = info[3] ;
   this.nr_perfect  = info[4] ;
   this.competences = info[5] ;
+  this.level       = info[6] ;
   this.current     = this.name == current_question ;
 
   for(var competence in this.competences)
@@ -106,7 +122,7 @@ Question.prototype.jump = function(recycle)
   window.location = "?question=" + escape2(this.name) + erase ;
 } ;
 
-Question.prototype.nice_results = function()
+Question.prototype.nice_results = function(left_to_right)
 {
   var cols = Math.max(this.nr_bad,
 		      this.nr_good - this.nr_perfect,
@@ -118,7 +134,10 @@ Question.prototype.nice_results = function()
     s.push('<tr>') ;
     for(var i=0; i < cols; i++)
     {
-      if ( i >= cols - nr )
+      if ( left_to_right
+	   ? i < nr
+	   : i >= cols - nr
+	   )
 	s.push('<td class="' + cls + '">') ;
       else
 	s.push('<td>') ;
@@ -171,8 +190,8 @@ function Competence(name)
   this.nr_bad = 0 ;
   this.nr_good = 0 ;
   this.nr_perfect = 0 ;
+  this.level = 1e9 ;
   competence_names.push(name) ;
-  competence_names.sort() ;
 }
 
 Competence.prototype.add = function(question)
@@ -181,6 +200,12 @@ Competence.prototype.add = function(question)
   this.nr_bad += question.nr_bad ;
   this.nr_good += question.nr_good ;
   this.nr_perfect += question.nr_perfect ;
+  this.level = Math.min(question.level, this.level) ;
+} ;
+
+Competence.prototype.sort = function()
+{
+  this.questions.sort(function(a,b) { return a.level - b.level ; }) ;
 } ;
 
 Competence.prototype.is_open = function()
@@ -295,22 +320,33 @@ function patch_title()
 {
   var d = document.getElementsByTagName('DIV') ;
   for(var i = 0 ; i < d.length; i++)
-    if ( d[i].className == 'title_bar' )
+    {
+      if ( d[i].className == 'competences' )
+	{
+	  var title = d[i].getElementsByTagName('EM')[0] ;
+	}
+      if ( d[i].className == 'title_bar' )
       {
 	d = d[i].getElementsByTagName('TABLE')[0] ;
-	d = d.rows[0].cells[0].getElementsByTagName('DIV')[0] ;
+	var row = d.rows[0] ;
+	var j = 0 ;
+	while( row.cells[j+1] !== undefined && row.cells[j+1].tagName == 'TD' )
+	  j++ ;
+	d = row.cells[j] ;
 	var q = questions[current_question] ;
 	if ( q )
 	  {
 	    var e = document.createElement('DIV') ;
 	    e.className = "competences" ;
 	    e.style.display = "inline" ;
-	    e.innerHTML = questions[current_question].nice_results() ;
-	    d.insertBefore(e, d.lastChild) ;
+	    e.innerHTML = questions[current_question].nice_results(true) ;
+	    d.appendChild(e) ;
 	  }
-	display_sunburst(d) ;
+	title.style.position = "relative" ;
+	display_sunburst(title) ;
 	return ;
       }
+    }
   setTimeout(patch_title, 10) ;
 }
 
@@ -406,6 +442,8 @@ function slice_path(ctx, radius0, radius, angle1, angle2)
 
 function slice(ctx, color, radius0, radius, angle1, angle2, text, x, y)
 {
+  angle1 += 0.0005 ;
+  angle2 -= 0.0005 ;
   angle1 = 2 * Math.PI * angle1 ;
   angle2 = 2 * Math.PI * angle2 ;
   ctx.fillStyle = color ;
@@ -416,7 +454,7 @@ function slice(ctx, color, radius0, radius, angle1, angle2, text, x, y)
   if ( inside && text != "" )
   {
     if ( text.indexOf(":") == -1 )
-      slice_path(ctx, radius0, 100, angle1, angle2) ;
+      slice_path(ctx, radius0, 150, angle1, angle2) ;
     ctx.fillStyle = "#FFFFFF" ;
     ctx.globalAlpha = 0.5 ;
     ctx.fill() ;
@@ -439,15 +477,46 @@ function slice(ctx, color, radius0, radius, angle1, angle2, text, x, y)
 	{
 	  // Center label
 	  display_text = text.substr(1) ;
+	  if ( inside )
+	     display_text = _("competences:center_before") + display_text
+	    + _("competences:center_after") ;
 	  ctx.textAlign = "center" ;
+	}
+      else
+	{
+	  if ( inside )
+	    {
+	      if ( text.indexOf(":") == -1 )
+		{
+		  display_text = _("competences:before") + display_text
+		  + _("competences:after") ;
+		}
+	      else
+		{
+		  display_text = _("competences:question_before")
+		  + display_text + _("competences:question_after") ;
+		}
+	    }
 	}
       ctx.rotate(angle) ;
       ctx.fillStyle = "#000000" ;
       if ( inside )
 	ctx.font = font_selected ;
       else
-	ctx.font = font_normal ;
-      ctx.fillText(display_text, radius0/scale, 0);
+	{
+	  if ( angle2 - angle1 > 0.08 )
+	    ctx.font = font_normal ;
+	  else
+	    ctx.font = font_small ;
+	}
+      var t = display_text.split('\n') ;
+      var h = ctx.font.split('px')[0] ;
+      ctx.translate(0, h*(0.5 - t.length/2)) ;
+      for(var i in t)
+	{
+	  ctx.fillText(t[i], radius0/scale, 0) ;
+	  ctx.translate(0, h) ;
+	}
       ctx.restore() ;
     }
   return inside ? text : false ;
@@ -568,6 +637,9 @@ function draw_sunburst_real()
       nr_perfect += competence.nr_perfect ;
       nr_bad += competence.nr_bad ;
     }
+  var pc = Math.floor(100 * nr_perfect / (nr_bad+nr_good)) ;
+  if ( isNaN(pc) )
+    pc = "0" ;
   select = slice(ctx,
 		 hex_color(get_color(nr_bad, nr_good, nr_perfect)),
 		 0, center / 3. * 0.8, 0, 1,
@@ -584,26 +656,7 @@ function display_sunburst(d, width, height, x, y)
     return ;
   if ( width === undefined )
     {
-      var title_bar = d ;
-      while( title_bar.className != "title_bar" )
-	title_bar = title_bar.parentNode ;
-      var next = title_bar.nextSibling ;
-      while ( next && next.tagName != 'DIV' )
-	next = next.nextSibling ;
-      width = 200 ;
-      height = 200 ;
-      var n = 0 ;
-      for(var i = 0 ; i < next.childNodes.length; i++)
-      {
-	if ( next.childNodes[i].tagName )
-	{
-	  n++ ;
-	  if ( n == 2 )
-	  {
-	    height = Math.min(next.childNodes[i].offsetTop, 200) ;
-	  }
-	}
-      }
+      height = width = d.offsetHeight ;
       c.style.position = "absolute" ;
       c.style.right = "0px" ;
       c.style.top = "0px" ;
@@ -629,6 +682,10 @@ function display_competences(data, question)
   current_question = question ;
   for(var i in data)
     questions[data[i][0]] = new Question(data[i]) ;
+  for(var competence in competences)
+    competences[competence].sort() ;
+  competence_names.sort(
+    function(a,b) { return competences[a].level - competences[b].level ;}) ;
   document.write('<div id="competences"></div>') ;
   update_competences() ;
 

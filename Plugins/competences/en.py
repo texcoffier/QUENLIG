@@ -1,8 +1,8 @@
 # -*- coding: latin-1 -*-
 
-title = "The 'competences'"
+title = "Competences"
 
-tip = "Choose a 'competence'"
+tip = "Choose a 'competence', or open it, or click on the graphic"
 
 translations = {
     'erase': 'Clear your answer to retry to answer more quickly in order to have a yellow square',

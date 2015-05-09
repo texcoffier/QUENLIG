@@ -48,6 +48,7 @@ css_attributes = (
     ".nice_results .bad     { background: #F00 ; }",
     ".nice_results .perfect { background: #0F0 ; }",
     "#competences { width: 15em }",
+    '.box_title { padding-top: 1em; padding-bottom: 1em; }',
     )
 acls = {}
 
@@ -62,6 +63,7 @@ def execute(state, plugin, dummy_argument):
     for info in answerables:
         info = list(info)
         info.append(tuple(info[0].competences))
+        info.append(info[0].level)
         info[0] = info[0].name
         q.append(info)
     if state.question and state.student.answered_question(state.question.name):
