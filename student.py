@@ -381,6 +381,8 @@ class Student:
                     ss = ''
                     for i in question_text.split('{{{')[1:]:
                         j = i.split('}}}')
+                        if j[0][0] == '!':
+                            j[0] = j[0][1:]
                         if j[0] in answer:
                             ss += '<br>' + utilities.answer_format(j[1])
                 else:
