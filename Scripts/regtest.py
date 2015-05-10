@@ -487,7 +487,7 @@ def test_0370_choice(student):
     student.give_answer('b')
     student.goto_question('b:choice')
     student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b"> B')
-    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c" id="2"> C')
+    student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="c"> C')
 
     student.get('?question_answer=b')
     student.expect('<input class="checkbox" type="checkbox" name="question_answer" value="b" checked id="2"> B')
