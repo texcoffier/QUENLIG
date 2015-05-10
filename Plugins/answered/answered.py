@@ -31,7 +31,7 @@ css_attributes = (
     'TABLE.good_answer .an_answer { background: #DFD ; }',
     'TABLE.bad_answer  .an_answer { background: #FDD ; }',
     '.comment     { background: #DDD ; }',
-    'TT.an_answer, PRE.an_answer { font-weight: bold ; }',
+    'DIV.an_answer, PRE.an_answer { font-weight: bold ; }',
     )
 
 def execute(state, plugin, argument):

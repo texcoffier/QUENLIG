@@ -352,7 +352,7 @@ class Student:
         t = self.answers.values()
         t.sort(lambda x,y: cmp(x.first_time, y.first_time))
         
-        s = ''
+        s = []
         none = None
         saved_question = state.question
         for a in t:
@@ -368,13 +368,15 @@ class Student:
                 continue
             import Plugins.question_change_answer.question_change_answer
             more = Plugins.question_change_answer.question_change_answer.add_a_link(state, q)
-            s += "<h3 class=\"short\">" + q.name + more + "</h3>"
+            s.append('<div class="question_history">')
+            s.append("<em class=\"box_title short\">" + q.name + more +"</em>")
+            s.append('<table class="box_content"><tr><td>')
             self.init_seed(a.question)
             question_text = q.question(state)
-            s += question_text.split('{{{')[0]
+            s.append(question_text.split('{{{')[0])
 
             if a.indice >= 0 and a.indice < len(q.indices):
-                s += utilities.list_format(q.indices[:a.indice+1])
+                s.append(utilities.list_format(q.indices[:a.indice+1]))
 
             def answer_format(answer):
                 if '{{{' in question_text:
@@ -384,7 +386,8 @@ class Student:
                         if j[0][0] == '!':
                             j[0] = j[0][1:]
                         if j[0] in answer:
-                            ss += '<br>' + utilities.answer_format(j[1])
+                            ss += '<br>' + utilities.answer_format(
+                                j[1], escape=False)
                 else:
                     ss = utilities.answer_format(answer)
                 return ss
@@ -393,44 +396,43 @@ class Student:
                 number, message = self.check_answer(b, state)
                 if message:
                     message = "<br>" + message
-                s += utilities.div("bad_answer",
-                                   answer_format(b) + message)
+                s.append(utilities.div("bad_answer",
+                                       answer_format(b) + message))
 
             if a.answered:
+                messages = [answer_format(a.answered)]
+                if q.good_answer:
+                    messages.append(q.good_answer)
                 try:
-                    number, message = self.check_answer(a.answered, state)
+                    number, mess = self.check_answer(a.answered, state)
+                    if mess:
+                        messages.append(mess)
                 except IOError:
-                    message = '???BUG???'
-                if message:
-                    message = "<br>" + message
-                    
-                s += utilities.div("good_answer",
-                                   answer_format(a.answered) + \
-                                   '<br>' + q.good_answer + message)
+                    messages.append('???BUG???')
+                s.append(utilities.div("good_answer", '<br>'.join(messages)))
                 if state.current_role == 'Grader':
-                    s += '<br>' + repr(a.grades)
-                    s += '<br>' + ' '.join(
-                        time.strftime("%H:%M:%S", time.localtime(t))
-                        for t in a.answer_times)
+                    s.append('<br>' + repr(a.grades)
+                             + '<br>' + ' '.join(
+                                 time.strftime("%H:%M:%S", time.localtime(t))
+                                 for t in a.answer_times))
 
             for comment_time, comment_text in a.comments:
-                s += utilities.div('comment',"<PRE>" + \
-                                   cgi.escape(comment_text) + "</PRE>")
+                s.append(utilities.div('comment',"<PRE>" + \
+                                       cgi.escape(comment_text) + "</PRE>"))
 
             import Plugins.question_correction.question_correction
-            s += Plugins.question_correction.question_correction.add_a_link(state, q)
+            s.append(Plugins.question_correction.question_correction.add_a_link(state, q))
+            s.append('</tr></table></div><br>')
+
         state.question = saved_question
 
                 
         if none and none.comments:
-            s += "<h3 class=\"short\">?</h3>"
+            s.append("<h3 class=\"short\">?</h3>")
             for comment_time, comment_text in none.comments:
-                s += utilities.div('comment',"<PRE>" + \
-                                   cgi.escape(comment_text) + "</PRE>")
-            
-
-
-        return s
+                s.append(utilities.div('comment',"<PRE>" + \
+                                       cgi.escape(comment_text) + "</PRE>"))
+        return ''.join(s)
 
     def classement(self):
         stats = statistics.question_stats()

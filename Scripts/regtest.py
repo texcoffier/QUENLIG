@@ -296,12 +296,12 @@ def test_0240_work_done(student):
     student.get_answered()
     minimal_tests(student, title=None, bad=1, indice=2, good=3)
     student.expect('<PRE>My--Comment</PRE>',
-                   '<tt class="an_answer">c</tt><br>good_c</TD>',
-                   '"short">a:c</h3>question_c<TABLE CLASS="good_answer">',
-                   '<tt class="an_answer">b</tt><br><br>good_b</TD>',
-                   'short">a:b</h3>question_b<TABLE CLASS="good_answer">',
-                   '>a</tt><br>good_answer_comment<br>good_answer__a</TD>',
-                   '<tt class="an_answer">bad_one</tt>',
+                   '<div class="an_answer">c</div><br>good_c</TD>',
+                   'short">a:c</em><table class="box_content"><tr><td>question_c<TABLE CLASS="good_answer">',
+                   '<div class="an_answer">b</div><br>good_b</TD>',
+                   'short">a:b</em><table class="box_content"><tr><td>question_b<TABLE CLASS="good_answer">',
+                   '>a</div><br>good_answer_comment<br>good_answer__a</TD>',
+                   '<div class="an_answer">bad_one</div>',
                    '<li>Indice X</li>',
                    '<li>Indice Y</li>',
                    )
@@ -429,7 +429,7 @@ def test_0320_root_statmenu_other_student(student):
 
     student.get('?answered_other=guest' + other_student.name)
     student.expect('otherComment',
-                   '<tt class="an_answer">a</tt><br>good_answer_comment')
+                   '<div class="an_answer">a</div><br>good_answer_comment')
     
 def test_0330_root_plugin_reload(student):
     student.select_role('Teacher')
