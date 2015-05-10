@@ -191,6 +191,29 @@ function _(message)
        return messages[languages[lang]][message] ;
   return message ;
 }
+
+function triggerKeyboardEvent(el, keyCode)
+{
+    var eventObj = document.createEventObject
+      ? document.createEventObject()
+      : document.createEvent("Events") ;
+
+    if(eventObj.initEvent){
+      eventObj.initEvent("keypress", true, true) ;
+    }
+
+    eventObj.keyCode = keyCode ;
+    eventObj.which = 0 ;
+    eventObj.charCode = keyCode ;
+    eventObj.target = el ;
+    eventObj.eventPhase == Event.AT_TARGET ;
+
+    if ( el.dispatchEvent )
+      el.dispatchEvent(eventObj) ;
+    else
+      el.fireEvent("onkeypress", eventObj) ;
+}
+
     ''']
     for p in state.plugins_dict.values():
         if p.javascript:

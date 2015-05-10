@@ -89,6 +89,10 @@ class AttributeCSS(Attribute):
                     s.append(self.generate_css('heart_content .' + name,
                                                self.selector % k[2:],
                                                self.css_name, v))
+                elif k.startswith('/'):
+                    s.append(self.generate_css(name,
+                                               self.selector % k[2:],
+                                               self.css_name, v))
                 else:
                     s.append(self.generate_css(name,
                                                self.selector % k,

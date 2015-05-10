@@ -691,6 +691,7 @@ function display_competences(data, question)
 
   if ( document.getElementsByTagName("BODY")[0] )
     document.getElementsByTagName("BODY")[0].onkeypress = function(event) {
+      console.log("BODY");
       if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
 	random_jump(questions) ;
       e = document.getElementById("competences_zoomed") ;
@@ -699,7 +700,6 @@ function display_competences(data, question)
 
     } ;
   patch_title() ;
-
   setInterval(draw_sunburst_real, 100) ;
 }
 

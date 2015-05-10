@@ -29,6 +29,24 @@ priority_execute = 'question_answer'
 background = '#CFC'
 title_background = '#8F8'
 acls = { 'Default': ('executable',) }
+css_attributes = (
+    "button { margin: 0.5em }",
+    )
+javascript = '''
+function click_on_next_button()
+{
+   var e = document.getElementById(1) ;
+   if ( e )
+     {
+        window.location = e.href ;
+     }
+   else
+     {
+     // We want the same behaviour than the enter key
+     triggerKeyboardEvent(document.getElementsByTagName('BODY')[0], 13) ;
+     }
+}
+'''
 
 def execute(state, dummy_plugin, dummy_argument):
     if state.question == None:
@@ -50,7 +68,12 @@ def execute(state, dummy_plugin, dummy_argument):
             message += '<hr>'
         message += state.question.good_answer
 
-    
+    message += '''<p id="question_good_buttons">
+    <a class="tips key_enter">
+    <button onclick="click_on_next_button()"><p></p></button><span></span>
+    </a>
+    </p>
+    '''
 
     return message
 
