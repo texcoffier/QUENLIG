@@ -30,6 +30,7 @@ acls = { 'Default': ('executable',) }
 
 css_attributes = (
     "/DIV.answeruser { white-space: pre; margin-left: 2em; background: #FFE; overflow:auto }",
+    ".answer { font-weight: bold ; }",
     )
 
 def execute(state, plugin, argument):
@@ -42,7 +43,7 @@ def execute(state, plugin, argument):
     for p in state.question.required.names(only_visible=True):
         s.append( questions.questions[p].question(state).split("{{{")[0] )
         try:
-            s[-1] += '<br><tt class="answer"></tt><div class="answeruser">%s</div>' % \
+            s[-1] += '<br><span class="answer"></span><div class="answeruser">%s</div>' % \
                      cgi.escape(state.student.answers[p].answered.strip())
                      
         except (KeyError, AttributeError):

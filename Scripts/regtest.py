@@ -37,7 +37,7 @@ def minimal_tests(student, good=0, bad=0, indice=0, title=''):
         '<span class="statmenu_indice0"></span></em>%d' % indice,
         '<A class="content tips" href="?answered=1">',
         '<A class="content tips" href="?action_help=1">',
-        '<TEXTAREA NAME="comment" COLS="30" ROWS="10"></TEXTAREA>',
+        '<TEXTAREA NAME="comment" ROWS="10"></TEXTAREA>',
         '<img src="?map=1">',
         'Questions/regtest',
          '<DIV class="title">\n<A class="content tips">\n<SPAN></SPAN>\n%s\n</A>\n</DIV>' % title

@@ -25,8 +25,8 @@ import cgi
 
 priority_display = 'analyse'
 css_attributes = (
-    "TEXTAREA { font-size: 80% ; }",
-    "FORM { display: none }",
+    "TEXTAREA { font-size: 80% ; width: 100% }",
+    "FORM { display: none; margin: 0px }",
     ":hover FORM { display: block }",
     "BUTTON { width: 100% ; }",
     ".comment_given { white-space: normal;}",
@@ -49,7 +49,7 @@ def execute(state, plugin, argument):
 
     return '''
     <FORM METHOD="GET" ACTION="#">
-    <TEXTAREA NAME="%s" COLS="30" ROWS="10"></TEXTAREA><br>
+    <TEXTAREA NAME="%s" ROWS="10"></TEXTAREA><br>
     <button type="submit"><p class="comment_button"></p></button>
     </FORM>
     ''' % plugin.plugin.css_name  + s
