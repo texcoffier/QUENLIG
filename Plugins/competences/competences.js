@@ -675,8 +675,7 @@ function draw_sunburst_real()
     pc = "0" ;
   select = slice(ctx,
 		 hex_color(get_color(nr_bad, nr_good, nr_perfect)),
-		 0, center / 3. * 0.8, 0, 1,
-		 ' ' + Math.floor(100 * nr_perfect / (nr_bad+nr_good)) + '%',
+		 0, center / 3. * 0.8, 0, 1, ' ' + pc + '%',
 		 x, y) || select ;
   do_draw_sunburst = false ;
   return select ;
