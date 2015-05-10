@@ -151,6 +151,43 @@ Question.prototype.nice_results = function(left_to_right)
   return s.join('') ;
 } ;
 
+function draw_nice_results(canvas_id)
+{
+  var c = document.getElementById('C_' + canvas_id) ;
+  if ( ! c )
+    return ;
+  if ( ! c.getContext )
+    return ;
+  c.width = c.height ;
+  var ctx = c.getContext("2d") ;
+  var q = canvas_question[canvas_id] ;
+  ctx.translate(c.width/2, c.height/2) ;
+  var n = 2 * Math.PI / (q.nr_bad + q.nr_good) ;
+
+  var t = [ ["", 0],
+	    ["#8F8", q.nr_perfect],
+	    ["#88F", q.nr_good],
+	    ["#F88", q.nr_bad + q.nr_good]
+	    ] ;
+  for(var i = 1; i < t.length; i++)
+    {
+      ctx.fillStyle = t[i][0] ;
+      slice_path(ctx, 0, c.width/2, t[i-1][1] * n, t[i][1] * n) ;
+      ctx.fill() ;
+    }
+}
+
+var canvas_id = 0 ;
+var canvas_question = {} ;
+
+Question.prototype.nice_results = function(left_to_right)
+{
+  var c = left_to_right ? 0 : canvas_id++ ;
+  canvas_question[c] = this ;
+  return '<div class="competences" style="display:inline"><a class="tips nice_results"><canvas id="C_'
+    + c + '" style="height:1em"></canvas><span></span></a></div>'
+}
+
 Question.prototype.is_answered = function()
 {
   return this.classes.indexOf("answered") != -1 ;
@@ -303,6 +340,7 @@ Competence.prototype.color = function()
 function update_competences()
 {
   var s = [] ;
+  canvas_id = 1 ; // Do not erase the title canvas
   for(var competence in competence_names)
   {
     competence = competences[competence_names[competence]] ;
@@ -314,6 +352,8 @@ function update_competences()
     }
   }
   document.getElementById("competences").innerHTML = s.join('\n') ;
+  for(var i = 0; i < canvas_id; i++)
+    draw_nice_results(i) ;
 }
 
 function patch_title()
@@ -327,20 +367,13 @@ function patch_title()
 	}
       if ( d[i].className == 'title_bar' )
       {
-	d = d[i].getElementsByTagName('TABLE')[0] ;
-	var row = d.rows[0] ;
-	var j = 0 ;
-	while( row.cells[j+1] !== undefined && row.cells[j+1].tagName == 'TD' )
-	  j++ ;
-	d = row.cells[j] ;
 	var q = questions[current_question] ;
 	if ( q )
 	  {
-	    var e = document.createElement('DIV') ;
-	    e.className = "competences" ;
-	    e.style.display = "inline" ;
-	    e.innerHTML = questions[current_question].nice_results(true) ;
-	    d.appendChild(e) ;
+	    var t = d[i].getElementsByTagName("TD")[0].getElementsByTagName("DIV")[0] ;
+	    t.innerHTML = questions[current_question].nice_results(true)
+	      + t.innerHTML ;
+	    draw_nice_results(0) ;
 	  }
 	title.style.position = "relative" ;
 	display_sunburst(title) ;
@@ -691,7 +724,6 @@ function display_competences(data, question)
 
   if ( document.getElementsByTagName("BODY")[0] )
     document.getElementsByTagName("BODY")[0].onkeypress = function(event) {
-      console.log("BODY");
       if ( event.eventPhase == Event.AT_TARGET && event.keyCode == 13 )
 	random_jump(questions) ;
       e = document.getElementById("competences_zoomed") ;
