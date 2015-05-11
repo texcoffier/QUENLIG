@@ -185,7 +185,7 @@ Question.prototype.icon_results = function(left_to_right)
   var c = left_to_right ? 0 : canvas_id++ ;
   canvas_question[c] = this ;
   return '<div class="competences" style="display:inline"><a class="tips nice_results"><canvas id="C_'
-    + c + '" style="height:1em; opacity:0.2"></canvas><span></span></a></div>'
+    + c + '" style="height:1em; opacity:0.3"></canvas><span></span></a></div>'
 } ;
 
 Question.prototype.icon_recycle = function()
@@ -193,8 +193,9 @@ Question.prototype.icon_recycle = function()
   return '<div class="competences" style="display:inline">'
     + '<a class="tips char_recycle" '
     + (this.is_answered()
-       ? 'onclick="questions[' + js(this.name) + '].jump(true)"'
-       : 'style="opacity:0.3"'
+       ? 'style="font-weight:normal" onclick="questions['
+       + js(this.name) + '].jump(true)"'
+       : 'style="color:#AAA"'
       )
     + '>' + char_recycle + '<span></span></a></div>' ;
 } ;
@@ -390,11 +391,12 @@ function add_next_question_button()
 function patch_title()
 {
   var d = document.getElementsByTagName('DIV') ;
+  var title ;
   for(var i = 0 ; i < d.length; i++)
     {
       if ( d[i].className == 'competences' )
 	{
-	  var title = d[i].getElementsByTagName('EM')[0] ;
+	  title = title || d[i].getElementsByTagName('EM')[0] ;
 	}
       if ( d[i].className == 'title_bar' )
       {
@@ -407,6 +409,8 @@ function patch_title()
 	    draw_nice_results(0) ;
 	  }
 	add_next_question_button() ;
+	title.style.position = "relative" ;
+	display_sunburst(title) ;
 	return ;
       }
     }
