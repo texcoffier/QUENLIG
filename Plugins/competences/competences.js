@@ -165,9 +165,9 @@ function draw_nice_results(canvas_id)
   var n = 2 * Math.PI / (q.nr_bad + q.nr_good) ;
 
   var t = [ ["", 0],
-	    ["#8F8", q.nr_perfect],
-	    ["#88F", q.nr_good],
-	    ["#F88", q.nr_bad + q.nr_good]
+	    ["#0F0", q.nr_perfect],
+	    ["#00F", q.nr_good],
+	    ["#F00", q.nr_bad + q.nr_good]
 	    ] ;
   for(var i = 1; i < t.length; i++)
     {
@@ -185,12 +185,24 @@ Question.prototype.nice_results = function(left_to_right)
   var c = left_to_right ? 0 : canvas_id++ ;
   canvas_question[c] = this ;
   return '<div class="competences" style="display:inline"><a class="tips nice_results"><canvas id="C_'
-    + c + '" style="height:1em"></canvas><span></span></a></div>'
+    + c + '" style="height:1em; opacity:0.2"></canvas><span></span></a></div>'
 }
 
 Question.prototype.is_answered = function()
 {
   return this.classes.indexOf("answered") != -1 ;
+} ;
+
+Question.prototype.icons = function(left_to_right)
+{
+  return '<div class="competences" style="display:inline">'
+    + this.nice_results(left_to_right)
+    + '<a class="tips char_recycle" '
+    + (this.is_answered()
+       ? 'onclick="questions[' + js(this.name) + '].jump(true)"'
+       : 'style="opacity:0.3"'
+       )
+    + '>' + char_recycle + '<span></span></a></div>' ;
 } ;
 
 Question.prototype.html = function()
@@ -207,17 +219,11 @@ Question.prototype.html = function()
   if ( this.current )
     info += ' current_question' ;
 
-  return this.nice_results()
+  return this.icons()
     + '<a class="tips ' + info + '" onclick="questions['
     + js(this.name) + '].jump()">' + this.name + '<span>'
     // + '<br>' + this.weight()
-    + '</span></a>'
-    + (this.is_answered()
-       ? '&nbsp;<a class="tips ' + info + '" style="position:absolute;" onclick="questions['
-       + js(this.name) + '].jump(true)">' + char_recycle
-       + '<span class="erase"></span></a>'
-       : ""
-      ) ;
+    + '</span></a>' ;
 } ;
 
 function Competence(name)
@@ -371,7 +377,7 @@ function patch_title()
 	if ( q )
 	  {
 	    var t = d[i].getElementsByTagName("TD")[0].getElementsByTagName("DIV")[0] ;
-	    t.innerHTML = questions[current_question].nice_results(true)
+	    t.innerHTML = questions[current_question].icons(true)
 	      + t.innerHTML ;
 	    draw_nice_results(0) ;
 	  }

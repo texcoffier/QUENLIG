@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 
-title = ("Give your answer here",
+title = ("Your answer",
          "Your answer was")
 
 tip = "Do not forget to test your answer before validating it, If no, you may give incorrect answer."
