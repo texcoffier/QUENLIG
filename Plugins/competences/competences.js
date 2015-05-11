@@ -1,8 +1,8 @@
-/* -*- coding: latin-1 -*- */
+/* -*- coding: utf-8 -*- */
 
 add_messages('fr', {
-  "competences:center_before": "% de r�ponses rapides (vert)\n",
-  "competences:center_after": "\nCliquez pour avoir une question adapt�e",
+  "competences:center_before": "% de réponses rapides (vert)\n",
+  "competences:center_after": "\nCliquez pour avoir une question adaptée",
   "competences:before": "",
   "competences:after": "",
   "competences:question_before": "",
@@ -13,9 +13,9 @@ add_messages('en', {
   "competences:center_after":  "\nClick to pick an adapted question",
   }) ;
 
-var char_close = '&#9660;' ;
-var char_open = '&#9654;' ;
-var char_recycle = '&#9851;' ;
+var char_close = '▼' ;
+var char_open = '▶' ;
+var char_recycle = '®' ;
 var font_small = "6px sans-serif" ;
 var font_normal = "10px sans-serif" ;
 var font_selected = "20px sans-serif" ;
