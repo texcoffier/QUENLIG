@@ -180,13 +180,24 @@ function draw_nice_results(canvas_id)
 var canvas_id = 0 ;
 var canvas_question = {} ;
 
-Question.prototype.nice_results = function(left_to_right)
+Question.prototype.icon_results = function(left_to_right)
 {
   var c = left_to_right ? 0 : canvas_id++ ;
   canvas_question[c] = this ;
   return '<div class="competences" style="display:inline"><a class="tips nice_results"><canvas id="C_'
     + c + '" style="height:1em; opacity:0.2"></canvas><span></span></a></div>'
-}
+} ;
+
+Question.prototype.icon_recycle = function()
+{
+  return '<div class="competences" style="display:inline">'
+    + '<a class="tips char_recycle" '
+    + (this.is_answered()
+       ? 'onclick="questions[' + js(this.name) + '].jump(true)"'
+       : 'style="opacity:0.3"'
+      )
+    + '>' + char_recycle + '<span></span></a></div>' ;
+} ;
 
 Question.prototype.is_answered = function()
 {
@@ -195,14 +206,7 @@ Question.prototype.is_answered = function()
 
 Question.prototype.icons = function(left_to_right)
 {
-  return '<div class="competences" style="display:inline">'
-    + this.nice_results(left_to_right)
-    + '<a class="tips char_recycle" '
-    + (this.is_answered()
-       ? 'onclick="questions[' + js(this.name) + '].jump(true)"'
-       : 'style="opacity:0.3"'
-       )
-    + '>' + char_recycle + '<span></span></a></div>' ;
+  return this.icon_results(left_to_right) + this.icon_recycle() ;
 } ;
 
 Question.prototype.html = function()
@@ -362,6 +366,27 @@ function update_competences()
     draw_nice_results(i) ;
 }
 
+function add_next_question_button()
+{
+  var e = document.getElementById('question_good_buttons') ;
+  if ( ! e )
+    return ;
+
+  var q = questions[current_question] ;
+  var c = q.competences ;
+  var s = ''
+  for(var competence in c)
+    {
+      competence = c[competence] ;
+      s += '<button onclick="competences[\'' + competence
+	+ '\'].choose_question()">' + competence + '</button>' ;
+    }
+  s += '<button style="font-size: 200%" onclick="questions['
+    + js(q.name) + '].jump(true)">'
+    + q.icon_recycle() + '</button>' ;
+  e.innerHTML += s ;
+}
+
 function patch_title()
 {
   var d = document.getElementsByTagName('DIV') ;
@@ -381,8 +406,7 @@ function patch_title()
 	      + t.innerHTML ;
 	    draw_nice_results(0) ;
 	  }
-	title.style.position = "relative" ;
-	display_sunburst(title) ;
+	add_next_question_button() ;
 	return ;
       }
     }
