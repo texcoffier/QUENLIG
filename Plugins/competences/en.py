@@ -6,6 +6,7 @@ tip = "Choose a 'competence', or open it, or click on the graphic"
 
 translations = {
     'char_recycle>SPAN': "'Clear your answer to recycle the question",
+    'openclose>SPAN': "Open/close question list",
     'nice_results>SPAN': "Red: bad answer\\A Blue: good answer\\A Green : Fast good answer\\A\\A Click to try another version of the question\\A\\A If the border is complete:\\A you have done all the question versions",
     'bad_answer_given>SPAN' : 'A bad answer was given',
     'answered>SPAN' : 'A good answer was given',

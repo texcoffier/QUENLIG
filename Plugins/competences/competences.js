@@ -22,6 +22,7 @@ var competences = {} ; // competence name -> competence object
 var competence_names = [] ; // sorted competences
 var current_question = '' ;
 var questions = {} ; // question name -> question object
+var open_close_is_stats = true ;
 
 var ordered = [
   'perfect_answer',
@@ -171,7 +172,7 @@ function draw_nice_results(canvas_id)
 	    ] ;
   for(var i = 1; i < t.length; i++)
     {
-      if ( q.is_answered() )
+      if ( !q.is_answered || q.is_answered() )
 	ctx.fillStyle = t[i][0] ;
       else
 	ctx.fillStyle = t[i][0].replace(/[^#F]/g, "9") ;
@@ -203,13 +204,21 @@ function draw_nice_results(canvas_id)
 var canvas_id = 0 ;
 var canvas_question = {} ;
 
-Question.prototype.icons = function(left_to_right)
+Question.prototype.click = function()
+{
+  this.jump(true) ;
+}
+
+Question.prototype.icons = function(left_to_right, classe)
 {
   var c = left_to_right ? 0 : canvas_id++ ;
+  if ( classe === undefined )
+    classe = "nice_results" ;
   canvas_question[c] = this ;
   return '<div class="competences opacity_feedback" style="display:inline">'
-    + '<a class="tips nice_results" onclick="questions['
-    + js(this.name) + '].jump(true)"><canvas id="C_'
+    + '<a class="tips ' + classe + '" onclick="'
+    + (questions[this.name] ? 'questions' : 'competences')
+    + '[' + js(this.name) + '].click()"><canvas id="C_'
     + c + '" style="height:1em;"></canvas><span></span></a></div>' ;
 } ;
 
@@ -232,7 +241,8 @@ Question.prototype.html = function()
   if ( this.current )
     info += ' current_question' ;
 
-  return this.icons()
+  return (open_close_is_stats ? '    ' : '')
+    + this.icons()
     + '<a class="tips ' + info + '" onclick="questions['
     + js(this.name) + '].jump()">' + this.name + '<span>'
     // + '<br>' + this.weight()
@@ -246,6 +256,7 @@ function Competence(name)
   this.nr_bad = 0 ;
   this.nr_good = 0 ;
   this.nr_perfect = 0 ;
+  this.nr_versions = 0 ;
   this.level = 1e9 ;
   competence_names.push(name) ;
 }
@@ -256,6 +267,7 @@ Competence.prototype.add = function(question)
   this.nr_bad += question.nr_bad ;
   this.nr_good += question.nr_good ;
   this.nr_perfect += question.nr_perfect ;
+  this.nr_versions += question.nr_versions ;
   this.level = Math.min(question.level, this.level) ;
 } ;
 
@@ -325,14 +337,29 @@ Competence.prototype.classe = function()
   return info ;
 } ;
 
+Competence.prototype.icons = Question.prototype.icons ;
+
+Competence.prototype.click = function()
+{
+  this.toggle(true) ;
+}
+
+
 Competence.prototype.html = function()
 {
   if (this.name === '')
     return '' ;
-  return '<a class="tips ' + this.classe()
-    + '" onclick="competences[' + js(this.name) + '].choose_question()">'
-    +'<var onclick="competences['+ js(this.name) +'].toggle();stop_event(event)">'
-    + (this.is_open() ? char_close : char_open) + '</var> '
+  var link = '<a class="tips ' + this.classe()
+    + '" onclick="competences[' + js(this.name) + '].choose_question()">' ;
+  return (open_close_is_stats ? '': link)
+    + (open_close_is_stats
+       ? this.icons(false, 'openclose')
+       : '<var onclick="competences['+ js(this.name)
+       + '].toggle();stop_event(event)">'
+       + (this.is_open() ? char_close : char_open)
+       + '</var> '
+      )
+    + (open_close_is_stats ? link : '')
     + this.name + '<span></span></a>' ;
 } ;
 
