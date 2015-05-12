@@ -15,7 +15,6 @@ add_messages('en', {
 
 var char_close = '▼' ;
 var char_open = '▶' ;
-var char_recycle = '®' ;
 var font_small = "6px sans-serif" ;
 var font_normal = "10px sans-serif" ;
 var font_selected = "20px sans-serif" ;
@@ -178,6 +177,7 @@ function draw_nice_results(canvas_id)
     }
   if ( q.nr_versions )
     {
+      ctx.globalAlpha = 0.5 ;
       var good = 2 * Math.PI * Math.min(q.nr_good, q.nr_versions
 				       ) / q.nr_versions ;
       ctx.fillStyle = "#FFF" ;
@@ -191,7 +191,7 @@ function draw_nice_results(canvas_id)
 	var good = 2 * Math.PI * Math.min(q.nr_good - q.nr_versions,
 					  q.nr_versions
 					 ) / q.nr_versions ;
-	slice_path(ctx, c.width/2.8, c.width/2, 0, good) ;
+	slice_path(ctx, c.width/2.8, c.width/2.4, 0, good) ;
 	ctx.fill() ;
       }
     }
@@ -200,34 +200,21 @@ function draw_nice_results(canvas_id)
 var canvas_id = 0 ;
 var canvas_question = {} ;
 
-Question.prototype.icon_results = function(left_to_right)
+Question.prototype.icons = function(left_to_right)
 {
   var c = left_to_right ? 0 : canvas_id++ ;
+  var opacity = this.is_answered() ? "" : "opacity:0.5" ;
   canvas_question[c] = this ;
-  return '<div class="competences" style="display:inline"><a class="tips nice_results"><canvas id="C_'
-    + c + '" style="height:1em; opacity:1"></canvas><span></span></a></div>'
-} ;
-
-Question.prototype.icon_recycle = function()
-{
   return '<div class="competences" style="display:inline">'
-    + '<a class="tips char_recycle" '
-    + (this.is_answered()
-       ? 'style="font-weight:normal" onclick="questions['
-       + js(this.name) + '].jump(true)"'
-       : 'style="color:#AAA"'
-      )
-    + '>' + char_recycle + '<span></span></a></div>' ;
+    + '<a class="tips nice_results" onclick="questions['
+    + js(this.name) + '].jump(true)"><canvas id="C_'
+    + c + '" style="height:1em;' + opacity
+    + '"></canvas><span></span></a></div>' ;
 } ;
 
 Question.prototype.is_answered = function()
 {
   return this.classes.indexOf("answered") != -1 ;
-} ;
-
-Question.prototype.icons = function(left_to_right)
-{
-  return this.icon_results(left_to_right) + this.icon_recycle() ;
 } ;
 
 Question.prototype.html = function()
@@ -402,9 +389,11 @@ function add_next_question_button()
       s += '<button onclick="competences[\'' + competence
 	+ '\'].choose_question()">' + competence + '</button>' ;
     }
+  /*
   s += '<button style="font-size: 200%" onclick="questions['
     + js(q.name) + '].jump(true)">'
-    + q.icon_recycle() + '</button>' ;
+    + q.icons() + '</button>' ;
+  */
   e.innerHTML += s ;
 }
 
