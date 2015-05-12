@@ -452,14 +452,15 @@ add(name="affectation",
       the 'personnel.py' file is 'm' or 'M'.
     </p>
     <p>
-      If the name ends with '¤' then the question is hidden
-      from the list of yet answered questions because the student
-      does not need to know about it.
-    </p>
-    <p>
-      If the name ends with '¤¤' then the question is not
-      really required but the student must see it before being
-      able to see the question.
+      If the name contains:
+      <ul>
+	<li> <tt>{unrequired}</tt>: the student does not need to
+	  give a good answer. The student needs only to read it.
+	<li> <tt>{before}</tt>: in the question required list,
+	  display the question <tt>before</tt> attribute.
+	<li> <tt>{hide}</tt>: in the question required list,
+	  hide the question and the student answer.
+      </ul>
     </p>
 
     <h3><a name="before">Parameter: <tt>before</tt></a></h3>

@@ -323,9 +323,9 @@ def graph_dot(show_stats=False):
             if not questions.questions.has_key(qq.name):
                 print "%s est requis par %s" % (qq.name, q)
                 raise ValueError
-            if qq.see_it_only:
+            if qq.unrequired:
                 style = "[ style=dotted ]"
-            elif not qq.visible:
+            elif qq.hidden:
                 style = "[ style=dashed ]"
             else:
                 style = ""

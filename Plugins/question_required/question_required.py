@@ -40,19 +40,26 @@ def execute(state, dummy_plugin, dummy_argument):
         return
         
     s = []
-    for p in state.question.required.names(only_visible=True):
-        state.student.init_seed(p)
-        question = questions.questions[p].question(state)
-        s.append( question.split("{{{")[0] )
-        try:
-            s[-1] += '<br><span class="answer"></span>%s' % \
-                     utilities.answer_format(state.student.answers[p].answered,
-                                             question=question)
-                     
-        except (KeyError, AttributeError):
-            pass
+    for p in state.question.required:
+        if p.hidden:
+            continue
+        if s:
+            s.append('<hr>')
+        if p.before:
+            s.append(questions.questions[p.name].before(state))
+        if not p.hide:
+            state.student.init_seed(p.name)
+            question = questions.questions[p.name].question(state)
+            s.append( question.split("{{{")[0] )
+            try:
+                s.append('<br><span class="answer"></span>%s' % \
+                         utilities.answer_format(
+                             state.student.answers[p.name].answered,
+                             question=question))
+            except (KeyError, AttributeError):
+                pass
     if s:
-        return '<hr>'.join(s)
+        return ''.join(s)
 
 
 

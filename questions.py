@@ -33,15 +33,17 @@ current_evaluate_answer = None
 current_eval_after = None
 
 class Required:
-    visible = True
-    see_it_only = False
+    unrequired = False
+    before = False
+    hide = False
     def __init__(self, world, string):
-        if string[-1] == u'¤':
-            self.visible = False
-            string = string[:-1]
-        if string[-1] == u'¤':
-            self.see_it_only = True
-            string = string[:-1]
+        for k in ('unrequired', 'before', 'hide'):
+            kk = '{' + k + '}'
+            if kk in string:
+                self.__dict__[k] = True
+                string = string.replace(kk, '')
+        # An unrequired question must not be displayed in requireds
+        self.hidden = self.unrequired or (not self.before and self.hide)
         w = string.split(":")
         if len(w) == 2:
             self.world = w[0]
@@ -84,7 +86,7 @@ class Requireds:
 
     def answered(self, answered, student):
         for r in self.requireds:
-            if r.see_it_only and student.given_question(r.name):
+            if r.unrequired and student.given_question(r.name):
                 continue
             if answered.get(r.name, False) is False:
                 return False
@@ -95,7 +97,7 @@ class Requireds:
     def names(self, only_visible=False):
         return [r.name
                 for r in self.requireds
-                if not only_visible or r.visible
+                if not only_visible or not r.hidden
             ]
 
 class Question:

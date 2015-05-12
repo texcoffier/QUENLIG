@@ -341,8 +341,16 @@ add(name="copie de répertoire",
       du fichier <tt>personnel.py</tt>
     </p>
     <p>
-      Si le nom se termine par '¤' alors la question est cachée
-      de la liste des questions auxquelles vous avez déjà répondu.
+      Si le nom contient :
+      <ul>
+	<li> <tt>{unrequired}</tt> : l'étudiant n'a pas besoin
+	  de répondre correctement à la question.
+	  La regarder suffit.
+	<li> <tt>{before}</tt> : dans la liste des questions
+	  déjà faite, affiche le champs <tt>before</tt> de la question.
+	<li> <tt>{hide}</tt> : dans la liste des questions
+	  déjà faite, cache la question et la réponse.
+      </ul>
     </p>
 
     <h3><a name="before">Paramètre : <tt>before</tt></a></h3>
