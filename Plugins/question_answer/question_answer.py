@@ -115,16 +115,21 @@ def execute(state, plugin, argument):
     if not isinstance(plugin.title, tuple):
         plugin.title = (plugin.title, plugin.title)
 
+    state.student.init_seed(state.question.name)
+    question = state.question.question(state)
+
     if state.student.answered_question(state.question.name):
         # Value setted in question_change_answer plugin
         if not configuration.allowed_to_change_answer(state):
             s = state.student.last_answer(state.question.name)
             plugin.value_title = plugin.title[-1]
+
             if state.answer_always_visible or argument:
-                return utilities.answer_format(s)
+                return utilities.answer_format(s, question=question)
             else:
                 return ('<div class="show_on_hover">'
-                        + utilities.answer_format(s) + '</div>')
+                        + utilities.answer_format(s, question=question)
+                        + '</div>')
 
     plugin.value_title = plugin.title[0]
 
@@ -150,8 +155,6 @@ def execute(state, plugin, argument):
                         .replace("'", "&#39;")
                         .replace('"', '&#34;'))
 
-    state.student.init_seed(state.question.name)
-    question = state.question.question(state)
     if '{{{' in question:
         t = question.split('{{{')[1:]
         if '{{{ shuffle}}}' in question:

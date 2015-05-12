@@ -377,30 +377,19 @@ class Student:
 
             if a.indice >= 0 and a.indice < len(q.indices):
                 s.append(utilities.list_format(q.indices[:a.indice+1]))
-
-            def answer_format(answer):
-                if '{{{' in question_text:
-                    ss = ''
-                    for i in question_text.split('{{{')[1:]:
-                        j = i.split('}}}')
-                        if j[0][0] == '!':
-                            j[0] = j[0][1:]
-                        if j[0] in answer:
-                            ss += '<br>' + utilities.answer_format(
-                                j[1], escape=False)
-                else:
-                    ss = utilities.answer_format(answer)
-                return ss
                 
             for b in a.bad_answers:
                 number, message = self.check_answer(b, state)
                 if message:
                     message = "<br>" + message
-                s.append(utilities.div("bad_answer",
-                                       answer_format(b) + message))
+                s.append(utilities.div(
+                    "bad_answer",
+                    utilities.answer_format(b,question=question_text)
+                    + message))
 
             if a.answered:
-                messages = [answer_format(a.answered)]
+                messages = [utilities.answer_format(a.answered,
+                                                    question=question_text)]
                 if q.good_answer:
                     messages.append(q.good_answer)
                 try:

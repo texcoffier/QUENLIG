@@ -60,8 +60,17 @@ def duration(t):
         s = str(t) + "s" + s
     return s
 
-def answer_format(t, space=False, escape=True):
+def answer_format(t, space=False, escape=True, question=''):
     t = unicode(t)
+    if '{{{' in question:
+        for i in question.split('{{{')[1:]:
+            j = i.split('}}}')
+            if j[0][0] == '!':
+                j[0] = j[0][1:]
+            if j[0] == t:
+                t = j[1]
+                escape = False
+                break
     if escape:
         t = cgi.escape(t)
     t = t.replace("\n","<br>")
