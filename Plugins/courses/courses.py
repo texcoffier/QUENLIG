@@ -35,35 +35,31 @@ javascript = """
 function add_courses_index()
 {
   var t = document.getElementsByTagName("DIV") ;
-  var course_menu ;
+  var course_menu, keys = [] ;
   for(var i in t)
-     if ( t[i].className == 'courses' )
-       if ( t[i].parentNode.className == "heart_content" )
+   {
+     if ( t[i].className == 'course_question' )
         {
-          var keys = [], q ;
           var qs = t[i].childNodes ;
-          for(var j=1; j < qs.length; j++)
-             {
-                if ( ! qs[j].getElementsByTagName )
-                   continue ;
-                if ( qs[j].tagName == 'B' )
-                   q = qs[j].textContent ;
-                var tt = qs[j].getElementsByTagName('KEY') ;
-                for(var k=0; k < tt.length; k++)
-                   keys.push([tt[k].textContent, q]) ;
-             }
-          var s = '<br><div style="margin-left:1em; font-size: 80%">' ;
-          keys.sort() ;
-          for(var j in keys)
-             s += '<a href="?question=' + escape2(keys[j][1]) + '">'
-                      + keys[j][0] + '<br>' ;
-          s += '</div>' ;
-          course_menu.innerHTML += s ;
-          break ;
+          var q = qs[0].textContent ;
+          var tt = t[i].getElementsByTagName('KEY') ;
+          for(var k=0; k < tt.length; k++)
+               keys.push([tt[k].textContent, q]) ;
         }
-      else
-       course_menu = t[i] ;
-
+    else if ( t[i].className == 'courses'
+         && t[i].parentNode.className != "heart_content" )
+        course_menu = t[i] ;
+   }
+  if ( keys.length )
+   {
+      var s = '<br><div style="margin-left:1em; font-size: 80%">' ;
+      keys.sort() ;
+      for(var j in keys)
+         s += '<a href="?question=' + escape2(keys[j][1]) + '">'
+                  + keys[j][0] + '<br>' ;
+      s += '</div>' ;
+      course_menu.innerHTML += s ;
+    }
 }
 
 setTimeout(add_courses_index, 500) ;
@@ -82,7 +78,7 @@ def execute(state, plugin, argument):
         q = question.before(state)
         if q == '':
             continue
-        s.append('<hr><div class="question_before"><b><a href="%s">%s</a></b><p>%s</div>'
+        s.append('<hr><div class="course_question"><b><a href="%s">%s</a></b><p>%s</div>'
                  % (question.url(), question.name, q))
 
     plugin.heart_content = '\n'.join(s)
