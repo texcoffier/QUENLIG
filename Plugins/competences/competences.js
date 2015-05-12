@@ -165,19 +165,22 @@ function draw_nice_results(canvas_id)
   var n = 2 * Math.PI / (q.nr_bad + q.nr_good) ;
 
   var t = [ ["", 0],
-	    ["#8F8", q.nr_perfect],
-	    ["#AAF", q.nr_good],
-	    ["#F88", q.nr_bad + q.nr_good]
+	    ["#0F0", q.nr_perfect],
+	    ["#44F", q.nr_good],
+	    ["#F00", q.nr_bad + q.nr_good]
 	    ] ;
   for(var i = 1; i < t.length; i++)
     {
-      ctx.fillStyle = t[i][0] ;
+      if ( q.is_answered() )
+	ctx.fillStyle = t[i][0] ;
+      else
+	ctx.fillStyle = t[i][0].replace(/[^#F]/g, "9") ;
       slice_path(ctx, 0, c.width/2, t[i-1][1] * n, t[i][1] * n) ;
       ctx.fill() ;
     }
   if ( q.nr_versions )
     {
-      ctx.globalAlpha = 0.5 ;
+      ctx.globalAlpha = 0.8 ;
       var good = 2 * Math.PI * Math.min(q.nr_good, q.nr_versions
 				       ) / q.nr_versions ;
       ctx.fillStyle = "#FFF" ;
@@ -203,13 +206,11 @@ var canvas_question = {} ;
 Question.prototype.icons = function(left_to_right)
 {
   var c = left_to_right ? 0 : canvas_id++ ;
-  var opacity = this.is_answered() ? "" : "opacity:0.5" ;
   canvas_question[c] = this ;
-  return '<div class="competences" style="display:inline">'
+  return '<div class="competences opacity_feedback" style="display:inline">'
     + '<a class="tips nice_results" onclick="questions['
     + js(this.name) + '].jump(true)"><canvas id="C_'
-    + c + '" style="height:1em;' + opacity
-    + '"></canvas><span></span></a></div>' ;
+    + c + '" style="height:1em;"></canvas><span></span></a></div>' ;
 } ;
 
 Question.prototype.is_answered = function()
@@ -631,7 +632,6 @@ function zoom_me(event)
   e.style.right = "0%" ;
   e.style.top = "0%" ;
   e.style.bottom = "0%" ;
-  e.style.opacity = 0.9 ;
   e.id = "competences_zoomed" ;
   e.onmousemove = zoom_me_move ;
   e.addEventListener("touchmove", zoom_me_move, false);
@@ -735,9 +735,7 @@ function display_sunburst(d, width, height, x, y)
       c.style.position = "absolute" ;
       c.style.right = "0px" ;
       c.style.top = "0px" ;
-      c.style.opacity = 0.5 ;
-      c.onmouseenter = function() { this.style.opacity = 1 ; } ;
-      c.onmouseout = function() { this.style.opacity = 0.5 ; } ;
+      c.className = "opacity_feedback" ;
       c.onclick = zoom_me ;
     }
   var ctx = c.getContext("2d") ;

@@ -41,6 +41,8 @@ css_attributes = (
     "A.not_answerable  {color:#DDD;}",
     "A.highlight  { background: black; color: white;text-decoration: blink; }",
     "VAR { font-style: normal }",
+    "/.opacity_feedback { opacity: 0.6 }",
+    "/.opacity_feedback:hover { opacity: 1 }",
     ".nice_results { display: inline-block; vertical-align: bottom; border-spacing: 1px }",
     ".nice_results TD { width: 5px; height: 5px; padding: 0px ; }",
     "/.title_bar DIV.competences .nice_results TD { width: 9px; height: 9px}",
