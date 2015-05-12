@@ -79,6 +79,7 @@ function Question(info)
   this.nr_perfect  = info[4] ;
   this.competences = info[5] ;
   this.level       = info[6] ;
+  this.nr_versions = info[7] ;
   this.current     = this.name == current_question ;
 
   for(var competence in this.competences)
@@ -165,15 +166,34 @@ function draw_nice_results(canvas_id)
   var n = 2 * Math.PI / (q.nr_bad + q.nr_good) ;
 
   var t = [ ["", 0],
-	    ["#0F0", q.nr_perfect],
-	    ["#00F", q.nr_good],
-	    ["#F00", q.nr_bad + q.nr_good]
+	    ["#8F8", q.nr_perfect],
+	    ["#AAF", q.nr_good],
+	    ["#F88", q.nr_bad + q.nr_good]
 	    ] ;
   for(var i = 1; i < t.length; i++)
     {
       ctx.fillStyle = t[i][0] ;
       slice_path(ctx, 0, c.width/2, t[i-1][1] * n, t[i][1] * n) ;
       ctx.fill() ;
+    }
+  if ( q.nr_versions )
+    {
+      var good = 2 * Math.PI * Math.min(q.nr_good, q.nr_versions
+				       ) / q.nr_versions ;
+      ctx.fillStyle = "#FFF" ;
+      slice_path(ctx, c.width/2.4, c.width/2, good, 2 * Math.PI) ;
+      ctx.fill() ;
+      ctx.fillStyle = "#000" ;
+      slice_path(ctx, c.width/2.4, c.width/2, 0, good) ;
+      ctx.fill() ;
+      if ( q.nr_good > q.nr_versions )
+      {
+	var good = 2 * Math.PI * Math.min(q.nr_good - q.nr_versions,
+					  q.nr_versions
+					 ) / q.nr_versions ;
+	slice_path(ctx, c.width/2.8, c.width/2, 0, good) ;
+	ctx.fill() ;
+      }
     }
 }
 
@@ -185,7 +205,7 @@ Question.prototype.icon_results = function(left_to_right)
   var c = left_to_right ? 0 : canvas_id++ ;
   canvas_question[c] = this ;
   return '<div class="competences" style="display:inline"><a class="tips nice_results"><canvas id="C_'
-    + c + '" style="height:1em; opacity:0.3"></canvas><span></span></a></div>'
+    + c + '" style="height:1em; opacity:1"></canvas><span></span></a></div>'
 } ;
 
 Question.prototype.icon_recycle = function()

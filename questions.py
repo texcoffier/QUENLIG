@@ -119,6 +119,7 @@ class Question:
             question = utilities.to_unicode(question)
             def tmp(dummy_state):
                 return question
+        tmp.real_question = question
         return tmp
 
     def __init__(self, world, arg, previous_question=[]):
@@ -156,6 +157,7 @@ class Question:
         self.maximum_time = int(arg.get("maximum_time", "0"))
         self.perfect_time = int(arg.get("perfect_time", "10"))
         self.courses = bool(arg.get("courses", "True"))
+        self.nr_versions = int(arg.get("nr_versions", "1"))
 
         self.eval_after = current_eval_after
         self.canonize = None
@@ -281,6 +283,11 @@ class Question:
                 competences.update(self.get_competences(test.children))
         return competences
 
+    def get_nr_versions(self):
+        try:
+            return self.question.real_question.nr_versions()
+        except AttributeError:
+            return self.nr_versions
 
 questions = {}
 previous_question = ""
@@ -304,6 +311,7 @@ def add(**arg):
     "maximum_time": "Temps maximum pour répondre en secondes",
     "perfect_time": "Si on répond plus vite : on maîtrise la question",
     "courses": "Si vrai alors insère la question dans le support de cours",
+    "nr_versions": "Nombre de versions pour la question",
     }
 
     # sys.stdout.write("*")
@@ -1656,6 +1664,14 @@ class Random(TestUnary):
                 )
         return string
 
+    def nr_versions(self):
+        if isinstance(self.values, dict):
+            # The real number is the product
+            return max(len(v)
+                       for v in self.values)
+        else:
+            return len(self.value)
+
     def source(self, state=None, format=None):
         return (self.test_name(format) + '(' + repr(self.values) + ',' +
                 self.children[0].source(state, format) + ')' )
@@ -1710,6 +1726,9 @@ class Choice(TestExpression):
             if a_bool is not None:
                 break
         return a_bool, all_comments
+
+    def nr_versions(self):
+        return len(self.args)
 
     def source(self, state=None, format=None):
         s = []
