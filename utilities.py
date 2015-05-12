@@ -61,6 +61,8 @@ def duration(t):
     return s
 
 def answer_format(t, space=False, escape=True, question=''):
+    if t is False:
+        t = ''
     t = unicode(t)
     if '{{{' in question:
         for i in question.split('{{{')[1:]:
