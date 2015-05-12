@@ -21,7 +21,7 @@
 
 """Display the informations about the required questions."""
 
-import cgi
+import utilities
 import questions
 
 priority_display = 'question_indices'
@@ -33,18 +33,21 @@ css_attributes = (
     ".answer { font-weight: bold ; }",
     )
 
-def execute(state, plugin, argument):
+def execute(state, dummy_plugin, dummy_argument):
     if state.question == None:
-        return    
+        return
     if state.student.answered_question(state.question.name):
         return
         
     s = []
     for p in state.question.required.names(only_visible=True):
-        s.append( questions.questions[p].question(state).split("{{{")[0] )
+        state.student.init_seed(p)
+        question = questions.questions[p].question(state)
+        s.append( question.split("{{{")[0] )
         try:
-            s[-1] += '<br><span class="answer"></span><div class="answeruser">%s</div>' % \
-                     cgi.escape(state.student.answers[p].answered.strip())
+            s[-1] += '<br><span class="answer"></span>%s' % \
+                     utilities.answer_format(state.student.answers[p].answered,
+                                             question=question)
                      
         except (KeyError, AttributeError):
             pass

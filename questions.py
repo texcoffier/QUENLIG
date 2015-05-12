@@ -105,6 +105,7 @@ class Question:
         if question == None:
             return None
         if callable(question):
+            question._question_ = self
             # Choice test because it contains the question
             if (not isinstance(question, TestExpression)
                 and 'state' not in question.func_code.co_varnames):
@@ -112,8 +113,6 @@ class Question:
                     return utilities.to_unicode(question())
             else:
                 def tmp(state):
-                    if state:
-                        state.current_question = self
                     return utilities.to_unicode(question(state))
         else:
             question = utilities.to_unicode(question)
@@ -164,6 +163,7 @@ class Question:
         for test in self.tests:
             if hasattr(test, 'initialize'):
                 test.initialize(lambda string, state: string, None)
+                test.link_to_question(self)
             if not self.canonize and hasattr(test, 'search_a_canonizer'):
                 self.canonize = test.search_a_canonizer()
         if self.canonize is None:
@@ -202,7 +202,6 @@ class Question:
             return False, "VOTRE REPONSE CONTIENT DES RETOURS A LA LIGNE"
         if u' ' in answer:
             return False, u"VOTRE REPONSE CONTIENT UN ESPACE INSÉCABLE"
-        # XXX state.current_question = state.question
         if self.evaluate_answer:
             answer = self.evaluate_answer(answer, state)
 
@@ -878,6 +877,11 @@ class TestExpression(Test):
             if c:
                 return c
         return
+
+    def link_to_question(self, question):
+        self._question_ = question
+        for child in self.children:
+            child.link_to_question(question)
 
 class TestNAry(TestExpression):
     """Base class for tests with a variable number of test as arguments."""
@@ -1602,26 +1606,26 @@ class GRADE(Grade):
     """
     stop_eval = False
 
-def random_chooser(state, key, values):
+def random_chooser(state, question, key, values):
     if state:
         return values[state.student.persistent_random(
-            state, state.current_question.name, len(values), key)]
+            state, question, len(values), key)]
     else:
         return values[0]
 
-def random_replace(state, string, values):
+def random_replace(state, question, string, values):
     if not isinstance(values, dict):
         # The values can be a list of dicts
         values = values[state.student.persistent_random(
-            state, state.current_question.name, len(values))]
+            state, question, len(values))]
     for k, v in values.items():
         if k in string:
-            string = string.replace(k, random_chooser(state, k, v))
+            string = string.replace(k, random_chooser(state, question, k, v))
     return string
 
 def random_question(question, choices):
     def f(state):
-        return random_replace(state, question, choices)
+        return random_replace(state, f._question_.name, question, choices)
     return f
 
 class Random(TestUnary):
@@ -1659,7 +1663,8 @@ class Random(TestUnary):
         if state:
             self.children[0].initialize(
                 lambda string, a_state:
-                    random_replace(a_state, string, self.values),
+                    random_replace(a_state, self._question_.name,
+                                   string, self.values),
                 state
                 )
         return string
@@ -1698,9 +1703,12 @@ class Choice(TestExpression):
            )
     """
     def __init__(self, *args):
+        self.children = []
         self.args = args
         for arg in args:
-            for test in arg[1:]:
+            arg = arg[1:]
+            self.children += arg
+            for test in arg:
                 test.initialize(lambda string, state: string, None)
 
     def initialize(self, parser, state):
@@ -1715,7 +1723,7 @@ class Choice(TestExpression):
 
     def choice(self, state):
         return self.args[state.student.persistent_random(
-            state, state.question.name, len(self.args))]
+            state, self._question_.name, len(self.args))]
 
     def do_test(self, student_answer, state):
         all_comments = ""
@@ -1747,10 +1755,27 @@ class Choice(TestExpression):
 def regression_tests():
     # Regression test on new tests.
     grades = {}
+    class A:
+        nr_erase = 0
+    class S:
+        import collections
+        answers = collections.defaultdict(A)
+        seed = 0
+        def persistent_random(self, *args):
+            return 0
+        def set_grade(self, q, t, g):
+            grades[q] = (t, g)
+    class Q:
+        name = 'x'
+    class St:
+        student = S()
+        question = Q()
+    q = Q()
     def create(txt):
         grades.clear()
         o = eval(txt)
         o.initialize(lambda string, state: string, None)
+        o.link_to_question(q)
         # print o.source()
         # print txt
         if o.source() != txt:
@@ -2018,21 +2043,6 @@ def regression_tests():
     assert( a('a  +   -   5') == (True, '') )
 
     a = create("Grade(Equal('a'),'john',4)")
-    class A:
-        nr_erase = 0
-    class S:
-        import collections
-        answers = collections.defaultdict(A)
-        seed = 0
-        def persistent_random(self, *args):
-            return 0
-        def set_grade(self, q, t, g):
-            grades[q] = (t, g)
-    class Q:
-        name = 'x'
-    class St:
-        student = S()
-        current_question = question = Q()
     st = St()
     assert( a('b',st) == (False, '') )
     assert( grades == {'x': ('john', 0)} )

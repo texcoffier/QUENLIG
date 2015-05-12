@@ -34,6 +34,8 @@ priority_execute = '-question_before'
 
 container = 'action'
 
+permanent_acl = True
+
 link_to_self = True
 
 acls = { 'Author': ('executable',) }

@@ -335,11 +335,8 @@ class Student:
         return teachers
 
     def grades(self):
-        p = ''
         summed = collections.defaultdict(int)
         for a in self.answers.values():
-            if a.grades:
-                p += repr(a.grades)
             for teacher, grade in a.grades.items():
                 summed[teacher] += float(grade)
         return summed
