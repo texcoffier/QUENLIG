@@ -44,6 +44,32 @@ css_attributes = (
     "/.opacity_feedback { opacity: 0.6 }",
     "/.opacity_feedback:hover { opacity: 1 }",
     ".nice_results { display: inline-block; vertical-align: bottom; border-spacing: 1px }",
+    """CANVAS.opacity_feedback:hover, .openclose:hover CANVAS, .nice_results:hover CANVAS {
+    animation-duration: 0.6s;
+    animation-name: zoom_in;
+    -webkit-animation-duration: 0.6s;
+    -webkit-animation-name: zoom_in;
+    transform: scale(2,2) ;
+    position: relative ;
+    z-index: 1 ;
+    }
+@keyframes zoom_in {
+    from { transform: scale(1,1) ; }
+    to { transform: scale(2,2)  ; }
+}
+@-webkit-keyframes zoom_in {
+    from { transform: scale(1,1) ; }
+    to { transform: scale(2,2)  ; }
+}""",
+#     """.openclose CANVAS, .nice_results CANVAS {
+#     animation-duration: 0.2s;
+#     animation-name: zoom_out;
+#     transform: scale(1,1) ;
+#     }
+# @keyframes zoom_out {
+#     from { transform: scale(2,2) ; }
+#     to { transform: scale(1,1)  ; }
+# }""",
     ".nice_results TD { width: 5px; height: 5px; padding: 0px ; }",
     "/.title_bar DIV.competences .nice_results TD { width: 9px; height: 9px}",
     "/.title_bar DIV.competences .nice_results { border-spacing: 2px;}",
