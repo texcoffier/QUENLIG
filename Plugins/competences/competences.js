@@ -108,7 +108,7 @@ Question.prototype.weight = function()
   else if ( this.nr_perfect == 0 )
     weight = 10 ;
   else
-    weight = 1. / this.nr_perfect ;
+    weight = this.nr_versions / this.nr_perfect ;
   if ( this.current )
     weight *= 0.9 ;
   weight += Math.random() / 1000 ;
