@@ -215,11 +215,11 @@ Question.prototype.icons = function(left_to_right, classe)
   if ( classe === undefined )
     classe = "nice_results" ;
   canvas_question[c] = this ;
-  return '<div class="competences opacity_feedback" style="display:inline">'
+  return '<div class="competences" style="display:inline">'
     + '<a class="tips ' + classe + '" onclick="'
     + (questions[this.name] ? 'questions' : 'competences')
     + '[' + js(this.name) + '].click()"><canvas id="C_'
-    + c + '" style="height:1em;"></canvas><span></span></a></div>' ;
+    + c + '" style="height:1em;opacity:0.6"></canvas><span></span></a></div>' ;
 } ;
 
 Question.prototype.is_answered = function()
@@ -373,11 +373,6 @@ function get_color(nr_bad, nr_good, nr_perfect)
 	  0.5 + (nr_good - nr_perfect) / s] ;
 }
 
-function hex_color(color)
-{
-  return "#" + hex2(color[0]) + hex2(color[1]) + hex2(color[2]) ;
-}
-
 Competence.prototype.color = function()
 {
   return get_color(this.nr_bad, this.nr_good, this.nr_perfect) ;
@@ -447,7 +442,7 @@ function patch_title()
 	  }
 	add_next_question_button() ;
 	title.style.position = "relative" ;
-	display_sunburst(title) ;
+	var c = display_sunburst(title, -300, -300) ;
 	return ;
       }
     }
@@ -462,75 +457,9 @@ function hex2(x)
   return x ;
 }
 
-function display_ifs(d)
+function hex_color(color)
 {
-  function draw_ifs(ctx, depth, transformations, color, d)
-  {
-    if ( depth == 0 )
-    {
-      ctx.fillStyle = hex_color(color) ;
-      ctx.fillRect(0, 0, 60, 60) ;
-      return ;
-    }
-    var tr, c ;
-    d /= 2 ;
-    depth-- ;
-    for(var i in transformations)
-    {
-      ctx.save() ;
-      tr = transformations[i] ;
-      ctx.scale(tr[0], tr[0]) ;
-      ctx.rotate(tr[1]) ;
-      ctx.translate(tr[2], tr[3]) ;
-      c = [color[0] + d*tr[4], color[1] + d*tr[5], color[2] + d*tr[6]] ;
-      draw_ifs(ctx, depth, transformations, c, d) ;
-      ctx.restore() ;
-    }
-  }
-  var transformations = [] ;
-  var i = 0 ;
-  for(var competence in competences)
-    {
-      competence = competences[competence] ;
-      var s = competence.nr_bad + competence.nr_good ;
-      if ( s == 0 )
-	s = 1 ;
-      var color = competence.color() ;
-      transformations.push(
-	[(1-1/(Math.log(s*3)+1.1))/1.5,
-	 (competence.questions.length - competence.nr_questions_perfect()
-	 ) / competence.questions.length,
-	 100 * Math.floor(i/2), 30 * (i % 2),
-	 color[0], color[1], color[2]
-	]) ;
-      i++ ;
-    }
-
-  var c = document.createElement('CANVAS') ;
-  if ( ! c.getContext )
-    return ;
-  var ctx = c.getContext("2d") ;
-
-  c.width = 500 ;
-  c.height = 200 ;
-  c.style.position = "absolute" ;
-  c.style.right = "0px" ;
-  c.style.top = "0px" ;
-  d.appendChild(c) ;
-
-  ctx.translate(50, 50);
-  ctx.scale(0.5, 0.5);
-  ctx.globalAlpha = 0.2 ;
-
-  var start = new Date() ;
-  n = 3
-  while(1)
-    {
-      t = new Date() ;
-      if ( t.getTime() - start.getTime() > 50 )
-	break ;
-      draw_ifs(ctx, n++, transformations, [0,0,0], 1) ;
-    }
+  return "#" + hex2(color[0]) + hex2(color[1]) + hex2(color[2]) ;
 }
 
 function slice_path(ctx, radius0, radius, angle1, angle2)
@@ -725,16 +654,30 @@ function draw_sunburst_real()
 		center,
 		center + scale*question.nr_perfect,
 		i, i_next, "", x, y) ;
+	  slice(ctx, "#CCC", center * 0.9, center, i,
+		i + Math.min(question.nr_good,
+			     question.nr_versions)
+		/ question.nr_versions
+		/ nr_questions,
+		"", x, y) ;
+	  if ( question.nr_good > question.nr_versions )
+	    slice(ctx, "#888", center * 0.9, center, i,
+		  i + Math.min(question.nr_good - question.nr_versions,
+			       question.nr_versions)
+		  / question.nr_versions
+		  / nr_questions,
+		  "", x, y) ;
 	  select = slice(ctx, "",
 			 center,
 			 center + scale*(question.nr_good + question.nr_bad),
 			 i, i_next, question.name, x, y) || select ;
 	  if ( question.name == current_question )
-	    slice(ctx, "#FFFF00", center * 0.9, center, i, i_next, "", x, y) ;
+	    slice(ctx, "#FFFF00", center * 0.8, center * 0.9, i, i_next,
+		  "", x, y) ;
 	  i = i_next ;
 	}
       select = slice(ctx, hex_color(competence.color()),
-		     center / 3., center * 0.9, i_start, i,
+		     center / 3., center * 0.8, i_start, i,
 		     competence.name, x, y) || select ;
       nr_good += competence.nr_good ;
       nr_perfect += competence.nr_perfect ;
@@ -756,13 +699,16 @@ function display_sunburst(d, width, height, x, y)
   var c = document.createElement('CANVAS') ;
   if ( ! c.getContext )
     return ;
-  if ( width === undefined )
+  if ( width < 0 )
     {
-      height = width = d.offsetHeight ;
+      height = -height ;
+      width = -width ;
       c.style.position = "absolute" ;
       c.style.right = "0px" ;
       c.style.top = "0px" ;
-      c.className = "opacity_feedback" ;
+      c.style.width = d.offsetHeight ;
+      c.style.height = d.offsetHeight ;
+      c.style.opacity = 0.6 ;
       c.onclick = zoom_me ;
     }
   var ctx = c.getContext("2d") ;
@@ -775,6 +721,7 @@ function display_sunburst(d, width, height, x, y)
   ctx.textBaseline = "middle";
   display_sunburst.ctx = ctx ;
   draw_sunburst(x, y) ;
+  return c ;
 }
 
 function display_competences(data, question)
