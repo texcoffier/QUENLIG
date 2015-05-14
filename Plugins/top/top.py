@@ -249,15 +249,17 @@ def display(plugin, s):
     else:
         s.append('<A class="%s">' % cl)
 
-    if plugin.tip:
-        s.append('<SPAN></SPAN>')
-
     if plugin.boxed():
         s.append('<em class="box_title">')
         if plugin.value_title:
             s.append(plugin.value_title)
         s.append('</em>')
+        if plugin.tip:
+            s.append('<SPAN></SPAN>')
         s.append('</A><table class="box_content"><tbody><tr><td>')
+    else:
+        if plugin.tip:
+            s.append('<SPAN></SPAN>')
 
     if plugin.horizontal:
         s.append('<table><tbody><tr>')
