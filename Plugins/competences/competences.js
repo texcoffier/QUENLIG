@@ -7,10 +7,12 @@ add_messages('fr', {
   "competences:after": "",
   "competences:question_before": "",
   "competences:question_after": "",
+  "competences:recycle": "Cliquez sur le disque à gauche du titre pour répondre à une autre version de la question"
   }) ;
 add_messages('en', {
   "competences:center_before": "% of fast answers (green)\n",
   "competences:center_after":  "\nClick to pick an adapted question",
+  "competences:recycle": "Click on the disc to answer another version of the question"
   }) ;
 
 var char_close = '▼' ;
@@ -108,7 +110,7 @@ Question.prototype.weight = function()
   else if ( this.nr_perfect == 0 )
     weight = 10 ;
   else
-    weight = this.nr_versions / this.nr_perfect ;
+    weight = Math.pow(this.nr_versions / this.nr_perfect, 2) ;
   if ( this.current )
     weight *= 0.9 ;
   weight += Math.random() / 1000 ;
@@ -424,29 +426,48 @@ function patch_title()
 {
   var d = document.getElementsByTagName('DIV') ;
   var title ;
+  var patched ;
   for(var i = 0 ; i < d.length; i++)
+  {
+    if ( d[i].className == 'competences' )
     {
-      if ( d[i].className == 'competences' )
-	{
-	  title = title || d[i].getElementsByTagName('EM')[0] ;
-	}
-      if ( d[i].className == 'title_bar' )
-      {
-	var q = questions[current_question] ;
-	if ( q )
-	  {
-	    var t = d[i].getElementsByTagName("TD")[0].getElementsByTagName("DIV")[0] ;
-	    t.innerHTML = questions[current_question].icons(true)
-	      + t.innerHTML ;
-	    draw_nice_results(0) ;
-	  }
-	add_next_question_button() ;
-	title.style.position = "relative" ;
-	var c = display_sunburst(title, -300, -300) ;
-	return ;
-      }
+      title = title || d[i].getElementsByTagName('EM')[0] ;
     }
-  setTimeout(patch_title, 10) ;
+    if ( d[i].className == 'title_bar' )
+    {
+      var q = questions[current_question] ;
+      if ( q )
+      {
+	var t = d[i].getElementsByTagName("TD")[0].getElementsByTagName("DIV")[0] ;
+	t.innerHTML = questions[current_question].icons(true)
+	  + t.innerHTML ;
+	draw_nice_results(0) ;
+      }
+      add_next_question_button() ;
+      title.style.position = "relative" ;
+      display_sunburst(title, -300, -300) ;
+      patched = true ;
+    }
+    if ( d[i].className == 'question_answer'
+	 && questions[current_question].nr_versions > 1 )
+    {
+      if ( ! d[i].innerHTML.match(/<form /) )
+	{
+	  var x = document.createElement("SPAN") ;
+	  x.style.fontSize = "60%" ;
+	  x.style.fontWeight = "normal" ;
+	  x.style.whiteSpace = "normal" ;
+	  x.style.width = "25em" ;
+	  x.style.display = "inline-block" ;
+	  x.style.lineHeight = "1em" ;
+	  x.style.verticalAlign = "bottom" ;
+	  x.innerHTML = _("competences:recycle") ;
+	  d[i].getElementsByTagName("EM")[0].appendChild(x) ;
+	}
+    }
+  }
+  if ( ! patched )
+    setTimeout(patch_title, 10) ;
 }
 
 function hex2(x)

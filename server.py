@@ -83,6 +83,8 @@ class CachedFile:
             self.mime_type = 'text/comma-separated-values'
         elif filename.endswith(".js"):
             self.mime_type = 'application/x-javascript'
+        elif filename.endswith(".tar"):
+            self.mime_type = 'application/x-tar'
 
         self.load()
 
