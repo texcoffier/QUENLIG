@@ -1683,7 +1683,16 @@ class Random(TestUnary):
         return (self.test_name(format) + '(' + repr(self.values) + ',' +
                 self.children[0].source(state, format) + ')' )
 
+    def __call__(self, student_answer, state=False):
+        """Add a compatibility layer for old tests"""
+        student_answer = self.canonize(student_answer, state)
+        if state is False:
+            return random_replace(state, self._question_.name,
+                                  self.children[0](student_answer),
+                                  self.values)
+        return self.do_test(student_answer, state)
 
+            
 class Choice(TestExpression):
     """Allow to choose a random question in a list.
 
@@ -1700,7 +1709,7 @@ class Choice(TestExpression):
                          ),
                         )
         add(name="stupid",
-            questions = choices,
+            question = choices,
             tests = (choices,),
            )
     """
@@ -1744,8 +1753,9 @@ class Choice(TestExpression):
         s = []
         for arg in self.args:
             s.append('(' + repr(arg[0]) + ','
-                     + ','.join(a.source(state, format)
-                                for a in arg[1:]) + ')')
+                     + ','.join('\n    '
+                                + a.source(state, format)
+                                for a in arg[1:]) + ')\n')
         return self.test_name(format) + '(' + ','.join(s) + ')'
 
     def __call__(self, student_answer, state=False):
@@ -2054,6 +2064,7 @@ def regression_tests():
     a = create("Good(Random({'$a$': ('x', 'x')},Equal('[$a$]')))")
     assert( a('x', st) == (None, '') )
     assert( a('[x]', st) == (True, '') )
+    assert( a('$a$', st) == (None, '') )
 
     a = create("Random({'$a$': ('x', 'x')},Expect('[$a$]'))")
     assert( a('x', st)
@@ -2084,18 +2095,19 @@ def regression_tests():
     a = create("Random({'D': ('E',)},Comment('(D)',canonize=True))")
     assert( a('x',st) == (None, '(E)') )
 
-    a = create("Choice(('a',Good(Comment(Equal('1'),'U')),Bad(Comment(Equal('2'),'D'))))")
+    a = create("Choice(('a',\n    Good(Comment(Equal('1'),'U')),\n    Bad(Comment(Equal('2'),'D')))\n)")
     assert( a('x',st) == (None, '') )
     assert( a('1',st) == (True, 'U') )
     assert( a('2',st) == (False, 'D') )
 
-    a = create("Replace((('2', '1'),),Choice(('a',Good(Comment(Equal('1'),'U')))))")
+    a = create("Replace((('2', '1'),),Choice(('a',\n    Good(Comment(Equal('1'),'U')))\n))")
     assert( a('2',st) == (True, 'U') )
 
-    a = create("Choice(('a',Good(Replace((('2', '1'),),Comment(Equal('2'),'U')))))")
+    a = create("Choice(('a',\n    Good(Replace((('2', '1'),),Comment(Equal('2'),'U'))))\n)")
     assert( a('2',st) == (True, 'U') )
+    assert( a(st) == 'a' )
 
-    a = create("Replace((('2', '1'),),Choice(('a',Good(Comment(Equal('2'),'U')))),canonize=True)")
+    a = create("Replace((('2', '1'),),Choice(('a',\n    Good(Comment(Equal('2'),'U')))\n),canonize=True)")
     assert( a('2',st) == (True, 'U') )
 
     a = create("Grade(Good(Equal('a')),'GG1',1)")
@@ -2110,5 +2122,12 @@ def regression_tests():
     assert( a('a',st) == (False, '') )
     assert( grades['x'] == ('GG1', 0) )
 
+    a = create("Random({'F': ('1', '1')},Choice(('{F}',\n    Good(Comment(Equal('(F)'),'[F]')))\n))")
+    assert( a('(1)',st) == (True, '[F]') )
+    assert( a(st) == '{1}' )
+
+    a = create("Random({'F': ('1', '1')},Choice(('F',\n    Good(Comment(Equal('(F)'),'[F]',canonize=True)))\n))")
+    assert( a('F',st) == (None, '') )
+    assert( a('(1)',st) == (True, '[1]') )
 if True:
     regression_tests()
