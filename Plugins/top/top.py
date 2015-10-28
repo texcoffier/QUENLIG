@@ -112,15 +112,18 @@ table.box_content {
 }
 
 TABLE.information_table {
-background-color: black ;
-border-spacing: 1px ;
+border-spacing: 0px ;
 margin: 0.4em;
 }
 
+TABLE.information_table, TABLE.information_table TR TD, TABLE.information_table TR TH {
+border: 1px solid #888 ;
+    }
+
 TABLE.information_table TD, TABLE.information_table TH {
 background: #EEE ;
-border: 1px ;
 }
+
 
 table > tbody > tr > td { vertical-align: top ; padding: 2px ; }
 

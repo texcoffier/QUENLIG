@@ -29,8 +29,7 @@ container = 'action'
 link_to_self = True
 priority_execute = '-question_source'
 acls = { 'Default': ('executable',), }
-css_attributes = ('TABLE { border: 1px solid black ; }',
-                  '/@media screen { .hide_on_screen { display: none ; }} ',
+css_attributes = ('/@media screen { .hide_on_screen { display: none ; }} ',
                   "/@media print { .hide_on_print { display: none ; }}"
                   )
 
