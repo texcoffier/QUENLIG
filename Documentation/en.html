@@ -682,6 +682,14 @@ content: "Good! Press «Enter» to choose a random question." ;
       To hide a question from the course documentation,
       set <tt>courses</tt> to <tt>False</tt>.
     </p>
+    <p>
+      To structure the courses, the course parameter can contain
+      its position in the table of content:
+      <tt>("2: Bases", "2.1: Types", "2.1.2: Floats")</tt>
+      The table of content is sorted by titles.
+      If multiple questions are in the same part, they are sorted
+      using the <tt>required</tt> attribute.
+      The numbering is optional, but it allows you to sort the items.
 
     <h3><a name="perfect_time">Parameter: <tt>perfect_time</tt></a></h3>
 

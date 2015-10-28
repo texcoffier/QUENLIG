@@ -21,6 +21,7 @@
 
 """Display all the questions definition."""
 
+import collections
 import statistics
 import questions
 
@@ -29,6 +30,8 @@ link_to_self = True
 priority_execute = '-question_source'
 acls = { 'Default': ('executable',), }
 css_attributes = ('TABLE { border: 1px solid black ; }',
+                  '/@media screen { .hide_on_screen { display: none ; }} ',
+                  "/@media print { .hide_on_print { display: none ; }}"
                   )
 
 javascript = """
@@ -50,16 +53,28 @@ function add_courses_index()
          && t[i].parentNode.className != "heart_content" )
         course_menu = t[i] ;
    }
-  if ( keys.length )
+  var t = document.getElementsByTagName("A") ;
+  var toc = [] ;
+  for(var i in t)
    {
-      var s = '<br><div style="margin-left:1em; font-size: 80%">' ;
-      keys.sort() ;
-      for(var j in keys)
-         s += '<a href="?question=' + escape2(keys[j][1]) + '">'
-                  + keys[j][0] + '<br>' ;
-      s += '</div>' ;
-      course_menu.innerHTML += s ;
-    }
+     if ( ! t[i].name )
+        continue ;
+     if ( t[i].name.substr(0,3) != 'toc' )
+        continue ;
+     toc.append('<a href="' + window.location + '#' + t[i].name + '">'
+                   + t[i].innerHTML + '</a>') ;
+   }
+
+  var s = [] ;
+  keys.sort() ;
+  for(var j in keys)
+      s.push('<a href="?question='+escape2(keys[j][1])+'">' + keys[j][0]) ;
+  if ( s.length || toc.length )
+       course_menu.innerHTML = '<br>' + toc.join("<br>") + '<br>'
+                        + 'Index:</br>'
+                        + '<div style="margin-left:1em; font-size: 80%">'
+                        + s.join('<br>')
+                        + '</div>' ;
 }
 
 setTimeout(add_courses_index, 500) ;
@@ -70,16 +85,36 @@ setTimeout(add_courses_index, 500) ;
 def execute(state, plugin, argument):
     if not argument:
         return ''
-        
-    s = []
+
+    toc = collections.defaultdict(list)
     for question in questions.sorted_questions:
         if not question.courses:
             continue
         q = question.before(state)
         if q == '':
             continue
-        s.append('<hr><div class="course_question"><b><a href="%s">%s</a></b><p>%s</div>'
-                 % (question.url(), question.name, q))
+        toc[question.courses].append(question)
+    s = []
+    last = ()
+    n = 0
+    for where in sorted(toc):
+        identical = True
+        if where is not True:
+            for i, title in enumerate(where):
+                if not identical or len(last) <= i or title != last[i]:
+                    identical = False
+                    s.append('<h%d><a name="toc%s">%s</a></h%d>'
+                             % (i+1, n, title, i+1))
+                    n += 1
+        last = where
+        for question in toc[where]:
+            if identical:
+                s.append('<hr class="hide_on_screen">')
+            identical = True
+            s.append('''
+<div class="course_question">
+<b class="hide_on_print"><a href="%s">%s</a></b>
+<p>%s</div>''' % (question.url(), question.name, question.before(state)))
 
     plugin.heart_content = '\n'.join(s)
     state.question = None

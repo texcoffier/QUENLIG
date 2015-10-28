@@ -157,7 +157,7 @@ class Question:
         self.maximum_bad_answer = int(arg.get("maximum_bad_answer", "0"))
         self.maximum_time = int(arg.get("maximum_time", "0"))
         self.perfect_time = int(arg.get("perfect_time", "10"))
-        self.courses = bool(arg.get("courses", "True"))
+        self.courses = arg.get("courses", "True")
         self.nr_versions = int(arg.get("nr_versions", "1"))
 
         self.eval_after = current_eval_after
