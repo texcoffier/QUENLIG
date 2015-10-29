@@ -1628,6 +1628,11 @@ def random_replace(state, question, string, values):
 def random_question(question, choices):
     def f(state):
         return random_replace(state, f._question_.name, question, choices)
+    if isinstance(choices, dict):
+        f.nr_const = max(len(v) for v in choices.values())
+    else:
+        f.nr_const = len(choices)
+    f.nr_versions = lambda: f.nr_const
     return f
 
 class Random(TestUnary):
@@ -1675,7 +1680,7 @@ class Random(TestUnary):
         if isinstance(self.values, dict):
             # The real number is the product
             return max(len(v)
-                       for v in self.values)
+                       for v in self.values.values())
         else:
             return len(self.values)
 
