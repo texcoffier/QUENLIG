@@ -89,6 +89,8 @@ def execute(state, plugin, argument):
     for question in questions.sorted_questions:
         if not question.courses:
             continue
+        if not question.before:
+            continue
         q = question.before(state)
         if q == '':
             continue
