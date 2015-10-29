@@ -1661,7 +1661,7 @@ class Random(TestUnary):
         self.values = values
 
     def canonize(self, string, state):
-        """Do not canonize the student answer, but the tests themselve"""
+        """Do not canonize the student answer, but the test"""
         if state:
             self.children[0].initialize(
                 lambda string, a_state:
@@ -1677,7 +1677,7 @@ class Random(TestUnary):
             return max(len(v)
                        for v in self.values)
         else:
-            return len(self.value)
+            return len(self.values)
 
     def source(self, state=None, format=None):
         return (self.test_name(format) + '(' + repr(self.values) + ',' +
@@ -1685,14 +1685,13 @@ class Random(TestUnary):
 
     def __call__(self, student_answer, state=False):
         """Add a compatibility layer for old tests"""
-        student_answer = self.canonize(student_answer, state)
         if state is False:
-            return random_replace(state, self._question_.name,
+            return random_replace(student_answer, self._question_.name,
                                   self.children[0](student_answer),
                                   self.values)
+        student_answer = self.canonize(student_answer, state)
         return self.do_test(student_answer, state)
 
-            
 class Choice(TestExpression):
     """Allow to choose a random question in a list.
 
@@ -1752,10 +1751,10 @@ class Choice(TestExpression):
     def source(self, state=None, format=None):
         s = []
         for arg in self.args:
-            s.append('(' + repr(arg[0]) + ','
+            s.append('\n    (' + repr(arg[0]) + ','
                      + ','.join('\n    '
                                 + a.source(state, format)
-                                for a in arg[1:]) + ')\n')
+                                for a in arg[1:]) + ')')
         return self.test_name(format) + '(' + ','.join(s) + ')'
 
     def __call__(self, student_answer, state=False):
@@ -1774,7 +1773,7 @@ def regression_tests():
         answers = collections.defaultdict(A)
         seed = 0
         def persistent_random(self, *args):
-            return 0
+            return A.nr_erase % args[2]
         def set_grade(self, q, t, g):
             grades[q] = (t, g)
     class Q:
@@ -2095,19 +2094,19 @@ def regression_tests():
     a = create("Random({'D': ('E',)},Comment('(D)',canonize=True))")
     assert( a('x',st) == (None, '(E)') )
 
-    a = create("Choice(('a',\n    Good(Comment(Equal('1'),'U')),\n    Bad(Comment(Equal('2'),'D')))\n)")
+    a = create("Choice(\n    ('a',\n    Good(Comment(Equal('1'),'U')),\n    Bad(Comment(Equal('2'),'D'))))")
     assert( a('x',st) == (None, '') )
     assert( a('1',st) == (True, 'U') )
     assert( a('2',st) == (False, 'D') )
 
-    a = create("Replace((('2', '1'),),Choice(('a',\n    Good(Comment(Equal('1'),'U')))\n))")
+    a = create("Replace((('2', '1'),),Choice(\n    ('a',\n    Good(Comment(Equal('1'),'U')))))")
     assert( a('2',st) == (True, 'U') )
 
-    a = create("Choice(('a',\n    Good(Replace((('2', '1'),),Comment(Equal('2'),'U'))))\n)")
+    a = create("Choice(\n    ('a',\n    Good(Replace((('2', '1'),),Comment(Equal('2'),'U')))))")
     assert( a('2',st) == (True, 'U') )
     assert( a(st) == 'a' )
 
-    a = create("Replace((('2', '1'),),Choice(('a',\n    Good(Comment(Equal('2'),'U')))\n),canonize=True)")
+    a = create("Replace((('2', '1'),),Choice(\n    ('a',\n    Good(Comment(Equal('2'),'U')))),canonize=True)")
     assert( a('2',st) == (True, 'U') )
 
     a = create("Grade(Good(Equal('a')),'GG1',1)")
@@ -2122,12 +2121,32 @@ def regression_tests():
     assert( a('a',st) == (False, '') )
     assert( grades['x'] == ('GG1', 0) )
 
-    a = create("Random({'F': ('1', '1')},Choice(('{F}',\n    Good(Comment(Equal('(F)'),'[F]')))\n))")
+    a = create("Random({'F': ('1', '2')},Choice(\n    ('{F}',\n    Good(Comment(Equal('(F)'),'[F]')))))")
     assert( a('(1)',st) == (True, '[F]') )
     assert( a(st) == '{1}' )
+    A.nr_erase = 1
+    assert( a(st) == '{2}' )
+    assert( a('(2)',st) == (True, '[F]') )
+    A.nr_erase = 0
 
-    a = create("Random({'F': ('1', '1')},Choice(('F',\n    Good(Comment(Equal('(F)'),'[F]',canonize=True)))\n))")
+    a = create("Random({'F': ('1', '1')},Choice(\n    ('{F}',\n    Good(Comment(Equal('(F)'),'[F]',canonize=True)))))")
+    assert( a(st) == '{1}' )
     assert( a('F',st) == (None, '') )
     assert( a('(1)',st) == (True, '[1]') )
+
+    a = create("Random({'F': ('1', '2', '3')},Choice(\n    ('Fa',\n    Good(Comment(Equal('(F)a'),'[F]a',canonize=True))),\n    ('Fb',\n    Good(Comment(Equal('(F)b'),'[F]b',canonize=True)))))")
+    assert( a(st) == '1a' )
+    assert( a('(1)a',st) == (True, '[1]a') )
+    A.nr_erase = 1
+    assert( a(st) == '2b' )
+    assert( a('(2)b',st) == (True, '[2]b') )
+    A.nr_erase = 2
+    assert( a(st) == '3a' )
+    assert( a('(3)a',st) == (True, '[3]a') )
+    A.nr_erase = 3
+    assert( a(st) == '1b' )
+    assert( a('(1)b',st) == (True, '[1]b') )
+    A.nr_erase = 0
+
 if True:
     regression_tests()
