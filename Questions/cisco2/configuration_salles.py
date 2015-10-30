@@ -39,21 +39,27 @@ if nombre_de_postes % 1:
 
 postes = postes[0:nombre_de_postes]
 
-network = Network(configuration.questions, display_eth1 = True)
+network = Network(os.path.join(configuration.root, configuration.questions),
+                  display_eth1 = True)
 
+zoom = 3
 
 hosts = [Host(nom, ip=ip,
-                    pos=(1000+1500*math.cos(i*math.pi/len(postes)),
-                         1000+1500*math.sin(i*math.pi/len(postes))
+                    pos=(zoom*(1+1.5*math.cos(2*i*math.pi/len(postes))),
+                         zoom*(1+1.5*math.sin(2*i*math.pi/len(postes)))
                          )
               ) for i, (ip, nom, cisco) in enumerate(postes)]
 ciscos = [cisco('R' + nom,
-                    pos=(1000+1000*math.cos(i*math.pi/len(postes)),
-                         1000+1000*math.sin(i*math.pi/len(postes))
+                    pos=(zoom*(1+math.cos(2*i*math.pi/len(postes))),
+                         zoom*(1+math.sin(2*i*math.pi/len(postes)))
                          )
                     )
           for i, (ip, nom, cisco) in enumerate(postes)  ]
-switches = [Switch('S' + nom) for ip, nom, cisco in postes[1::2]]
+switches = [Switch('S' + nom,
+                   pos=(zoom*(1+1.25*math.cos((4*i+1)*math.pi/len(postes))),
+                        zoom*(1+1.25*math.sin((4*i+1)*math.pi/len(postes)))
+                    )
+               ) for i, (ip, nom, cisco) in enumerate(postes[1::2])]
 
 network.append(hosts + ciscos + switches)
 
