@@ -1,52 +1,71 @@
+#!/bin/sh
+# Ce script est à lancer une fois en début de semestre :
+#   * Il archive les anciens TP
+#   * Il crée les nouveaux : cisco1 et cisco2
+#   * Il lance les nouveaux : cisco1 et cisco2
+# NE PAS LE LANCER DEUX FOIS !
+# Le nom des admins est en dur dans le code
 
-#
-# Archiver l'ancienne session de Students/cisco[12]
-# avec le script Students/ARCHIVAGE
-#
+cd
+cd QUENLIG
 
-#
-# CREATION de la session
-#
-
-set +H
-T=""
 for TP in 1 2
-  do
-  SESSION=cisco$TP
-  ./main.py $SESSION create Questions/cisco$TP 300$TP \
-    admin thierry.excoffier \
-    admin yves.caniou \
-    admin jacques.bonneville \
-    url "http://demo710.univ-lyon1.fr/LIF8TP$TP/"
-  echo 16 >Students/$SESSION/nr_hosts
-  (cd Questions/cisco$TP/HTML ; make)
-  if [ ! -d Students/$SESSION/Logs/Default ]
-  then
-    mkdir Students/$SESSION/Logs/Default
-  fi
-  if [ ! -d Students/$SESSION/Logs/Student ]
-  then
-    mkdir Students/$SESSION/Logs/Student
-  fi
-  echo "{'session_deconnection':('!executable',),
+do
+    echo "
+###########################################################################
+###########################################################################
+# Archive l'ancienne session de Students/cisco$TP
+###########################################################################
+###########################################################################"
+    if [ -d Student/cisco$TP ]
+    then
+	mv Student/cisco$TP Student/cisco$TP.$(date "+%Y%m%d")
+    fi
+    echo "
+###########################################################################
+# CREATION de la session
+###########################################################################"
+    SESSION=cisco$TP
+    ./main.py $SESSION create Questions/cisco$TP 300$TP \
+	admin thierry.excoffier \
+	admin yves.caniou \
+	admin jacques.bonneville \
+	admin olivier.gluck \
+	url "http://demo710.univ-lyon1.fr/LIF8TP$TP"
+    echo 16 >Students/$SESSION/nr_hosts
+    (cd Questions/cisco$TP/HTML ; make)
+    if [ ! -d Students/$SESSION/Logs/Default ]
+    then
+	mkdir Students/$SESSION/Logs/Default
+    fi
+    if [ ! -d Students/$SESSION/Logs/Student ]
+    then
+	mkdir Students/$SESSION/Logs/Student
+    fi
+    echo "{'session_deconnection':('!executable',),
 'session_start': ('!executable',),
 'session_stop': ('!executable',),
 'session_duration':('!executable',),
 'statmenu_smiley':('!executable',),
 'statmenu_rank':('!executable',)}
 " >Students/$SESSION/Logs/Student/acls
-  T="$T
-( cd ~/QUENLIG ; nohup ./main.py $SESSION start ) &"
-  done
-echo "$T"
+    echo "
+###########################################################################
+# LANCEMENT de la session en arrière plan
+###########################################################################"
+    ./main.py $SESSION start >>Students/$SESSION/log 2>&1 </dev/null &
+    echo "
+###########################################################################
+# Création du sujet de TP (TRES TRES lent)
+# Normalement FireFox affiche $(pwd)/Questions/cisco1/HTML/sujet.html
+###########################################################################"
 
-#
-# Création du sujet de TP
-#
+    ./main.py $SESSION plot
+    cp Questions/cisco$TP/HTML/sujet.html Students/cisco$TP/HTML
+    firefox Students/cisco$TP/HTML/sujet.html
 
-./main.py cisco1 plot # TRES LENT et permet de créer les graphiques du sujet
-cp Students/cisco1/HTML/plan?.png Questions/cisco1/HTML
-firefox Questions/cisco1/HTML/sujet.html
+done
+
 
 
 

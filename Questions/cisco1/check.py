@@ -388,7 +388,7 @@ class ConsoleLink(Link):
 class CloudLink(Link):
     name = "V"
     dot_style = "dotted"
-    legend = "Réseau logique"
+    legend = u"Réseau logique".encode("utf-8")
 
     def dot(self, showip):
         return  '%s [ style=%s%s%s];\n' % (
