@@ -302,6 +302,8 @@ add(name="remontage",
     question = """Donnez la ligne de commande permettant de configurer
     la nouvelle interface (<tt>eth1</tt>) que vous utilisez.""",
     tests = (
+    Good(HostReplace(Equal(
+        "ip a add {E1.port.ip}/{E1.nr_bits_netmask} dev {E1.port.name}"))),
     good("ifconfig {E1.port.name} {E1.port.ip} netmask {E1.mask}",
          parse_strings=host),
     good("ifconfig {E1.port.name} {E1.port.ip}/{E1.nr_bits_netmask}",

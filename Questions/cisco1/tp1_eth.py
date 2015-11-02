@@ -141,7 +141,6 @@ add(name="config pc eth",
     configurer le port ethernet pour qu'il puisse communiquer
     avec le routeur CISCO&nbsp;?""",
     tests = (
-    require('ifconfig', "Vous devez utiliser la commande <tt>ifconfig</tt>"),
     require('{E0.port.name}', "Je ne vois pas le nom de l'interface réseau",
             parse_strings=host),
     reject('up', "Le 'up' est inutile"),
@@ -166,6 +165,10 @@ add(name="config pc eth",
          correspond à la classe d'adresse IP utilisée (ABCD)
          Ceci est le cas pour cette adresse.""",
          parse_strings=host),
+    Good(HostReplace(Equal(
+        "ip a add {E0.port.ip}/{E0.nr_bits_netmask} dev {E0.port.name}"))),
+    #require('ifconfig', "Vous devez utiliser la commande <tt>ifconfig</tt>"),
+    Bad(Comment(~Start('ip'), "Vous devez utiliser la commande <tt>ip</tt>")),
     ),
     )
 

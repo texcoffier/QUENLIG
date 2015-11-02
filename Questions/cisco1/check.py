@@ -599,6 +599,11 @@ class Cisco2800(Cisco):
     version_IOS = ("12.4(3e)", "12.4(18e)", "12.4(18r)",
                    "12.4(1c)")
 
+class Cisco2800B(Cisco2800):
+    interfaces_name = {'C0': 'console',
+                       'S0': 'serial 0/1/0', 'S1': 'serial 0/1/1',
+                       'E0': 'fastethernet 0/0', 'E1': 'fastethernet 0/1'}
+
 class Cisco1800(Cisco):
     names = ('1800', '1841')
     interfaces_name = {'C0': 'console',
@@ -869,9 +874,9 @@ class HostReplace(TestUnary):
     Example:
        Good(HostReplace(Equal('ifconfig eth0 {E0.ip} netmask {E0.mask}')))
        # The order is important :
-       Good(HostReplace(UpperCase('hostname {name}')))
+       Good(HostReplace(UpperCase(Equal('hostname {name}'))))
        # The following will not work because the {name} is uppercased
-       # Good(UpperCase(HostReplace('hostname {name}')))
+       # Good(UpperCase(HostReplace(Equal('hostname {name}'))))
     """
     
     def canonize(self, student_answer, state=None):
@@ -922,7 +927,6 @@ def host(test, state):
        {C0.remote_port.host.E0.port.ip}
        {C0.remote_port.host.E1.port.ip}       
     """
-    
     strings = test.strings
 
     if state == None:
@@ -1052,7 +1056,7 @@ postes = (
 ["10.57.18.10",  'B3',Cisco1800], # SB3 Cisco2960
 ("10.57.30.150", 'C3',Cisco2900),
 ("10.57.30.152", 'D3',Cisco1800), # SD3 Cisco2950
-("10.56.145.237",'E3',Cisco2800),
+("10.56.145.237",'E3',Cisco2800B),
 ("10.57.30.155", 'F3',Cisco1800), # SF3 Cisco2950
 ("10.57.30.159", 'G3',Cisco2900),
 ("10.57.18.238", 'H3',Cisco1800), # SH3 Cisco2960
@@ -1060,7 +1064,7 @@ postes = (
 ("10.57.18.242", 'J3',Cisco1800), # SJ3 Cisco2960
 ("10.57.30.162", 'K3',Cisco2900),
 ("10.57.18.250", 'L3',Cisco1800), # SL3 Cisco2950
-("10.57.30.156", 'M3',Cisco2800),
+("10.57.30.156", 'M3',Cisco2800B),
 ("10.57.30.165", 'N3',Cisco1800), # SN3 Cisco2950
 ("10.57.30.164", 'O3',Cisco2900),
 ("10.57.30.160", 'P3',Cisco1800), # SP3 Cisco2950
@@ -1073,6 +1077,7 @@ import socket
 
 if 'lirispaj' in socket.gethostname():
     postes[0][0] = "134.214.142.30"
+    postes[0][0] = "127.0.0.1"
 elif 'pundit' in socket.gethostname():
     postes[1][0] = "127.0.1.1"
 
