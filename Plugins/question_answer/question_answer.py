@@ -108,8 +108,10 @@ def execute(state, plugin, argument):
         state.question = None
         return '<p class="maximum_bad_answer">'
 
-    if not state.question.required.answered(state.student.answered_questions(),
-                                            state.student):
+    if (not state.question.required.answered(state.student.answered_questions(),
+                                            state.student)
+        and not state.plugins_dict['questions_all'].current_acls['executable']
+        ):
         return '<p class="missing_required">'
 
     if not isinstance(plugin.title, tuple):
