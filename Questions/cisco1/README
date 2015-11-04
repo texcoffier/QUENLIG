@@ -11,21 +11,26 @@ cd QUENLIG
 
 for TP in 1 2
 do
+    SESSION=cisco$TP
     echo "
 ###########################################################################
 ###########################################################################
-# Archive l'ancienne session de Students/cisco$TP
+# ARRET de l'ancienne session
 ###########################################################################
 ###########################################################################"
-    if [ -d Student/cisco$TP ]
+    ./main.py $SESSION stop
+    echo "
+###########################################################################
+# Archive l'ancienne session de Students/cisco$TP
+###########################################################################"
+    if [ -d Students/cisco$TP ]
     then
-	mv Student/cisco$TP Student/cisco$TP.$(date "+%Y%m%d")
+	mv Students/cisco$TP Students/cisco$TP.$(date "+%Y%m%d")
     fi
     echo "
 ###########################################################################
 # CREATION de la session
 ###########################################################################"
-    SESSION=cisco$TP
     ./main.py $SESSION create Questions/cisco$TP 300$TP \
 	admin thierry.excoffier \
 	admin yves.caniou \
@@ -45,6 +50,7 @@ do
     echo "{'session_deconnection':('!executable',),
 'session_start': ('!executable',),
 'session_stop': ('!executable',),
+'courses': ('!executable',),
 'session_duration':('!executable',),
 'statmenu_smiley':('!executable',),
 'statmenu_rank':('!executable',)}
