@@ -494,7 +494,7 @@ def spiral(x,y):
 def _format(s):
     r = ""
     for i in s:
-        r += utilities.answer_format(str(i)) + "<BR>"
+        r += utilities.answer_format(unicode(i)) + "<BR>"
     return r[:-4]
 
 def return_first_arg(a,b):
@@ -539,11 +539,11 @@ class Test(object):
                  sort_lines=None,
                  ):
         if comment:
-            self.comment = comment
+            self.comment = utilities.to_unicode(comment)
         if replace:
-            self.replace = replace
+            self.replace = utilities.to_unicode(replace)
         if replacement:
-            self.replacement = replacement
+            self.replacement = utilities.to_unicode(replacement)
         if uppercase:
             self.uppercase = uppercase
         if all_agree:
@@ -555,7 +555,7 @@ class Test(object):
         else:
             self.parse_strings = return_first_arg
         if strings:
-            self.strings = utilities.rewrite_string(strings)
+            self.strings = utilities.rewrite_string(utilities.to_unicode(strings))
 
     def html(self, state):
         if self.comment:
@@ -570,7 +570,6 @@ class Test(object):
             r = ''
         else:
             r = '<hr>After parse_strings<br>' + ''.join(_format(self.parse_strings(self, state)).replace('&lt;/argument&gt;','&lt;/argument&gt;<br>'))
-
         return ("<TR CLASS=\"a_test " + self.html_class +
                 "\"><td class=\"a\"></td>" +
                 "<td class=\"b\"></td>" +

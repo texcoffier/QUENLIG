@@ -84,7 +84,6 @@ def execute(state, plugin, argument):
         return
     if state.question.tests == ():
         return
-
     if argument and (
             state.question in state.student.answerables()
             or configuration.allowed_to_change_answer(state)
