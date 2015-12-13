@@ -29,8 +29,10 @@ priority_execute = 'question_answer' # We need to know if the answer was answere
 acls = { 'Default': ('executable',) }
 
 css_attributes = (
-    "/DIV.answeruser { white-space: pre; margin-left: 2em; background: #FFE; overflow:auto }",
-    ".answer { font-weight: bold ; }",
+    "/DIV.an_answer { }",
+    ".answer { background: #FFF ; margin-bottom: 1em; border-bottom: 1px solid black}",
+    ".course { opacity:0.3 ; width: 50% }"
+    "DIV.question_required .course:hover { opacity:1 }"
     )
 
 def execute(state, dummy_plugin, dummy_argument):
@@ -43,21 +45,32 @@ def execute(state, dummy_plugin, dummy_argument):
     for p in state.question.required:
         if p.hidden:
             continue
-        if s:
-            s.append('<hr>')
-        if p.before:
-            s.append(questions.questions[p.name].before(state))
-        if not p.hide:
-            state.student.init_seed(p.name)
-            question = questions.questions[p.name].question(state)
-            s.append( question.split("{{{")[0] )
+        if p.hide:
+            question = ''
+        else:
+            q = questions.questions[p.name]
+            question = q.question(state)
             try:
-                s.append('<br><span class="answer"></span>%s' % \
-                         utilities.answer_format(
-                             state.student.answers[p.name].answered,
-                             question=question))
+                answer = utilities.answer_format(
+                    state.student.answers[p.name].answered,
+                    question=question)
             except (KeyError, AttributeError):
-                pass
+                answer = ''
+            question = question.split("{{{")[0]
+            answer = '<div class="answer">' + answer + '</div>'
+        if (q.courses or p.before) and q.before:
+            before = q.before(state)
+        else:
+            before = ""
+        if not question and not before:
+            continue
+        if before and question:
+            s.append('<table><tr><td width="50%">')
+            s.append(question)
+            s.append('<td class="course">' + before + "</tr></table>")
+            s.append(answer)
+        else:
+            s.append(before + question +  answer)
     if s:
         return ''.join(s)
 

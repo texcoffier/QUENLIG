@@ -48,12 +48,14 @@ def allowed_to_change_answer(state):
         return False
     if state.question is None:
         return False
-    if 'question_answer' in state.form:
-        return False
     if state.current_role in acls:
         return True # At any time
-    t = state.student.answer(state.question.name).answer_times[-1]
-    if time.time() - t < change_allowed_timeout:
+    # if 'question_answer' in state.form:
+    #     return False
+    a = state.student.answer(state.question.name).answer_times
+    if len(a) == 0:
+        return False
+    if time.time() - a[-1] < change_allowed_timeout:
         return True
 
 configuration.allowed_to_change_answer = allowed_to_change_answer

@@ -302,23 +302,23 @@ add(name="show",
 
 add(name="copié collé",
     required=['show'],
-    before="""Faites un copié/collé des 3 commandes suivantes sur le routeur (sans oublier d'exécuter la dernière commande)&nbsp;:
-    <pre>show clock
-show hardware
-show history</pre>""",
-    question="""Qu'elle est la dernière ligne affichée par le routeur
-    (à part l'invite de commande)&nbsp;?""",
+    before="""Pour faire un copier/coller sous unix, vous sélectionnez
+    avec le bouton de gauche et vous collez en cliquant sur le bouton
+    du milieu.""",
+    question="""De quoi n'avez-vous <b>pas</b> besoin pour faire un
+    copier/coller sous unix ?
+    {{{ shuffle}}}
+    {{{ctrlC}}} De taper controle-C
+    {{{ctrlV}}} De taper controle-V
+    {{{droite}}} Du bouton de droite de la souris
+    {{{gauche}}} Du bouton de gauche de la souris
+    {{{milieu}}} Du bouton du milieu de la souris
+    {{{menu}}} De menu déroulant
+    """,
     tests = (
-    reject('Configuration register',
-           "Vous avez oublié d'exécuter la dernière commande"),
-    good("show history"),
-    good("how history",
-        """Il y a actuellement un bug avec le copié/collé.
-        Nous ne savons pas d'ou il vient,
-        certainement du contrôle de flux sur la RS232C.
-        <p>
-        Exécutez <tt>show history</tt> pour voir ce que cela fait.
-        """),
+    Good(Contain("ctrlC") & Contain("ctrlV") & Contain("droite")
+         & Contain("menu")
+         & ~Contain("gauche") & ~Contain("milieu")),
     ),
     )
 

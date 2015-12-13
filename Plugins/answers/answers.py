@@ -45,7 +45,7 @@ def execute(state, plugin, argument):
                 s.append(' maximum_bad_answer:%d'%question.maximum_bad_answer)
             
             s.append('<br>' + question.question(state))
-            s.append('<table>')
+            s.append('<table class="information_table">')
             for t in question.tests:
                 if 'good' in t.__class__.__name__.lower():
                     s.append(t.html(state=state) + '<br>')

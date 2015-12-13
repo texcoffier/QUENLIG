@@ -173,7 +173,7 @@ class BarPlot:
 
         if url:
             self.svg.content += '<a xlink:href="%s%s">' % (
-                self.svg.url_base, url.replace('&','&amp;'))
+                self.svg.url_base.encode('utf-8'), url.replace('&','&amp;'))
         
         for i in range(len(textes)):
             if textes[i]:

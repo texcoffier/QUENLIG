@@ -22,22 +22,23 @@
 from check import *
 from configuration_salles import *
 
-good_default = "<pre>route add default gw ???.???.???.???</pre>"
+good_default = "<pre>ip route add default via ???.???.???.???</pre>"
 
 add(name="defaut pc",
     required=["tp1_eth:machine>routeur 2 ?", "tp1_eth:routeur>remote eth OK"],
     question="""Quelle commande tapez-vous pour ajouter une route par
     défaut à votre ordinateur pour qu'il envoie tout au routeur&nbsp;?""",
     tests = (
-    require_startswith("route",
-                       """Vous devez utiliser la commande <tt>route</tt>
+    Good(HostReplace(Equal("ip route add default via {E0.remote_port.ip}"))),
+    require_startswith("ip route",
+                       """Vous devez utiliser la commande <tt>ip route</tt>
                        pour indiquer la route par défaut"""
                        ),
     good("route add -net 0.0.0.0 netmask 0.0.0.0 gw {E0.remote_port.ip}",
          "On préfère utiliser le mot clef <tt>default</tt>" + good_default,
          parse_strings=host),
     good("route add -net 0.0.0.0/0 gw {E0.remote_port.ip}",
-         "Pas sur que cela soit portable, on conseille&nbsp;:" + good_default,
+         "Pas sûr que cela soit portable, on conseille&nbsp;:" + good_default,
          parse_strings=host),
     require("default", """Je ne vois pas le mot clef <tt>default</tt>
     indiquant que vous voulez définir la route par défaut"""),
