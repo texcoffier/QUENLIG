@@ -167,6 +167,8 @@ add(name="config pc eth",
          parse_strings=host),
     Good(HostReplace(Equal(
         "ip a add {E0.port.ip}/{E0.nr_bits_netmask} dev {E0.port.name}"))),
+    Good(HostReplace(Equal(
+        "ip addr add {E0.port.ip}/{E0.nr_bits_netmask} dev {E0.port.name}"))),
     #require('ifconfig', "Vous devez utiliser la commande <tt>ifconfig</tt>"),
     Bad(Comment(~Start('ip'), "Vous devez utiliser la commande <tt>ip</tt>")),
     ),

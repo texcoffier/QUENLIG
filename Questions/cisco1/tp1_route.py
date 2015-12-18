@@ -45,7 +45,7 @@ add(name="defaut pc",
     require("{E0.remote_port.ip}",
             "Je ne vois pas l'adresse IP du routeur connecté à votre machine",
             parse_strings=host),
-    require("gw", "Je ne vois pas le mot clef obligatoire <tt>gw</tt>"),
+#    require("gw", "Je ne vois pas le mot clef obligatoire <tt>gw</tt>"),
     good("route add default gw {E0.remote_port.ip}", parse_strings=host),
     ),
     good_answer="Exécutez la commande",
@@ -137,7 +137,7 @@ add(name="défaut routeur",
               "tp1_serie:routeur>s1 routeur ?"],
     before="""Les routeurs étant organisés sous la forme d'une boucle,
     nous allons faire circuler les informations sur la boucle
-    jusqu'à ce qu'un routeur les routent lui-même
+    jusqu'à ce qu'un routeur les route lui-même
     ou que les paquets se retrouvent avec un TTL de 0.""",
     question="""Quelle commande tapez-vous sur le routeur pour configurer
     la route par défaut en direction du routeur connecté sur le port

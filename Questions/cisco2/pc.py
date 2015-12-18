@@ -185,6 +185,8 @@ add(name="eth0",
          parse_strings=host),
     Good(HostReplace(Equal(
         "ip a add {E0.port.ip}/{E0.nr_bits_netmask} dev {E0.port.name}"))),
+    Good(HostReplace(Equal(
+        "ip addr add {E0.port.ip}/{E0.nr_bits_netmask} dev {E0.port.name}"))),
     Bad(Comment(~Contain('/') & ~Contain('netmask'),
                 """Vous devez ajouter le masque de réseaux soit
                 avec la syntaxe utilisant <tt>/</tt> soit avec

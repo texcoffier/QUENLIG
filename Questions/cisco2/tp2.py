@@ -304,6 +304,8 @@ add(name="remontage",
     tests = (
     Good(HostReplace(Equal(
         "ip a add {E1.port.ip}/{E1.nr_bits_netmask} dev {E1.port.name}"))),
+    Good(HostReplace(Equal(
+        "ip addr add {E1.port.ip}/{E1.nr_bits_netmask} dev {E1.port.name}"))),
     good("ifconfig {E1.port.name} {E1.port.ip} netmask {E1.mask}",
          parse_strings=host),
     good("ifconfig {E1.port.name} {E1.port.ip}/{E1.nr_bits_netmask}",
