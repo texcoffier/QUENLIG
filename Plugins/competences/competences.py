@@ -43,22 +43,16 @@ css_attributes = (
     "VAR { font-style: normal }",
     ".nice_results { display: inline-block; vertical-align: bottom; border-spacing: 1px }",
     """.box_title CANVAS:hover, .openclose:hover CANVAS, .nice_results:hover CANVAS {
-    animation-duration: 0.6s;
-    animation-name: zoom_in;
-    -webkit-animation-duration: 0.6s;
-    -webkit-animation-name: zoom_in;
     transform: scale(2.5,2.5) ;
-    position: relative ;
     z-index: 1 ;
     }
-@keyframes zoom_in {
-    from { transform: scale(1,1) ; }
-    to { transform: scale(2.5,2.5)  ; }
-}
-@-webkit-keyframes zoom_in {
-    from { transform: scale(1,1) ; }
-    to { transform: scale(2.5,2.5)  ; }
-}""",
+""",
+    """.box_title CANVAS, .openclose CANVAS, .nice_results CANVAS {
+    webkit-transition: transform 0.5s;
+    transition: transform 0.5s;
+    position: relative ;
+    transform: scale(1.,1.) ;
+    }""",
     ".nice_results TD { width: 5px; height: 5px; padding: 0px ; }",
     "/.title_bar DIV.competences .nice_results TD { width: 9px; height: 9px}",
     "/.title_bar DIV.competences .nice_results { border-spacing: 2px;}",
