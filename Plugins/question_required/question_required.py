@@ -46,24 +46,21 @@ def execute(state, dummy_plugin, dummy_argument):
         if p.hidden:
             continue
         if p.hide:
-            question = ''
-        else:
-            q = questions.questions[p.name]
-            question = q.question(state)
-            try:
-                answer = utilities.answer_format(
-                    state.student.answers[p.name].answered,
-                    question=question)
-            except (KeyError, AttributeError):
-                answer = ''
-            question = question.split("{{{")[0]
-            answer = '<div class="answer">' + answer + '</div>'
-        if (q.courses or p.before) and q.before:
+            return
+        q = questions.questions[p.name]
+        question = q.question(state)
+        try:
+            answer = utilities.answer_format(
+                state.student.answers[p.name].answered,
+                question=question)
+        except (KeyError, AttributeError):
+            answer = ''
+        question = question.split("{{{")[0]
+        answer = '<div class="answer">' + answer + '</div>'
+        if (q.courses  or  p.before) and q.before:
             before = q.before(state)
         else:
             before = ""
-        if not question and not before:
-            continue
         if before and question:
             s.append('<table><tr><td width="50%">')
             s.append(question)
