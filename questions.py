@@ -651,7 +651,7 @@ class expect(require):
     def test(self, student_answer, string):
         if student_answer.find(string) == -1:
             return False, \
-                   "Je devrais trouver '<tt>%s</tt>' dans la réponse" % string
+                   u"Je devrais trouver '<tt>%s</tt>' dans la réponse" % string
 class reject(Test):
     html_class = 'test_string test_bad test_reject'
     def test(self, student_answer, string):

@@ -390,8 +390,8 @@ add(name="lister",
 
 add(name="lister sans erreur",
     required=["lister", "sh:redirection erreur", "device:poubelle"],
-    question="""Que faut-il <b>ajouter</b> à la commande suivante
-    pour que les messages d'erreur ne s'affiche pas.
+    question="""Complétez la commande suivante
+    pour que les messages d'erreur ne s'affichent pas.
     <pre>grep -l a4 /etc/*</pre>
     """,
     tests=(

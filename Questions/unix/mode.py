@@ -40,7 +40,7 @@ class mode_display(TestExpression):
                 s += 'rwxrwxrwx'[i]
             else:
                 s += '-'
-        return True, "Le mode numérique <tt>%s</tt> représente <tt>%s</tt>"%(
+        return True, u"Le mode numérique <tt>%s</tt> représente <tt>%s</tt>"%(
             student_answer, s)
 
 

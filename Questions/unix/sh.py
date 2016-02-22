@@ -563,8 +563,9 @@ add(name="cribler erreurs",
 add(name="remplacement",
     required=["lister:nommé", "pattern:tout", "variable:affectation"],
     question="""Donner la ligne de commande permettant
-    de stocker la liste des noms des fichiers et répertoires
-    courant dans la variable <tt>A</tt>.""",
+    de stocker dans la variable <tt>A</tt>.
+    la liste des noms des fichiers et répertoires
+    du répertoire courant.""",
     tests=(
     Bad(Comment(RemoveSpaces(Contain('ls') & ~Contain('ls)')),
                 "Si vous utilisez <tt>ls</tt>, pas besoin d'argument")),
@@ -596,7 +597,6 @@ add(name="remplacement",
     ),
     indices=('''On utilise la syntaxe shell permettant de remplacer
     une commande par la sortie standard de celle-ci.''',
-             
              ),
     )
 

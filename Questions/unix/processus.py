@@ -281,6 +281,7 @@ add(name="pstree",
     à la racine de la hiérarchie des processus&nbsp;?""",
     tests=(
     good("init"),
+    good("systemd"),
     bad('1', "Le nom du processus, pas son <tt>PID</tt>"),
     ),
     )
