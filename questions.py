@@ -157,7 +157,7 @@ class Question:
         self.maximum_bad_answer = int(arg.get("maximum_bad_answer", "0"))
         self.maximum_time = int(arg.get("maximum_time", "0"))
         self.perfect_time = int(arg.get("perfect_time", "10"))
-        self.courses = arg.get("courses", "True")
+        self.courses = arg.get("courses", None)
         self.nr_versions = int(arg.get("nr_versions", "1"))
 
         self.eval_after = current_eval_after
@@ -311,7 +311,7 @@ def add(**arg):
     "maximum_bad_answer": "Nombre maximum de mauvaises réponse",
     "maximum_time": "Temps maximum pour répondre en secondes",
     "perfect_time": "Si on répond plus vite : on maîtrise la question",
-    "courses": "Si vrai alors insère la question dans le support de cours",
+    "courses": "Position ('H1', 'H2'...) dans le support de cours",
     "nr_versions": "Nombre de versions pour la question",
     }
 
