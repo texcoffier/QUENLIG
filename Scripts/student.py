@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,7 +21,7 @@
 #
 
 import server
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import os
 
 class Student:
@@ -77,13 +77,13 @@ class Student:
         f.close()
 
     def goto_question(self, question):
-        return self.get('?question=' + urllib.quote(question))
+        return self.get('?question=' + urllib.parse.quote(question))
 
     def give_answer(self, answer, base=None):
-        return self.get('?question_answer=' + urllib.quote(answer), base=base)
+        return self.get('?question_answer=' + urllib.parse.quote(answer), base=base)
 
     def give_comment(self, answer):
-        return self.get('?comment=' + urllib.quote(answer))
+        return self.get('?comment=' + urllib.parse.quote(answer))
 
     def get_answered(self):
         return self.get('?answered=1')
@@ -161,13 +161,13 @@ if __name__ == "__main__":
         student = Student(the_server, 'toto')
         page = student.goto_question('repondre:bonjour')
         assert( "Répondez 'bonjour' à cette question." in page)
-        print 'The first question is correctly displayed'
+        print('The first question is correctly displayed')
         page = student.give_answer('coucou')
         assert( '<DIV class="question_bad">' in page)
-        print 'Bad answer rejected'
+        print('Bad answer rejected')
         page = student.give_answer('bonjour')
         assert( '<DIV class="question_good">' in page)
-        print 'Good answer accepted'
+        print('Good answer accepted')
         
     finally:
         the_server.stop()

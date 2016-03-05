@@ -63,7 +63,7 @@ def duration(t):
 def answer_format(t, space=False, escape=True, question=''):
     if t is False:
         t = ''
-    t = unicode(t)
+    t = str(t)
     if '{{{' in question:
         for i in question.split('{{{')[1:]:
             j = i.split('}}}')
@@ -99,17 +99,17 @@ def div(class_name, content=""):
 
 
 def cell_value(cell):
-    if isinstance(cell, types.TupleType):
+    if isinstance(cell, tuple):
         return cell[1]
     return cell
 
 def cell_attributes(cell):
-    if isinstance(cell, types.TupleType):
+    if isinstance(cell, tuple):
         return " " + cell[0]
     return ""
 
 def line_attributes(cell):
-    if isinstance(cell, types.TupleType):
+    if isinstance(cell, tuple):
         try:
             return " " + cell[2]
         except KeyError:
@@ -170,20 +170,20 @@ def sortable_table(sort_column, content, html_class='', url='',
         s.append("<tr%s>" % line_attributes(line[1]))
         for cell in line[1:]:
             s.append("<td%s>" % cell_attributes(cell) \
-                 + unicode(cell_value(cell)) + "</td>")
+                 + str(cell_value(cell)) + "</td>")
         s.append("</tr>")
     s.append("</tbody></table>")
     return '\n'.join(s)
 
-flat = u"\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f ! #$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~?\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f?????Y|?????????????'u?.????????AAAAAA?CEEEEIIIIDNOOOOOXOUUUUY?Baaaaaa?ceeeeiiiionooooo??uuuuy?y"
+flat = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f ! #$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~?\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f?????Y|?????????????'u?.????????AAAAAA?CEEEEIIIIDNOOOOOXOUUUUY?Baaaaaa?ceeeeiiiionooooo??uuuuy?y"
 
 
 # Safe for use in shell scripts between ' or "
 # SAfe for a file name.
 safe_ascii = ''
 for i in range(256):
-    i = unichr(i)
-    if i in u" #%()*+,-.0123456789;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ¯˘˙˚¸˝˛ˇ":
+    i = chr(i)
+    if i in " #%()*+,-.0123456789;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ¯˘˙˚¸˝˛ˇ":
         safe_ascii += i
     else:
         safe_ascii += '?'
@@ -211,15 +211,15 @@ def rewrite_string_string(s, parser=None):
     ( 'a', 'b',('c', 'd'))==>( ( ('a', ), '' ), ( ('b', ), '' ), (('c',),'d'))
     """
 
-    if isinstance(s, (basestring, types.FunctionType)):
+    if isinstance(s, (str, types.FunctionType)):
         s = (s, )
 
     r = []
     for t in s:
-        if isinstance(t, (basestring, types.FunctionType)):
+        if isinstance(t, (str, types.FunctionType)):
             t = ((t,), '')
         left, right = t
-        if isinstance(left, (basestring, types.FunctionType) ):
+        if isinstance(left, (str, types.FunctionType) ):
             left = (left, )
         if parser:
             left = [ parser(x) for x in left ]
@@ -227,14 +227,12 @@ def rewrite_string_string(s, parser=None):
 
     return r
 
-import configuration
+from . import configuration
+import importlib
 
 def load_module(filename):
     name = filename.replace(os.path.sep, '.')
-    # Get module object
-    module = __import__(name)
-    for directory in name.split('.')[1:]:
-        module = module.__dict__[directory]
+    module = importlib.import_module(name, package="QUENLIG")    
     module.mtime = os.path.getmtime(module.__file__.replace('.pyc','.py'))
     module.name = name
     try:
@@ -252,6 +250,8 @@ def load_directory(dirname, py=True):
             continue
         if i.startswith('.'):
             continue
+        if i == '__pycache__':
+            continue
         if py:
             if not i.endswith('.py'):
                 continue
@@ -265,7 +265,7 @@ def load_directory(dirname, py=True):
         try:
             modules[i] = load_module(os.path.join(dirname, i))
         except:
-            print "*"*99, "Can't load module", i
+            print("*"*99, "Can't load module", i)
             raise
         
     return modules
@@ -300,26 +300,8 @@ def allow_one_more_call(f):
     except AttributeError:
         pass
 
-def to_unicode(v):
-    if isinstance(v, unicode):
-        return v
-    if isinstance(v, str):
-        try:
-            return unicode(v, 'utf-8')
-        except UnicodeError:
-            return unicode(v, 'latin-1') # LATIN-1: OK
-    if isinstance(v, list):
-        return [to_unicode(i) for i in v]
-    if isinstance(v, tuple):
-        return tuple(to_unicode(i) for i in v)
-    if isinstance(v, dict):
-        for k in v:
-            v[k] = to_unicode(v[k])
-        return v
-    return v
-
 def get_encoding(v):
     try:
-        return unicode(v, 'utf-8'), 'utf-8'
+        return str(v, 'utf-8'), 'utf-8'
     except UnicodeError:
-        return unicode(v, 'latin-1'), 'latin-1' # LATIN-1: OK
+        return str(v, 'latin-1'), 'latin-1' # LATIN-1: OK

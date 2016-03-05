@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="intro",
     required=["sh:console"],
@@ -40,7 +40,7 @@ class mode_display(TestExpression):
                 s += 'rwxrwxrwx'[i]
             else:
                 s += '-'
-        return True, u"Le mode numérique <tt>%s</tt> représente <tt>%s</tt>"%(
+        return True, "Le mode numérique <tt>%s</tt> représente <tt>%s</tt>"%(
             student_answer, s)
 
 
@@ -259,7 +259,7 @@ add(name="récursif",
 
     
 
-import chercher
+from . import chercher
 
 add(name="réparation",
     required=["ajouter", "chercher:exécuter", "chercher:images"],

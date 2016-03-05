@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2008 Thierry EXCOFFIER, Olivier GLÜCK, Universite de Lyon
@@ -26,10 +26,10 @@ import os
 def generate(name):
     sys.path.append(os.path.join(os.getcwd()))
 
-    import statistics
-    import configuration
+    from QUENLIG import statistics
+    from QUENLIG import configuration
     import main
-    import questions
+    from QUENLIG import questions
     import cgi
     
     configuration.session = main.Session(name)
@@ -42,7 +42,7 @@ def generate(name):
 
     ba = []
     filename = 'xxx-' + name + '.html'
-    print '\nGenerate', os.path.join(os.getcwd(), filename)
+    print('\nGenerate', os.path.join(os.getcwd(), filename))
     f = open(filename, 'w')
     f.write('''
 <body onclick="compute();">
@@ -151,8 +151,8 @@ if __name__ == "__main__":
     
     current_directory = os.getcwd()
     for i in sys.argv[1:]:
-        print i
+        print(i)
         generate(i)
         os.chdir(current_directory)
-        import statistics
+        from QUENLIG import statistics
         statistics.forget_stats()

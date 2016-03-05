@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="intro",
     before='''La suite de commandes qui vous est proposée liste
@@ -53,8 +53,8 @@ grep ' -&gt; ' &lt;/tmp/xxx</pre>""",
     <pre>find . -type l</pre>"""
     )
 
-import chercher
-import remplacer
+from . import chercher
+from . import remplacer
 
 add(name="extensions",
     required=["intro", "chercher:pattern", "remplacer:intro",

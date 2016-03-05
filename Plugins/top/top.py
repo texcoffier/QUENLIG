@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -65,10 +65,10 @@ option_default = "gray"
 
 
 import json
-import utilities
+from QUENLIG import utilities
 import os
 import cgi
-import configuration
+from QUENLIG import configuration
 
 
 def css(state):
@@ -78,7 +78,7 @@ def css(state):
         preformatted = False
         if p.tip and '\\A' in p.tip:
             preformatted = True
-        elif p.translations and '\\A' in ''.join(p.translations.values()):
+        elif p.translations and '\\A' in ''.join(list(p.translations.values())):
             preformatted = True
         if preformatted:
             s.append('DIV.%s A.tips > SPAN { white-space: pre ; }' % \
@@ -158,7 +158,7 @@ A { background-image: url('transparent.png'); }
 
 PRE { background-color: #FF0 ; border: 1px solid black ; }
 
-""" + '\n'.join(s).encode('utf-8')
+""" + '\n'.join(s)
 
 def css_cached(state):
     try:
@@ -222,8 +222,7 @@ function triggerKeyboardEvent(el, keyCode)
         if p.javascript:
             s.append( '/* PLUGIN: ' + p.plugin.css_name + ' */')
             s.append( p.javascript )
-    utilities.write(os.path.join('HTML','quenlig.js'),
-                    '\n'.join(s).encode('utf-8'))
+    utilities.write(os.path.join('HTML','quenlig.js'), '\n'.join(s))
     
 
 def display(plugin, s):
@@ -333,7 +332,7 @@ def execute(state, plugin, argument):
             try:
                 i.encode("utf-8")
             except:
-                print '*'*999
-            print repr(i)
+                print('*'*999)
+            print(repr(i))
         raise
 

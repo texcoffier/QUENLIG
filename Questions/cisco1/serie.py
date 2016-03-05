@@ -19,9 +19,9 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
-from configuration_salles import *
+from QUENLIG.questions import *
+from .check import *
+from .configuration_salles import *
 
 rien_de_branche = """Il ne doit pas y avoir de cable série (hors console)
     branchés sur le routeur CISCO"""

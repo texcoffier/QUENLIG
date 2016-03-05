@@ -26,8 +26,8 @@ But they are not fully implemented (users can't change the values)
 
 """
 
-import utilities
-import configuration
+from . import utilities
+from . import configuration
 import os
 import cgi
 
@@ -72,7 +72,7 @@ class AttributeCSS(Attribute):
                                   cgi.escape(self.selector))
 
     def generate_css(self, name, selector, attribute, value, div='DIV.'):
-        if not isinstance(value, basestring):
+        if not isinstance(value, str):
             return ''
         if attribute == 'content':
             value = '"' + value + '"'
@@ -246,13 +246,13 @@ class Plugin:
         self.prototype = self.plugin.__dict__.get('prototype')
         self.plugins_dict[self.css_name] = self
 
-    def __getitem__(self, (lang, attribute)):
+    def __getitem__(self, xxx_todo_changeme):
         """Get an attribute from (in the order) :
         * The language dependent file (Plugins/plugin_name/fr.py for example)
         * The plugin itself (Plugins/plugin_name/plugin_name.py)
         * The default values
         """
-
+        (lang, attribute) = xxx_todo_changeme
         if lang not in self.lang: # Not yet loaded module
             for a_lang in lang: # Search the language
                 module_name = os.path.join(self.dir_name, a_lang)
@@ -265,12 +265,12 @@ class Plugin:
                 self.lang[lang] = None
 
         try: # Get the localized value
-            return utilities.to_unicode(self.lang[lang].__dict__[attribute])
+            return (self.lang[lang].__dict__[attribute])
         except (KeyError, AttributeError):
             pass
 
         try: # Get the default defined in the plugin file
-            return utilities.to_unicode(self.plugin.__dict__[attribute])
+            return (self.plugin.__dict__[attribute])
         except KeyError:
             pass
 
@@ -281,7 +281,7 @@ class Plugin:
 
     def doc_html_item(self, item):
         v = self[('en','fr'), item]
-        if isinstance(v, basestring):
+        if isinstance(v, str):
             r = cgi.escape(v)
         elif isinstance(v, int):
             r = str(v)
@@ -304,7 +304,7 @@ class Plugin:
         s = ('<table class="attr"><caption><b><a href="#attr_' + name
              + '">' + name + '</a>'
              + '</caption><tr><th>CSS selector<th>English<th>French</tr>')
-        for k in sorted(set(d1.keys() + d2.keys())):
+        for k in sorted(set(list(d1.keys()) + list(d2.keys()))):
             v1 = cgi.escape(d1.get(k, '???'))
             v2 = cgi.escape(d2.get(k, '???'))
             if v1 != v2:
@@ -414,7 +414,7 @@ class Plugin:
                 fr = self[('fr',), attr.name]
                 def value_html(x):
                     v = '<td'
-                    x = cgi.escape(unicode(x)).replace('\\A','\n')
+                    x = cgi.escape(str(x)).replace('\\A','\n')
                     if '\n' in x:
                         v += ' class="pre"'
                     return v + '>' + x + '</td>'

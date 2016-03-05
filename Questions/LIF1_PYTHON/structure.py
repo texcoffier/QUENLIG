@@ -23,8 +23,8 @@
 Les objets
 """
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="créer classe",
     required = ["control:def", "idem:flottant", "idem:chaine",

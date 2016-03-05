@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,9 +21,9 @@
 
 """Displays all the bad answers given for a question."""
 
-import utilities
-import statistics
-import questions
+from QUENLIG import utilities
+from QUENLIG import statistics
+from QUENLIG import questions
 
 priority_display = 'question_comments'
 acls = { 'Author': ('executable',) }

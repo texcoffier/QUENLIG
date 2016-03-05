@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,8 +21,8 @@
 
 """Display the students grades for a question sorted by answer"""
 
-import utilities
-import statistics
+from QUENLIG import utilities
+from QUENLIG import statistics
 
 priority_display = 'question_stat'
 acls = { 'Author': ('executable',), 'Grader': ('executable',) }

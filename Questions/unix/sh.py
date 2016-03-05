@@ -19,10 +19,10 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 import random
-import remplacer
+from . import remplacer
 
 add(name="console",
     before="""Pour faire la suite de ce TP vous devrez taper des commandes

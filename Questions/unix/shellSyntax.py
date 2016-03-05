@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
@@ -24,7 +24,7 @@
 # TODO : # { } fonctions
 
 
-import tpg
+from . import tpg
 import os
 
 def indent(xml):
@@ -33,7 +33,7 @@ def indent(xml):
     f.write(xml)
     f.close()
     os.system("xmllint --format xxx")
-    print xml
+    print(xml)
 
 
 
@@ -91,14 +91,14 @@ class Command:
         elif isinstance(x, Affectation):
             self.affectation.append(x)
         else:
-            print x
+            print(x)
             raise ValueError("?????")
         return self
     def __str__(self):
         s = "<command>"
         self.redirection.sort()
         for i in self.args:
-            s += unicode(i)
+            s += str(i)
         for i in self.redirection:
             s += str(i)
         for i in self.affectation:
@@ -247,7 +247,7 @@ class Pipeline:
             bg = ""
         s = "<pipeline nrchild='%d'%s>" % (len(self.command), bg)
         for i in self.command:
-            s += unicode(i)
+            s += str(i)
         s += "</pipeline>"
         return s
 
@@ -268,7 +268,7 @@ class Sequence:
     def __str__(self):
         s = "<sequence nrchild='%d'>" % (len(self.pipeline))
         for i in self.pipeline:
-            s += unicode(i)
+            s += str(i)
         s += "</sequence>"
         return s
 
@@ -492,7 +492,7 @@ class Sh(tpg.VerboseParser):
 sh = Sh()
 
 def test():
-    print "DEBUT TEST"
+    print("DEBUT TEST")
     for a, b in [
 (r'$(a )', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument><replacement double_quoted='0'><sequence nrchild='1'><pipeline nrchild='1'><command><argument>a</argument></command></pipeline></sequence></replacement></argument></command></pipeline></sequence>"),
 (r'` b ` $( a)', "<sequence nrchild='1'><pipeline nrchild='1'><command><argument><replacement double_quoted='0'><sequence nrchild='1'><pipeline nrchild='1'><command><argument>b</argument></command></pipeline></sequence></replacement></argument><argument><replacement double_quoted='0'><sequence nrchild='1'><pipeline nrchild='1'><command><argument>a</argument></command></pipeline></sequence></replacement></argument></command></pipeline></sequence>"),
@@ -624,13 +624,13 @@ def test():
 # Do not work... it should
 # ('"\'" \'\'', ""),
 ]:
-        print "="*50, a
+        print("="*50, a)
         c = str(sh(a))
         if c != b:
-            print "Parse :", a
-            print "Obtenu :"
+            print("Parse :", a)
+            print("Obtenu :")
             indent(c)
-            print "Attendu :"
+            print("Attendu :")
             indent(b)
 
 if __name__ == "__main__":

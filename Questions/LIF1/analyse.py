@@ -23,8 +23,8 @@
 Questions portant sur la syntaxe et la structuration d'un programme C
 """
 
-from questions import *
-from check import C
+from QUENLIG.questions import *
+from .check import C
 
 prog1 = r"""/*
 Ce programme affiche les entiers de 0 à 9 inclus.

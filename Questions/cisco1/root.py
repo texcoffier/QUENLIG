@@ -20,9 +20,9 @@
 #
 
 
-from questions import *
-from check import *
-from configuration_salles import *
+from QUENLIG.questions import *
+from .check import *
+from .configuration_salles import *
 
 add(name="mode privilégié",
     required=['doc:intro', 'cli:aide commande', 'cli:fin édition'],

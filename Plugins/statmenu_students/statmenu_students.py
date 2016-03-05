@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2014 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,8 +21,8 @@
 
 """Displays a statistics table about all the students."""
 
-import utilities
-import statistics
+from QUENLIG import utilities
+from QUENLIG import statistics
 
 container = 'statmenu'
 priority_execute = '-question_answer'

@@ -19,7 +19,7 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
+from QUENLIG.questions import *
 
 add(name="A",
     required=["a:a", "a:b(B)"],

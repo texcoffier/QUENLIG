@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2013 Thierry EXCOFFIER, Universite Claude Bernard
@@ -22,7 +22,7 @@
 """Displays all the bad answers given for a question."""
 
 import collections
-import statistics
+from QUENLIG import statistics
 import re
 import subprocess
 
@@ -80,21 +80,21 @@ graph[charset="UTF-8", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
         for other in others:
             nodes.add(other)
     for node in nodes:
-        str_node = unicode(uncanonize.get(node,node)
+        str_node = str(uncanonize.get(node,node)
                        ).replace('\\', '\\\\'
                                  ).replace('"', '\\"'
                                            ).replace('\n', '\\n')
                                      
-        if unicode(node).startswith(is_comment):
+        if str(node).startswith(is_comment):
             s += '%s [ label="%s"];\n' % (
                 H(node), str_node[1:])
-        elif unicode(node).startswith(is_good):
+        elif str(node).startswith(is_good):
             s += '%s [ label="%s", style="filled",fillcolor="#88FF88" ];\n' % (
                 H(node), str_node[1:])
-        elif unicode(node).startswith(is_first):
+        elif str(node).startswith(is_first):
             s += '%s [ label="%s" ];\n' % (
                 H(node), str_node[1:])
-        elif unicode(node).startswith(is_done):
+        elif str(node).startswith(is_done):
             s += '%s [ label="%s", style="filled",fillcolor="#00FF00" ];\n' % (
                 H(node), str_node[1:])
         elif node is False:
@@ -108,16 +108,9 @@ graph[charset="UTF-8", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
     s += '}'
 
     f = open("xxx.dot", "w")
-    f.write(s.encode('utf-8'))
+    f.write(s)
     f.close()
     p = subprocess.Popen(["dot", "-Tsvg", "xxx.dot"], stdout=subprocess.PIPE)
-    svg = p.communicate()[0]
+    svg = p.communicate()[0].decode("utf-8")
     
-    try:
-        svg = unicode(svg, "utf-8", 'ignore')
-    except UnicodeDecodeError:
-        print "SVG: UnicodeDecodeError"
-    except UnicodeEncodeError:
-        print "SVG: UnicodeEncodeError"
-        
     return '<div style="text-align:left; width:100%">' + svg + '</div>'

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -22,7 +22,7 @@
 """This plugin display a box with the information about the bad answer."""
 
 
-import configuration
+from QUENLIG import configuration
 import cgi
 
 priority_display = 'question_answer'

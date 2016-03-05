@@ -23,8 +23,8 @@
 Les "list" Python
 """
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="création",
     required = ["idem:affectation", "idem:chaine", "idem:flottant"],

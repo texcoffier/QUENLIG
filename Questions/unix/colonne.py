@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 cut_required = require("cut",
                        """Comme vous le savez déjà la commande pour
@@ -106,7 +106,7 @@ add(name="utilisateurs",
     ),
     )
 
-import remplacer
+from . import remplacer
 
 add(name="espaces multiples",
     required=["les shells", "remplacer:intro", "pipeline:intro"],

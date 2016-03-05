@@ -27,8 +27,8 @@ attention = """<p>Ne recopiez pas les <tt>&gt;&gt;&gt;</tt> et <tt>...</tt>,
     mais seulement ce que <b>vous</b> avez tapé.
     N'oubliez pas les espaces pour décaler à droite."""
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="for",
     required = ["table:range", "idem:flottant", "io:print"],

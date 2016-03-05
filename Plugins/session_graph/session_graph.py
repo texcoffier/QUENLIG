@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -27,8 +27,8 @@ link_to_self = True
 acls = { 'Teacher': ('executable',), 'Author': ('executable',), }
 priority_execute = '-question_source'
 
-import statistics
-import server
+from QUENLIG import statistics
+from QUENLIG import server
 
 server.do_not_cache.add('xxx_graphe.svg')
 server.do_not_cache.add('xxx_graphe.png')
@@ -39,11 +39,11 @@ def execute(state, plugin, argument):
         statistics.graph_dot_minimal(True)
         svg = server.get_file('xxx_graphe.svg').content
         try:
-            svg = unicode(svg, "utf-8")
+            svg = str(svg, "utf-8")
         except UnicodeDecodeError:
-            print "SVG: UnicodeDecodeError"
+            print("SVG: UnicodeDecodeError")
         except UnicodeEncodeError:
-            print "SVG: UnicodeEncodeError"
+            print("SVG: UnicodeEncodeError")
         plugin.heart_content = svg
         state.question = None
     return ''

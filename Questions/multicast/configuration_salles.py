@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from check import *
-import configuration
+from .check import *
+from QUENLIG import configuration
 import math
 
 add(name="intro",
@@ -96,7 +96,7 @@ EthLink(24, Port(r17, prefix + "90.90.1"),
 
 # Link.dot_option = ",color=magenta"
 
-import statistics
+from QUENLIG import statistics
 old = statistics.graph_dot
 
 def graph_dot():

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -20,15 +20,15 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 import socket
-import BaseHTTPServer
+import http.server
 import time
 import cgi
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import os
 import sys
-import state
-import configuration
-import utilities
+from . import state
+from . import configuration
+from . import utilities
 
 cache = None # Do not cache files
 cache = {}   # Allow file caching
@@ -58,7 +58,7 @@ class CachedFile:
     def __init__(self, filename):
         # XXX Is this secure (UTF8) ?
         if '..' in filename or '/' in filename or '?' in filename:
-            print '*'*99, 'Inapropriate filename:', filename
+            print('*'*99, 'Inapropriate filename:', filename)
             filename = 'BUG'
         
         self.filename = filename
@@ -96,15 +96,9 @@ class CachedFile:
             ):
             try:
                 self.full_name = os.path.join(directory, self.filename)
-                f = open(self.full_name, "r")
+                f = open(self.full_name, "rb")
                 self.content = f.read()
                 f.close()
-                if self.filename.endswith(('.html', '.css', '.js')):
-                    try:
-                        unicode(self.content, 'utf-8')
-                    except:
-                        self.content = utilities.to_unicode(self.content
-                        ).encode("utf-8")
                 self.content_length = len(self.content)
                 self.gmtime = os.path.getmtime(self.full_name)
                 self.modification_time = html_time(self.gmtime)
@@ -127,14 +121,14 @@ def get_file(filename):
     if cache == None:
         return CachedFile(filename)
     
-    if not cache.has_key(filename):
+    if filename not in cache:
         cache[filename] = CachedFile(filename)
     else:
         cache[filename].update()
         
     return cache[filename]
     
-class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
+class MyRequestBroker(http.server.BaseHTTPRequestHandler):
 
     timeout = 0.3 # Some bugged browser do not send the GET
     
@@ -174,7 +168,10 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
                                modif_time = c.modification_time,
                                content_length = c.content_length,
                                cached = path[-1] not in do_not_cache)
-                self.wfile.write(c.content)
+                if isinstance(c.content, bytes):
+                    self.wfile.write(c.content)
+                else:
+                    self.wfile.write(c.content.encode("utf-8"))
                 return
 
         # Get the FORM values
@@ -182,14 +179,14 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         form = {}
         for i in f:
             form[i] = ''.join(
-                utilities.to_unicode(ff)
+                (ff)
                 for ff in f[i]) # concatenation of parameters
 
-        if form.has_key('guest'):
+        if 'guest' in form:
             path[0] = 'guest' + form['guest']
 
-        if not form.has_key('ticket'):
-            form['ticket'] = urllib.unquote(path[0])
+        if 'ticket' not in form:
+            form['ticket'] = urllib.parse.unquote(path[0])
 
         # Get the number
         try:
@@ -202,7 +199,7 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         form["number"] = number
 
         # Get the session state
-        print form['ticket']
+        print(form['ticket'])
         session = state.get_state(self, form['ticket'].translate(utilities.safe_ascii))
         if session == None:
             return
@@ -210,7 +207,7 @@ class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
         sys.stdout.flush() # To really log into the file for 'regtests'
         mime, content = session.execute(form)
         if mime in ('application/x-javascript', 'text/html', 'text/css'):
-            content = utilities.to_unicode(content).encode("utf-8")
+            content = (content).encode("utf-8")
         sys.stdout.flush()
         self.send_head(mime, cached=False, content_length=len(content))
         self.wfile.write(content)
@@ -224,7 +221,7 @@ server = None
 
 def function_to_profile(nr_requests):
     global server
-    for i in xrange(nr_requests):
+    for i in range(nr_requests):
         server.handle_request()
 
 
@@ -237,12 +234,12 @@ def run(nr_requests, the_cache):
     cache = the_cache
 
     global server
-    server = BaseHTTPServer.HTTPServer(("0.0.0.0", configuration.port)
+    server = http.server.HTTPServer(("0.0.0.0", configuration.port)
                                        , MyRequestBroker)
 
-    print "\nServer Ready on\n\thttp://%s:%d/guest.html\n\t%s/guest.html" % (
-        socket.getfqdn(), configuration.port, configuration.url)
-    print "Remove 'guest.html' if you want to use CAS authentication service"
+    print("\nServer Ready on\n\thttp://%s:%d/guest.html\n\t%s/guest.html" % (
+        socket.getfqdn(), configuration.port, configuration.url))
+    print("Remove 'guest.html' if you want to use CAS authentication service")
 
     if nr_requests:
         import hotshot

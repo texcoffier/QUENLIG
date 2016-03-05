@@ -22,8 +22,8 @@
 
 # FAIRe LES QUESTION . * ^ $ +
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 aide = """La méthode la plus simple pour tester les expressions
     régulière est d'exécuter la commande suivante&nbsp;:

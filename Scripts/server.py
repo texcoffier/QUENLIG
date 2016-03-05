@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2010 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -20,7 +20,7 @@
 #
 
 import os
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import time
 import stats
 import sys
@@ -31,7 +31,7 @@ class Server:
                  questions='Questions/unix',
                  profiling=False,
                  name="test"):
-        print 'Start server', port, questions, profiling, name
+        print('Start server', port, questions, profiling, name)
         self.port = port
         self.name = name
         self.stats = stats.Stats()
@@ -47,19 +47,19 @@ class Server:
             './main.py %s create %s %d begin-date "1:1 1/1/1970" end-date "1:1 1/1/2020" url "%s" start &) >xxx.log 2>&1' % (
             name, questions, port, self.base)
             )
-        print 'Log file is: xxx.log'
-        print 'Wait server start: ',
+        print('Log file is: xxx.log')
+        print('Wait server start: ', end=' ')
         while True:
             try:
-                urllib2.urlopen(self.base + '/fr.css').close()
+                urllib.request.urlopen(self.base + '/fr.css').close()
                 break
-            except urllib2.URLError:
+            except urllib.error.URLError:
                 sys.stdout.write('*')
                 sys.stdout.flush()
                 time.sleep(0.4)
             except KeyboardInterrupt:
                 self.stop()
-        print
+        print()
 
     def sessiondir(self):
         return 'Students/%s/' % self.name
@@ -68,25 +68,25 @@ class Server:
         return self.sessiondir() + 'Logs/'
 
     def stop(self):
-        print 'Stop server'
+        print('Stop server')
         os.system('./main.py %s stop >>xxx.log 2>&1' % self.name)
-        print 'Server stopped'
+        print('Server stopped')
 
     def get(self, url, trace=False):
         if trace:
-            print 'GET', url
+            print('GET', url)
         start = time.time()
-        f = urllib2.urlopen(url)
-        p = f.read()
+        f = urllib.request.urlopen(url)
+        p = f.read().decode("utf-8")
         f.close()
         if trace:
-            print 'GET', time.time() - start
+            print('GET', time.time() - start)
         self.stats.add(time.time() - start)
         return p
 
 if __name__ == "__main__":
     server = Server()
-    print 'len(css.css) =', len(server.get('http://localhost:%d/css.css' % server.port))
+    print('len(css.css) =', len(server.get('http://localhost:%d/css.css' % server.port)))
     server.stop()
     
 

@@ -18,10 +18,10 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-from questions import *
+from QUENLIG.questions import *
 import os
 import subprocess
-import utilities
+from QUENLIG import utilities
 
 navigation = """<p>Quelques commandes pour naviguer dans les fichiers :
 <ul>

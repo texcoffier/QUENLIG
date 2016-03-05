@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -23,8 +23,7 @@
 
 import os
 import cgi
-import compiler
-import utilities
+from QUENLIG import utilities
 
 container = 'heart'
 priority_display = 10000000
@@ -75,12 +74,12 @@ def replace_question(c, question, source, state, encoding):
              + '\n'.join(c[end+1:])).encode(encoding))
     f.close()
 
-    import plugins
+    from QUENLIG import plugins
     reload_questions = plugins.Plugin.plugins_dict['reload_questions']
     try:
         reload_questions.plugin.execute(state, reload_questions, '1')
         return 'OK'
-    except Exception, e:
+    except Exception as e:
         os.system("cat " + question.python_file())
         os.rename(question.python_file() + '.old', question.python_file())
         reload_questions.plugin.execute(state, reload_questions, '1')
@@ -98,7 +97,7 @@ def execute(state, dummy_plugin, argument):
     if state.question == None:
         return
 
-    f = open(state.question.python_file(), "r")
+    f = open(state.question.python_file(), "rb")
     c, encoding = utilities.get_encoding(f.read())
     c = c.split('\n')
     f.close()
@@ -107,8 +106,8 @@ def execute(state, dummy_plugin, argument):
     if argument:
         source = argument
         try:
-            compiler.parse(source.encode("utf-8"))
-        except SyntaxError, e:
+            compile(source)
+        except SyntaxError as e:
             before = ('<pre class="python_error">' +
                       cgi.escape(str(e)) + '</pre>')
         if before == '':

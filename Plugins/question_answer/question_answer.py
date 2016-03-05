@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
@@ -28,8 +28,8 @@ before the question list computation.
 
 import random
 import cgi
-import configuration
-import utilities
+from QUENLIG import configuration
+from QUENLIG import utilities
 
 priority_execute = '-questions' # To update question list before
 priority_display = 'question'

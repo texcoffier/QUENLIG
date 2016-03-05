@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2010 Thierry EXCOFFIER, Universite Claude Bernard
@@ -22,7 +22,7 @@
 """This plugin allows to remove acls to others users.
 It is not yet working."""
 
-import student
+from QUENLIG import student
 
 priority_execute = '-top'
 
@@ -87,7 +87,7 @@ def execute(state, plugin, argument):
             s = student.students[role]
             # It is normally a tristate : add, remove or inherit
             s.acls.change_acls(args[0], '!executable')
-            print '\n\n', args[0], role, '\n\n'
+            print('\n\n', args[0], role, '\n\n')
 
         errors += 'window.location = "?" ;\n'
 

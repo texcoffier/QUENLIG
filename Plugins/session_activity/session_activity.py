@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -24,8 +24,8 @@ currently in this role."""
 
 import collections
 import time
-import statistics
-import state
+from QUENLIG import statistics
+from QUENLIG import state
 
 priority_display = 'role'
 # font_size = "70%"

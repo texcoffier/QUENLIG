@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,8 +21,8 @@
 
 """Destroy all the students with 0 or 1 good answer."""
 
-import statistics
-import utilities
+from QUENLIG import statistics
+from QUENLIG import utilities
 
 container = 'action'
 link_to_self = True

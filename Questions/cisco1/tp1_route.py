@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from check import *
-from configuration_salles import *
+from .check import *
+from .configuration_salles import *
 
 good_default = "<pre>ip route add default via ???.???.???.???</pre>"
 

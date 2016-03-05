@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import C
+from QUENLIG.questions import *
+from .check import C
 
 add(name = "affectation",
     required = ['variable:casse variable', 'types:entier flottant'],

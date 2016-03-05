@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 
-import en
+from . import en
 
 css_attributes = (
     "/A.question_change_answer:before { content:' (Changer votre réponse)' }",

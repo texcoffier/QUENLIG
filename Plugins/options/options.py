@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -29,10 +29,10 @@ link_to_self = True
 acls = { 'Admin': ('executable',) }
 priority_execute = '-question'
 
-import utilities
-import plugins
+from QUENLIG import utilities
+from QUENLIG import plugins
 import cgi
-import configuration
+from QUENLIG import configuration
 
 def the_options(state, m_plugin):
     t = []
@@ -73,7 +73,7 @@ def save_options(a_state, m_plugin):
             continue
         utilities.write(name, value,overwrite=True)
 
-    import state
+    from QUENLIG import state
     for s in state.states.values():
         for p in s.plugins_list:
             s.init_option(p)

@@ -44,7 +44,7 @@ A FAIRE
 
 """
 
-from questions import *
+from QUENLIG.questions import *
 
 add(name="intro",
     before="""

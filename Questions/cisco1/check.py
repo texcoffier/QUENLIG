@@ -19,9 +19,9 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-import configuration
-import questions
+from QUENLIG.questions import *
+from QUENLIG import configuration
+from QUENLIG import questions
 import re
 import sys
 
@@ -237,7 +237,7 @@ class IP:
     def __str__(self):
         return self.ip
 
-    def __nonzero__(self):
+    def __bool__(self):
         if self.ip:
             return 1
         else:
@@ -388,7 +388,7 @@ class ConsoleLink(Link):
 class CloudLink(Link):
     name = "V"
     dot_style = "dotted"
-    legend = u"Réseau logique".encode("utf-8")
+    legend = "Réseau logique".encode("utf-8")
 
     def dot(self, showip):
         return  '%s [ style=%s%s%s];\n' % (
@@ -800,10 +800,10 @@ mv %s.svg %s.png %s
                 if link.mask and link.port.ip:
                     s.append(str(link.port.ip) + ' ' +
                                 h.name + link.port.key)
-        print '\n'.join(s)
+        print('\n'.join(s))
 
     def html(self, from_node):
-        hosts = self.hosts.values()
+        hosts = list(self.hosts.values())
         hosts.sort(lambda x,y: cmp(x.name, y.name))
         if self.display_eth1:
             x = '<td>Host eth1</td>'
@@ -909,7 +909,7 @@ def host_substitute(string, host):
                 e = item[0].replace('[', '["').replace(']', '"]')
                 new += str(eval('host.' + e)) + item[1]
     except AttributeError:
-        print 'BUG REPLACE', string
+        print('BUG REPLACE', string)
         return string
     return new
     
@@ -1045,7 +1045,7 @@ class require_ip(Test):
     def test(self, student_answer, string):
         try:
             a = IP(student_answer)
-        except ValueError, e:
+        except ValueError as e:
             return False, str(e)
 
 

@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 reject_space = reject((" =", "= "),
            """S'il y a des blancs autour du <tt>=</tt> le shell

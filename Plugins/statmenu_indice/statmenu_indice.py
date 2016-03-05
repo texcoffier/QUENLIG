@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -22,7 +22,7 @@
 """The number of given tips."""
 
 priority_display = 'statmenu_bad'
-priority_execute = 'question_answer' # Verify answer before
+priority_execute = 'question_indices' # Verify answer before
 acls = { 'Student': ('executable',) }
 
 def execute(state, plugin, argument):

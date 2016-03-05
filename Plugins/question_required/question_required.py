@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,8 +21,8 @@
 
 """Display the informations about the required questions."""
 
-import utilities
-import questions
+from QUENLIG import utilities
+from QUENLIG import questions
 
 priority_display = 'question_indices'
 priority_execute = 'question_answer' # We need to know if the answer was answered

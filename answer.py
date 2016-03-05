@@ -23,8 +23,8 @@ on the same question.
 """
 
 import time
-import configuration
-import questions
+from . import configuration
+from . import questions
 
 class Answer:
     """These objects track how a student answer to the question"""
@@ -62,8 +62,7 @@ class CreateInstance(type):
         super(CreateInstance, cls).__init__(name, bases, dct)
         cls()
 
-class Command(object):
-    __metaclass__ = CreateInstance
+class Command(object, metaclass=CreateInstance):
     question = True
     value = True
     def __init__(self):

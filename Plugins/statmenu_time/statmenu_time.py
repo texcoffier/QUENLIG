@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007,2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,7 +21,7 @@
 
 """Display the student work time."""
 
-import utilities
+from QUENLIG import utilities
 
 priority_display = 'statmenu_nr_questions'
 priority_execute = 'question_answer' # Verify answer before

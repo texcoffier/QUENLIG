@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2011 Thierry EXCOFFIER, Universite Claude Bernard
@@ -29,7 +29,7 @@ acls = { 'Teacher': ('executable',), 'Grader': ('executable',),
          'Author': ('executable',) }
 
 import time
-import configuration
+from QUENLIG import configuration
 
 option_name = 'change-allowed-timeout'
 option_help = '''"integer"

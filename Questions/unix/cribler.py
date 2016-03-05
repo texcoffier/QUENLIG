@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 grep_required = require("grep","On utilise <tt>grep</tt> pour cribler")
 grep_e_inutile = reject("-e",

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,7 +21,7 @@
 
 """It rejects any work before the session start."""
 
-import utilities
+from QUENLIG import utilities
 import time
 
 font_size = "70%"

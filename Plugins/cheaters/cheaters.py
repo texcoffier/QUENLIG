@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2008,2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,8 +21,8 @@
 
 """Detection of the student always giving the same answer at the same time."""
 
-import utilities
-import statistics
+from QUENLIG import utilities
+from QUENLIG import statistics
 
 container = 'analyse'
 priority_execute = '-question_answer'

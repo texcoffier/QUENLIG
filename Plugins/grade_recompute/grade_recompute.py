@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2013 Thierry EXCOFFIER, Universite Claude Bernard
@@ -34,8 +34,8 @@ css_attributes = (
     "A { color: red }",
     )
 
-import statistics
-import questions
+from QUENLIG import statistics
+from QUENLIG import questions
 
 def execute(state, plugin, argument):
     if not argument:

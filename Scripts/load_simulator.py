@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -42,18 +42,18 @@ It prints the mean page load time and the number of loaded page.
 """
 
 import os
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import time
 import re
 import sys
 import cgi
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 load_map = False # to load te question map picture
 load_map = True # to load te question map picture
 
 for i in ('http_proxy', 'https_proxy'):
-    if os.environ.has_key(i):
+    if i in os.environ:
         del os.environ[i]
 
 class Stats:
@@ -117,9 +117,9 @@ class Server:
         # Wait server start
         while True:
             try:
-                urllib2.urlopen("http://localhost:%d/" % self.port).close()
+                urllib.request.urlopen("http://localhost:%d/" % self.port).close()
                 break
-            except urllib2.URLError:
+            except urllib.error.URLError:
                 time.sleep(0.4)
 
     def stop(self):
@@ -132,13 +132,13 @@ class Server:
 
     def get(self, url, trace=False):
         if trace:
-            print 'GET', url
+            print('GET', url)
         start = time.time()
-        f = urllib2.urlopen(url)
+        f = urllib.request.urlopen(url)
         p = f.read()
         f.close()
         if trace:
-            print 'GET %6.3f %s' % (time.time() - start, url)
+            print('GET %6.3f %s' % (time.time() - start, url))
         self.stats.add(time.time() - start)
         return p
 
@@ -187,13 +187,13 @@ class Student:
     def do_action(self):
         action = self.action
         if action.action == 'asked':
-            self.get('?question=%s' % urllib.quote(action.question))
+            self.get('?question=%s' % urllib.parse.quote(action.question))
         elif action.action == 'good' or action.action == 'bad':
-            self.get('?question_answer=%s' % urllib.quote(action.value).replace('/','%2F'))
+            self.get('?question_answer=%s' % urllib.parse.quote(action.value).replace('/','%2F'))
         elif action.action == 'indice':
             self.get('?question_indice=1')
         elif action.action == 'comment':
-            self.get('?comment=%s#' % urllib.quote(action.value))
+            self.get('?comment=%s#' % urllib.parse.quote(action.value))
         elif action.action == 'None':            
             pass
         else:
@@ -258,13 +258,13 @@ try:
     nr_students = int(sys.argv[1])
     time_slice = int(sys.argv[2])
     time_acceleration = int(sys.argv[4])
-    print 'nr_students=', nr_students
-    print 'time_slice (to display statistics)=', time_slice
-    print 'time_acceleration=', time_acceleration
-    print 'sessionname=', sessionname
-    print 'port=', port
-    print 'created_session_nameport=', sys.argv[7]
-    print 'nr_request_for_profiling=', port
+    print('nr_students=', nr_students)
+    print('time_slice (to display statistics)=', time_slice)
+    print('time_acceleration=', time_acceleration)
+    print('sessionname=', sessionname)
+    print('port=', port)
+    print('created_session_nameport=', sys.argv[7])
+    print('nr_request_for_profiling=', port)
 
     if histogram:
         user = Student(server, '', 'guestme')
@@ -286,13 +286,13 @@ try:
                 time.sleep(dt)
             else:
                 if dt < -1:
-                    print 'Too much late (server overloaded)', -dt
+                    print('Too much late (server overloaded)', -dt)
             todo[0][1].do_action()
             todo[0][0] = todo[0][1].next_action()
 
         j = int(time.time() / time_slice)
         if i != j:
-            print i, server.stats.reset()
+            print(i, server.stats.reset())
             i = j
             if histogram:
                 p = user.get('?histogramgood=1')

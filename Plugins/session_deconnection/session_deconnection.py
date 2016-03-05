@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,7 +21,7 @@
 
 """The 'logout' button."""
 
-import casauth
+from QUENLIG import casauth
 
 priority_display = 'session_duration'
 font_size = "70%"

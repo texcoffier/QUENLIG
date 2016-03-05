@@ -4,6 +4,6 @@ tip = "Gestion des vues"
 
 before = "Visibilité"
 
-import hide
+from . import hide
 
 javascript = "var hide_message = 'Donnez la liste des roles à qui faut-il enlever ce droit :' ;" + hide.javascript

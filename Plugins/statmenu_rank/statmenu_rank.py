@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -22,7 +22,7 @@
 """Displays the student rank computed with the number of good answers.
 It is only useful when all the students are working together."""
 
-import utilities
+from QUENLIG import utilities
 
 priority_display = 'statmenu_time'
 priority_execute = 'question_answer' # Verify answer before

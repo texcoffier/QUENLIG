@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2014 Thierry EXCOFFIER, Universite Claude Bernard
@@ -24,8 +24,8 @@
 It will create the 'roles' file with the default role.
 """
 
-import student
-import utilities
+from QUENLIG import student
+from QUENLIG import utilities
 import os
 import time
 
@@ -70,7 +70,7 @@ def update_roles(astudent):
         try:
             astudent.roles = eval(utilities.read(astudent.roles_filename))
         except:
-            print 'BUG', astudent, utilities.read(astudent.roles_filename)
+            print('BUG', astudent, utilities.read(astudent.roles_filename))
             astudent.roles = eval(default)
 
 

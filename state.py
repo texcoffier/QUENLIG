@@ -18,18 +18,18 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 import cgi
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import time
 import re
 import sys
 import os
-import casauth
-import questions
-import student
-import statistics
-import configuration
-import plugins
-import utilities
+from . import casauth
+from . import questions
+from . import student
+from . import statistics
+from . import configuration
+from . import plugins
+from . import utilities
 
 ###############################################################################
 # Information filling 
@@ -44,7 +44,7 @@ def client_ip(server):
             return ip.split(",")[0]
         except IndexError:
             return ip
-    except KeyError:
+    except (KeyError, AttributeError):
         return server.client_address[0]
 
 def the_service(server):
@@ -296,7 +296,7 @@ class State(object):
         self.analyse_form(form)
 
         self.url_base_full = "%s/%s/%d/" % (self.url_base,
-                                            urllib.quote(self.ticket),
+                                            urllib.parse.quote(self.ticket),
                                             len(self.history))
 
         self.full_page = "No presentation plugin"
@@ -324,7 +324,7 @@ class State(object):
                                      + [sys.exc_info()[1]]
                                                          )
                                  ])
-                print '*'*80, v
+                print('*'*80, v)
                 v = '<div style="font-size:70%;text-align:left;position:relative;background:#FBB">' + v + '</div>'
                 
             if plugin.content_is_title:
@@ -353,10 +353,10 @@ def get_state(server, ticket):
         and server.client_address[0] != configuration.only_from):
         return None
 
-    service = urllib.quote(the_service(server))
+    service = urllib.parse.quote(the_service(server))
 
     if ticket == "": # No ticket, so redirect to the CAS service
-        print 'No ticket, redirect to authentication service'
+        print('No ticket, redirect to authentication service')
         casauth.redirect(server, service)
         return None
 
@@ -365,7 +365,7 @@ def get_state(server, ticket):
             if not states[ticket].ticket_valid(server):
                 states[ticket].update(server)
         else:
-            print 'New guest ticket for', ticket
+            print('New guest ticket for', ticket)
             student_name = ticket
             states[ticket] = State(server, ticket, student_name)
         return states[ticket]
@@ -377,13 +377,13 @@ def get_state(server, ticket):
                 states[ticket].old_role = ''
                 states[ticket].update_plugins()
             return states[ticket]
-        print 'Ticket no more valid (too old or other changes), forget it.'
+        print('Ticket no more valid (too old or other changes), forget it.')
         # del states[ticket]
         casauth.redirect(server, service)
         # return get_state(server, "")
         return None
 
-    print 'Ticket unknown:', ticket
+    print('Ticket unknown:', ticket)
     try:
         student_name = casauth.get_name(ticket, service)
     except IOError:
@@ -393,14 +393,14 @@ def get_state(server, ticket):
         # Search if it is a new ticket for an existing student
         for s in states.values():
             if s.student.filename == student_name:
-                print 'Affect the new ticket to an existing session.'
+                print('Affect the new ticket to an existing session.')
                 del states[s.ticket]
                 states[ticket] = s
                 s.ticket = ticket
                 s.update(server)
                 return s
 
-    print 'Session created for ticket', ticket
+    print('Session created for ticket', ticket)
     
     states[ticket] = State(server, ticket, student_name)
     return states[ticket]

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -22,9 +22,9 @@
 """Display an SVG graphic of the session with all the questions and statistics.
 This graphic is very slow to display so it is unusable."""
 
-import statistics
-import questions
-import configuration
+from QUENLIG import statistics
+from QUENLIG import questions
+from QUENLIG import configuration
 import types
 import cgi
 
@@ -35,7 +35,7 @@ acls = { 'Teacher': ('executable',) }
 
 ##############################################################################
 
-import server
+from QUENLIG import server
 
 class Svg:
     def __init__(self, text_height, bar_text_height, border_width,
@@ -87,7 +87,7 @@ class Svg:
 
 def split_text(text):
     middle = len(text)/2
-    for i in xrange(middle):
+    for i in range(middle):
         if text[middle+i] == ' ':
             return [text[0:middle+i], text[middle+i+1:]]
         if text[middle-i] == ' ':
@@ -110,7 +110,7 @@ class BarPlot:
                  svg_class='back', style=self.opacity)
 
     def bar(self, nr, value, max, svg_class, pixel=False):
-        if isinstance(value, types.ListType):
+        if isinstance(value, list):
             if not value:
                 return
             dy = self.bar_height / float(len(value))

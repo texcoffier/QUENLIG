@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -75,8 +75,8 @@ N = 2
 P = 1.1
 
 import time
-import questions
-import student
+from QUENLIG import questions
+from QUENLIG import student
 
 # Must be greater then 1.4 to avoid problems
 time_slot_power = 1.5

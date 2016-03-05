@@ -23,10 +23,10 @@ import colorsys
 import time
 import cgi
 
-import questions
-import utilities
-import student
-import configuration
+from . import questions
+from . import utilities
+from . import student
+from . import configuration
 import types
 
 _stats = None
@@ -122,7 +122,7 @@ class Stats:
                 q.student_indice += answer.indice + 1
                 if answer.indice >= 0:
                     try:
-                        for i in xrange(answer.indice+1):                    
+                        for i in range(answer.indice+1):                    
                             q.student_indices[i] += 1
                     except IndexError:
                         import sys
@@ -148,9 +148,9 @@ student: %s
             s.nr_answer_same_time = collections.defaultdict(lambda: [0,0])
             for answer in s.answers.values():
                 if answer.answered:
-                    t.append( (answer.question, answer.answer_times[-1], s) )
+                    t.append( (answer.question, answer.answer_times[-1], id(s), s) )
         t.sort()
-        for i in xrange(len(t)):
+        for i in range(len(t)):
             current_time = t[i][1]
             current_question = t[i][0]
             j = i - 1
@@ -159,12 +159,12 @@ student: %s
                     and current_question == t[j][0]
                     ) :
                 # i copied on j
-                t[i][2].nr_answer_same_time[t[j][2].name][0] += 1
+                t[i][3].nr_answer_same_time[t[j][3].name][0] += 1
                 # j was copied by i
-                t[j][2].nr_answer_same_time[t[i][2].name][1] += 1
+                t[j][3].nr_answer_same_time[t[i][3].name][1] += 1
                 j -= 1
         for s in self.all_students:
-            s.nr_of_same_time = sum(sum( s.nr_answer_same_time.values(), []))
+            s.nr_of_same_time = sum(sum( list(s.nr_answer_same_time.values()), []))
             if s.the_number_of_given_questions:
                 s.nr_of_same_time_normed = (
                     s.nr_of_same_time
@@ -175,10 +175,11 @@ student: %s
 
 
         # Compute the list of students by number of good answers
-        t = [(s.the_number_of_good_answers, s)  for s in self.all_students]
+        t = [(s.the_number_of_good_answers, id(s), s)
+             for s in self.all_students]
         t.sort()
         t.reverse()
-        self.sorted_students = [ b for a,b in t]
+        self.sorted_students = [c for a, b, c in t]
 
         if normed_count:
             # Compute some means
@@ -320,8 +321,8 @@ def graph_dot(show_stats=False):
 
     for q in questions.questions.values():
         for qq in q.required.requireds:
-            if not questions.questions.has_key(qq.name):
-                print "%s est requis par %s" % (qq.name, q)
+            if qq.name not in questions.questions:
+                print("%s est requis par %s" % (qq.name, q))
                 raise ValueError
             if qq.unrequired:
                 style = "[ style=dotted ]"
@@ -385,8 +386,8 @@ def graph2_dot():
 
     for q in questions.questions.values():
         for qq in q.required.names():
-            if not questions.questions.has_key(qq):
-                print "%s est requis par %s" % (qq, q)
+            if qq not in questions.questions:
+                print("%s est requis par %s" % (qq, q))
                 raise ValueError
             f.write("%s -> %s ;\n" % (translate_dot(qq), translate_dot(q.name)))
 
@@ -441,7 +442,7 @@ def display_no_more_valid_answers():
     X = X()
     stats = question_stats()
     messages = {}
-    print
+    print()
     
     for s in stats.all_students:
         sys.stdout.write('*')
@@ -460,10 +461,10 @@ def display_no_more_valid_answers():
                 if answer.question not in messages:
                     messages[answer.question] = {}
                 messages[answer.question][answer.answered] = True
-    print
-    print "Answers no more accepted:"
+    print()
+    print("Answers no more accepted:")
     for m in messages:
-        print m
+        print(m)
         for v in messages[m]:
-            print '\t' + v
+            print('\t' + v)
 

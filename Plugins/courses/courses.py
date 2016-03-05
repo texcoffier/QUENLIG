@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2015 Thierry EXCOFFIER, Universite Claude Bernard
@@ -22,8 +22,8 @@
 """Display all the questions definition."""
 
 import collections
-import statistics
-import questions
+from QUENLIG import statistics
+from QUENLIG import questions
 
 container = 'action'
 link_to_self = True

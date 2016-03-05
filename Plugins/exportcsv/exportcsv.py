@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -23,8 +23,8 @@
 the normalized number of good/bad answers and indices.
 There is also the work time in hours."""
 
-import statistics
-import configuration
+from QUENLIG import statistics
+from QUENLIG import configuration
 
 container = 'statmenu'
 link_to_self = True
@@ -77,7 +77,7 @@ def execute(state, plugin, argument):
     formater = "%s" + ", %5.3f" * (len(header)-1)
 
     t = [','.join(header),
-         ','.join(unicode(configuration.explain_grade.get(i,''),"latin-1") for i in header)
+         ','.join(str(configuration.explain_grade.get(i,''),"latin-1") for i in header)
          ]
     for c in content:
         t.append(formater % c)

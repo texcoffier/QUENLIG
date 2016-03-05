@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -22,8 +22,8 @@
 
 # TODO : while $$ $# $1 $* # { } fonctions
 
-from shellSyntax import sh
-import tpg
+from .shellSyntax import sh
+from . import tpg
 import types
 import re
 
@@ -53,7 +53,7 @@ def real_parse(answer, replacement=(), dumb_replace=()):
     """
     
     for olds, new in dumb_replace:
-        if not isinstance(olds, (types.ListType, types.TupleType)):
+        if not isinstance(olds, (list, tuple)):
             olds = (olds, )
         for old in olds:
             answer = answer.replace(old, new)
@@ -65,7 +65,7 @@ def real_parse(answer, replacement=(), dumb_replace=()):
     except tpg.SyntacticError:
         return parse_error, parse_error
 
-    c_student = c = unicode(c)
+    c_student = c = str(c)
     for short_option, long_option, take_option in replacement:
         c = canonise_option(c, short_option, long_option, take_option)
     c = c.split('<command>')
@@ -135,7 +135,7 @@ def parse_only_not_commented(answer):
     return uncommented
 
 if __name__ == "__main__":
-    print parse("echo 'a';")
+    print(parse("echo 'a';"))
     
 
 

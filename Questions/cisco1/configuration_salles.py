@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from check import *
-import configuration
+from .check import *
+from QUENLIG import configuration
 import os
 import sys
 
@@ -96,7 +96,7 @@ for h in hosts:
     if h.name in ('A3', 'E3', 'I3', 'M3'):
         legend = h
 
-import statistics
+from QUENLIG import statistics
 
 old = statistics.graph_dot
 

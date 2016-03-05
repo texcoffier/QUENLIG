@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 
-import en
+from . import en
 
 css_attributes = (
     "/A.change_acl:before { content:'Editer les droits d\\'accès (ACL)' }",

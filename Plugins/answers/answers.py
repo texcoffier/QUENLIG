@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2008 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,8 +21,8 @@
 
 """Display all the questions definition."""
 
-import statistics
-import questions
+from QUENLIG import statistics
+from QUENLIG import questions
 
 container = 'action'
 link_to_self = True
@@ -34,7 +34,7 @@ css_attributes = ('TABLE { border: 1px solid black ; }',
 def execute(state, plugin, argument):
     if argument:    
         s = []
-        for question in sorted(questions.questions.values(),
+        for question in sorted(list(questions.questions.values()),
                                key=lambda q: q.name):
             state.question = question
             state.student.init_seed(question.name)

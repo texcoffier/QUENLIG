@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2010-2014 Thierry EXCOFFIER, Universite Claude Bernard
@@ -25,7 +25,7 @@ To use it, you must click on a student name on the student statistics page.
 """
 
 import Plugins.answered.answered
-import student
+from QUENLIG import student
 
 prototype = 'answered' # Same plugin
 priority_execute = '-question_answer'

@@ -19,9 +19,9 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
-import remplacer
+from QUENLIG.questions import *
+from .check import *
+from . import remplacer
 
 dumb_replace = ( ('-A', '-e'), )
 

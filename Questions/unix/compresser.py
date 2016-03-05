@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="intro",
     required=["archiver:création"],
@@ -147,7 +147,7 @@ add(name="garde le compressé",
     ),
     )
 
-import archiver
+from . import archiver
 
 add(name="comp. archive",
     required=["garde l'original", "archiver:création", "pipeline:intro"],

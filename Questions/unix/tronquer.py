@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 require_passwd = require('/etc/passwd',
                          '''Je ne vois pas le fichier <tt>passwd</tt>

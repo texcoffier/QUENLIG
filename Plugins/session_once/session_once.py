@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2013 Thierry EXCOFFIER, Universite Claude Bernard
@@ -26,7 +26,7 @@ The student may see there answers.
 """
 
 import time
-import questions
+from QUENLIG import questions
 
 percent = 0.15
 timeout = 4*3600

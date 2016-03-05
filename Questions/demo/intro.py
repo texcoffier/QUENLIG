@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 import random
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 reject_quotes = reject("'", "Il ne faut pas recopier les apostrophes&nbsp;!")
 

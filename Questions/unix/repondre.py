@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="bonjour",
     before="""<IMG SRC="Sunrise_over_the_sea.jpg" align="right">
@@ -129,7 +129,7 @@ add(name="questions en tout",
 
 class check_nr_items(TestWithoutStrings):
     def test(self, student_answer, string):
-        import server
+        from QUENLIG import server
         nb = server.get_file("help.html").content.count('<li')
         nb2 = server.get_file("help.html").content.count('<li ')
         a = int(student_answer)

@@ -18,8 +18,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 
 add(name="message codé",
@@ -85,7 +85,7 @@ add(name='10001 = ? * ?',
 def pm(number, prod, summ, n):
     if n == 0:
         if prod == summ:
-            print number
+            print(number)
     else:
         n -= 1
         for i in range(1,number % 10 + 1):

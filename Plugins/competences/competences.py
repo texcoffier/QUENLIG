@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2015 Thierry EXCOFFIER, Universite Claude Bernard
@@ -23,9 +23,9 @@
 
 import json
 import collections
-import questions
-import utilities
-import configuration
+from QUENLIG import questions
+from QUENLIG import utilities
+from QUENLIG import configuration
 
 priority_display = 'identity'
 priority_execute = 'question' # In order to emphasis current question

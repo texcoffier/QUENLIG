@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="intro",
     required=["sh:console"],
@@ -121,7 +121,7 @@ add(name="pattern",
 
 dumb_replace=(("-R","-r"),("-type f", ""))
 
-import chercher
+from . import chercher
 
 add(name="pattern arbre",
     required=["simple", "sh:remplacement", "chercher:pattern", "chercher:exécuter"],

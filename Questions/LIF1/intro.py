@@ -23,7 +23,7 @@
 Environnement de travail, prise en main de quenlig
 """
 
-from questions import *
+from QUENLIG.questions import *
 
 add(name="intro",
     before="""Tout d'abord, ce tutoriel s'adresse aux débutants.

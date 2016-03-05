@@ -24,8 +24,8 @@ Environnement de travail, prise en main de quenlig
 et questions sur les choses qui sont identiques en C et Python.
 """
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="CLIQUEZ-ICI !",
     before="""Tout d'abord lancez l'environnement Python en tapant

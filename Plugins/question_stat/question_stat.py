@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2008 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,8 +21,8 @@
 
 """Displays some statistics about the current question."""
 
-import statistics
-import utilities
+from QUENLIG import statistics
+from QUENLIG import utilities
 
 priority_display = 'question_bads'
 acls = { 'Teacher': ('executable',) }

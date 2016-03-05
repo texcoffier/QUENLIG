@@ -23,8 +23,8 @@
 Tout sur les chaines de caractères
 """
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="conversion",
     required = ["table:chaine", "idem:flottant", "idem:chaine",

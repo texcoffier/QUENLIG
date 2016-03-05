@@ -19,14 +19,14 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
+from QUENLIG.questions import *
 import re
 import cgi
 import compiler
 import ast
 
 def P_clean(txt):
-    if isinstance(txt, basestring):
+    if isinstance(txt, str):
         # Replace tabulations with space
         txt = txt.strip(' \n\t').replace('\t',' ').replace('\n\n', '\n').replace('\n',';')
         # A run of spaces if replaced by one space
@@ -53,7 +53,7 @@ class P(TestUnary):
                     "Enlevez les «...» en début de ligne, ils ne font pas parti du langage. C'est l'invite de commande de l'interpréteur")
         try:
             compiler.parse(student_answer)
-        except SyntaxError, e:
+        except SyntaxError as e:
             return (False,
                     'Message de Python : <b>' + cgi.escape(str(e)) + '</b><br>'
                     )
@@ -212,7 +212,7 @@ if a > 4 or b < 6 or a <= b:
 if x_computed != x_expected:
     import difflib
     for i in difflib.ndiff(x_computed, x_expected):
-        print i
+        print(i)
     error
 
 
@@ -236,7 +236,7 @@ class P_AST(TestUnary):
                     "Enlevez les «...» en début de ligne, ils ne font pas parti du langage. C'est l'invite de commande de l'interpréteur")
         try:
             ast_tree = ast.parse(student_answer)
-        except SyntaxError, e:
+        except SyntaxError as e:
             return (False,
                     'Message de Python : <b>' + cgi.escape(str(e)) + '</b><br>'
                     )

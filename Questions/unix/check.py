@@ -18,9 +18,9 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 import re
-import utilities
-from shellParser import parse, parse_only_not_commented, parse_error
-from questions import Test, TestUnary, no_parse
+from QUENLIG import utilities
+from .shellParser import parse, parse_only_not_commented, parse_error
+from QUENLIG.questions import Test, TestUnary, no_parse
 
 
 class TestShell(Test):

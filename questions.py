@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2015 Thierry EXCOFFIER, Universite Claude Bernard
@@ -24,10 +24,10 @@ import types
 import os
 import inspect
 import cgi
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import re
-import configuration
-import utilities
+from . import configuration
+from . import utilities
 
 current_evaluate_answer = None
 current_eval_after = None
@@ -110,14 +110,14 @@ class Question:
             question._question_ = self
             # Choice test because it contains the question
             if (not isinstance(question, TestExpression)
-                and 'state' not in question.func_code.co_varnames):
+                and 'state' not in question.__code__.co_varnames):
                 def tmp(state):
-                    return utilities.to_unicode(question())
+                    return (question())
             else:
                 def tmp(state):
-                    return utilities.to_unicode(question(state))
+                    return (question(state))
         else:
-            question = utilities.to_unicode(question)
+            question = (question)
             def tmp(dummy_state):
                 return question
         tmp.real_question = question
@@ -139,15 +139,15 @@ class Question:
         self.tests = arg.get("tests", ())
         self.before = self.transform_question(arg.get("before", None))
         self.good_answer = arg.get("good_answer", "")
-        if not isinstance(self.good_answer, basestring):
+        if not isinstance(self.good_answer, str):
             raise ValueError("good_answer must be a string")
         self.bad_answer = arg.get("bad_answer", "")
-        if not isinstance(self.bad_answer, basestring):
+        if not isinstance(self.bad_answer, str):
             raise ValueError("bad_answer must be a string")
         self.nr_lines = int(arg.get("nr_lines", "1"))
         self.comment = []
         self.required = arg.get("required", previous_question)
-        self.required = Requireds([Required(world, utilities.to_unicode(i))
+        self.required = Requireds([Required(world, (i))
                                    for i in self.required])
             
         self.indices = arg.get("indices", ())
@@ -202,27 +202,26 @@ class Question:
         answer = answer.strip(" \n\t\r").replace("\r\n", "\n")
         if self.nr_lines == 1 and answer.find("\n") != -1:
             return False, "VOTRE REPONSE CONTIENT DES RETOURS A LA LIGNE"
-        if u' ' in answer:
-            return False, u"VOTRE REPONSE CONTIENT UN ESPACE INSÉCABLE"
+        if ' ' in answer:
+            return False, "VOTRE REPONSE CONTIENT UN ESPACE INSÉCABLE"
         if self.evaluate_answer:
             answer = self.evaluate_answer(answer, state)
 
         full_comment = []
         for t in self.tests:
             if isinstance(t, types.FunctionType):
-                if 'state' in t.func_code.co_varnames:
+                if 'state' in t.__code__.co_varnames:
                     result, comment = t(answer, state=state)
                 else:
                     result, comment = t(answer)
             else:
                 result, comment = t(answer, state=state)
-            comment = utilities.to_unicode(comment)
+            comment = (comment)
             if comment not in full_comment:
                 full_comment.append(comment)
             if result != None:
                 if self.eval_after:
-                    full_comment.append(utilities.to_unicode(
-                        self.eval_after(answer, state)))
+                    full_comment.append(self.eval_after(answer, state))
                 return result, ''.join(full_comment)
 
         if self.eval_after:
@@ -244,7 +243,7 @@ class Question:
         return c
 
     def url(self):
-        return "?question=%s" % urllib.quote(self.name.encode('utf-8'))
+        return "?question=%s" % urllib.parse.quote(self.name.encode('utf-8'))
 
     def a_href(self):
         return "<A HREF=\"%s\">%s</A>" % (self.url(), cgi.escape(self.name))
@@ -276,7 +275,7 @@ class Question:
             if isinstance(test, Grade):
                 if test.grade > 0:
                     if test.teacher:
-                        if isinstance(test.teacher, basestring):
+                        if isinstance(test.teacher, str):
                             competences.add(test.teacher)
                         else:
                             competences.update(test.teacher)
@@ -319,12 +318,12 @@ def add(**arg):
     # sys.stdout.flush()
     world = inspect.currentframe().f_back.f_globals["__name__"].split(".")
     for a, v in arg.items():
-        arg[a] = utilities.to_unicode(arg[a])
+        arg[a] = (arg[a])
         if a not in attributs.keys():
-            print "'%s' n'est pas un attribut de question" % a
-            print "Les attributs possibles de questions sont:"
+            print("'%s' n'est pas un attribut de question" % a)
+            print("Les attributs possibles de questions sont:")
             for i in attributs.keys():
-                print "\t%s: %s" % (i, attributs[i]) 
+                print("\t%s: %s" % (i, attributs[i])) 
             raise KeyError("Voir stderr")
     arg["name"] = world[-1] + ":" + arg["name"]
     if arg["name"] in questions.keys():
@@ -370,15 +369,9 @@ def worlds():
     d = {}
     for q in questions.values():
         d[q.world] = 1
-    return d.keys()
+    return list(d.keys())
 
 sorted_questions = []
-
-def compare_questions(x, y):
-    c = cmp(x.level, y.level)
-    if c != 0:
-        return c
-    return cmp( len(y.used_by), len(x.used_by) ) # Most used first
 
 # Very far from optimal algorithm
 def sort_questions():
@@ -392,7 +385,7 @@ def sort_questions():
             try:
                 questions[r].used_by.append(q.name)
             except KeyError:
-                print q.name, '=== REQUIRE ===>', r
+                print(q.name, '=== REQUIRE ===>', r)
 
     # Compute 'descendants'
     leave = []
@@ -430,8 +423,8 @@ def sort_questions():
             break
 
     global sorted_questions
-    sorted_questions = questions.values()
-    sorted_questions.sort(compare_questions)
+    sorted_questions = list(questions.values())
+    sorted_questions.sort(key = lambda x: (x.level, len(x.used_by)))
 
     # Compute coordinates.
     # Questions without prerequisites are in the center.
@@ -494,7 +487,7 @@ def spiral(x,y):
 def _format(s):
     r = ""
     for i in s:
-        r += utilities.answer_format(unicode(i)) + "<BR>"
+        r += utilities.answer_format(str(i)) + "<BR>"
     return r[:-4]
 
 def return_first_arg(a,b):
@@ -539,11 +532,11 @@ class Test(object):
                  sort_lines=None,
                  ):
         if comment:
-            self.comment = utilities.to_unicode(comment)
+            self.comment = (comment)
         if replace:
-            self.replace = utilities.to_unicode(replace)
+            self.replace = (replace)
         if replacement:
-            self.replacement = utilities.to_unicode(replacement)
+            self.replacement = (replacement)
         if uppercase:
             self.uppercase = uppercase
         if all_agree:
@@ -555,7 +548,7 @@ class Test(object):
         else:
             self.parse_strings = return_first_arg
         if strings:
-            self.strings = utilities.rewrite_string(utilities.to_unicode(strings))
+            self.strings = utilities.rewrite_string((strings))
 
     def html(self, state):
         if self.comment:
@@ -593,7 +586,7 @@ class Test(object):
             if self.sort_lines:
                 string = sort_lines(string)
                 
-            if state != None and 'state' in self.test.func_code.co_varnames:
+            if state != None and 'state' in self.test.__code__.co_varnames:
                 t = self.test(student_answer, string, state=state)
             else:
                 t = self.test(student_answer, string)
@@ -651,7 +644,7 @@ class expect(require):
     def test(self, student_answer, string):
         if student_answer.find(string) == -1:
             return False, \
-                   u"Je devrais trouver '<tt>%s</tt>' dans la réponse" % string
+                   "Je devrais trouver '<tt>%s</tt>' dans la réponse" % string
 class reject(Test):
     html_class = 'test_string test_bad test_reject'
     def test(self, student_answer, string):
@@ -854,7 +847,7 @@ class TestExpression(Test):
     def __call__(self, student_answer, state=None):
         """Add a compatibility layer for old tests"""
         student_answer = self.canonize(student_answer, state)
-        if isinstance(student_answer, basestring):
+        if isinstance(student_answer, str):
             return self.do_test(student_answer, state)
         else:
             return student_answer
@@ -919,14 +912,14 @@ class TestString(TestExpression):
          Bad(Shell(Contain('&lt;parameter&gt;-z&lt;/parameter&gt;', canonize=False)))
     """
     def __init__(self, string, canonize=True):
-        if not isinstance(string, basestring):
+        if not isinstance(string, str):
             raise ValueError("Expect a string")
         self.string = string
         self.do_canonize = canonize
 
     def canonize_test(self, parser, state):
         if self.do_canonize:
-            self.string_canonized = parser(utilities.to_unicode(self.string),
+            self.string_canonized = parser((self.string),
                                            state)
         else:
             self.string_canonized = self.string
@@ -1039,9 +1032,9 @@ class TestFunction(TestExpression):
         return self.fct(student_answer, state)
 
     def source(self, state=None, format=None):
-        name = str(self.fct.func_name)
+        name = str(self.fct.__name__)
         if name == '<lambda>':
-            name = repr(self.fct.func_code)
+            name = repr(self.fct.__code__)
         return self.test_name(format) + '(' + cgi.escape(name) + ')'
 
 
@@ -1353,10 +1346,10 @@ class Replace(TestUnary):
         if self.do_canonize:
             self.replace_canonized = [
                 (parser(old, state), parser(new, state))
-                for old, new in utilities.to_unicode(self.replace)
+                for old, new in (self.replace)
                 ]
         else:
-            self.replace_canonized = utilities.to_unicode(self.replace)
+            self.replace_canonized = (self.replace)
 
     def source(self, state=None, format=None):
         if self.do_canonize:
@@ -1500,7 +1493,7 @@ class TestDictionary(TestExpression):
         if self.uppercase:
             student_answer = student_answer.upper()
         if student_answer not in self.dict:
-            return False, 'Possible answers are:' + str(self.dict.keys())
+            return False, 'Possible answers are:' + str(list(self.dict.keys()))
         r = self.dict[student_answer]
         if r == self.good:
             return True, ''
@@ -1584,7 +1577,7 @@ class Grade(TestUnary):
             grade = self.grade
         else:
             grade = 0
-        if isinstance(self.teacher, basestring):
+        if isinstance(self.teacher, str):
             teachers = [self.teacher]
         else:
             teachers = self.teacher
@@ -1794,8 +1787,8 @@ def regression_tests():
         # print o.source()
         # print txt
         if o.source() != txt:
-            print txt
-            print o.source()
+            print(txt)
+            print(o.source())
             raise ValueError("Bad source")
         return o
 

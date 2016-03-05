@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2015 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -33,11 +33,11 @@ import cgi
 import random
 import ast
 import collections
-import questions # Only for nr_indices and any_questions
-import utilities
-import answer
-import configuration
-import statistics
+import hashlib
+from . import questions # Only for nr_indices and any_questions
+from . import utilities
+from . import answer
+from . import configuration
 
 def unquote(s):
     "Anybody has a better idea for this complex function?"
@@ -56,7 +56,7 @@ def translate_log(filename):
     f.close()
     t = []
     for c in content:
-        c = unicode(c[:-1], "latin-1").split("") # LATIN-1: OK
+        c = str(c[:-1], "latin-1").split("") # LATIN-1: OK
         decal = int(len(c) == 5) # In order to read old log files
 
         question = c[0]
@@ -85,7 +85,7 @@ class Student:
     def __init__(self, name, stop_loading=lambda x: False):
         """Initialise student data or read the log file"""
         self.filename = name.translate(utilities.safe_ascii)
-        self.seed = abs(hash(name))
+        self.seed = int(hashlib.md5(name.encode('utf-8')).hexdigest(), 16)
         self.name = name.title()
         self.answers = {}
         self.file = os.path.join(log_directory(), self.filename)
@@ -247,7 +247,7 @@ class Student:
 
     def answerables(self, any=False):
         if any or self.answerable_any:
-            return questions.questions.values()
+            return list(questions.questions.values())
 
         if self.answerables_cache:
             return self.answerables_cache
@@ -346,8 +346,8 @@ class Student:
         random.seed(self.seed + self.answer(question).nr_erase)
 
     def answered_page(self, state):
-        t = self.answers.values()
-        t.sort(lambda x,y: cmp(x.first_time, y.first_time))
+        t = list(self.answers.values())
+        t.sort(key= lambda x: x.first_time)
         
         s = []
         none = None
@@ -363,8 +363,8 @@ class Student:
                 state.question = q
             except KeyError:
                 continue
-            import Plugins.question_change_answer.question_change_answer
-            more = Plugins.question_change_answer.question_change_answer.add_a_link(state, q)
+            from QUENLIG.Plugins.question_change_answer.question_change_answer import add_a_link
+            more = add_a_link(state, q)
             s.append('<div class="question_history">')
             s.append("<em class=\"box_title short\">" + q.name + more +"</em>")
             s.append('<table class="box_content"><tr><td>')
@@ -406,8 +406,8 @@ class Student:
                 s.append(utilities.div('comment',"<PRE>" + \
                                        cgi.escape(comment_text) + "</PRE>"))
 
-            import Plugins.question_correction.question_correction
-            s.append(Plugins.question_correction.question_correction.add_a_link(state, q))
+            from QUENLIG.Plugins.question_correction.question_correction import add_a_link
+            s.append(add_a_link(state, q))
             s.append('</tr></table></div><br>')
 
         state.question = saved_question
@@ -421,6 +421,7 @@ class Student:
         return ''.join(s)
 
     def classement(self):
+        from . import statistics
         stats = statistics.question_stats()
         return "%d/%d" % (stats.sorted_students.index(self)+1,
                           len(stats.sorted_students))
@@ -523,7 +524,7 @@ students = {}
 stop_loading_default = lambda x: False
 
 def student(name):
-    if not students.has_key(name):
+    if name not in students:
         students[name] = Student(name, stop_loading=stop_loading_default)
     return students[name]
 

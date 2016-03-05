@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -23,10 +23,10 @@
 Allow to change the ACL of users and roles.
 """
 
-import student
+from QUENLIG import student
 import re
-import plugins
-import utilities
+from QUENLIG import plugins
+from QUENLIG import utilities
 import Plugins.acls.acls
 
 priority_execute = 'statmenu_students'

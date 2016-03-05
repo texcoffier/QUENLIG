@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,8 +21,8 @@
 
 """Displays all the comments about the current question."""
 
-import utilities
-import statistics
+from QUENLIG import utilities
+from QUENLIG import statistics
 import cgi
 
 priority_display = 'question_required'

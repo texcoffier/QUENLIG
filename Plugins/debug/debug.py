@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,10 +21,10 @@
 
 """Allow to display plugin definition in tips from the plugin interface"""
 
-import plugins
+from QUENLIG import plugins
 import cgi
-import student
-import utilities
+from QUENLIG import student
+from QUENLIG import utilities
 
 priority_execute = '-top'
 container = 'action'
@@ -47,11 +47,11 @@ def execute(state, plugin, argument):
         s = ['<h2>' + a_plugin.plugin.css_name + '</h2>']
         for attribute in plugins.Attribute.attributes.keys():
             if a_plugin.__dict__[attribute]:
-                v = unicode(a_plugin.__dict__[attribute])
+                v = str(a_plugin.__dict__[attribute])
                 v = v.encode('utf-8')
                 v = cgi.escape(v)
                 v = v.replace(',', ',<br>&nbsp;&nbsp;&nbsp;&nbsp;')
-                v = utilities.to_unicode(v)
+                v = (v)
                 s.append('<b>%s</b> : %s<br>' % (attribute, v))
 
         s.append('current_acls=%s<br>' % a_plugin.current_acls)

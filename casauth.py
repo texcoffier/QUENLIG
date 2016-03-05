@@ -16,16 +16,16 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
-import urllib2
-import urllib
-import configuration
+import urllib.request, urllib.error, urllib.parse
+import urllib.request, urllib.parse, urllib.error
+from . import configuration
 
 # To make casauth work we should not use a proxy
 # It is done in 'main.py'
 
 def redirect(serv, service):
     """Redirect user browser on the CAS login page for the given service"""
-    print 'Redirect web client to', service
+    print('Redirect web client to', service)
     serv.send_response(307)
     serv.send_header('Location', '%s/login?service=%s' % (
         configuration.CAS,service))
@@ -33,17 +33,17 @@ def redirect(serv, service):
 
 def get_name(ticket, service):
     """With the ticket and the service get the user name"""
-    print 'Get user name for service', service, 'and ticket', ticket
+    print('Get user name for service', service, 'and ticket', ticket)
     checkparams = "?service=" + service + "&ticket=" + ticket
-    casdata = urllib2.urlopen("%s/validate?service=%s&ticket=%s" % (
-        configuration.CAS, service, urllib.quote(ticket)
+    casdata = urllib.request.urlopen("%s/validate?service=%s&ticket=%s" % (
+        configuration.CAS, service, urllib.parse.quote(ticket)
     ))
     
     test = casdata.readline().strip()
     if test == 'yes':
         return casdata.readline().strip().lower()               
     else:
-        print 'Cannot authenticate ticket', test
+        print('Cannot authenticate ticket', test)
         raise IOError("Can't authenticate ticket: " + test)
 
 def logout_url():

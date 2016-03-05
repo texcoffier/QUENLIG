@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 dumb_replace = (
     ('-re ', '-r '), ('-er ', '-r '),
@@ -1097,7 +1097,7 @@ add(name="liste extensions",
     default_answer = "ls | ",
     )
 
-from awk import awk_compte
+from .awk import awk_compte
 
 add(name="compter extensions",
     required=["extensions", "awk:compte"],

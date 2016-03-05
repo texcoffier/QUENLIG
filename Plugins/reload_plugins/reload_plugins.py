@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2010 Thierry EXCOFFIER, Universite Claude Bernard
@@ -26,8 +26,8 @@ It is currently not working nicely, do not try to use.
 
 import os
 import sys
-import plugins
-import utilities
+from QUENLIG import plugins
+from QUENLIG import utilities
 
 priority_execute = 1000000000
 container = 'action'
@@ -59,7 +59,7 @@ def execute(state, plugin, argument):
     return ''
 
 def init():
-    import state
+    from QUENLIG import state
 
     old_state = state.State
 
@@ -71,7 +71,7 @@ def init():
                 import Plugins.top.top
                 Plugins.top.top.css_cached.cache = {}
                 utilities.allow_one_more_call(Plugins.top.top.generate_javascript)
-                import server
+                from QUENLIG import server
                 server.cache = {}
 
                 for s in state.states.values():

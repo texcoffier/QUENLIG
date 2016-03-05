@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2008 Thierry EXCOFFIER, Universite Claude Bernard
@@ -36,8 +36,8 @@ The code assume that :
   * A role is a student: The ACLs of a role are the ACLs of the student
 """
 
-import student
-import utilities
+from QUENLIG import student
+from QUENLIG import utilities
 import os
 
 priority_execute = 'role' # Role must have been computed.
@@ -183,7 +183,7 @@ def update_role(state, astudent, role):
                 comment="From '%s' acls" % astudent.name
                 )
         except KeyError:
-            print 'ERROR ACLS %s : %s' % (astudent.name, plugin)
+            print('ERROR ACLS %s : %s' % (astudent.name, plugin))
 
     return True
 
@@ -222,7 +222,7 @@ def execute(state, plugin=None, argument=None):
 def reload():
     """Reinitialize all the ACLS"""
 
-    import state
+    from QUENLIG import state
     for s in state.states.values():
         try:
             # del a_student.roles

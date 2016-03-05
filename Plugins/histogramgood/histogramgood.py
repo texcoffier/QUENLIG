@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -22,7 +22,7 @@
 """Display the histogram of the number of good and bad answers
 for all the students."""
 
-import statistics
+from QUENLIG import statistics
 
 container = 'analyse'
 link_to_self = True

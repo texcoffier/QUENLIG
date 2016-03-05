@@ -20,8 +20,8 @@
 
 import os
 import sys
-from questions import *
-import questions
+from QUENLIG.questions import *
+from QUENLIG import questions
 import cgi
 import subprocess
 
@@ -32,7 +32,7 @@ global_evals = {}
 
 def python_eval(v):
     """Eval a python with a cache"""
-    if global_evals.has_key(v):
+    if v in global_evals:
         return global_evals[v]
 
     if not os.path.isdir('XXX-PYPY'):

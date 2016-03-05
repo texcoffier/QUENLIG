@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2008,2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,9 +21,9 @@
 
 """Detection of students answering too quickly."""
 
-import utilities
-import statistics
-import questions
+from QUENLIG import utilities
+from QUENLIG import statistics
+from QUENLIG import questions
 import collections
 
 container = 'analyse'

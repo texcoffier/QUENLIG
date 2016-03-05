@@ -23,8 +23,8 @@
 Exercices simples
 """
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 add(name="len",
     required = ["control:def", "control:for", "table:len",

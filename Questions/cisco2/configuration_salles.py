@@ -19,8 +19,8 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from check import *
-import configuration
+from .check import *
+from QUENLIG import configuration
 import math
 
 
@@ -99,7 +99,7 @@ for i, h in enumerate(hosts):
                 Port(hosts[(i+1)%len(hosts)], "192.168.200.%d" % (4*i+2)),
                 )
 
-import statistics
+from QUENLIG import statistics
 old = statistics.graph_dot
 
 def graph_dot():

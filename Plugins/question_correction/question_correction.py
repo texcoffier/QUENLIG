@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -46,9 +46,9 @@ css_attributes = (
     "/.question_correction_comment { text-decoration: underline; }",
 )
 
-import utilities
-import statistics
-import student
+from QUENLIG import utilities
+from QUENLIG import statistics
+from QUENLIG import student
 import cgi
 
 def execute(state, plugin, argument):

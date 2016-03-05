@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007,2011 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,7 +21,7 @@
 
 """Display a graphical map of the questions."""
 
-import questions
+from QUENLIG import questions
 import os
 
 priority_display = 'comment'
@@ -37,7 +37,7 @@ try:
         im = PIL.Image.new("RGB", (width, height))
         im.putdata(data)
         im.save(filename, 'GIF')
-        f = open(filename,'r')
+        f = open(filename,'rb')
         image = f.read()
         f.close()
         return image
@@ -51,11 +51,11 @@ except ImportError:
         f = os.popen('ppmtogif >"%s" 2>/dev/null' % filename, 'w')
         f.write(''.join(image))
         f.close()
-        f = open(filename,'r')
+        f = open(filename,'rb')
         image = f.read()
         f.close()
         return image
-    print "To speed up Quenlig, install PIL package"
+    print("To speed up Quenlig, install PIL package")
 
 
 def question_color(q, state, answerables):
@@ -98,7 +98,7 @@ def question_pixel_map(state):
     image = []
     for col in m:
         image.append(col + [(255,255,255)] * (width - len(col)))
-    image = sum(zip(*image), ())
+    image = sum(list(zip(*image)), ())
     
     return 'image/gif', convert_to_gif(len(m), width, image, state)
 

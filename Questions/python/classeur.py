@@ -18,8 +18,8 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-from questions import *
-from check import *
+from QUENLIG.questions import *
+from .check import *
 
 
 
@@ -81,7 +81,7 @@ add(name='les entiers',
     bracket_required,
     require("range", "Tu dois utiliser <tt>range</tt>"),
     reject('19', "Il va aller jusqu'à 18, pas 19."),
-    python_answer_good(str(range(20))+'\n'),
+    python_answer_good(str(list(range(20)))+'\n'),
     ),
     )
 
@@ -195,7 +195,7 @@ add(name="addition",
     number_of_is(']',2,
                  """Il doit y avoir 2 derrières de couvertures de classeur
                  car on ajoute 2 classeurs"""),
-    python_answer_good(str(range(3)+range(2))+'\n'),
+    python_answer_good(str(list(range(3))+list(range(2)))+'\n'),
     ),    
     ) 
     

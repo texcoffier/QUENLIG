@@ -23,7 +23,7 @@
 Questions portant sur la syntaxe et la structuration d'un programme C
 """
 
-from questions import *
+from QUENLIG.questions import *
 
 add(name="mots-clefs",
     required = ["intro:intro"],

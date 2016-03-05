@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2010 Thierry EXCOFFIER, Universite Claude Bernard
@@ -26,9 +26,10 @@ It is not totally safe, if you introduce a syntax error in the module,
 the server will need a restart to restore the question file.
 """
 
-import questions
-import statistics
-import student
+import imp
+from QUENLIG import questions
+from QUENLIG import statistics
+from QUENLIG import student
 
 priority_execute = '-question_before'
 
@@ -53,7 +54,7 @@ def execute(state, plugin, argument):
         questions.questions = q
         questions.previous_question = ""
         # Reload !
-        reload(questions.modules[module_name])
+        imp.reload(questions.modules[module_name])
         state.question = questions.questions[state.question.name]
         statistics.forget_stats()
         for s in student.all_students():

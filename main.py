@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2007 Thierry EXCOFFIER, Universite Claude Bernard
@@ -21,19 +21,27 @@
 
 import os
 import sys
-import statistics
 import time
-import configuration
-import questions
-import server
 import socket
-import utilities
 import re
+
+# Make it a package
+__package__ = "QUENLIG"
+sys.path.insert(0, os.path.sep.join(os.getcwd().split(os.path.sep)[:-1]))
+sys.modules["QUENLIG"] = __import__(os.getcwd().split(os.path.sep)[-1])
+sys.path.pop(0)
+sys.modules["QUENLIG"].__name__ = 'QUENLIG'
+
+from . import statistics
+from . import configuration
+from . import questions
+from . import server
+from . import utilities
 
 # To make casauth work we should not use a proxy
 # And the mailcheck speed-down shell startup.
 for i in ('http_proxy', 'https_proxy', 'MAIL', 'MAILCHECK'):
-    if os.environ.has_key(i):
+    if i in os.environ:
         del os.environ[i]
 
 def search_command(command, comment):
@@ -118,10 +126,10 @@ class Session:
 
     def question_stats(self):
         self.init()
-        print
-        print len(questions.questions), 'questions'
+        print()
+        print(len(questions.questions), 'questions')
         d = {}
-        for q in questions.questions.itervalues():
+        for q in questions.questions.values():
             for t in q.tests:
                 try:
                     name = t.__name__ + '!!!'
@@ -130,13 +138,13 @@ class Session:
                 if name not in d:
                     d[name] = 0
                 d[name] += 1
-        t = list(d.iterkeys())
+        t = list(d.keys())
         t.sort()
         n = 0
         for k in t:
-            print '%40s %d' % (k, d[k])
+            print('%40s %d' % (k, d[k]))
             n += d[k]
-        print n, 'tests'
+        print(n, 'tests')
 
     def start(self):
         self.init()
@@ -207,7 +215,7 @@ class Session:
                     if e:
                         return e
                 
-        print 'Check all questions in ' + utilities.read(self.dir + 'questions')
+        print('Check all questions in ' + utilities.read(self.dir + 'questions'))
         self.init()
         os.chdir(self.dir)
         errors = []
@@ -217,7 +225,7 @@ class Session:
                 if e:
                    errors.append(e)
         errors.sort()
-        print '\n'.join(errors)
+        print('\n'.join(errors))
 
 if '--silent' not in sys.argv:
     search_command('ppmtogif',
@@ -236,10 +244,10 @@ else:
     questions.silent = True
     sys.argv.remove('--silent')
 
-import plugins
+from . import plugins
 plugins.init()
 
-import state
+from . import state
 
 class FakeServer:
     headers = {"X-Forwarded-For":'IP?', "User-Agent": 'UI?',
@@ -553,7 +561,7 @@ if __name__ == "__main__":
             user = os.path.join(session.dir, 'Logs', args.pop())
             mkdir(user)
             user = os.path.join(user, 'roles')
-            import Plugins.role.role
+            from QUENLIG import Plugins
             x = list(Plugins.role.role.default_roles)
             x.sort()
             x.remove('Teacher')
@@ -575,7 +583,7 @@ if __name__ == "__main__":
                 out = out[1]
             else:
                 out = p.heart_content
-            print out
+            print(out)
             sys.exit(0)
         elif action == 'stop-loading':
             # DO NOT USE WHEN THE SESSION IS NOT FULLY TERMINATED.
@@ -586,7 +594,7 @@ if __name__ == "__main__":
 
             # To have a session snapshot at a fixed time
             # stop-loading "lambda s:s.logs and s.logs[-1][0] > 1393400000"
-            import student
+            from . import student
             student.stop_loading_default = eval(args.pop())
         else:
             if not session.set_option(action, args):

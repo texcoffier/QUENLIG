@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2011-2015 Thierry EXCOFFIER, Universite Claude Bernard
@@ -19,7 +19,6 @@
 #
 #    Contact: Thierry.EXCOFFIER@univ-lyon1.fr
 #
-
 from server import Server
 from student import Student
 import sys
@@ -546,8 +545,8 @@ def test_0400_root_reload_questions(student):
     minimal_tests(student_bad, good=1, bad=1, title='a:a')
 
 def test_0410_CHOICE(student):
-    q = '99' # For user
-    r = '38' # For root
+    q = '43' # For user
+    r = '85' # For root
     student.goto_question('a:a')
     student.give_answer('unlockCHOICES')
     student.goto_question('b:z')
@@ -581,7 +580,7 @@ try:
     for test in tests:
         if not test.startswith('test_'):
             continue
-        print '%-45s' % test,
+        print('%-45s' % test, end=' ')
         sys.stdout.flush()
         if '_root_' in test:
             roles="['Default','Teacher','Author','Grader','Developer','Admin']"
@@ -591,7 +590,7 @@ try:
                                 test[len('test_'):],
                                 roles=roles,
                                 ))
-        print 'OK'
+        print('OK')
 finally:
     the_server.stop()
     pass

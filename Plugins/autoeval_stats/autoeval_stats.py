@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2012 Thierry EXCOFFIER, Universite Claude Bernard
@@ -87,8 +87,8 @@ function histogram(t, time_searching)
        )
 
 import math
-import questions
-import statistics
+from QUENLIG import questions
+from QUENLIG import statistics
 
 def px(v, vmin, vmax, size):
     return '%6.2fem' % ( size * (v-vmin) / (vmax-vmin) )

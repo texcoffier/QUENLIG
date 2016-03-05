@@ -19,9 +19,9 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
-from check import *
-from configuration_salles import *
+from QUENLIG.questions import *
+from .check import *
+from .configuration_salles import *
 
 add(name="intro",
     before="""Le sujet du premier TP est à faire sur <b>deux séances</b>

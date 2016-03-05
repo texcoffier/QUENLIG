@@ -19,11 +19,11 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 #
 
-from questions import *
+from QUENLIG.questions import *
 import re
 
 def C_clean(txt):
-    if isinstance(txt, basestring):
+    if isinstance(txt, str):
         # Remove last ';' and replace tabulations with space
         txt = txt.strip(' ;\n\t').replace('\t',' ').replace('\n',' ')
         # A run of spaces if replaced by one space

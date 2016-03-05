@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2008 Thierry EXCOFFIER, Universite Claude Bernard
@@ -42,11 +42,11 @@ port = 11111
 
 import sys
 import subprocess
-import thread
+import _thread
 import os
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import cgi
-import utilities
+from QUENLIG import utilities
 import re
 import tempfile
 import signal
@@ -125,10 +125,10 @@ class Interactive:
 			       )
         self.output = output
         self.pid = self.process.pid
-        thread.start_new_thread(html, (self,))
+        _thread.start_new_thread(html, (self,))
         
     def send(self, string):
-        string = urllib2.unquote(string)
+        string = urllib.parse.unquote(string)
         self.process.stdin.write(string + '\n')
         self.process.stdin.flush()
 
@@ -146,15 +146,15 @@ if __name__ == "__main__":
         def close(self):
             pass
 
-    import BaseHTTPServer
-    class MyRequestBroker(BaseHTTPServer.BaseHTTPRequestHandler):
+    import http.server
+    class MyRequestBroker(http.server.BaseHTTPRequestHandler):
         processes = {}
         
         def do_GET(self):
-            print self.path
+            print(self.path)
             if self.path.startswith('/exec='):
                 process = MyRequestBroker.application = Interactive(
-                    urllib2.unquote(self.path.split('/exec=')[1]),
+                    urllib.parse.unquote(self.path.split('/exec=')[1]),
                     self.wfile)
                 MyRequestBroker.processes[process.pid] = process
 
@@ -179,7 +179,7 @@ if __name__ == "__main__":
                     pass
 
 
-    server = BaseHTTPServer.HTTPServer(("0.0.0.0", port), MyRequestBroker)
+    server = http.server.HTTPServer(("0.0.0.0", port), MyRequestBroker)
     server.serve_forever()
 
     
