@@ -96,7 +96,7 @@ class Command:
         return self
     def __str__(self):
         s = "<command>"
-        self.redirection.sort()
+        self.redirection.sort(key=lambda x: x.direction)
         for i in self.args:
             s += str(i)
         for i in self.redirection:
@@ -143,7 +143,7 @@ class Case:
         return self
     def __str__(self):
         s = "<case>"
-        self.redirection.sort()
+        self.redirection.sort(key=lambda x: x.direction)
         for i in self.redirection:
             s += str(i)
         s += str(self.word)
@@ -172,7 +172,7 @@ class For:
         for i in self.list:
             s += str(i)
         s += str(self.sequence)
-        self.redirection.sort()
+        self.redirection.sort(key=lambda x: x.direction)
         for i in self.redirection:
             s += str(i)
         s += "</for>"
@@ -195,7 +195,7 @@ class While:
         s = "<while>"
         s += str(self.command)
         s += str(self.sequence)
-        self.redirection.sort()
+        self.redirection.sort(key=lambda x: x.direction)
         for i in self.redirection:
             s += str(i)
         s += "</while>"
@@ -210,7 +210,7 @@ class SubShell:
         return self
     def __str__(self):
         s = "<subshell>"
-        self.redirection.sort()
+        self.redirection.sort(key=lambda x: x.direction)
         s += str(self.sequence)
         for i in self.redirection:
             s += str(i)
@@ -287,7 +287,7 @@ class If:
         s = "<if>" + str(self.condition)
         for i in self.thenelse:
             s += str(i)
-        self.redirection.sort()
+        self.redirection.sort(key=lambda x: x.direction)
         for i in self.redirection:
             s += str(i)
         s += "</if>"

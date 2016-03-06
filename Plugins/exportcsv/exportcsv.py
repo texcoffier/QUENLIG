@@ -77,7 +77,7 @@ def execute(state, plugin, argument):
     formater = "%s" + ", %5.3f" * (len(header)-1)
 
     t = [','.join(header),
-         ','.join(str(configuration.explain_grade.get(i,''),"latin-1") for i in header)
+         ','.join(configuration.explain_grade.get(i, '') for i in header)
          ]
     for c in content:
         t.append(formater % c)

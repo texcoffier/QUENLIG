@@ -130,8 +130,8 @@ add(name="questions en tout",
 class check_nr_items(TestWithoutStrings):
     def test(self, student_answer, string):
         from QUENLIG import server
-        nb = server.get_file("help.html").content.count('<li')
-        nb2 = server.get_file("help.html").content.count('<li ')
+        nb = server.get_file("help.html").content.count(b'<li')
+        nb2 = server.get_file("help.html").content.count(b'<li ')
         a = int(student_answer)
         if a == nb:
             return True

@@ -561,8 +561,8 @@ if __name__ == "__main__":
             user = os.path.join(session.dir, 'Logs', args.pop())
             mkdir(user)
             user = os.path.join(user, 'roles')
-            from QUENLIG import Plugins
-            x = list(Plugins.role.role.default_roles)
+            from .Plugins.role import role
+            x = list(role.default_roles)
             x.sort()
             x.remove('Teacher')
             x.insert(0, 'Teacher')

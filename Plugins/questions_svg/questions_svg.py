@@ -66,7 +66,9 @@ class Svg:
       %s
     ]]></style>
   </defs>
-     ''' % (configuration.prefix, width, height,configuration.prefix,text_height,text_height, bar_text_height, border_width, server.get_file('svg.css').content)
+     ''' % (configuration.prefix, width, height,configuration.prefix,
+            text_height, text_height, bar_text_height, border_width,
+            server.get_file('svg.css').content.decode("utf-8"))
 
     def end(self):
         return self.content + '''</svg>'''
@@ -86,7 +88,7 @@ class Svg:
         self.content += """</g>\n"""
 
 def split_text(text):
-    middle = len(text)/2
+    middle = len(text) // 2
     for i in range(middle):
         if text[middle+i] == ' ':
             return [text[0:middle+i], text[middle+i+1:]]
@@ -173,12 +175,12 @@ class BarPlot:
 
         if url:
             self.svg.content += '<a xlink:href="%s%s">' % (
-                self.svg.url_base.encode('utf-8'), url.replace('&','&amp;'))
+                self.svg.url_base, url.replace('&','&amp;'))
         
         for i in range(len(textes)):
             if textes[i]:
                 self.svg.text(x, line_decal*(i+1),
-                              textes[i].encode('utf-8'),
+                              textes[i],
                               style=opacity,
                               svg_class=svg_class
                               )
@@ -254,7 +256,7 @@ def plot_svg(url_base):
 def execute(state, plugin, argument):
     if argument == None:
         return ''
-    return 'image/svg+xml', plot_svg(state.url_base_full)
+    return 'image/svg+xml', plot_svg(state.url_base_full).encode("utf-8")
 
 
 

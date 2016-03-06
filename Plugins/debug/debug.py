@@ -48,7 +48,6 @@ def execute(state, plugin, argument):
         for attribute in plugins.Attribute.attributes.keys():
             if a_plugin.__dict__[attribute]:
                 v = str(a_plugin.__dict__[attribute])
-                v = v.encode('utf-8')
                 v = cgi.escape(v)
                 v = v.replace(',', ',<br>&nbsp;&nbsp;&nbsp;&nbsp;')
                 v = (v)

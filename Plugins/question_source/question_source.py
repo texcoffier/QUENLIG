@@ -63,12 +63,12 @@ def extract_question(c, question):
 
 def replace_question(c, question, source, state, encoding):
     # Save old file
-    f = open(question.python_file() + '.old', 'w')
+    f = open(question.python_file() + '.old', 'wb')
     f.write('\n'.join(c).encode(encoding))
     f.close()
 
     start, end = question_lines(c, question)
-    f = open(question.python_file(), 'w')
+    f = open(question.python_file(), 'wb')
     f.write(('\n'.join(c[:start]) + '\n'
              + source + '\n'
              + '\n'.join(c[end+1:])).encode(encoding))
@@ -106,7 +106,7 @@ def execute(state, dummy_plugin, argument):
     if argument:
         source = argument
         try:
-            compile(source)
+            compile(source, 'nofilename', 'exec')
         except SyntaxError as e:
             before = ('<pre class="python_error">' +
                       cgi.escape(str(e)) + '</pre>')

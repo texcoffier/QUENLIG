@@ -58,7 +58,7 @@ def execute(state, plugin, argument):
          return ''
     pairs.sort(key=lambda x: x[0] + x[1])
     pairs.reverse()
-    average = (sum(zip(*pairs)[1]) + sum(zip(*pairs)[2])) / len(pairs)
+    average = (sum(list(zip(*pairs))[1]) + sum(list(zip(*pairs))[2])) / len(pairs)
     average2 = sum((i[1]+i[2])**2 for i in pairs) / len(pairs)
     stddev = (average2 - average*average) ** 0.5
     

@@ -33,18 +33,10 @@ from QUENLIG import server
 server.do_not_cache.add('xxx_graphe.svg')
 server.do_not_cache.add('xxx_graphe.png')
 
-
 def execute(state, plugin, argument):
     if argument:
         statistics.graph_dot_minimal(True)
-        svg = server.get_file('xxx_graphe.svg').content
-        try:
-            svg = str(svg, "utf-8")
-        except UnicodeDecodeError:
-            print("SVG: UnicodeDecodeError")
-        except UnicodeEncodeError:
-            print("SVG: UnicodeEncodeError")
-        plugin.heart_content = svg
+        plugin.heart_content = server.get_file('xxx_graphe.svg').content.decode("utf-8")
         state.question = None
     return ''
 
