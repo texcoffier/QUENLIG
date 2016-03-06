@@ -1,0 +1,33 @@
+#!/bin/sh
+# -*- sh -*-
+
+if [ "" = "$1" ]
+then
+    echo "$0 directory_to_translate_to_python3"
+    exit 1
+fi >&2
+
+FILES=$(find $1 -name '*.py' ! -name 'log.py' ! -size 0 ! -type l)
+
+2to3 -f all -x callable -w $FILES
+
+# Replace 'for i in list(...):' by 'for i in ...'
+sed -r -i -e 's/in list\((([^()]*|(\([^()]*\)))*\(\))\)/in \1/' $FILES
+
+# Replace 'from . import Plugins.foo.bar' by 'from QUENLIG import Plugins'
+sed -r -i -e 's/from \. import Plugins.*/from QUENLIG import Plugins/' $FILES
+
+# Interpreter is Python3
+sed -r -i -e '1 s/python$/python3/' $FILES
+
+# 2to3 missed import translations to relative
+sed -r -i -e 's/^( *)import (student|utilities|configuration|statistics|questions|plugins|state|server|casauth) *$/\1from QUENLIG import \2/' $FILES
+
+# Replace 'from xxx import *' by 'from QUENLIG.xxx import *'
+sed -r -i -e 's/^( *)from ([a-z]*) import \* *$/\1from QUENLIG.\2 import */' $FILES
+
+# Replace 'from xxx import yyy' by 'from QUENLIG.xxx import yyy'
+sed -r -i -e 's/^( *)from (student|utilities|configuration|statistics|questions|plugins|state|server|casauth) *import(.*)$/\1from QUENLIG.\2 import\3/' $FILES
+
+# Replace 'utilities.to_unicode(...)' by '...'
+sed -r -i -e 's/utilities\.to_unicode(\([^()]*(\([^()]*\))*\))/\1/g' $FILES
