@@ -205,7 +205,9 @@ class State(object):
                 plugin.link = '?' + plugin.plugin.css_name + '=1'
 
         self.plugins_list = list(self.plugins_dict.values())
-        self.plugins_list.sort(key = lambda x: x.priority_execute_int)
+        self.plugins_list.sort(key = lambda x: (x.priority_execute_int,
+                                                x.plugin.css_name
+                                            ))
 
 
         for plugin in self.plugins_list:
