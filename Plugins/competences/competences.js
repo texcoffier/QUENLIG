@@ -38,7 +38,7 @@ var ordered = [
 
 function escape2(txt)
 {
-  return escape(txt).replace(/[+]/g, "%2B") ;
+  return encodeURI(txt).replace(/[+]/g, "%2B") ;
 }
 
 function js(t)

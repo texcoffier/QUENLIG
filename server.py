@@ -175,7 +175,7 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
                 return
 
         # Get the FORM values
-        f = cgi.parse_qs(path[-1].split('?')[-1])
+        f = urllib.parse.parse_qs(path[-1].split('?')[-1])
         form = {}
         for i in f:
             form[i] = ''.join(f[i])

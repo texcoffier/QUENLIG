@@ -267,7 +267,7 @@ if 'plugins.html' in sys.argv:
     # Now the plugin tree is working
     def display(f, plugin):
         f.write('<tr><td>')
-        f.write(plugin.plugin.doc_html().encode('utf-8'))
+        f.write(plugin.plugin.doc_html())
         f.write('<table class="plugin">')
         for p in plugin.full_content:
             display(f, p)

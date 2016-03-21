@@ -243,7 +243,7 @@ class Question:
         return c
 
     def url(self):
-        return "?question=%s" % urllib.parse.quote(self.name.encode('utf-8'))
+        return "?question=%s" % urllib.parse.quote(self.name)
 
     def a_href(self):
         return "<A HREF=\"%s\">%s</A>" % (self.url(), cgi.escape(self.name))

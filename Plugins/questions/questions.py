@@ -92,7 +92,7 @@ def execute(state, plugin, dummy_argument):
         <script>
         function f(x)
         {
-        window.location = '?question=' + escape(x) ;
+        window.location = '?question=' + escape2(x) ;
         }
         </script>
         """

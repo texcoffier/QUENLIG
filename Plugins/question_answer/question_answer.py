@@ -31,7 +31,7 @@ import cgi
 from QUENLIG import configuration
 from QUENLIG import utilities
 
-priority_execute = '-questions' # To update question list before
+priority_execute = 'question' # To update question list before
 priority_display = 'question'
 
 css_attributes = (

@@ -39,9 +39,9 @@ def get_name(ticket, service):
         configuration.CAS, service, urllib.parse.quote(ticket)
     ))
     
-    test = casdata.readline().strip()
+    test = casdata.readline().decode('utf-8').strip()
     if test == 'yes':
-        return casdata.readline().strip().lower()               
+        return casdata.readline().decode('utf-8').strip().lower()
     else:
         print('Cannot authenticate ticket', test)
         raise IOError("Can't authenticate ticket: " + test)
