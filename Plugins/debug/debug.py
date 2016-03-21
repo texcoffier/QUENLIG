@@ -21,10 +21,9 @@
 
 """Allow to display plugin definition in tips from the plugin interface"""
 
-from QUENLIG import plugins
 import cgi
+from QUENLIG import plugins
 from QUENLIG import student
-from QUENLIG import utilities
 
 priority_execute = '-top'
 container = 'action'
@@ -50,7 +49,6 @@ def execute(state, plugin, argument):
                 v = str(a_plugin.__dict__[attribute])
                 v = cgi.escape(v)
                 v = v.replace(',', ',<br>&nbsp;&nbsp;&nbsp;&nbsp;')
-                v = (v)
                 s.append('<b>%s</b> : %s<br>' % (attribute, v))
 
         s.append('current_acls=%s<br>' % a_plugin.current_acls)
@@ -61,7 +59,7 @@ def execute(state, plugin, argument):
             except AttributeError:
                 pass
             
-        s = '<tt class="tips"><span>' + '\n'.join(s) + '</span>*</tt>'
+        s = '<tt class="tips">*<span>' + '\n'.join(s) + '</span></tt>'
 
         if a_plugin.boxed():
             if a_plugin.value_title == None:

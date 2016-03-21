@@ -433,14 +433,16 @@ function patch_title()
     {
       title = title || d[i].getElementsByTagName('EM')[0] ;
     }
-    if ( d[i].className == 'title_bar' )
+    else if ( d[i].className == 'title_bar' )
     {
       var q = questions[current_question] ;
       if ( q )
       {
-	var t = d[i].getElementsByTagName("TD")[0].getElementsByTagName("DIV")[0] ;
-	t.innerHTML = questions[current_question].icons(true)
-	  + t.innerHTML ;
+	var icon = document.createElement("TD") ;
+	icon.style = "font-size: 200%" ;
+	icon.innerHTML = questions[current_question].icons(true) ;
+	var tr = d[i].getElementsByTagName("TR")[0] ;
+	tr.insertBefore(icon, tr.childNodes[1]) ;
 	draw_nice_results(0) ;
       }
       add_next_question_button() ;
@@ -448,7 +450,7 @@ function patch_title()
       display_sunburst(title, -300, -300) ;
       patched = true ;
     }
-    if ( d[i].className == 'question_answer'
+    else if ( d[i].className == 'question_answer'
 	 && questions[current_question].nr_versions > 1 )
     {
       if ( ! d[i].innerHTML.match(/<form /) )

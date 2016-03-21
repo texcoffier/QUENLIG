@@ -63,13 +63,9 @@ option_help = ' or '.join('"%s"' % t
 '''
 option_default = "gray"
 
-
+import os
 import json
 from QUENLIG import utilities
-import os
-import cgi
-from QUENLIG import configuration
-
 
 def css(state):
     s = []
@@ -129,23 +125,39 @@ table > tbody > tr > td { vertical-align: top ; padding: 2px ; }
 
 /* TIPS */
 
-A.tips > SPAN, TT.tips > SPAN, DIV.tips > TT { display: none; }
-
-A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {
+A.tips > SPAN, TT.tips > SPAN, DIV.tips > TT {
   font-size: 10pt ;
   text-align: left ;
   font-weight: 500 ;
   text-decoration: none ;
-  margin-top: 3em;
   position:absolute;
   background-image: url('tip.png');
   color:#000;
   border:2px solid #00F;
   padding:0.2em;
-  display:block;
   white-space:normal;
-  z-index: 10;
+  opacity: 0;
+  visibility: hidden ;
+  transition: opacity 1s;
+  top: -2000px ;
+  left: -2000px ;
+  z-index: 1;
 }
+
+A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {
+  opacity:1;
+  top: auto ;
+  left: auto ;
+  visibility: visible ;
+}
+
+A.tips > SPAN:hover, TT.tips > SPAN:hover , DIV.tips > TT:hover {
+  opacity:0;
+  top: -2000px ;
+  left: -2000px ;
+  visibility: hidden ;
+}
+
 
 A { text-decoration: none ; }
 A[href]:hover { text-decoration: underline ; }
@@ -238,7 +250,7 @@ def display(plugin, s):
         
     
     if plugin.value == None and len(plugin.content) == 0:
-        s.append('<!-- EMPTY -->')
+        s.append('<!-- EMPTY %s -->' % plugin.plugin.css_name)
         return
 
     s.append('<DIV class="%s">' % plugin.plugin.css_name)
@@ -248,7 +260,7 @@ def display(plugin, s):
         cl += ' tips'
     if plugin.link:
         s.append('<A class="%s" href="%s">' % (cl, plugin.link))
-    else:
+    elif plugin.tip or plugin.boxed():
         s.append('<A class="%s">' % cl)
 
     if plugin.boxed():
@@ -259,9 +271,6 @@ def display(plugin, s):
         if plugin.tip:
             s.append('<SPAN></SPAN>')
         s.append('</A><table class="box_content"><tbody><tr><td>')
-    else:
-        if plugin.tip:
-            s.append('<SPAN></SPAN>')
 
     if plugin.horizontal:
         s.append('<table><tbody><tr>')
@@ -284,7 +293,8 @@ def display(plugin, s):
     if plugin.boxed():
         s.append('</td></tr></tbody></table>')
     else:
-        s.append('</A>')
+        if plugin.tip or plugin.link:
+            s.append('<SPAN></SPAN></A>')
         
     s.append('</DIV>')
 

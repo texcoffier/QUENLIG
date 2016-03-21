@@ -39,7 +39,7 @@ def minimal_tests(student, good=0, bad=0, indice=0, title=''):
         '<TEXTAREA NAME="comment" ROWS="10"></TEXTAREA>',
         '<img src="?map=1">',
         'Questions/regtest',
-         '<DIV class="title">\n<A class="content tips">\n<SPAN></SPAN>\n%s\n</A>\n</DIV>' % title
+         '<DIV class="title">\n<A class="content tips">\n%s\n<SPAN></SPAN></A>\n</DIV>' % title
         )
 
 def test_0000_initial_display(student):
@@ -57,7 +57,7 @@ def test_0010_goto_question(student):
     student.expect(
         '<table class="box_content"><tbody><tr><td>\nquestion_a\n</td></tr></tbody></table>',
         '<FORM CLASS="questionanswer"',
-        '<DIV class="title">\n<A class="content tips">\n<SPAN></SPAN>\na:a\n</A>\n</DIV>',
+        '<DIV class="title">\n<A class="content tips">\na:a\n<SPAN></SPAN></A>\n</DIV>',
         )
 
 def test_0020_give_good_answer(student):

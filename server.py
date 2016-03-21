@@ -205,7 +205,7 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
         sys.stdout.flush() # To really log into the file for 'regtests'
         mime, content = session.execute(form)
         if mime in ('application/x-javascript', 'text/html', 'text/css'):
-            content = (content).encode("utf-8")
+            content = content.encode("utf-8")
         sys.stdout.flush()
         self.send_head(mime, cached=False, content_length=len(content))
         self.wfile.write(content)
