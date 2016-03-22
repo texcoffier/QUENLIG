@@ -112,12 +112,11 @@ class Question:
             if (not isinstance(question, TestExpression)
                 and 'state' not in question.__code__.co_varnames):
                 def tmp(state):
-                    return (question())
+                    return question()
             else:
                 def tmp(state):
-                    return (question(state))
+                    return question(state)
         else:
-            question = (question)
             def tmp(dummy_state):
                 return question
         tmp.real_question = question
@@ -147,7 +146,7 @@ class Question:
         self.nr_lines = int(arg.get("nr_lines", "1"))
         self.comment = []
         self.required = arg.get("required", previous_question)
-        self.required = Requireds([Required(world, (i))
+        self.required = Requireds([Required(world, i)
                                    for i in self.required])
             
         self.indices = arg.get("indices", ())
@@ -216,7 +215,6 @@ class Question:
                     result, comment = t(answer)
             else:
                 result, comment = t(answer, state=state)
-            comment = (comment)
             if comment not in full_comment:
                 full_comment.append(comment)
             if result != None:
@@ -318,7 +316,6 @@ def add(**arg):
     # sys.stdout.flush()
     world = inspect.currentframe().f_back.f_globals["__name__"].split(".")
     for a, v in arg.items():
-        arg[a] = (arg[a])
         if a not in attributs.keys():
             print("'%s' n'est pas un attribut de question" % a)
             print("Les attributs possibles de questions sont:")
@@ -532,11 +529,11 @@ class Test(object):
                  sort_lines=None,
                  ):
         if comment:
-            self.comment = (comment)
+            self.comment = comment
         if replace:
-            self.replace = (replace)
+            self.replace = replace
         if replacement:
-            self.replacement = (replacement)
+            self.replacement = replacement
         if uppercase:
             self.uppercase = uppercase
         if all_agree:
@@ -548,7 +545,7 @@ class Test(object):
         else:
             self.parse_strings = return_first_arg
         if strings:
-            self.strings = utilities.rewrite_string((strings))
+            self.strings = utilities.rewrite_string(strings)
 
     def html(self, state):
         if self.comment:
@@ -1346,10 +1343,10 @@ class Replace(TestUnary):
         if self.do_canonize:
             self.replace_canonized = [
                 (parser(old, state), parser(new, state))
-                for old, new in (self.replace)
+                for old, new in self.replace
                 ]
         else:
-            self.replace_canonized = (self.replace)
+            self.replace_canonized = self.replace
 
     def source(self, state=None, format=None):
         if self.do_canonize:
@@ -1711,8 +1708,14 @@ class Choice(TestExpression):
     """
     def __init__(self, *args):
         self.children = []
-        self.args = args
-        for arg in args:
+        self.args = list(args)
+        for i, arg in enumerate(args):
+            question = arg[0]
+            if not callable(question):
+                self.args[i] = list(self.args[i])
+                def tmp(dummy_state, question=question):
+                    return question
+                self.args[i][0] = tmp
             arg = arg[1:]
             self.children += arg
             for test in arg:
@@ -1748,7 +1751,11 @@ class Choice(TestExpression):
     def source(self, state=None, format=None):
         s = []
         for arg in self.args:
-            s.append('\n    (' + repr(arg[0]) + ','
+            if isinstance(arg[0], TestExpression):
+                question = arg[0](state, format)
+            else:
+                question = repr(arg[0](None))
+            s.append('\n    (' + question + ','
                      + ','.join('\n    '
                                 + a.source(state, format)
                                 for a in arg[1:]) + ')')
@@ -1756,7 +1763,7 @@ class Choice(TestExpression):
 
     def __call__(self, student_answer, state=False):
         if state is False:
-            return self.choice(student_answer)[0]
+            return self.choice(student_answer)[0](student_answer)
         else:
             return self.do_test(student_answer, state)
 
