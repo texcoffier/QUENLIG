@@ -31,7 +31,7 @@ import cgi
 from QUENLIG import configuration
 from QUENLIG import utilities
 
-priority_execute = 'question' # To update question list before
+priority_execute = '-question' # To update question list before
 priority_display = 'question'
 
 css_attributes = (
@@ -84,6 +84,9 @@ def execute(state, plugin, argument):
         return
     if state.question.tests == ():
         return
+    if state.form.get('erase', False):
+        state.student.erase(state.question.name)
+
     if argument and (
             state.question in state.student.answerables()
             or configuration.allowed_to_change_answer(state)

@@ -30,8 +30,6 @@ def execute(state, dummy_plugin, dummy_argument):
     if q == None:
         return
 
-    if state.form.get('erase', False):
-        state.student.erase(q.name)
     state.student.init_seed(q.name)
     state.student.tell_question(q.name)
 
