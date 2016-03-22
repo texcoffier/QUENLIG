@@ -21,9 +21,6 @@
 
 """Display the information box in case of good answer."""
 
-from QUENLIG import configuration
-import cgi
-
 priority_display = 'question_answer'
 priority_execute = 'question_answer'
 background = '#CFC'

@@ -481,14 +481,17 @@ class Student:
         else:
             self.log(question, "comment", comment)
 
-    def persistent_random(self, state, question, maximum, key=''):
+    def persistent_random(self, state, question, maximum, key='', real=False):
         if not state:
             return 0
         a = self.answer(question)
         if key not in a.persistent_random:
-            a.persistent_random[key] = int(
-                (self.seed + a.nr_erase + abs(hash(key))) % maximum)
-            self.log(question, "random", (key,a.persistent_random[key]))
+            if real:
+                v = (self.seed * (a.nr_erase+1) * abs(hash(key))) >> 10
+            else:
+                v = self.seed + a.nr_erase + abs(hash(key))
+            a.persistent_random[key] = int(v % maximum)
+            self.log(question, "random", (key, a.persistent_random[key]))
         return a.persistent_random[key]
 
     def erase(self, question):
