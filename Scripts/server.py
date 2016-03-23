@@ -24,6 +24,7 @@ import urllib.request, urllib.error, urllib.parse
 import time
 import stats
 import sys
+import shutil
 
 class Server:
     def __init__(self,
@@ -36,7 +37,10 @@ class Server:
         self.name = name
         self.stats = stats.Stats()
         self.base = 'http://localhost:%d' % self.port
-        os.system("rm -r Students/%s/Logs || true" % self.name)
+        shutil.rmtree("/tmp/Students%s" % self.name, True)
+        os.remove("Students/%s" % self.name)
+        os.mkdir("/tmp/Students%s" % self.name)
+        os.symlink("/tmp/Students%s" % self.name, "Students/%s" % self.name)
         if profiling:
             profiling = 'nr-requests-served %s' % profiling
         else:
