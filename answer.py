@@ -49,6 +49,9 @@ class Answer:
         self.nr_erase = 0         # #erase to change the question parameters
         self.erase_time = 0       # Last erase time
         self.persistent_random = {} # For Random and Choice
+        self.random_history = []
+        self.random_max = {}
+        self.random_next = {}
         self.answer_times = []
 
     def __str__(self):
@@ -146,6 +149,22 @@ class Command_erase(Command_indice):
         answer.erase_time = action_time
         answer.bad_answers = []
         answer.persistent_random = {}
+        return
+
+        answer.random_history.append(answer.persistent_random)
+        for k, v in answer.persistent_random.items():
+            if k in answer.random_max:
+                answer.random_next[k] = (v + 1) % answer.random_max[k]
+        answer.persistent_random = {}
+        return
+        # Search a random dict value never used
+        for k in sorted(answer.persistent_random):
+            if answer.random_next not in answer.random_history:
+                return
+            if k not in answer.random_max:
+                continue
+            answer.random_next[k] = (
+                answer.random_next[k] + 1 ) % answer.random_max[k]
 
 ####################
 # Only value

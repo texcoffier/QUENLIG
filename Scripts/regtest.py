@@ -545,8 +545,8 @@ def test_0400_root_reload_questions(student):
     minimal_tests(student_bad, good=1, bad=1, title='a:a')
 
 def test_0410_CHOICE(student):
-    q = '43' # For user
-    r = '85' # For root
+    q = '97' # For user
+    r = '39' # For root
     student.goto_question('a:a')
     student.give_answer('unlockCHOICES')
     student.goto_question('b:z')

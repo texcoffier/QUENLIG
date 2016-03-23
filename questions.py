@@ -1606,9 +1606,13 @@ def random_chooser(state, question, key, values):
 
 def random_replace(state, question, string, values):
     if not isinstance(values, dict):
-        # The values can be a list of dicts
+        # The values can be a list of dicts:
+        # ( {'A':(1,3,5,7,9),'B':("odd",)},
+        #   {'A':(0,2,4,6,8),'B':("even",)}
+        # )
+        # A random dict is chosen
         values = values[state.student.persistent_random(
-            state, question, len(values))]
+            state, question, len(values), "__RD__")]
     for k, v in values.items():
         if k in string:
             string = string.replace(k, random_chooser(state, question, k, v))
@@ -1733,7 +1737,7 @@ class Choice(TestExpression):
 
     def choice(self, state):
         return self.args[state.student.persistent_random(
-            state, self._question_.name, len(self.args))]
+            state, self._question_.name, len(self.args), "__CHOICE__")]
 
     def do_test(self, student_answer, state):
         all_comments = ""

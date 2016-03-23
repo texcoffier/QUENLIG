@@ -78,6 +78,9 @@ def translate_log(filename):
     f.write('\n'.join(t) + '\n')
     f.close()
 
+def static_hash(txt):
+    return int(hashlib.md5(txt.encode('utf-8')).hexdigest(), 16)
+
 class Student:
     """Student work log"""
     writable = True
@@ -85,7 +88,7 @@ class Student:
     def __init__(self, name, stop_loading=lambda x: False):
         """Initialise student data or read the log file"""
         self.filename = name.translate(utilities.safe_ascii)
-        self.seed = int(hashlib.md5(name.encode('utf-8')).hexdigest(), 16)
+        self.seed = static_hash(name)
         self.name = name.title()
         self.answers = {}
         self.file = os.path.join(log_directory(), self.filename)
@@ -487,11 +490,16 @@ class Student:
         a = self.answer(question)
         if key not in a.persistent_random:
             if real:
-                v = (self.seed * (a.nr_erase+1) * abs(hash(key))) >> 10
+                v = int(self.seed * (a.nr_erase+1) * static_hash(key)) >> 10
             else:
-                v = self.seed + a.nr_erase + abs(hash(key))
-            a.persistent_random[key] = int(v % maximum)
+                if key in a.random_next:
+                    v = a.random_next[key]
+                else:
+                    v = int(self.seed + a.nr_erase + static_hash(key))
+            a.persistent_random[key] = v % maximum
             self.log(question, "random", (key, a.persistent_random[key]))
+        # always because it is not stored in the log file
+        a.random_max[key] = maximum
         return a.persistent_random[key]
 
     def erase(self, question):
