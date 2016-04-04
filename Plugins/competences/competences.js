@@ -498,8 +498,10 @@ function slice_path(ctx, radius0, radius, angle1, angle2)
 
 function slice(ctx, color, radius0, radius, angle1, angle2, text, x, y)
 {
-  angle1 += 0.0005 ;
-  angle2 -= 0.0005 ;
+  angle1 += 0.0001 ;
+  angle2 -= 0.0001 ;
+  if ( angle2 < angle1 )
+    return ;
   angle1 = 2 * Math.PI * angle1 ;
   angle2 = 2 * Math.PI * angle2 ;
   ctx.fillStyle = color ;
