@@ -64,6 +64,7 @@ class Stats:
             question.student_indice = 0
             question.student_indices = [0] * len(question.indices)
             question.student_nr_comment = 0
+            question.student_good_time = [] # Times to give a good answer
 
         self.nr_good_answers = 0
         self.nr_bad_answers = 0
@@ -138,9 +139,25 @@ student: %s
                 q.student_time_after += answer.time_after
                 q.student_good += answer.nr_good_answer != 0
                 q.student_nr_comment += len(answer.comments)
+                # Not the first good answer because it is very long to find
+                q.student_good_time += answer.good_answer_times[1:]
+
 
         for q in questions.questions.values():
             q.student_time = q.student_time_searching + q.student_time_after
+            nr_good_times = len(q.student_good_time)
+            if nr_good_times > 5:
+                q.perfect_time = max(
+                    sorted(q.student_good_time)[nr_good_times//2],
+                    q.perfect_time)
+
+        # Recompute the number of perfect time answer
+        for s in self.all_students:
+            for answer in s.answers.values():
+                answer.nr_perfect_answer = len(tuple(
+                    x
+                    for x in answer.good_answer_times
+                    if x < q.perfect_time))
 
         # Search correct response time within a time window
         t = []

@@ -694,13 +694,20 @@ content: "Good! Press «Enter» to choose a random question." ;
 
     <p>
       If the question is answered in less than the specified number
-      of seconds, then the question is perfectly answered.
+      of seconds, then the question is «perfectly answered».
       It is only useful with the <tt>competences</tt> plugin because
       it allows to retry to answer and display the number
       of perfect answers.
     </p>
     <p>
       The default value is 10 seconds
+    </p>
+    <p>
+      If this time is too short, QUENLIG will automaticaly <b>increase</b> it
+      to the median value of the time to make a good answer by
+      the current session students.
+      The time of the first good answer is not taken into account
+      because it is far more longer than the next ones.
     </p>
 
     <h2><a name="session_management">Session Management</a></h2>

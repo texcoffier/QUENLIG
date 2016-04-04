@@ -143,11 +143,12 @@ class Student:
         if self.last_time:
             dt = action_time - self.last_time
             if dt < configuration.timeout_on_question:
-                if (self.last_command == 'good'
-                    or self.previous_answer.nr_erase != 0):
+                if self.last_command == 'good':
                     self.previous_answer.time_after += dt
+                    self.previous_answer.current_time_after += dt
                 else:
                     self.previous_answer.time_searching += dt
+                    self.previous_answer.current_time_searching += dt
         self.previous_answer = the_answer
         self.last_command = command.name
         self.last_time = action_time

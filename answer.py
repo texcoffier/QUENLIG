@@ -39,6 +39,8 @@ class Answer:
         self.nr_asked = 0         # The number of display of the question text
         self.time_searching = 0   # The time spend searching the answer
         self.time_after = 0       # The time spend without onscreen question
+        self.current_time_searching = 0 # The time spend searching the answer
+        self.current_time_after = 0  # The time spend without onscreen question
         self.first_time = 0       # The question first display date
         self.comments = []        # The comment sent by the student
         self.bad_answers = []     # The bad answers given by the student
@@ -53,6 +55,7 @@ class Answer:
         self.random_max = {}
         self.random_next = {}
         self.answer_times = []
+        self.good_answer_times = []
 
     def __str__(self):
         return "%d %d %d %d %g %s %d" % (self.answered != False, self.nr_asked, self.nr_bad_answer, self.indice, self.time_searching+self.time_after, self.question, len(self.comments))
@@ -90,7 +93,9 @@ class Command_good(Command):
         answer.answered = value
         t = questions.questions[question_name].perfect_time
         answer.nr_good_answer += 1
-        if action_time - max(answer.first_time, answer.erase_time) < t:
+        answer.good_answer_times.append(action_time - student.last_time
+                                        + answer.current_time_searching)
+        if answer.good_answer_times[-1] < t:
             answer.nr_perfect_answer += 1
         answer.answer_times.append(action_time)
 
@@ -149,6 +154,8 @@ class Command_erase(Command_indice):
         answer.erase_time = action_time
         answer.bad_answers = []
         answer.persistent_random = {}
+        answer.current_time_after = 0
+        answer.current_time_searching = 0
         return
 
         answer.random_history.append(answer.persistent_random)

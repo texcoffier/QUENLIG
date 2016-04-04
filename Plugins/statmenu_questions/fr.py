@@ -13,6 +13,7 @@ translations = {
     '//c5': 'Indices',
     '//c6': 'Temps',
     '//c7': 'Commentaire',
+    '//c8': 'P.Time',
     '//c0>SPAN': "La question pour laquelle on donne les statistiques",
     '//c1>SPAN': "0: Personne ne la connaît, 1: tous le monde la connaît",
     '//c2>SPAN': "Nombre de fois quelle a été posée / Nombre de personne qui la connaisse",
@@ -21,5 +22,6 @@ translations = {
     '//c5>SPAN': "Nombre d'indices / Nombre de personnes qui la connaisse",
     '//c6>SPAN': "Temps total HH:MM:SS passé pour répondre à la question",
     '//c7>SPAN': "Nombre de commentaires déposés",
+    '//c8>SPAN': "Temps courant pour avoir une réponse parfaite",
     '//CAPTION': tip,
     }

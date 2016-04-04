@@ -13,6 +13,7 @@ translations = {
     '//c5': 'Tips',
     '//c6': 'time',
     '//c7': 'Comment',
+    '//c8': 'P.Time',
     '//c0>SPAN': "The question",
     '//c1>SPAN': "0: Nobody saw it, 1: Everybody saw it",
     '//c2>SPAN': "#displayed on screen / #students saw it",
@@ -21,5 +22,6 @@ translations = {
     '//c5>SPAN': "#tip / #students saw it",
     '//c6>SPAN': "Full time HH:MM:SS to answer the question",
     '//c7>SPAN': "#comments about the question",
+    '//c8>SPAN': "Current perfect time in seconds",
     '//CAPTION': tip,
     }
