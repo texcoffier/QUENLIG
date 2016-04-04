@@ -153,25 +153,30 @@ class Command_erase(Command_indice):
         answer.nr_erase += 1
         answer.erase_time = action_time
         answer.bad_answers = []
-        answer.persistent_random = {}
-        answer.current_time_after = 0
-        answer.current_time_searching = 0
-        return
-
         answer.random_history.append(answer.persistent_random)
+
+        # Add 1 to every random value
         for k, v in answer.persistent_random.items():
             if k in answer.random_max:
                 answer.random_next[k] = (v + 1) % answer.random_max[k]
+
+        if answer.random_next in answer.random_history:
+            # Search a random dict value never used
+            for k in sorted(answer.persistent_random):
+                if k not in answer.random_max:
+                    continue
+                save = answer.random_next[k]
+                answer.random_next[k] = (
+                    answer.random_next[k] + 1 ) % answer.random_max[k]
+                if answer.random_next not in answer.random_history:
+                    break
+                answer.random_next[k] = save
+        else:
+            answer.random_history = []
+
         answer.persistent_random = {}
-        return
-        # Search a random dict value never used
-        for k in sorted(answer.persistent_random):
-            if answer.random_next not in answer.random_history:
-                return
-            if k not in answer.random_max:
-                continue
-            answer.random_next[k] = (
-                answer.random_next[k] + 1 ) % answer.random_max[k]
+        answer.current_time_after = 0
+        answer.current_time_searching = 0
 
 ####################
 # Only value

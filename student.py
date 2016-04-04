@@ -485,18 +485,15 @@ class Student:
         else:
             self.log(question, "comment", comment)
 
-    def persistent_random(self, state, question, maximum, key='', real=False):
+    def persistent_random(self, state, question, maximum, key=''):
         if not state:
             return 0
         a = self.answer(question)
         if key not in a.persistent_random:
-            if real:
-                v = int(self.seed * (a.nr_erase+1) * static_hash(key)) >> 10
+            if key in a.random_next:
+                v = a.random_next[key]
             else:
-                if key in a.random_next:
-                    v = a.random_next[key]
-                else:
-                    v = int(self.seed + a.nr_erase + static_hash(key))
+                v = int(self.seed + a.nr_erase + static_hash(key))
             a.persistent_random[key] = v % maximum
             self.log(question, "random", (key, a.persistent_random[key]))
         # always because it is not stored in the log file
