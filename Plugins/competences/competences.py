@@ -81,5 +81,5 @@ def execute(state, plugin, dummy_argument):
         info[0] = info[0].name
         q.append(info)
     question = state.question and state.question.name or ''
-    return '<script>display_competences(%s,%s);</script>' % (
-        json.dumps(q), json.dumps(question))
+    return '<script>display_competences(%s,%s,%s);</script>' % (
+        json.dumps(q), json.dumps(question), state.student.seed % 1000000000)

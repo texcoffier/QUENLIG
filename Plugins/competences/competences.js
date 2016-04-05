@@ -36,6 +36,8 @@ var ordered = [
   'question_given'
   ] ;
 
+var student_seed ;
+
 function escape2(txt)
 {
   return encodeURI(txt).replace(/[+]/g, "%2B") ;
@@ -229,6 +231,36 @@ Question.prototype.is_answered = function()
   return this.classes.indexOf("answered") != -1 ;
 } ;
 
+function MyRand(seed_between_0_1)
+{
+  this.seed = 2 * Math.PI * seed_between_0_1 ;
+}
+
+MyRand.prototype.get = function(max)
+{
+  var n = Math.sin(this.seed) ;
+  this.seed++ ;
+  return  Math.floor(Math.abs(n * max * 10000)) % max ;
+}
+
+Question.prototype.display_name = function()
+{
+  var name = this.name ;
+  var short_name = name.split(":") ;
+  if ( isNaN(short_name[1]) )
+    return name ;
+  name = "" ;
+  var c = "BCFRTNSDL" ;
+  var v = "aeiou" ;
+  var rand = new MyRand(student_seed + 1 / (1 + short_name[1]))
+  for(var i=0 ; i < 3 ; i++)
+  {
+    name += c.substr(rand.get(c.length), 1) ;
+    name += v.substr(rand.get(v.length), 1) ;
+  }
+  return short_name[0] + ":" + name ;
+}
+
 Question.prototype.html = function()
 {
   var info = '' ;
@@ -246,7 +278,7 @@ Question.prototype.html = function()
   return (open_close_is_stats ? '    ' : '')
     + this.icons()
     + '<a class="tips ' + info + '" onclick="questions['
-    + js(this.name) + '].jump()">' + this.name + '<span>'
+    + js(this.name) + '].jump()">' + this.display_name() + '<span>'
     // + '<br>' + this.weight()
     + '</span></a>' ;
 } ;
@@ -442,6 +474,8 @@ function patch_title()
 	icon.style = "font-size: 200%" ;
 	icon.innerHTML = questions[current_question].icons(true) ;
 	var tr = d[i].getElementsByTagName("TR")[0] ;
+	tr.childNodes[1].getElementsByTagName(
+	  "A")[0].innerHTML = q.display_name() ;
 	tr.insertBefore(icon, tr.childNodes[1]) ;
 	draw_nice_results(0) ;
       }
@@ -749,9 +783,10 @@ function display_sunburst(d, width, height, x, y)
   return c ;
 }
 
-function display_competences(data, question)
+function display_competences(data, question, seed)
 {
   current_question = question ;
+  student_seed = seed / 1000000000 ;
   for(var i in data)
     questions[data[i][0]] = new Question(data[i]) ;
   for(var competence in competences)

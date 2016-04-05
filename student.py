@@ -88,7 +88,7 @@ class Student:
     def __init__(self, name, stop_loading=lambda x: False):
         """Initialise student data or read the log file"""
         self.filename = name.translate(utilities.safe_ascii)
-        self.seed = static_hash(name)
+        self.seed = static_hash(configuration.session.name + name)
         self.name = name.title()
         self.answers = {}
         self.file = os.path.join(log_directory(), self.filename)
