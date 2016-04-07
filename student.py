@@ -485,13 +485,16 @@ class Student:
         else:
             self.log(question, "comment", comment)
 
-    def persistent_random(self, state, question, maximum, key=''):
+    def persistent_random(self, state, question, maximum, key='', real=False):
         if not state:
             return 0
         a = self.answer(question)
         if key not in a.persistent_random:
             if key in a.random_next:
                 v = a.random_next[key]
+                if real:
+                    random.seed(v)
+                    v = random.randrange(0, maximum)
             else:
                 v = int(self.seed + a.nr_erase + static_hash(key))
             a.persistent_random[key] = v % maximum
