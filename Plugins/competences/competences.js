@@ -729,7 +729,7 @@ function draw_sunburst_real()
 	  select = slice(ctx, "",
 			 center,
 			 center + scale*(question.nr_good + question.nr_bad),
-			 i, i_next, question.name, x, y) || select ;
+			 i, i_next, question.display_name(), x, y) || select ;
 	  if ( question.name == current_question )
 	    slice(ctx, "#FFFF00", center * 0.8, center * 0.9, i, i_next,
 		  "", x, y) ;
