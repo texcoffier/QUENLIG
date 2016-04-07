@@ -46,7 +46,7 @@ def execute(state, plugin, argument):
         if not a.answered:
             continue
         table.append([utilities.answer_format(a.answered)]
-                     + [a.grades.get(c, '') for c in columns])
+                     + [a.grades.get(c, 0) for c in columns])
 
     return utilities.sortable_table(plugin.sort_column, table,
                                     url=plugin.plugin.css_name,
