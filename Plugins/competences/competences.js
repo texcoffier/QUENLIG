@@ -760,6 +760,15 @@ function display_sunburst(d, width, height, x, y)
     return ;
   if ( width < 0 )
     {
+      var good = 0, version = 0 ;
+      for(var competence in competences)
+	{
+	  competence = competences[competence] ;
+	  good += Math.min(competence.nr_good, competence.nr_versions) ;
+	  version += competence.nr_versions ;
+	}
+      d.innerHTML = "<br><tt>" + good + '/' + version + '<br>'
+	+ Math.floor(1000*good/version)/10 + "%</tt>" ;
       height = -height ;
       width = -width ;
       c.style.position = "absolute" ;
@@ -767,7 +776,6 @@ function display_sunburst(d, width, height, x, y)
       c.style.top = "0px" ;
       c.style.width = d.offsetHeight ;
       c.style.height = d.offsetHeight ;
-      c.style.opacity = 0.6 ;
       c.onclick = zoom_me ;
     }
   var ctx = c.getContext("2d") ;

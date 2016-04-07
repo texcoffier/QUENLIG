@@ -60,7 +60,8 @@ css_attributes = (
     ".nice_results .bad     { background: #F00 ; }",
     ".nice_results .perfect { background: #0F0 ; }",
     "#competences { width: 15em }",
-    '.box_title { padding-top: 1em; padding-bottom: 1em; }',
+    '.box_title TT { font-weight: normal; font-size: 80% }',
+    '.box_title { padding-top: 0.5em; padding-bottom: 0.5em; }',
     )
 acls = {}
 
