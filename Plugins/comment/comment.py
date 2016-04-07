@@ -26,8 +26,14 @@ import cgi
 priority_display = 'analyse'
 css_attributes = (
     "TEXTAREA { font-size: 80% ; width: 100% }",
-    "FORM { display: none; margin: 0px }",
-    ":hover FORM { display: block }",
+    """FORM {
+    max-height: 0px ;
+    margin: 0px;
+    transition: max-height 1s;
+    webkit-transition: max-height 1s;
+    overflow: hidden ;
+    }""",
+    ":hover FORM { max-height: 20em }",
     "BUTTON { width: 100% ; }",
     ".comment_given { white-space: normal;}",
     )

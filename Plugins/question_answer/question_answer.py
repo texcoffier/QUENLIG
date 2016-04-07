@@ -41,8 +41,8 @@ css_attributes = (
     "FORM { margin: 0px }",
     "BUTTON { margin-top: 0.5em }",
     "BUTTON P { margin: 0px ; }",
-    ".show_on_hover { display: none }",
-    ":hover .show_on_hover { display: block }",
+    ".show_on_hover { overflow: hidden ; max-height: 0px ; transition: max-height 1s ;  webkit-transition: max-height 1s ;  }",
+    ":hover .show_on_hover { max-height: 10em }",
     )
 acls = { 'Wired': ('executable',) }
 
