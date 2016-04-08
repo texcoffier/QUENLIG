@@ -23,6 +23,7 @@
 
 import os
 import cgi
+import time
 from QUENLIG import utilities
 
 container = 'heart'
@@ -104,7 +105,8 @@ def execute(state, dummy_plugin, argument):
 
     before = ''
     if argument:
-        source = argument
+        source = ("# Edited by %s (%s)\n"
+                  % (state.student.name, time.ctime()) + argument)
         try:
             compile(source, 'nofilename', 'exec')
         except SyntaxError as e:
