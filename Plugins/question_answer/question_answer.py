@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -170,11 +170,18 @@ def execute(state, plugin, argument):
         nr_checked = 0
         for i in t:
             j = i.split('}}}')
+            if j[0].startswith('↑'):
+                j[0] = j[0][1:]
+                if s.endswith("<br>"):
+                    s = s[:-4]
             if j[0].startswith('!'):
                 j[0] = j[0][1:]
                 button_type = "radio"
             else:
                 button_type = "checkbox"
+            if j[0] == '':
+                s += j[1] + '<br>'
+                continue
             if j[0] in last_answer:
                 checked = ' checked'
                 if nr_checked == 0:

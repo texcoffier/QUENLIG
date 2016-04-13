@@ -518,13 +518,22 @@ content: "Good! Press «Enter» to choose a random question." ;
       The possible student answer may by 'M' or 'F' or 'MF'
     </p>
     <p>
-      If you want radio button and not a checkboxe, use '!':
+      If you want radio button and not a checkbox, use '!':
     </p>
       <pre>question = "Are you {{{!M}}} male or {{{!F}}} female?"</pre>
     <p>
       If you want to randomize the order of the choices,
       the put <tt>{{{ shuffle}}}</tt> as a choice.
       Il will not be displayed.
+    </p>
+    <p>
+      If you want to put a choice on the same line than the previous one,
+      use '↑': <tt>{{{Y}}} Yes or {{{↑N}}} No</tt>.
+    </p>
+    <p>
+      If you want to put a text without a button, use '{{{}}}':
+      <pre>{{{}}} If you are sure: {{{↑Y}}} Yes, or {{{↑N}}} No
+{{}}} If you hesitate: {{{↑None}}} not Y nor N, or {{{↑B}}} bad question</pre>
     </p>
 
     <h3><a name="tests">Parameter: <tt>tests</tt></a></h3>

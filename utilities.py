@@ -1,4 +1,4 @@
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2014 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -67,7 +67,9 @@ def answer_format(t, space=False, escape=True, question=''):
     if '{{{' in question:
         for i in question.split('{{{')[1:]:
             j = i.split('}}}')
-            if j[0][0] == '!':
+            if j[0] == '':
+                continue
+            if j[0][0] in '!â†‘':
                 j[0] = j[0][1:]
             if j[0] == t:
                 t = j[1]
@@ -183,7 +185,7 @@ flat = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11
 safe_ascii = ''
 for i in range(256):
     i = chr(i)
-    if i in " #%()*+,-.0123456789;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõöøùúûüışÿ":
+    if i in " #%()*+,-.0123456789;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~Ã€ÃÃ‚ÃƒÃ„Ã…Ã†Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃÃÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã˜Ã™ÃšÃ›ÃœÃÃÃŸÃ Ã¡Ã¢Ã£Ã¤Ã¥Ã¦Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã±Ã²Ã³Ã´ÃµÃ¶Ã¸Ã¹ÃºÃ»Ã¼Ã½Ã¾Ã¿":
         safe_ascii += i
     else:
         safe_ascii += '?'
