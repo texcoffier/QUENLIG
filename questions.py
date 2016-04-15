@@ -84,15 +84,19 @@ class Requireds:
     def __iter__(self):
         return self.requireds.__iter__()
 
-    def answered(self, answered, student):
+    def missing(self, answered, student):
+        missings = []
         for r in self.requireds:
             if r.unrequired and student.given_question(r.name):
                 continue
             if answered.get(r.name, False) is False:
-                return False
-            if r.answer and not re.match(r.answer, answered[r.name]):
-                return False
-        return True
+                missings.append(r.name)
+            elif r.answer and not re.match(r.answer, answered[r.name]):
+                missings.append(r.name)
+        return missings
+
+    def answered(self, answered, student):
+        return not self.missing(answered, student)
 
     def names(self, only_visible=False):
         return [r.name

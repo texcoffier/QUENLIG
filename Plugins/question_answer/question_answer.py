@@ -30,6 +30,7 @@ import random
 import cgi
 from QUENLIG import configuration
 from QUENLIG import utilities
+from QUENLIG import questions
 
 priority_execute = '-question' # To update question list before
 priority_display = 'question'
@@ -114,7 +115,11 @@ def execute(state, plugin, argument):
                                             state.student)
         and not state.plugins_dict['questions_all'].current_acls['executable']
         ):
-        return '<p class="missing_required">'
+        return ('<p class="missing_required">: '
+                + ', '.join(questions.questions[q].a_href()
+                            for q in state.question.required.missing(
+                                    state.student.answered_questions(),
+                                    state.student)))
 
     if not isinstance(plugin.title, tuple):
         plugin.title = (plugin.title, plugin.title)
@@ -214,8 +219,11 @@ def execute(state, plugin, argument):
             last_answer_html)
         s += '<br><button type="submit"><p class="answer_button"></p></button>'
         
-    s += '<script type="text/javascript">document.getElementById(2).focus();</script>'
-    s += '</FORM>'
+    s += ('<script type="text/javascript">document.getElementById(2).focus();'
+          + 'window.scrollTo(0,0) ;'
+          + '</script>'
+          + '</FORM>'
+          )
     if state.question.maximum_bad_answer:
         s += '<p class="nr_try">%d</p>' % (
             state.question.maximum_bad_answer

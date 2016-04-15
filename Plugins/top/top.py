@@ -142,6 +142,7 @@ A.tips > SPAN, TT.tips > SPAN, DIV.tips > TT {
   top: -2000px ;
   left: -2000px ;
   z-index: 1;
+  margin-left: 1em ;
 }
 
 A.tips:hover > SPAN, TT.tips:hover > SPAN , DIV.tips:hover > TT {

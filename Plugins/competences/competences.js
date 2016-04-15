@@ -25,6 +25,7 @@ var competence_names = [] ; // sorted competences
 var current_question = '' ;
 var questions = {} ; // question name -> question object
 var open_close_is_stats = true ;
+var nr_questions = 0 ;
 
 var ordered = [
   'perfect_answer',
@@ -169,6 +170,12 @@ function draw_nice_results(canvas_id)
   ctx.translate(c.width/2, c.height/2) ;
   var n = 2 * Math.PI / (q.nr_bad + q.nr_good) ;
 
+  if ( q.nr_bad + q.nr_good == 0 )
+  {
+    slice(ctx, "#FFFFFF", 0          , c.width/2, 0, 1, "") ;
+    slice(ctx, "#808080", c.width/2.1, c.width/2, 0, 1, "") ;
+    return ;
+  }
   var t = [ ["", 0],
 	    ["#0F0", q.nr_perfect],
 	    ["#44F", q.nr_good],
@@ -223,7 +230,7 @@ Question.prototype.icons = function(left_to_right, classe)
     + '<a class="tips ' + classe + '" onclick="'
     + (questions[this.name] ? 'questions' : 'competences')
     + '[' + js(this.name) + '].click()"><canvas id="C_'
-    + c + '" style="height:1em;opacity:0.6"></canvas><span></span></a></div>' ;
+    + c + '"></canvas><span></span></a></div>' ;
 } ;
 
 Question.prototype.is_answered = function()
@@ -279,7 +286,6 @@ Question.prototype.html = function()
     + this.icons()
     + '<a class="tips ' + info + '" onclick="questions['
     + js(this.name) + '].jump()">' + this.display_name() + '<span>'
-    // + '<br>' + this.weight()
     + '</span></a>' ;
 } ;
 
@@ -419,11 +425,17 @@ function update_competences()
   for(var competence in competence_names)
   {
     competence = competences[competence_names[competence]] ;
-    s.push(competence.html() +  '<br>') ;
+    s.push('<div class="line">') ;
+    s.push(competence.html()) ;
+    s.push('</div>') ;
     if ( competence.is_open() || competence.name === '' )
     {
       for(var question in competence.questions)
-        s.push(competence.questions[question].html() + '<br>') ;
+	{
+	  s.push('<div class="line">') ;
+          s.push(competence.questions[question].html()) ;
+	  s.push('</div>') ;
+	}
     }
   }
   document.getElementById("competences").innerHTML = s.join('\n') ;
@@ -673,6 +685,39 @@ function zoom_me(event)
   display_sunburst(e, e.offsetWidth, e.offsetHeight, xy[0], xy[1]) ;
 }
 
+Question.prototype.sunburst = function(ctx, center, scale, i, x, y)
+{
+  var i_next = i + 1./nr_questions ;
+  slice(ctx, "#FFA0A0",
+	center + scale*this.nr_good,
+	center + scale*(this.nr_good + this.nr_bad),
+	i, i_next, "", x, y) ;
+  slice(ctx, "#8080FF",
+	center + scale*this.nr_perfect,
+	center + scale*this.nr_good,
+	i, i_next, "", x, y) ;
+  slice(ctx, "#40DD40",
+	center,
+	center + scale*this.nr_perfect,
+	i, i_next, "", x, y) ;
+  slice(ctx, "#CCC", center * 0.9, center, i,
+	i + Math.min(this.nr_good, this.nr_versions)
+	/ this.nr_versions / nr_questions,
+	"", x, y) ;
+  if ( this.nr_good > this.nr_versions )
+    slice(ctx, "#888", center * 0.9, center, i,
+	  i + Math.min(this.nr_good - this.nr_versions, this.nr_versions)
+	  / this.nr_versions / nr_questions,
+	  "", x, y) ;
+  var selected = slice(ctx, "",
+		       center,
+		       center + scale*(this.nr_good + this.nr_bad),
+		       i, i_next, this.display_name(), x, y) ;
+  if ( this.name == current_question )
+    slice(ctx, "#FFFF00", center * 0.8, center * 0.9, i, i_next, "", x, y) ;
+  return selected ;
+} ;
+
 function draw_sunburst_real()
 {
   if ( ! do_draw_sunburst )
@@ -686,61 +731,35 @@ function draw_sunburst_real()
       ctx.fillStyle = "#FFFFFF" ;
       ctx.fillRect(-100, -100, 200, 200) ;
     }
-  var nr_questions = 0 ;
-  for(var competence in competences)
-    nr_questions += competences[competence].questions.length ;
   var i = 0 ;
   var scale = 5 ;
   var center = 20 ;
   var nr_perfect = 0, nr_good = 0, nr_bad = 0 ;
+  var redraw, selected_question ;
   for(var competence in competences)
     {
       competence =  competences[competence] ;
       var i_start = i ;
       for(var question in competence.questions)
 	{
-	  var i_next = i + 1./nr_questions ;
 	  question = competence.questions[question] ;
-	  slice(ctx, "#FFA0A0",
-		center + scale*question.nr_good,
-		center + scale*(question.nr_good + question.nr_bad),
-		i, i_next, "", x, y) ;
-	  slice(ctx, "#8080FF",
-		center + scale*question.nr_perfect,
-		center + scale*question.nr_good,
-		i, i_next, "", x, y) ;
-	  slice(ctx, "#40DD40",
-		center,
-		center + scale*question.nr_perfect,
-		i, i_next, "", x, y) ;
-	  slice(ctx, "#CCC", center * 0.9, center, i,
-		i + Math.min(question.nr_good,
-			     question.nr_versions)
-		/ question.nr_versions
-		/ nr_questions,
-		"", x, y) ;
-	  if ( question.nr_good > question.nr_versions )
-	    slice(ctx, "#888", center * 0.9, center, i,
-		  i + Math.min(question.nr_good - question.nr_versions,
-			       question.nr_versions)
-		  / question.nr_versions
-		  / nr_questions,
-		  "", x, y) ;
-	  select = slice(ctx, "",
-			 center,
-			 center + scale*(question.nr_good + question.nr_bad),
-			 i, i_next, question.display_name(), x, y) || select ;
-	  if ( question.name == current_question )
-	    slice(ctx, "#FFFF00", center * 0.8, center * 0.9, i, i_next,
-		  "", x, y) ;
-	  i = i_next ;
+	  var question_hover = question.sunburst(ctx, center, scale, i, x, y) ;
+	  if ( question_hover !== false )
+	    {
+	      redraw = i ;
+	      selected_question = question ;
+	    }
+	  select = question_hover || select ;
+	  i += 1./nr_questions ;
 	}
+      if ( redraw !== undefined )
+	 selected_question.sunburst(ctx, center, scale, redraw, x, y) ;
       select = slice(ctx, hex_color(competence.color()),
 		     center / 3., center * 0.8, i_start, i,
 		     competence.name, x, y) || select ;
-      nr_good += competence.nr_good ;
+      nr_good    += competence.nr_good ;
       nr_perfect += competence.nr_perfect ;
-      nr_bad += competence.nr_bad ;
+      nr_bad     += competence.nr_bad ;
     }
   var pc = Math.floor(100 * nr_perfect / (nr_bad+nr_good)) ;
   if ( isNaN(pc) )
@@ -803,6 +822,8 @@ function display_competences(data, question, seed)
     function(a,b) { return competences[a].level - competences[b].level ;}) ;
   document.write('<div id="competences"></div>') ;
   update_competences() ;
+  for(var competence in competences)
+    nr_questions += competences[competence].questions.length ;
 
   if ( document.getElementsByTagName("BODY")[0] )
     document.getElementsByTagName("BODY")[0].onkeypress = function(event) {

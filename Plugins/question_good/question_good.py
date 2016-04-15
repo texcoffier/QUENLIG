@@ -67,7 +67,7 @@ def execute(state, dummy_plugin, dummy_argument):
 
     message += '''<p id="question_good_buttons">
     <a class="tips key_enter">
-    <button onclick="click_on_next_button()"><p></p></button><span></span>
+    <button onclick="click_on_next_button()"><p style="margin:0.5em"></p></button><span></span>
     </a>
     </p>
     '''

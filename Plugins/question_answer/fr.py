@@ -3,7 +3,7 @@
 title = ("Votre réponse",
          "Vous avez répondu")
 
-tip = "Pensez à tester votre réponse dans la réalité avant de la saisir ici, sinon vous risquez de donnez une mauvaise réponse bêtement"
+tip = "Pensez à tester votre réponse dans la réalité avant de la saisir ici, afin d'éviter des erreurs bêtes"
 
 translations = {
     'answer_button' : 'Envoyer la réponse',
