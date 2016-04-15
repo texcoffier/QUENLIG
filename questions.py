@@ -377,7 +377,8 @@ sorted_questions = []
 # Very far from optimal algorithm
 def sort_questions():
     for q in questions.values():
-        q.level = 0
+        q.level = None
+        q.priority = None
         q.used_by = []
 
     # Compute 'used_by'
@@ -408,24 +409,35 @@ def sort_questions():
                 del q.nr_childs
                 leave.append(q)
 
-    # Compute 'level' (not optimal)
-    while True:
-        change = False
-        for q in questions.values():
-            max_level = [ questions[r].level for r in q.required.names() ]
-            if max_level:
-                max_level = max(max_level)
+    # Compute 'level'
+    def compute_level(q):
+        q = questions[q]
+        if q.level is None:
+            levels = [compute_level(r) for r in q.required.names()]
+            if levels:
+                q.level = max(levels) + 1
             else:
-                max_level = 0
-            if q.level != max_level + 1:
-                q.level = max_level + 1
-                change = True
-        if not change:
-            break
+                q.level = 1
+        return q.level
+    for q in questions:
+        compute_level(q)
+
+    # Compute 'priority'
+    def compute_priority(q, p):
+        if q.priority is not None:
+            return p
+        for r in sorted(q.required.names(),
+                        key = lambda x: -len(questions[x].used_by)):
+            p = compute_priority(questions[r], p)
+        q.priority = p
+        return p + 1
+    priority = 0
+    for q in sorted(questions.values(), key=lambda x: -x.level):
+        priority = compute_priority(q, priority)
 
     global sorted_questions
     sorted_questions = list(questions.values())
-    sorted_questions.sort(key = lambda x: (x.level, len(x.used_by)))
+    sorted_questions.sort(key = lambda x: (x.priority, len(x.used_by)))
 
     # Compute coordinates.
     # Questions without prerequisites are in the center.

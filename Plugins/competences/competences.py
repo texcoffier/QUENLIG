@@ -81,7 +81,7 @@ def execute(state, plugin, dummy_argument):
     for info in answerables:
         info = list(info)
         info.append(tuple(info[0].competences))
-        info.append(info[0].level)
+        info.append(info[0].priority)
         info.append(info[0].get_nr_versions())
         info.append(info[0].get_nr_versions())
         info[0] = info[0].name
