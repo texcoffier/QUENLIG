@@ -1615,8 +1615,12 @@ class GRADE(Grade):
 
 def random_chooser(state, question, key, values):
     if state:
-        return values[state.student.persistent_random(
-            state, question, len(values), key)]
+        try:
+            return values[state.student.persistent_random(
+                state, question, len(values), key)]
+        except IndexError:
+            # The question has been removed from questionnary
+            return values[0]
     else:
         return values[0]
 
