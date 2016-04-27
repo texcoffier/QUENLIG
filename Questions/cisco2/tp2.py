@@ -443,7 +443,7 @@ class RouteTest(HostTest):
 for h in network.hosts.values():
     if not isinstance(h, Host):
         continue
-    if h.E1.port.ip < h.E1.remote_port.ip:
+    if str(h.E1.port.ip) < str(h.E1.remote_port.ip):
         continue
     s = str(h.E1.network)
     ss = str(h.E1.network_plus_bits)

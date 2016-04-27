@@ -67,12 +67,12 @@ network.append(hosts + ciscos + switches)
 for i, (h, cisco) in enumerate(zip(hosts, ciscos)):
     ConsoleLink(port=Port(h), remote_port=Port(cisco))
     EthLink(24,
-            Port(h, "192.168.%d.%d" % (i/2, 1 + 2*i)),
-            Port(switches[i/2]),
+            Port(h, "192.168.%d.%d" % (i//2, 1 + 2*i)),
+            Port(switches[i//2]),
             )
     EthLink(24,
-            Port(cisco, "192.168.%d.%d" % (i/2, 1 + 2*i+1)),
-            Port(switches[i/2]),
+            Port(cisco, "192.168.%d.%d" % (i//2, 1 + 2*i+1)),
+            Port(switches[i//2]),
             )
     if i & 1:
         SerialLink(30,

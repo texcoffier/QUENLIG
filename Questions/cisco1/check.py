@@ -169,7 +169,7 @@ class IP:
             self.bytes = []
             while m:
                 self.bytes = [m % 256] + self.bytes
-                m /= 256
+                m //= 256
             self.ip = '.'.join( [str(i) for i in self.bytes] )
             return
         except ValueError:
@@ -239,9 +239,9 @@ class IP:
 
     def __bool__(self):
         if self.ip:
-            return 1
+            return True
         else:
-            return 0
+            return False
 
 ##############################################################################
 #
