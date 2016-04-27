@@ -50,6 +50,9 @@ add(name="route par défaut",
              parse_strings=host),
     Good(HostReplace(Equal(
         "ip route add default via {C0.remote_port.host.E0.port.ip}"))),
+    Good(Comment(HostReplace(Equal(
+        "ip route add 0.0.0.0/0 via {C0.remote_port.host.E0.port.ip}")),
+         "Utilisez 'default' plutôt que '0.0.0.0/0'")),
     good("route add default gw {C0.remote_port.host.E0.port.ip}",
          parse_strings=host),
     good(("route add -net 0.0.0.0/0 gw {C0.remote_port.host.E0.port.ip}",
