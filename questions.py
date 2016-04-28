@@ -415,10 +415,12 @@ def sort_questions():
         if q.level is None:
             levels = [compute_level(r) for r in q.required.names()]
             if levels:
-                q.level = max(levels) + 1
+                levels = tuple(zip(*levels))
+                q.level = max(levels[0]) + 1
+                q.level_min = min(levels[1]) + 1
             else:
-                q.level = 1
-        return q.level
+                q.level = q.level_min = 1
+        return q.level, q.level_min
     for q in questions:
         compute_level(q)
 

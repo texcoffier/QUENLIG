@@ -89,16 +89,16 @@ def question_pixel_map(state):
     level = None
     answerables = [q.name for q in state.student.answerables(any=True)]
     for q in questions.sorted_questions:
-        if q.level != level:
+        if q.level_min != level:
             m.append([])
-            level = q.level
+            level = q.level_min
         m[-1].append(question_color(q, state, answerables))
     
     width = max([len(x) for x in m])
     image = []
     for col in m:
         image.append(col + [(255,255,255)] * (width - len(col)))
-    image = sum(list(zip(*image)), ())
+    image = sum(zip(*image), ())
     
     return 'image/gif', convert_to_gif(len(m), width, image, state)
 
