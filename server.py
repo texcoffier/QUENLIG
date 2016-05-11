@@ -131,6 +131,7 @@ def get_file(filename):
 class MyRequestBroker(http.server.BaseHTTPRequestHandler):
 
     timeout = 0.3 # Some bugged browser do not send the GET
+    timeout = 1 # Because of slow internet connections
     
     def send_head(self, type, modif_time=None,content_length=None,cached=True):
         if modif_time == None:
