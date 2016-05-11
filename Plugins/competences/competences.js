@@ -7,12 +7,22 @@ add_messages('fr', {
   "competences:after": "",
   "competences:question_before": "",
   "competences:question_after": "",
-  "competences:recycle": "Cliquez sur le disque à gauche du titre pour répondre à une autre version de la question"
+  "competences:recycle": "Cliquez sur le disque à gauche du titre pour répondre à une autre version de la question",
+  "competences:star1": "Vous avez accès à toutes les questions",
+  "competences:star2": "Vous avez vu toutes les questions",
+  "competences:star3": "Vous avez répondu correctement à toutes les questions",
+  "competences:star4": "Vous avez répondu rapidement à toutes les questions",
+  "competences:star5": "Vous avez vu toutes les versions des questions"
   }) ;
 add_messages('en', {
   "competences:center_before": "% of fast answers (green)\n",
   "competences:center_after":  "\nClick to pick an adapted question",
-  "competences:recycle": "Click on the disc to answer another version of the question"
+  "competences:recycle": "Click on the disc to answer another version of the question",
+  "competences:star1": "You have access to all the questions",
+  "competences:star2": "You readed all the questions",
+  "competences:star3": "You correctly answered all the questions",
+  "competences:star4": "You answered quickly to all the questions",
+  "competences:star5": "You saw all the questions alternatives"
   }) ;
 
 var char_close = '▼' ;
@@ -772,6 +782,14 @@ function draw_sunburst_real()
   return select ;
 }
 
+function progress_bar(percent)
+{
+    return '<b style="display: inline-block; height: 0.5em; width:5em;'
+    + 'border-radius: 0.2em; border:1px solid black; background: white;">'
+    + '<div style="background: black; text-align:left; width: '
+    + percent + '%; height: 100%"></div></b>' ;
+}
+
 function display_sunburst(d, width, height, x, y)
 {
   var c = document.createElement('CANVAS') ;
@@ -779,15 +797,20 @@ function display_sunburst(d, width, height, x, y)
     return ;
   if ( width < 0 )
     {
-      var good = 0, version = 0 ;
-      for(var competence in competences)
-	{
-	  competence = competences[competence] ;
-	  good += Math.min(competence.nr_good, competence.nr_versions) ;
-	  version += competence.nr_versions ;
-	}
-      d.innerHTML = "<br><tt>" + good + '/' + version + '<br>'
-	+ Math.floor(1000*good/version)/10 + "%</tt>" ;
+      var level = get_level() ;
+      var s = '<br><a class="tips">' ;
+      for(var i=1; i<6; i++)
+	s += (level > i ? '★' : '☆') ;
+      s += '<span style="z-index:1000">' ;
+      for(var i=1; i<6; i++)
+	s += (level > i ? '★' : '☆') + _("competences:star" + i) + '<br>' ;
+      s += '</span></a><br><a class="tips">'
+	+ progress_bar(100*(level%1)) + '<span style="z-index:1000">'
+	+ (100*(level % 1)).toFixed(0) + '% → ☆'
+	+ _("competences:star" + Math.ceil(level))
+	+ '</span></a>' ;
+      d.innerHTML = s ;
+
       height = -height ;
       width = -width ;
       c.style.position = "absolute" ;
@@ -838,3 +861,54 @@ function display_competences(data, question, seed)
   setInterval(draw_sunburst_real, 100) ;
 }
 
+// 0 - 1 : % questions accessibles
+// 1 - 2 : % questions viewed
+// 2 - 3 : % questions correctly answered
+// 3 - 4 : % questions perfectly answered
+// 4 - 5 : % questions versions done
+function get_level()
+{
+  var nr = 0 ;
+  var nr_accessible = 0 ;
+  var nr_view = 0 ;
+  var nr_good = 0 ;
+  var nr_perfect = 0 ;
+  var nr_versions = 0 ;
+  var level ;
+
+  for(var question in questions)
+  {
+    question = questions[question] ;
+    nr++ ;
+    if ( question.classes.indexOf("not_answerable") == -1 )
+      nr_accessible++ ;
+    if ( question.classes.indexOf("question_given") != -1 )
+      nr_view++ ;
+    if ( question.nr_good )
+      nr_good++ ;
+    if ( question.nr_perfect )
+      nr_perfect++ ;
+    if ( question.nr_good >= question.nr_versions )
+      nr_versions++ ;
+    }
+  if ( nr_accessible < nr )
+    level = nr_accessible / nr ;
+  else if ( nr_view < nr )
+    level = 1 + nr_view / nr ;
+  else if ( nr_good < nr )
+    level = 2 + nr_good / nr ;
+  else if ( nr_perfect < nr )
+    level = 3 + nr_perfect / nr ;
+  else
+    level = 4 + nr_versions / nr ;
+  if ( false )
+    console.log('questions=' + nr
+		+ ' accessible=' + nr_accessible
+		+ ' view=' + nr_view
+		+ ' good=' + nr_good
+		+ ' perfect=' + nr_perfect
+		+ ' versions=' + nr_versions
+		+ ' level=' + level
+		) ;
+  return level ;
+}
