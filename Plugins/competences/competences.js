@@ -800,11 +800,13 @@ function display_sunburst(d, width, height, x, y)
       var level = get_level() ;
       var s = '<br><a class="tips">' ;
       for(var i=1; i<6; i++)
-	s += (level > i ? '★' : '☆') ;
+	s += (level >= i ? '★' : '☆') ;
       s += '<span style="z-index:1000">' ;
       for(var i=1; i<6; i++)
-	s += (level > i ? '★' : '☆') + _("competences:star" + i) + '<br>' ;
-      s += '</span></a><br><a class="tips">'
+	s += (level >= i ? '★' : '☆') + _("competences:star" + i) + '<br>' ;
+      s += '</span></a>' ;
+      if ( level < 5 )
+	s += '<br><a class="tips">'
 	+ progress_bar(100*(level%1)) + '<span style="z-index:1000">'
 	+ (100*(level % 1)).toFixed(0) + '% → ☆'
 	+ _("competences:star" + Math.ceil(level))
