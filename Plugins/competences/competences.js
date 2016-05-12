@@ -461,7 +461,7 @@ function add_next_question_button()
 
   var q = questions[current_question] ;
   var c = q.competences ;
-  var s = ''
+  var s = '' ;
   for(var competence in c)
     {
       competence = c[competence] ;
@@ -786,8 +786,8 @@ function progress_bar(percent)
 {
     return '<b style="display: inline-block; height: 0.5em; width:5em;'
     + 'border-radius: 0.2em; border:1px solid black; background: white;">'
-    + '<div style="background: black; text-align:left; width: '
-    + percent + '%; height: 100%"></div></b>' ;
+    + '<span style="background: black; text-align:left; width: '
+    + percent + '%; height: 100%"></span></b>' ;
 }
 
 function display_sunburst(d, width, height, x, y)
