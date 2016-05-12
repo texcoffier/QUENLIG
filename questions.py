@@ -1334,6 +1334,12 @@ class Reject(Expect):
                 return False, '<p class="string_rejected">\'<b>' + self.string + '</b>\'</p>'
     
 
+def rejects(expected, comment=None):
+    a = Reject(expected[0], comment)
+    for e in expected[1:]:
+        a = a & Reject(e, comment)
+    return a
+
 
 # Set a 'replace' attribute on all the children
 class Replace(TestUnary):

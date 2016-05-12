@@ -61,12 +61,12 @@ add(name="console",
     <b>N'entrez pas dans le dialogue de configuration initiale</b>.
     </ul>""",
     question="""Sélectionnez le cas dans lequel vous êtes&nbsp;:
-    {{{1}}} Le prompt <tt>Router&gt;</tt> apparaît.
-    {{{2}}} Un prompt contenant <tt>rommon</tt> apparaît.
-    {{{3}}} Si un autre prompt se terminant par <tt>&gt;</tt> apparaît.
+    {{{!1}}} Le prompt <tt>Router&gt;</tt> apparaît.
+    {{{!2}}} Un prompt contenant <tt>rommon</tt> apparaît.
+    {{{!3}}} Si un autre prompt se terminant par <tt>&gt;</tt> apparaît.
        ou si on vous demande un mot de passe.
-    {{{4}}} Vous n'arrivez pas à réinitialiser le routeur.
-    {{{5}}} <tt>minicom</tt> ne se lance pas.
+    {{{!4}}} Vous n'arrivez pas à réinitialiser le routeur.
+    {{{!5}}} <tt>minicom</tt> ne se lance pas.
     <p>
     Si vous êtes dans un autre cas, appelez un enseignant.
     """,
