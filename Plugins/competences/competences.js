@@ -11,8 +11,8 @@ add_messages('fr', {
   "competences:star1": "Vous avez accès à toutes les questions",
   "competences:star2": "Vous avez vu toutes les questions",
   "competences:star3": "Vous avez répondu correctement à toutes les questions",
-  "competences:star4": "Vous avez répondu rapidement à toutes les questions",
-  "competences:star5": "Vous avez vu toutes les versions des questions"
+  "competences:star4": "Vous avez vu toutes les versions des questions",
+  "competences:star5": "Vous avez répondu rapidement à toutes les questions"
   }) ;
 add_messages('en', {
   "competences:center_before": "% of fast answers (green)\n",
@@ -21,8 +21,8 @@ add_messages('en', {
   "competences:star1": "You have access to all the questions",
   "competences:star2": "You readed all the questions",
   "competences:star3": "You correctly answered all the questions",
-  "competences:star4": "You answered quickly to all the questions",
-  "competences:star5": "You saw all the questions alternatives"
+  "competences:star4": "You saw all the questions alternatives",
+  "competences:star5": "You answered quickly to all the questions"
   }) ;
 
 var char_close = '▼' ;
@@ -786,7 +786,7 @@ function progress_bar(percent)
 {
     return '<b style="display: inline-block; height: 0.5em; width:5em;'
     + 'border-radius: 0.2em; border:1px solid black; background: white;">'
-    + '<span style="background: black; text-align:left; width: '
+    + '<span style="display:block;background: black; text-align:left; width: '
     + percent + '%; height: 100%"></span></b>' ;
 }
 
@@ -899,10 +899,10 @@ function get_level()
     level = 1 + nr_view / nr ;
   else if ( nr_good < nr )
     level = 2 + nr_good / nr ;
-  else if ( nr_perfect < nr )
-    level = 3 + nr_perfect / nr ;
+  else if ( nr_versions < nr )
+    level = 3 + nr_versions / nr ;
   else
-    level = 4 + nr_versions / nr ;
+    level = 4 + nr_perfect / nr ;
   if ( false )
     console.log('questions=' + nr
 		+ ' accessible=' + nr_accessible
