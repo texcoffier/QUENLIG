@@ -51,7 +51,7 @@ var student_seed ;
 
 function escape2(txt)
 {
-  return encodeURI(txt).replace(/[+]/g, "%2B") ;
+  return encodeURIComponent(txt) ;
 }
 
 function js(t)
