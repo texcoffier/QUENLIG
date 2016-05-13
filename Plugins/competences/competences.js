@@ -782,11 +782,18 @@ function draw_sunburst_real()
   return select ;
 }
 
+var star_color = "#0D0" ;
+var star_color_bad = "#CCC" ;
+var tip_style = ' style="z-index:1000; color:#000"' ;
+var star_good = '<b style="color:' + star_color + ';display:inline">★</b>';
+var star_bad = '<b style="color:'+star_color_bad+ ';display:inline">★</b>';
+
 function progress_bar(percent)
 {
     return '<b style="display: inline-block; height: 0.5em; width:5em;'
-    + 'border-radius: 0.2em; border:1px solid black; background: white;">'
-    + '<span style="display:block;background: black; text-align:left; width: '
+    + 'border-radius: 0.2em; background: ' + star_color_bad + ';">'
+    + '<span style="background:' + star_color
+    + ';display:block; text-align:left; width: '
     + percent + '%; height: 100%"></span></b>' ;
 }
 
@@ -800,15 +807,16 @@ function display_sunburst(d, width, height, x, y)
       var level = get_level() ;
       var s = '<br><a class="tips">' ;
       for(var i=1; i<6; i++)
-	s += (level >= i ? '★' : '☆') ;
-      s += '<span style="z-index:1000">' ;
+	s += (level >= i ? star_good : star_bad) ;
+      s += '<span' + tip_style + '>' ;
       for(var i=1; i<6; i++)
-	s += (level >= i ? '★' : '☆') + _("competences:star" + i) + '<br>' ;
+	s += (level >= i ? star_good : star_bad)
+	+ _("competences:star" + i) + '<br>' ;
       s += '</span></a>' ;
       if ( level < 5 )
 	s += '<br><a class="tips">'
-	+ progress_bar(100*(level%1)) + '<span style="z-index:1000">'
-	+ (100*(level % 1)).toFixed(0) + '% → ☆'
+	+ progress_bar(100*(level%1)) + '<span' + tip_style + '>'
+	+ (100*(level % 1)).toFixed(0) + '% → ' + star_good
 	+ _("competences:star" + Math.ceil(level))
 	+ '</span></a>' ;
       d.innerHTML = s ;
