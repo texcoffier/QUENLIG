@@ -30,7 +30,8 @@ link_to_self = True
 priority_execute = '-question_source'
 acls = { 'Default': ('executable',), }
 css_attributes = ('/@media screen { .hide_on_screen { display: none ; }} ',
-                  "/@media print { .hide_on_print { display: none ; }}"
+                  "/@media print { .hide_on_print { display: none ; }}",
+                  ".question_title { margin-top: 1.5em ; margin-bottom: 0em }"
                   )
 
 javascript = """
@@ -114,7 +115,7 @@ def execute(state, plugin, argument):
             identical = True
             s.append('''
 <div class="course_question">
-<b class="hide_on_print"><a href="%s">%s</a></b>
+<p class="hide_on_print question_title"><b><a href="%s">%s</a></b>
 <p>%s</div>''' % (question.url(), question.name, question.before(state)))
 
     plugin.heart_content = '\n'.join(s)
