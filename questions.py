@@ -1185,8 +1185,7 @@ class UpperCase(TestUnary):
 
 class RemoveSpaces(TestUnary):
     """Remove unecessary spaces/tabs.
-    White space at the end of line are removed, but not at the start.
-    So 'a +   5' become 'a+5'
+    So 'a +   5' become 'a+5' because '+' is not alphanumeric.
     But 'a 5' stays as 'a 5'
     """
     def canonize(self, string, state):
@@ -1205,7 +1204,7 @@ class RMS(TestUnary):
         return re.sub('( $|^ )', '', re.sub('[ \t]+', ' ', string))
 
 class SortLines(TestUnary):
-    """The lines of the student answer are sorted and child test value
+    r"""The lines of the student answer are sorted and child test value
     is returned.
 
     Examples:
@@ -1479,6 +1478,21 @@ class LengthLT(TestInt):
     """
     def do_test(self, student_answer, state):
         return len(student_answer) < self.integer, ''
+
+class NrBadAnswerGreaterThan(TestInt):
+    """Returns True if the number of bad student-answers since the last
+    question reset is greater than the integer in parameter.
+
+    Examples:
+        Bad(Comment(NrBadAnswerGreaterThan(3),
+                    "Let me give you a tip: ...."))
+    """
+    def do_test(self, dummy_student_answer, state):
+        if len(state.student.answer(state.question.name).bad_answers
+              ) > self.integer:
+            return True, ''
+        else:
+            return None, ''
 
 class NumberOfIs(TestExpression):
     """The number of time the first parameter string is found in the

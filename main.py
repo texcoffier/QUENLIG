@@ -257,13 +257,15 @@ if 'plugins.html' in sys.argv:
     # These lines are here to create a fake environnement.
     # because the initialisation methods need an environnement to run.
     configuration.url = 'fake'
+    class FakeSession:
+        name = "fakesession"
+    configuration.session = FakeSession
     for i in ('Logs', os.path.join('Logs', 'nostudent')):
         try:
             os.mkdir(i)
         except OSError:
             pass
     s = state.State(FakeServer(), 'noticket', 'nostudent')
-
     # Now the plugin tree is working
     def display(f, plugin):
         f.write('<tr><td>')

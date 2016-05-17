@@ -203,7 +203,7 @@ add(name="hello",
                ),
           )
     )
-</pre>      
+</pre>
     <p>
       This question requires that the student answer exactly 'yes'
       and not 'Yes' or 'YES'.
@@ -307,14 +307,28 @@ add(name="hello",
    )
 </pre>
     <p>
-      Or more simple way to do all this is to use a base test
+      Or a more simple way to do all this is to use a base test
       that does all this work:
    </p>
     <pre>
 add(name="hello",
     question="Are you ready?",
     tests=(
-           <em>Yes(),</em>
+           <em>Good(Yes()),</em>
+	   ),
+    )
+</pre>
+    <p>
+      It is possible to check the number of bad answers in order
+      to give a tip to the stucked student.
+   </p>
+    <pre>
+add(name="hello",
+    question="Are you ready?",
+    tests=(
+           Good(Yes()),
+           <em>Bad(Comment(NrBadAnswerGreaterThan(3),
+                       "Stop playing, and start working. Answer: YES")),</em>
 	   ),
     )
 </pre>   
@@ -570,6 +584,7 @@ content: "Good! Press «Enter» to choose a random question." ;
 	    <a href="tests.html#Int">Int</a>,
 	    <a href="tests.html#IntLG">IntLG</a>,
 	    <a href="tests.html#IntGT">IntGT</a>,
+	    <a href="tests.html#NrBadAnswerGreaterThan">NrBadAnswerGreaterThan</a>,
 	    <a href="tests.html#NumberOfIs">NumberOfIs</a>,
 	    <a href="tests.html#TestFunction">TestFunction</a>,
 	    <a href="tests.html#Length">Length</a>,
