@@ -287,7 +287,7 @@ def forget_stats():
     _stats.last_time = 0
 
 def translate_dot_(name):
-    return cgi.escape(name.translate(utilities.flat)).replace(':',' ').replace('"',' ').replace(' ', '\\n')
+    return cgi.escape(name.translate(utilities.flat).replace('\\', 'BS')).replace(':',' ').replace('"',' ').replace(' ', '\\n')
 
 def translate_dot(name):
     return '"' + translate_dot_(name) + '"'
