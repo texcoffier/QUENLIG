@@ -171,8 +171,9 @@ class Command_erase(Command_indice):
                 if answer.random_next not in answer.random_history:
                     break
                 answer.random_next[k] = save
-        else:
-            answer.random_history = []
+            else:
+                # All possible cases done, reset the history
+                answer.random_history = []
 
         answer.persistent_random = {}
         answer.current_time_after = 0
