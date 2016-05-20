@@ -934,8 +934,7 @@ class TestString(TestExpression):
 
     def canonize_test(self, parser, state):
         if self.do_canonize:
-            self.string_canonized = parser((self.string),
-                                           state)
+            self.string_canonized = parser(self.string, state)
         else:
             self.string_canonized = self.string
 
@@ -1296,14 +1295,22 @@ class Expect(TestString):
             self.comment = None
         else:
             self.comment = args[1]
+        self.do_canonize_comment = keys.pop("canonize_comment", True)
         TestString.__init__(self, args[0], **keys)
+
+    def canonize_test(self, parser, state):
+        super().canonize_test(parser, state)
+        if self.do_canonize_comment and self.comment:
+            self.comment_canonized = parser(self.comment, state)
+        else:
+            self.comment_canonized = self.comment
 
     def do_test(self, student_answer, state):
         if self.string_canonized in student_answer:
             return None, ''
         else:
             if self.comment:
-                return False, self.comment
+                return False, self.comment_canonized
             else:
                 return False, '<p class="string_expected">\'<b>' + self.string_canonized + '</b>\'</p>'
 
@@ -1328,7 +1335,7 @@ class Reject(Expect):
             return None, ''
         else:
             if self.comment:
-                return False, self.comment
+                return False, self.comment_canonized
             else:
                 return False, '<p class="string_rejected">\'<b>' + self.string + '</b>\'</p>'
     
