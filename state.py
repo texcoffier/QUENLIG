@@ -154,7 +154,8 @@ class State(object):
     def update_language(self, server):
         self.lang = lang = server.headers.get('accept-language','')
         lang = lang.lower().replace(';',',').replace('-','_')
-        lang = [x for x in lang.split(',')
+        lang = [x.split("_")[0] for x in lang.split(',')]
+        lang = [x for x in lang
                 if len(x) == 2] # XXX Should test if the translation exists
         if 'fr' not in lang:
             lang.append('fr')
