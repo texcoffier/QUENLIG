@@ -30,7 +30,8 @@ link_to_self = True
 priority_execute = '-question_source'
 acls = { 'Default': ('executable',), }
 css_attributes = ('/@media screen { .hide_on_screen { display: none ; }} ',
-                  "/@media print { .hide_on_print { display: none ; }}",
+                  """/@media print { .hide_on_print { display: none ; }
+                                     BODY { background: #FFF } }""",
                   ".question_title { margin-top: 1.5em ; margin-bottom: 0em }"
                   )
 
