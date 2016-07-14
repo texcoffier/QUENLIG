@@ -51,6 +51,7 @@
       <li><a href="#trigger">What is triggering ?</a></li>
       <li><a href="#evaluation">Evaluation</a></li>
       <li><a href="#display">What is displayed ?</a></li>
+      <li><a href="#option">Plugin option</a></li>
       </ul>
       </li>
 
@@ -1183,6 +1184,27 @@ class UpperCase(TestUnary):
 	But there is a catch, as the plugin modifying the other must
 	be evaluated last, 2 plugins can not mutualy modify themselves.
       </p>
+
+      <h3><a name="option">Plugin option</a></h3>
+
+      <p>
+	Each plugin can define a single session persistent option.
+	The minimal option definition if for example:
+      </p>
+<pre>option_name = 'help' # Command line option name
+# Help message for the command line and session option web page
+option_help = '''"true" or "false"
+        Display HTML/help.html when starting a session.'''
+# The default valeur for the option
+option_default = "false"</pre>
+    <p>
+      The option is stored into <tt>plugin.option</tt> as a string.
+    </p>
+    <p>
+      It is possible to define an option parser to check it:
+<pre>def option_set(plugin, value):
+    plugin.option = int(value)</pre>
+
        
       <h2><a name="developper_tools">Developper tools</a></h2>
 

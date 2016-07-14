@@ -28,8 +28,14 @@ link_to_self = True
 priority_execute = '-question_answer'
 acls = { 'Student': ('executable',) }
 
+option_name = 'help'
+option_help = '''"true" or "false"
+        Display HTML/help.html when starting a session.'''
+option_default = "false"
+
 def execute(state, plugin, argument):
-    if argument:
+    if argument or (state.question is None
+                    and plugin.option == 'true'):
         plugin.heart_content = '''
         <OBJECT type="text/html" data="help.html" width="100%" height="2000px">
         <p class="object_unsupported"></p>

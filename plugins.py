@@ -181,7 +181,7 @@ Attribute('prototype'
             will be taken.'''
           )
 
-def set_option(state, plugin, value):
+def set_option(plugin, value):
     plugin.option = value
 Attribute('option_default', 'Default value for the option')
 Attribute('option_help', 'Explanation of the option usage', 'No help')
