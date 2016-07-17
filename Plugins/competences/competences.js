@@ -70,19 +70,28 @@ function random_jump(question_list)
 {
   var weight = 0 ;
   for(var question in question_list)
-    weight += question_list[question].weight() ;
+    if ( question_list[question].name !== current_question )
+      weight += question_list[question].weight() ;
   var random = Math.random() * weight ;
   weight = 0 ;
   for(var question in question_list)
   {
     question = question_list[question] ;
-    weight += question.weight() ;
-    if ( weight >= random )
+    if ( question.name !== current_question )
+    {
+      weight += question.weight() ;
+      if ( weight >= random )
       {
 	question.jump() ;
 	return ;
       }
+    }
   }
+}
+
+function question_redo()
+{
+  window.location += '&erase=1' ;
 }
 
 function Question(info)
@@ -453,34 +462,11 @@ function update_competences()
     draw_nice_results(i) ;
 }
 
-function add_next_question_button()
-{
-  var e = document.getElementById('question_good_buttons') ;
-  if ( ! e )
-    return ;
-
-  var q = questions[current_question] ;
-  var c = q.competences ;
-  var s = '' ;
-  for(var competence in c)
-    {
-      competence = c[competence] ;
-      s += '<button onclick="competences[\'' + competence
-	+ '\'].choose_question()">' + competence + '</button>' ;
-    }
-  /*
-  s += '<button style="font-size: 200%" onclick="questions['
-    + js(q.name) + '].jump(true)">'
-    + q.icons() + '</button>' ;
-  */
-  e.innerHTML += s ;
-}
-
 function patch_title()
 {
   var d = document.getElementsByTagName('DIV') ;
   var title ;
-  var patched ;
+  var state = "", heart ;
   for(var i = 0 ; i < d.length; i++)
   {
     if ( d[i].className == 'competences' )
@@ -501,30 +487,62 @@ function patch_title()
 	tr.insertBefore(icon, tr.childNodes[1]) ;
 	draw_nice_results(0) ;
       }
-      add_next_question_button() ;
       title.style.position = "relative" ;
       display_sunburst(title, -300, -300) ;
-      patched = true ;
+      heart = d[i].parentNode ;
     }
-    else if ( d[i].className == 'question_answer'
-	 && questions[current_question].nr_versions > 1 )
-    {
-      if ( ! d[i].innerHTML.match(/<form /) )
-	{
-	  var x = document.createElement("SPAN") ;
-	  x.style.fontSize = "60%" ;
-	  x.style.fontWeight = "normal" ;
-	  x.style.whiteSpace = "normal" ;
-	  x.style.width = "25em" ;
-	  x.style.display = "inline-block" ;
-	  x.style.lineHeight = "1em" ;
-	  x.style.verticalAlign = "bottom" ;
-	  x.innerHTML = _("competences:recycle") ;
-	  d[i].getElementsByTagName("EM")[0].appendChild(x) ;
-	}
-    }
+    else if ( d[i].className == 'question_bad' )
+      state = "bad" ;
+    else if ( d[i].className == 'question_good' )
+      state = "good" ;
+    else if ( d[i].className == 'question_answer' && state === '' )
+      {
+	if ( d[i].innerHTML.match(/<form /) )
+	  state = "asked" ;
+        else
+          state = "done" ;
+      }
   }
-  if ( ! patched )
+  if ( heart
+       && current_question && current_question !== ''
+       && get_level() > 0.05
+     )
+    {
+      var s = '' ;
+      var q = questions[current_question] ;
+      var c = q.competences ;
+      for(var competence in c)
+      {
+	competence = c[competence] ;
+	s += '<div class="question_good" style="display:inline">'
+	  + '<a class="tips key_enter">'
+	  + '<button onclick="competences[\'' + competence
+	  + '\'].choose_question()"><p> ∈ ' + competence
+	  + '</p></button></a></div>' ;
+      }
+      var more = document.createElement("DIV") ;
+      more.style.marginTop = "1em" ;
+      more.innerHTML = '<div class="question_good" style="display:inline">'
+	+ '<a class="tips key_enter">'
+	+ '<button onclick="click_on_next_button()"><p></p></button>'
+	+ (state === 'done' || state == "good" ? '<span></span>' : '')
+	+ '</a></div>'
+        + s
+	+ '<div class="question_redo" style="display:inline">'
+	+ '<a class="tips question_redo">'
+	+ '<button onclick="question_redo()" style="background:#FEE"'
+	+ (questions[current_question].nr_versions < 1 ? " disabled" : "")
+	+ '><p></p></button>'
+	+ '<span></span></a></div>' ;
+
+      heart.appendChild(more) ;
+
+      var e = document.getElementById('question_good_buttons') ;
+      if ( e )
+	e.style.display = "none" ;
+    }
+
+  if ( ! heart )
     setTimeout(patch_title, 10) ;
 }
 

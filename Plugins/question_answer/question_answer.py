@@ -63,6 +63,21 @@ function disable_tab(event)
           return true;
 
 }
+
+function check_button(e)
+{
+  while(e.tagName != 'FORM')
+     e = e.parentNode ;
+  var input = e.getElementsByTagName("INPUT") ;
+  var button = e.getElementsByTagName("BUTTON")[0] ;
+  for(var i in input)
+     if ( input[i].checked )
+        {
+          button.disabled = false ;
+          return ;
+        }
+  button.disabled = true ;
+}
 """
 
 def option_set(plugin, value):
@@ -194,14 +209,14 @@ def execute(state, plugin, argument):
                     nr_checked = 1
             else:
                 checked = ''
-            s += '<label><input class="checkbox" type="%s" name="%s" value="%s"%s>' % (
+            s += '<label><input onchange="check_button(this)" class="checkbox" type="%s" name="%s" value="%s"%s>' % (
                 button_type, plugin.plugin.css_name, j[0], checked
             ) + j[1] + '</label><br>'
         if nr_checked == 0:
             checked = ' id="2"'
         else:
             checked = ''
-        s += '<button type="submit"%s><p class="answer_button"></p></button>' % checked
+        s += '<button disabled type="submit"%s><p class="answer_button"></p></button>' % checked
     elif state.question.nr_lines == 1:
         s += '<INPUT TYPE="text" ID="2" NAME="%s.%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (
             # INPUT NAME

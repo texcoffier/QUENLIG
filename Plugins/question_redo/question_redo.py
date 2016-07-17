@@ -36,7 +36,7 @@ def execute(state, plugin, argument):
         return
     if state.form.get('erase', False):
         return
-    return '''<button onclick="window.location+='&erase=1'"><var></var></button>'''
+    return '''<button onclick="question_redo()"><p></p></button>'''
 
 
     

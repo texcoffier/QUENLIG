@@ -27,7 +27,7 @@ background = '#CFC'
 title_background = '#8F8'
 acls = { 'Default': ('executable',) }
 css_attributes = (
-    "button { margin: 0.5em }",
+    "button, p { margin: 0.5em }",
     )
 javascript = '''
 function click_on_next_button()
@@ -67,7 +67,7 @@ def execute(state, dummy_plugin, dummy_argument):
 
     message += '''<p id="question_good_buttons">
     <a class="tips key_enter">
-    <button onclick="click_on_next_button()"><p style="margin:0.5em"></p></button><span></span>
+    <button onclick="click_on_next_button()"><p></p></button><span></span>
     </a>
     </p>
     '''
