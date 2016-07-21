@@ -91,7 +91,8 @@ function random_jump(question_list)
 
 function question_redo()
 {
-  window.location += '&erase=1' ;
+  window.location.search = "?question=" + escape2(current_question)
+   + '&erase=1' ;
 }
 
 function Question(info)
