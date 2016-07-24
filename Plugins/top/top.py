@@ -59,8 +59,7 @@ def option_set(plugin, value):
 option_name = 'theme'
 option_help = ' or '.join('"%s"' % t
                           for t in themes) + '''
-        The GUI theme.
-'''
+        The GUI theme.'''
 option_default = "gray"
 
 import os
