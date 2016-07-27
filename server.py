@@ -239,6 +239,8 @@ def run(nr_requests, the_cache):
     print("\nServer Ready on\n\thttp://%s:%d/guest.html\n\t%s/guest.html" % (
         socket.getfqdn(), configuration.port, configuration.url))
     print("Remove 'guest.html' if you want to use CAS authentication service")
+    sys.stdout.flush()
+    sys.stderr.flush()
 
     if nr_requests:
         import hotshot

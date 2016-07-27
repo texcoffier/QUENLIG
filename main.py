@@ -151,7 +151,9 @@ class Session:
         utilities.write(self.dir + 'pid', str(os.getpid()))
         utilities.write(self.dir + 'hostname', socket.gethostname())
         if os.path.isdir(configuration.html):
-            os.system('cd %s ; make' % configuration.html)
+            sys.stdout.flush()
+            sys.stderr.flush()
+            os.system('cd %s ; make 2>/dev/null' % configuration.html)
         os.chdir(self.dir)
         try:
             server.run(self.nr_requests, self.cache)
