@@ -959,7 +959,13 @@ class TestString(TestExpression):
             pf(self.string, format), canonize)
 
 class Or(TestNAry):
-    """True if one of the child test returns True,
+    """Returns True if one child returns True:
+    True  False => True,
+    True  True  => True,
+    True  None  => True,
+    None  None  => None,
+    None  False => False,
+    False False => False.
     the syntax with '|' operator can be used.
     As in other programmation language, by default, the evaluation stops
     is the result is predictible.
@@ -977,12 +983,17 @@ class Or(TestNAry):
     """
     def do_test(self, student_answer, state):
         all_comments = ""
-        a_bool = False
+        a_bool = None
         for c in self.children:
-            a_bool, a_comment = c(student_answer, state)
+            aa_bool, a_comment = c(student_answer, state)
             all_comments += a_comment
-            if self.shortcut and a_bool == True:
-                break
+            if aa_bool is True:
+                a_bool = True
+                if self.shortcut:
+                    break
+            elif aa_bool is False:
+                if a_bool is None:
+                    a_bool = False
         return a_bool, all_comments
 
     def __or__(self, other):
@@ -991,7 +1002,13 @@ class Or(TestNAry):
 
 
 class And(TestNAry):
-    """True if all the children test returns True,
+    """Returns False if one child returns False:
+    True  False => False,
+    True  True  => True,
+    True  None  => True,
+    None  None  => None,
+    None  False => False,
+    False False => False.
     the syntax with '&' operator can be used.
     As in other programmation language, by default, the evaluation stops
     is the result is predictible.
@@ -1010,12 +1027,17 @@ class And(TestNAry):
     operator = " & "
     def do_test(self, student_answer, state):
         all_comments = ""
-        a_bool = False
+        a_bool = None
         for c in self.children:
-            a_bool, a_comment = c(student_answer, state)
+            aa_bool, a_comment = c(student_answer, state)
             all_comments += a_comment
-            if self.shortcut and a_bool == False:
-                break
+            if aa_bool is False:
+                a_bool = False
+                if self.shortcut:
+                    break
+            elif aa_bool is True:
+                if a_bool is None:
+                    a_bool = True
         return a_bool, all_comments
     def __and__(self, other):
         self.children.append(other)
@@ -2213,6 +2235,24 @@ def regression_tests():
     assert( a(st) == '1b' )
     assert( a('(1)b',st) == (True, '[1]b') )
     A.nr_erase = 0
+
+    good = "Good(Contain('AF'))"
+    bad = "Bad(Comment(Contain('ZF'),'BaD'))"
+    for operator in ('And', 'Or'):
+        for x, y in ( (good, bad), (bad, good) ):
+            a = create(
+                "Random({'F': ('1', '2')},%s(Expect('F'),Reject('X'),%s,%s))"
+                 % (operator, x, y))
+            assert( a('3',st)==(False,'<p class="string_expected">\'<b>1</b>\'</p>'))
+            assert( a('X1',st)==(False,'<p class="string_rejected">\'<b>X</b>\'</p>'))
+            assert( a('A1',st)==(True, ''))
+            assert( a('Z1',st)==(False, 'BaD'))
+            assert( a('Y1',st)==(None, ''))
+
+            if operator == 'And':
+                assert(a('A1Z1',st)==(False, 'BaD'))
+            else:
+                assert(a('A1Z1',st)==(True, '' if x == good else 'BaD'))
 
 if True:
     regression_tests()

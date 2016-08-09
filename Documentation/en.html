@@ -565,8 +565,9 @@ content: "Good! Press «Enter» to choose a random question." ;
       These tests are not all of the same kind:
     </p>
     <ul>
-      <li> The final answer returns True to indicates a good
-	answer, False for a bad and None if the testing must continue.
+      <li> A final test may return <b>True</b> to indicates a good
+	answer, <b>False</b> for a bad and <b>None</b>
+	if the testing must continue.
 	For example:
 	    <a href="tests.html#Good">Good</a>,
 	    <a href="tests.html#Bad">Bad</a>,
@@ -575,7 +576,8 @@ content: "Good! Press «Enter» to choose a random question." ;
 	    <a href="tests.html#Expect">Expect</a>,
 	    <a href="tests.html#Reject">Reject</a>,
       <li> The expression leaves really test the student answer,
-	they return True is the test is fine.
+	they return <b>True</b> is the test is fine and <b>False</b>
+	if it is not.
 	For example:
 	    <a href="tests.html#Equal">Equal</a>,
 	    <a href="tests.html#Start">Start</a>,
@@ -609,6 +611,15 @@ content: "Good! Press «Enter» to choose a random question." ;
        <a href="tests.html#And">And</a> '&amp;',
        <a href="tests.html#Or">Or</a> '|',
        <a href="tests.html#TestInvert">Negation</a> '~',
+       <table border>
+	 <tr><th> A    <th>  B   <th> A &amp; B <th> A | B <th> ~ A</tr>
+	 <tr><td>True  <td>False <td><b>False</b> <td><b>True</b> <td> False </tr>
+	 <tr><td>True  <td>True  <td>True  <td>True  <td>False </tr>
+	 <tr><td>True  <td>None  <td>True  <td>True  <td>False </tr>
+	 <tr><td>None  <td>None  <td>None  <td>None  <td>True  </tr>
+	 <tr><td>None  <td>False <td>False <td>False <td>True  </tr>
+	 <tr><td>False <td>False <td>False <td>False <td>True  </tr>
+       </table>
 
 	 <li> The comment operator that add a comment if its parameter
 	   is True: <a href="tests.html#Comment">Comment</a>
