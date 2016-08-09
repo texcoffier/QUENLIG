@@ -806,7 +806,10 @@ def pf(txt, format=None):
     if format == None:
         return txt
     if format == 'html':
-        return cgi.escape(txt)
+        txt = cgi.escape(txt).replace("\\n", " ")
+        if len(txt) > 20:
+            txt = '<div style="display:inline-block;max-width:30em;vertical-align:top">' +txt+ '</div>'
+        return txt
     raise ValueError('Unknown output format')
 
 def no_parse(string, state, test):
@@ -892,6 +895,17 @@ class TestExpression(Test):
         for child in self.children:
             child.link_to_question(question)
 
+    def block(self, format, items, name=None):
+        if name is None:
+            name = self.test_name(format)
+        if format == 'html':
+            return (name
+                    + '(<div style="display:inline-block;vertical-align:top;border:1px solid #CCC;margin-top:2px;margin-bottom:2px">'
+                    + ',<br>'.join(items)
+                    + '</div>)')
+        else:
+            return name + '(' + ','.join(items) + ')'
+
 class TestNAry(TestExpression):
     """Base class for tests with a variable number of test as arguments."""
     def __init__(self, *args, **keys):
@@ -899,13 +913,11 @@ class TestNAry(TestExpression):
         TestExpression.__init__(self, *args)
 
     def source(self, state=None, format=None):
-        if self.shortcut:
-            shortcut = ''
-        else:
-            shortcut = ',shortcut=False'
-        return self.test_name(format) + '(' + \
-               ','.join( [c.source(state, format) for c in self.children]) + \
-               shortcut + ')'
+        t = [c.source(state, format)
+             for c in self.children]
+        if not self.shortcut:
+            t.append('shortcut=False')
+        return self.block(format, t)
 
 class TestUnary(TestExpression):
     """Base class for tests with one child test."""
@@ -1253,17 +1265,13 @@ class Comment(TestUnary):
         self.comment = comment
 
     def source(self, state=None, format=None):
-        if self.do_canonize:
-            more = ",canonize=True"
-        else:
-            more = ""
+        t = []
         if self.children:
-            return self.test_name(format) + "(%s,%s%s)" % (
-                self.children[0].source(state,format), pf(self.comment,
-                                                          format), more )
-        else:
-            return self.test_name(format) + "(%s%s)" % (pf(self.comment,
-                                                           format), more)
+            t.append(self.children[0].source(state, format))
+        t.append(pf(self.comment, format))
+        if self.do_canonize:
+            t.append("canonize=True")
+        return self.block(format, t)
 
     def canonize_test(self, parser, state):
         if self.do_canonize:
@@ -1610,9 +1618,9 @@ class Grade(TestUnary):
         self.grade = grade
         TestUnary.__init__(self, expression)
     def source(self, state=None, format=None):
-        return (self.test_name(format) + '('
-                + self.children[0].source(state, format) + ','
-                + repr(self.teacher) + ',' + repr(self.grade) + ')')
+        return self.block(format,
+                          [self.children[0].source(state, format),
+                           repr(self.teacher) + ',' + repr(self.grade)])
     def do_test(self, student_answer, state=None):
         goodbad, a_comment = self.children[0](student_answer, state)
         if state.question and goodbad is True:
@@ -1727,8 +1735,8 @@ class Random(TestUnary):
             return len(self.values)
 
     def source(self, state=None, format=None):
-        return (self.test_name(format) + '(' + repr(self.values) + ',' +
-                self.children[0].source(state, format) + ')' )
+        return self.block(format, [repr(self.values),
+                                   self.children[0].source(state, format)])
 
     def __call__(self, student_answer, state=False):
         """Add a compatibility layer for old tests"""
@@ -1807,12 +1815,12 @@ class Choice(TestExpression):
             if isinstance(arg[0], TestExpression):
                 question = arg[0](state, format)
             else:
-                question = repr(arg[0](None))
-            s.append('\n    (' + question + ','
-                     + ','.join('\n    '
-                                + a.source(state, format)
-                                for a in arg[1:]) + ')')
-        return self.test_name(format) + '(' + ','.join(s) + ')'
+                question = arg[0](None)
+            t = [pf(question, format)]
+            for a in arg[1:]:
+                t.append(a.source(state, format))
+            s.append(self.block(format, t, name=""))
+        return self.block(format, s)
 
     def __call__(self, student_answer, state=False):
         if state is False:
@@ -1846,9 +1854,10 @@ def regression_tests():
         o.link_to_question(q)
         # print o.source()
         # print txt
-        if o.source() != txt:
+        src = o.source()
+        if src != txt:
             print(txt)
-            print(o.source())
+            print(src)
             raise ValueError("Bad source")
         return o
 
@@ -2151,19 +2160,19 @@ def regression_tests():
     a = create("Random({'D': ('E',)},Comment('(D)',canonize=True))")
     assert( a('x',st) == (None, '(E)') )
 
-    a = create("Choice(\n    ('a',\n    Good(Comment(Equal('1'),'U')),\n    Bad(Comment(Equal('2'),'D'))))")
+    a = create("Choice(('a',Good(Comment(Equal('1'),'U')),Bad(Comment(Equal('2'),'D'))))")
     assert( a('x',st) == (None, '') )
     assert( a('1',st) == (True, 'U') )
     assert( a('2',st) == (False, 'D') )
 
-    a = create("Replace((('2', '1'),),Choice(\n    ('a',\n    Good(Comment(Equal('1'),'U')))))")
+    a = create("Replace((('2', '1'),),Choice(('a',Good(Comment(Equal('1'),'U')))))")
     assert( a('2',st) == (True, 'U') )
 
-    a = create("Choice(\n    ('a',\n    Good(Replace((('2', '1'),),Comment(Equal('2'),'U')))))")
+    a = create("Choice(('a',Good(Replace((('2', '1'),),Comment(Equal('2'),'U')))))")
     assert( a('2',st) == (True, 'U') )
     assert( a(st) == 'a' )
 
-    a = create("Replace((('2', '1'),),Choice(\n    ('a',\n    Good(Comment(Equal('2'),'U')))),canonize=True)")
+    a = create("Replace((('2', '1'),),Choice(('a',Good(Comment(Equal('2'),'U')))),canonize=True)")
     assert( a('2',st) == (True, 'U') )
 
     a = create("Grade(Good(Equal('a')),'GG1',1)")
@@ -2178,7 +2187,7 @@ def regression_tests():
     assert( a('a',st) == (False, '') )
     assert( grades['x'] == ('GG1', 0) )
 
-    a = create("Random({'F': ('1', '2')},Choice(\n    ('{F}',\n    Good(Comment(Equal('(F)'),'[F]')))))")
+    a = create("Random({'F': ('1', '2')},Choice(('{F}',Good(Comment(Equal('(F)'),'[F]')))))")
     assert( a('(1)',st) == (True, '[F]') )
     assert( a(st) == '{1}' )
     A.nr_erase = 1
@@ -2186,12 +2195,12 @@ def regression_tests():
     assert( a('(2)',st) == (True, '[F]') )
     A.nr_erase = 0
 
-    a = create("Random({'F': ('1', '1')},Choice(\n    ('{F}',\n    Good(Comment(Equal('(F)'),'[F]',canonize=True)))))")
+    a = create("Random({'F': ('1', '1')},Choice(('{F}',Good(Comment(Equal('(F)'),'[F]',canonize=True)))))")
     assert( a(st) == '{1}' )
     assert( a('F',st) == (None, '') )
     assert( a('(1)',st) == (True, '[1]') )
 
-    a = create("Random({'F': ('1', '2', '3')},Choice(\n    ('Fa',\n    Good(Comment(Equal('(F)a'),'[F]a',canonize=True))),\n    ('Fb',\n    Good(Comment(Equal('(F)b'),'[F]b',canonize=True)))))")
+    a = create("Random({'F': ('1', '2', '3')},Choice(('Fa',Good(Comment(Equal('(F)a'),'[F]a',canonize=True))),('Fb',Good(Comment(Equal('(F)b'),'[F]b',canonize=True)))))")
     assert( a(st) == '1a' )
     assert( a('(1)a',st) == (True, '[1]a') )
     A.nr_erase = 1

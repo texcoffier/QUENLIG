@@ -45,12 +45,9 @@ def execute(state, plugin, argument):
                 s.append(' maximum_bad_answer:%d'%question.maximum_bad_answer)
             
             s.append('<br>' + question.question(state))
-            s.append('<table class="information_table">')
+            s.append('<table class="information_table" style="clear:right">')
             for t in question.tests:
-                if 'good' in t.__class__.__name__.lower():
-                    s.append(t.html(state=state) + '<br>')
-                else:
-                    s.append('<small>' + t.html(state=state) + '</small><br>')
+                s.append(t.html(state=state))
             s.append('</table><hr>')
 
         plugin.heart_content = '\n'.join(s)
