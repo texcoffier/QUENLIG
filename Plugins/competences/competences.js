@@ -123,17 +123,17 @@ Question.prototype.weight = function()
   if ( this.classes.indexOf("not_answerable") != -1 )
     weight = 0 ;
   else if ( this.classes.indexOf("question_given") == -1 ) // NOT GIVEN
-    weight = 100000 ;
+    weight = 1000000 ;
   else if ( this.nr_bad + this.nr_good == 0 )
-    weight = 10000 ;
+    weight = 100000 ;
   else if ( this.nr_good == 0 )
-    weight = 1000 ;
+    weight = 10000 ;
   else if ( ! this.is_answered() )
+    weight = 1000 ;
+  else if ( this.nr_good < this.nr_versions )
     weight = 100 ;
-  else if ( this.nr_perfect == 0 )
-    weight = 10 ;
   else
-    weight = Math.pow(this.nr_versions / this.nr_perfect, 2) ;
+    weight = Math.pow(this.nr_versions / (this.nr_perfect + 1), 2) ;
   if ( this.current )
     weight *= 0.9 ;
   weight += Math.random() / 1000 ;

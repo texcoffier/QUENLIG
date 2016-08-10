@@ -33,6 +33,9 @@ css_attributes = ('/@media screen { .hide_on_screen { display: none ; }} ',
                   """/@media print { .hide_on_print { display: none ; }
                                      BODY { background: #FFF } }""",
                   ".question_title { margin-top: 1.5em ; margin-bottom: 0em }"
+                  "/BODY { orphans: 3; widows: 3; }",
+                  "/H1 { page-break-after: avoid }",
+                  "/.course_question { page-break-before: avoid }",
                   )
 
 javascript = """
