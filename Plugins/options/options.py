@@ -29,10 +29,8 @@ link_to_self = True
 acls = { 'Admin': ('executable',) }
 priority_execute = '-question'
 
-from QUENLIG import utilities
-from QUENLIG import plugins
 import cgi
-from QUENLIG import configuration
+from QUENLIG import utilities
 
 def the_options(state, m_plugin):
     t = []

@@ -26,11 +26,16 @@ container = 'title_bar'
 text_align = 'center'
 acls = { 'Default': ('executable',) }
 
-def execute(state, plugin, argument):
+option_name = 'title'
+option_help = '''"Title of the session"
+        It is displayed as the page title if there is no current question.'''
+option_default = ""
+
+def execute(state, plugin, dummy_argument):
     try:
         plugin.the_title = state.question.name
     except:
-        plugin.the_title = state.student.name
+        plugin.the_title = plugin.option or state.student.name
 
     return plugin.the_title
 
