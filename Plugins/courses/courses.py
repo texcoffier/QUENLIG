@@ -22,7 +22,6 @@
 """Display all the questions definition."""
 
 import collections
-from QUENLIG import statistics
 from QUENLIG import questions
 
 container = 'action'
@@ -31,10 +30,16 @@ priority_execute = '-question_source'
 acls = { 'Default': ('executable',), }
 css_attributes = ('/@media screen { .hide_on_screen { display: none ; }} ',
                   """/@media print { .hide_on_print { display: none ; }
-                                     BODY { background: #FFF } }""",
+                                     BODY, H1,
+                                     TABLE.information_table TD,
+                                     TABLE.information_table TH
+                                     { background: #FFF }
+                                     DIV.heart { margin-left: -1em }
+                  }""",
                   ".question_title { margin-top: 1.5em ; margin-bottom: 0em }"
                   "/BODY { orphans: 3; widows: 3; }",
-                  "/H1 { page-break-after: avoid }",
+                  "/H2 { page-break-after: avoid }",
+                  "/H3 { page-break-after: avoid }",
                   "/.course_question { page-break-before: avoid }",
                   )
 
@@ -110,7 +115,7 @@ def execute(state, plugin, argument):
                 if not identical or len(last) <= i or title != last[i]:
                     identical = False
                     s.append('<h%d><a name="toc%s">%s</a></h%d>'
-                             % (i+1, n, title, i+1))
+                             % (i+2, n, title, i+2))
                     n += 1
         last = where
         for question in toc[where]:

@@ -24,7 +24,3 @@
 horizontal = True
 container = 'heart'
 acls = { 'Default': ('executable',) }
-
-css_attributes = (
-    "TABLE { background: #DDD ; }",
-)
