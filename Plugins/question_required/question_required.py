@@ -31,7 +31,14 @@ acls = { 'Default': ('executable',) }
 css_attributes = (
     "/DIV.an_answer { }",
     ".answer { background: #FFF ; margin-bottom: 1em; border-bottom: 1px solid black}",
-    ".course { opacity:0.3 ; width: 50% }"
+    """.course {
+    opacity: 0.3 ;
+    max-height: 2em ;
+    overflow: hidden ;
+    transition: max-height 2s, opacity 2s ;
+    webkit-transition: max-height 2s, opacity 2s ;
+ }""",
+    ".course:hover { max-height: 100em ; opacity:1 ; border-bottom: 1px solid black }",
     "DIV.question_required .course:hover { opacity:1 }"
     )
 
@@ -62,12 +69,16 @@ def execute(state, dummy_plugin, dummy_argument):
         else:
             before = ""
         if before and question:
-            s.append('<table><tr><td width="50%">')
+            s.append('<div class="course">')
+            s.append(before)
+            s.append("</div>")
+            s.append('<div class="question">')
             s.append(question)
-            s.append('<td class="course">' + before + "</tr></table>")
-            s.append(answer)
+            s.append("</div>")
         else:
-            s.append(before + question +  answer)
+            s.append(before)
+            s.append(question)
+        s.append(answer)
     if s:
         return ''.join(s)
 

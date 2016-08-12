@@ -308,7 +308,8 @@ def graph_dot(show_stats=False):
     i = 0
     for w in questions.worlds():
         c = colorsys.hls_to_rgb(i/nb, 0.8, 0.99)
-        rvb[w] = '"#%02x%02x%02x"' % (c[0]*256, c[1]*256, c[2]*256)
+        rvb[w] = '"#%02x%02x%02x"' % (int(c[0]*256), int(c[1]*256),
+                                      int(c[2]*256))
         i += 1
     n = float(len(stats.all_students))
     for q in questions.questions.values():

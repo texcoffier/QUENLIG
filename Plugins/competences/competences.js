@@ -903,6 +903,7 @@ function get_level()
   var nr_good = 0 ;
   var nr_perfect = 0 ;
   var nr_versions = 0 ;
+  var nr_total_versions = 0 ;
   var level ;
 
   for(var question in questions)
@@ -919,6 +920,7 @@ function get_level()
       nr_perfect++ ;
     if ( question.nr_good >= question.nr_versions )
       nr_versions++ ;
+    nr_total_versions += question.nr_versions ;
     }
   if ( nr_accessible < nr )
     level = nr_accessible / nr ;
@@ -930,13 +932,14 @@ function get_level()
     level = 3 + nr_versions / nr ;
   else
     level = 4 + nr_perfect / nr ;
-  if ( false )
+  if ( true )
     console.log('questions=' + nr
 		+ ' accessible=' + nr_accessible
 		+ ' view=' + nr_view
 		+ ' good=' + nr_good
 		+ ' perfect=' + nr_perfect
-		+ ' versions=' + nr_versions
+		+ ' all_versions_done=' + nr_versions
+		+ ' total_versions=' + nr_total_versions
 		+ ' level=' + level
 		) ;
   return level ;
