@@ -68,10 +68,13 @@ class StatePlugin:
         self.value = None
         self.heart_content = None
         self.current_acls = {'executable':True} # Erased with the acls loading
+        self.update_attributes()
+
+    def update_attributes(self):
         # Should be done each time an attribute is modified
         for attribute in plugins.Attribute.attributes.values():
-            self.__dict__[attribute.name] = plugin[state.localization,
-                                                   attribute.name]
+            self.__dict__[attribute.name] = self.plugin[self.state.localization,
+                                                        attribute.name]
 
     def priority_compute(self, attribute):
         attribute_int = attribute + '_int'
@@ -153,12 +156,16 @@ class State(object):
 
     def update_language(self, server):
         self.lang = lang = server.headers.get('accept-language','')
-        lang = lang.lower().replace(';',',').replace('-','_')
-        lang = [x.split("_")[0] for x in lang.split(',')]
-        lang = [x for x in lang
-                if len(x) == 2] # XXX Should test if the translation exists
-        if 'fr' not in lang:
-            lang.append('fr')
+        lang = []
+        lang_normalized = self.lang.lower().replace(';',',').replace('-','_')
+        lang_normalized += ',fr'
+        for language in lang_normalized.split(','):
+            language = language.split("_")[0]
+            if len(language) != 2:
+                continue
+            if language not in lang:
+                # XXX Should test if the translation exists
+                lang.append(language)
         self.localization = tuple(lang)
 
     def init_option(self, plugin):

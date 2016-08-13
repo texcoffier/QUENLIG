@@ -56,7 +56,6 @@ class CachedFile:
     mime_type = None
     
     def __init__(self, filename):
-        # XXX Is this secure (UTF8) ?
         if '..' in filename or '/' in filename or '?' in filename:
             print('*'*99, 'Inapropriate filename:', filename)
             filename = 'BUG'
