@@ -104,7 +104,8 @@ graph[charset="UTF-8", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
             s += '%s [ label="%s", style="filled",fillcolor="#FF8888"   ];\n' % (H(node), str_node)
     for node, others in arcs.items():
         for arc, nb in others.items():
-            s += '%s -> %s [penwidth="%d"];\n' % (H(node), H(arc), nb)
+            s += '%s -> %s [penwidth="%d"];\n' % (H(node), H(arc),
+                                                  int((2*nb)**0.5))
     s += '}'
 
     f = open("xxx.dot", "w")
