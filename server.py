@@ -149,6 +149,9 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Length', content_length)
         self.end_headers()
 
+    def do_POST(self):
+        self.do_GET()
+
     def do_GET(self):
         # The 'path' is in the form :
         #                               /prefix/Ticket/number/?action=qu
@@ -203,6 +206,7 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
             return
         # Execute and return page
         sys.stdout.flush() # To really log into the file for 'regtests'
+        session.server = self # To retrieve POST data
         mime, content = session.execute(form)
         if mime in ('application/x-javascript', 'text/html', 'text/css'):
             content = content.encode("utf-8")

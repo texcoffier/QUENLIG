@@ -88,8 +88,8 @@ def replace_question(c, question, source, state, encoding):
 
 def edit_python(source):
     return (
-        '<FORM action="javascript:window.location=(\'?question_source=\' + encode_uri(document.getElementById(\'src\').value));">' +
-        '<TEXTAREA id="src" style="width:100%%; height: %sem">' % (
+        '<FORM action="?question_source=save" method="POST">' +
+        '<TEXTAREA name="src" style="width:100%%; height: %sem">' % (
             1.3 * source.count('\n'))
         + cgi.escape(source)
         + '</TEXTAREA><BUTTON class="save_source"></BUTTON></FORM>')
@@ -104,7 +104,11 @@ def execute(state, dummy_plugin, argument):
     f.close()
 
     before = ''
-    if argument:
+    if argument == "save":
+        data = cgi.FieldStorage(fp=state.server.rfile,
+                                headers=state.server.headers,
+                                environ={'REQUEST_METHOD' : 'POST'})
+        argument = data.getfirst('src').replace("\r\n", "\n")
         source = ("# Edited by %s (%s)\n"
                   % (state.student.name, time.ctime()) + argument)
         try:
