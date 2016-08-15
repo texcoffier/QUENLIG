@@ -33,11 +33,60 @@ css_attributes = (
     webkit-transition: max-height 1s;
     overflow: hidden ;
     }""",
+    "FORM.highlight { max-height: initial ; }",
+    "FORM.highlight BUTTON P { background: #CFC ; }",
     ":hover FORM { max-height: 20em }",
     "BUTTON { width: 100% ; }",
     ".comment_given { white-space: normal;}",
     )
 acls = { 'Student': ('executable',) }
+javascript = """
+function PersistentInput(element_id, name)
+{
+   this.input = document.getElementById(element_id) ;
+   this.form = this.input ;
+   while( this.form.tagName != 'FORM' )
+      this.form = this.form.parentNode ;
+   this.key = 'persistent_input/' + element_id + '/' + (name || '') ;
+   if ( this.get_persistent() !== '')
+      {
+         this.input.value = this.get_persistent() ;
+         this.show() ;
+      }
+   this.form.onsubmit = this.onsubmit.bind(this) ;
+   if ( this.input.onkeypress )
+      this.old_onkeypress = this.input.onkeypress.bind(this) ;
+   this.input.onkeypress = this.onkeypress.bind(this) ;
+}
+
+PersistentInput.prototype.get_persistent = function()
+{
+   return localStorage[this.key] || '' ;
+} ;
+PersistentInput.prototype.set_persistent = function(txt)
+{
+   localStorage[this.key] = txt ;
+   this.show() ;
+} ;
+PersistentInput.prototype.show = function()
+{
+   this.form.className = this.input.value != '' ? "highlight" : '' ;
+} ;
+PersistentInput.prototype.onkeypress_real = function()
+{
+   this.set_persistent(this.input.value) ;
+} ;
+PersistentInput.prototype.onkeypress = function(event)
+{  // Needed because INPUT.value is modified after the keypress
+   setTimeout(this.onkeypress_real.bind(this), 100) ;
+   if ( this.old_onkeypress )
+      this.old_onkeypress(event) ;
+} ;
+PersistentInput.prototype.onsubmit = function()
+{
+   this.set_persistent("") ;
+} ;
+"""
 
 def execute(state, plugin, argument):
     if argument:
@@ -55,7 +104,8 @@ def execute(state, plugin, argument):
 
     return '''
     <FORM METHOD="GET" ACTION="#">
-    <TEXTAREA NAME="%s" ROWS="10"></TEXTAREA><br>
+    <TEXTAREA id="comment" NAME="%s" ROWS="10"></TEXTAREA><br>
+    <script>new PersistentInput('comment')</script>
     <button type="submit"><p class="comment_button"></p></button>
     </FORM>
     ''' % plugin.plugin.css_name  + s

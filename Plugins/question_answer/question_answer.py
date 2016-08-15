@@ -221,7 +221,7 @@ def execute(state, plugin, argument):
         s += '<INPUT TYPE="text" ID="2" NAME="%s.%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (
             # INPUT NAME
             plugin.plugin.css_name, configuration.session.name,
-            state.question.name,
+            cgi.html.escape(state.question.name),
             #
             configuration.nr_columns, last_answer_html,
             style and last_answer_html or '',
@@ -236,6 +236,8 @@ def execute(state, plugin, argument):
         
     s += ('<script type="text/javascript">document.getElementById(2).focus();'
           + 'window.scrollTo(0,0) ;'
+          + 'new PersistentInput("2", "{}") ;'.format(cgi.html.escape(
+              state.question.name))
           + '</script>'
           + '</FORM>'
           )
