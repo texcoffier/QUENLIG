@@ -12,7 +12,7 @@ translations = {
       'answered>SPAN' : 'Vous avez bien répondu',
       'perfect_answer>SPAN' : "Réponse parfaite, prêt pour l'examen",
       'not_answerable>SPAN' : "Vous ne l'avez pas encore débloquée",
-      'not_seen>SPAN' : "Vous ne l'avez jamais lu",
+      'not_seen>SPAN' : "Vous ne l'avez jamais lue",
       'question_given>SPAN' : "Vous n'avez pas encore répondu",
       'resigned>SPAN' : "Vous n'avez pas encore répondu",
     }
