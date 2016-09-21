@@ -76,6 +76,8 @@ if javascript == '':
                                 + "/Plugins/competences/competences.js")
 
 def execute(state, plugin, dummy_argument):
+    if not hasattr(state, 'question'):
+        return get_levels()
     answerables = state.student.answerables_typed(any=True)
     q = []
     for info in answerables:
@@ -89,3 +91,48 @@ def execute(state, plugin, dummy_argument):
     question = state.question and state.question.name or ''
     return '<script>display_competences(%s,%s,%s);</script>' % (
         json.dumps(q), json.dumps(question), state.student.seed % 1000000000)
+
+
+def get_levels():
+    """Copy paste from competence.js"""
+    from QUENLIG import statistics
+    stats = statistics.question_stats()
+    csv = []
+    for s in stats.all_students:
+        nr = 0
+        nr_accessible = 0
+        nr_view = 0
+        nr_good = 0
+        nr_perfect = 0
+        nr_versions = 0
+        nr_total_versions = 0
+        answerable_set = set(s.answerables())
+        for q in s.answerables(any=True):
+            a = s.answer(q.name)
+            nr += 1
+            if q in answerable_set or a.nr_good_answer:
+                nr_accessible += 1
+            if a.nr_asked:
+                nr_view += 1
+            if a.nr_good_answer:
+                nr_good += 1
+            if a.nr_perfect_answer:
+                nr_perfect += 1
+            if a.nr_good_answer >= q.get_nr_versions():
+                nr_versions += 1
+            
+        if nr_accessible < nr:
+            level = nr_accessible / nr
+        elif nr_view < nr:
+            level = 1 + nr_view / nr
+        elif nr_good < nr:
+            level = 2 + nr_good / nr
+        elif nr_versions < nr:
+            level = 3 + nr_versions / nr
+        else:
+            level = 4 + nr_perfect / nr
+        csv.append("{}\t{:.2f}\t{:.1f}\n".format(s.filename, level,
+                                                 (s.the_time_searching
+                                                  + s.the_time_after)/3600.))
+    return 'text/csv; charset=UTF-8', '\n'.join(csv).encode("utf-8")
+
