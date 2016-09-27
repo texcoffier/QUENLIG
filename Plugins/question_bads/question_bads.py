@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2016 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
+#    Contact: Thierry.EXCOFFIER@univ-lyon1.fr
 
 """Displays all the bad answers given for a question."""
 
@@ -28,8 +28,8 @@ from QUENLIG import questions
 priority_display = 'question_comments'
 acls = { 'Author': ('executable',) }
 css_attributes = (
-    "SPAN.uncommented { background: #FAA; }",
-    "SPAN.uncommented PRE { background-color: #FAA ; }",
+    "DIV.uncommented { background: #FAA; display: inline-block }",
+    "DIV.uncommented PRE { background-color: #FAA ; }",
     )
 
 def execute(state, plugin, argument):
@@ -48,7 +48,7 @@ def execute(state, plugin, argument):
                 c = utilities.answer_format(answer)
                 if not commented:
                     # Uppercase in order to display them first when sorted
-                    c = "<SPAN class=\"uncommented\">" + c + "</span>"
+                    c = '<div class="uncommented">' + c + "</div>"
                 elif commented == '*':
                     c = "***!!!" + c + "!!!***"
                 else:
