@@ -168,11 +168,18 @@ def sortable_table(sort_column, content, html_class='', url='',
     content.sort()
     if not ascending:
         content.reverse()
-    for line in content:
+    for i, line in enumerate(content):
         s.append("<tr%s>" % line_attributes(line[1]))
-        for cell in line[1:]:
-            s.append("<td%s>" % cell_attributes(cell) \
-                 + str(cell_value(cell)) + "</td>")
+        for j, cell in enumerate(line):
+            if j == 0:
+                continue
+            if i > 0 and content[i-1][j] == cell:
+                continue
+            last = i+1
+            while last < len(content) and content[last][j] == cell:
+                last += 1
+            s.append("<td%s rowspan=%d>%s</td>" % (
+                cell_attributes(cell), last - i, cell_value(cell)))
         s.append("</tr>")
     s.append("</tbody></table>")
     return '\n'.join(s)
