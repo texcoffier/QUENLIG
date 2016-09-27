@@ -44,6 +44,7 @@ class Answer:
         self.first_time = 0       # The question first display date
         self.comments = []        # The comment sent by the student
         self.bad_answers = []     # The bad answers given by the student
+        self.full_bad_answers = []# Random value + bad answer
         self.resign = False       # The student saw the question in the past
         self.last_answer = ''     # The last student answer
         self.grades = {}          # The teachers grades
@@ -104,6 +105,7 @@ class Command_bad(Command):
         answer.answered = False # Needed for 'any_question'
         answer.nr_bad_answer += 1
         answer.bad_answers.append(value)
+        answer.full_bad_answers.append((answer.persistent_random, value))
         answer.answer_times.append(action_time)
 
 class Command_comment(Command):

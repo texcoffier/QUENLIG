@@ -21,6 +21,7 @@
 
 """Displays all the bad answers given for a question."""
 
+import collections
 from QUENLIG import utilities
 from QUENLIG import statistics
 from QUENLIG import questions
@@ -38,12 +39,12 @@ def execute(state, plugin, argument):
 
     stats = statistics.question_stats()
     
-    ba = []
+    bads = collections.defaultdict(list)
     for s in stats.all_students:
         for a in s.answers.values():
             if a.question != state.question.name:
                 continue
-            for answer in a.bad_answers:
+            for rand, answer in a.full_bad_answers:
                 commented = s.answer_commented(a.question, answer, state)
                 c = utilities.answer_format(answer)
                 if not commented:
@@ -59,25 +60,30 @@ def execute(state, plugin, argument):
                     name = "<b>" + name + "</b>"
                 if a.indice != -1:
                     name = "<em>" + name + "</em>"
-                ba.append( [state.question.canonize(answer,state), c, name,
-                            answer] )
+                save = a.persistent_random
+                a.persistent_random = rand
+                rand = state.question.question(state)
+                a.persistent_random = save
+                bads[rand].append(
+                    [state.question.canonize(answer,state), c, name, answer] )
 
-    if len(ba) == 0:
+    if len(bads) == 0:
         return
-                
-    # Fusion of bad answers with identical canonization
-    ba.sort(key=lambda x: (x[0], len(x[3])))
+
     new_ba = []
-    last = False
-    for x in ba:
-        if x[0] == last:
-            if x[3] != last_orig:
-                x[2] += '<a class="tips"><SPAN style="white-space: normal">' +  utilities.answer_format(x[3], space=True) + '</SPAN>+</a>'
-            new_ba[-1][1] += ", " + x[2]
-        else:
-            new_ba.append([x[1], x[2]])
-            last = x[0]
-            last_orig = x[3]
+    for rand, ba in bads.items():
+        # Fusion of bad answers with identical canonization
+        ba.sort(key=lambda x: (x[0], len(x[3])))
+        last = False
+        for x in ba:
+            if x[0] == last:
+                if x[3] != last_orig:
+                    x[2] += '<a class="tips"><SPAN style="white-space: normal">' +  utilities.answer_format(x[3], space=True) + '</SPAN>+</a>'
+                new_ba[-1][1] += ", " + x[2]
+            else:
+                new_ba.append([rand, x[1], x[2]])
+                last = x[0]
+                last_orig = x[3]
 
     return utilities.sortable_table(plugin.sort_column, new_ba,
                                     url=plugin.plugin.css_name
