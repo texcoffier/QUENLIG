@@ -120,7 +120,7 @@ def line_attributes(cell):
 
 
 def sortable_table(sort_column, content, html_class='', url='',
-                   titles=()
+                   titles=(), merge=False
                    ):
     """Content is a list of line.
     Each line is a list containing the same number of cell.
@@ -173,10 +173,10 @@ def sortable_table(sort_column, content, html_class='', url='',
         for j, cell in enumerate(line):
             if j == 0:
                 continue
-            if i > 0 and content[i-1][j] == cell:
+            if merge and i > 0 and content[i-1][j] == cell:
                 continue
             last = i+1
-            while last < len(content) and content[last][j] == cell:
+            while merge and last < len(content) and content[last][j] == cell:
                 last += 1
             s.append("<td%s rowspan=%d>%s</td>" % (
                 cell_attributes(cell), last - i, cell_value(cell)))
