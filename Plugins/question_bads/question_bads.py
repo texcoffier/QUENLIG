@@ -33,6 +33,8 @@ css_attributes = (
     "DIV.uncommented PRE { background-color: #FAA ; }",
     )
 
+sort_column = 0
+
 def execute(state, plugin, argument):
     if state.question == None:
         return
@@ -45,6 +47,10 @@ def execute(state, plugin, argument):
             if a.question != state.question.name:
                 continue
             for rand, answer in a.full_bad_answers:
+                save = (state.student, a.persistent_random)
+                a.persistent_random = rand
+                state.student = s
+
                 commented = s.answer_commented(a.question, answer, state)
                 c = utilities.answer_format(answer)
                 if not commented:
@@ -60,10 +66,8 @@ def execute(state, plugin, argument):
                     name = "<b>" + name + "</b>"
                 if a.indice != -1:
                     name = "<em>" + name + "</em>"
-                save = a.persistent_random
-                a.persistent_random = rand
                 rand = state.question.question(state)
-                a.persistent_random = save
+                (state.student, a.persistent_random) = save
                 bads[rand].append(
                     [state.question.canonize(answer,state), c, name, answer] )
 
@@ -76,15 +80,16 @@ def execute(state, plugin, argument):
         ba.sort(key=lambda x: (x[0], len(x[3])))
         last = False
         for x in ba:
-            if x[0] == last:
+            if (x[0],x[1]) == last:
                 if x[3] != last_orig:
                     x[2] += '<a class="tips"><SPAN style="white-space: normal">' +  utilities.answer_format(x[3], space=True) + '</SPAN>+</a>'
-                new_ba[-1][1] += ", " + x[2]
+                new_ba[-1][2] += ", " + x[2]
             else:
                 new_ba.append([rand, x[1], x[2]])
-                last = x[0]
+                last = (x[0], x[1])
                 last_orig = x[3]
 
     return utilities.sortable_table(plugin.sort_column, new_ba,
-                                    url=plugin.plugin.css_name
+                                    url=plugin.plugin.css_name,
+                                    merge=True
                                     )
