@@ -50,8 +50,13 @@ def execute(state, plugin, argument):
                 save = (state.student, a.persistent_random)
                 a.persistent_random = rand
                 state.student = s
-
-                commented = s.answer_commented(a.question, answer, state)
+                s.writable = False
+                try:
+                    commented = s.answer_commented(a.question, answer, state)
+                    rand = state.question.question(state)
+                finally:
+                    s.writable = True
+                    (state.student, a.persistent_random) = save
                 c = utilities.answer_format(answer)
                 if not commented:
                     # Uppercase in order to display them first when sorted
@@ -66,8 +71,6 @@ def execute(state, plugin, argument):
                     name = "<b>" + name + "</b>"
                 if a.indice != -1:
                     name = "<em>" + name + "</em>"
-                rand = state.question.question(state)
-                (state.student, a.persistent_random) = save
                 bads[rand].append(
                     [state.question.canonize(answer,state), c, name, answer] )
 
