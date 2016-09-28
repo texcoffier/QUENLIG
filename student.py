@@ -349,10 +349,18 @@ class Student:
         """Set the random seed for the question"""
         random.seed(self.seed + self.answer(question).nr_erase)
 
+
     def answered_page(self, state):
+        try:
+            state.student.writable = False
+            return self.answered_page_(state)
+        finally:
+            state.student.writable = True
+
+    def answered_page_(self, state):
         t = list(self.answers.values())
         t.sort(key= lambda x: x.first_time)
-        
+
         s = []
         none = None
         saved_question = state.question

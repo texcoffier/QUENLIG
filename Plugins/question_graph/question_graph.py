@@ -45,30 +45,36 @@ def execute(state, dummy_plugin, dummy_argument):
     stats = statistics.question_stats()
 
     uncanonize = {}
-    
+    save = state.student
     arcs = collections.defaultdict(lambda: collections.defaultdict(int))
     for s in stats.all_students:
         if state.question.name not in s.answers:
             continue
-        a = s.answers[state.question.name]
-        last_comment = is_first + state.question.question(state)
-        for c_orig in a.bad_answers:
-            c = state.question.canonize(c_orig, state)
-            uncanonize[c] = c_orig
-            commented = is_comment + re_comment.sub("\n", s.answer_commented(a.question ,c_orig, state))
-            arcs[last_comment][c] += 1
-            arcs[c][commented] += 1
-            last_comment = commented
-        if a.answered:
-            c = is_good + state.question.canonize(a.answered, state)
-            commented = is_done + re_comment.sub(
-                "\n", s.check_answer(a.answered, state)[1])
-            commented = re.sub("(?s)<u:sequence.*", "", commented)
-            arcs[last_comment][c] += 1
-            arcs[c][commented] += 1
-            uncanonize[c] = is_good + a.answered
-        else:
-            arcs[last_comment][a.answered] += 1
+        s.writable = False
+        state.student = s
+        try:
+            a = s.answers[state.question.name]
+            last_comment = is_first + state.question.question(state)
+            for c_orig in a.bad_answers:
+                c = state.question.canonize(c_orig, state)
+                uncanonize[c] = c_orig
+                commented = is_comment + re_comment.sub("\n", s.answer_commented(a.question ,c_orig, state))
+                arcs[last_comment][c] += 1
+                arcs[c][commented] += 1
+                last_comment = commented
+            if a.answered:
+                c = is_good + state.question.canonize(a.answered, state)
+                commented = is_done + re_comment.sub(
+                    "\n", s.check_answer(a.answered, state)[1])
+                commented = re.sub("(?s)<u:sequence.*", "", commented)
+                arcs[last_comment][c] += 1
+                arcs[c][commented] += 1
+                uncanonize[c] = is_good + a.answered
+            else:
+                arcs[last_comment][a.answered] += 1
+        finally:
+            s.writable = True
+            state.student = save
 
     s = '''digraph "%s" {
 node[height="0.2",width="0.2",shape=rectangle, margin="0.025", label="",style="filled", fillcolor="white", fontsize="8"];
