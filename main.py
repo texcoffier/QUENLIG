@@ -589,6 +589,24 @@ if __name__ == "__main__":
                 out = p.heart_content
             print(out)
             sys.exit(0)
+        elif action == 'profile':
+            import cProfile
+            session.init()
+            os.chdir(session.dir)
+            from . import student
+            import pstats
+
+            print("\n\n\nLoading students profiling\n\n")
+            cProfile.run("student.all_students()", 'xxx.stats')
+            p = pstats.Stats('xxx.stats')
+            p.sort_stats('cumulative').print_stats()
+
+            print("\n\n\nStudent statistics profiling\n\n")
+            cProfile.run("statistics.question_stats()", 'xxx2.stats')
+            p = pstats.Stats('xxx2.stats')
+            p.sort_stats('cumulative').print_stats()
+
+            sys.exit(0)
         elif action == 'stop-loading':
             # DO NOT USE WHEN THE SESSION IS NOT FULLY TERMINATED.
             
