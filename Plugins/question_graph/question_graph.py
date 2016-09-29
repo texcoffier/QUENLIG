@@ -26,7 +26,7 @@ from QUENLIG import statistics
 import re
 import subprocess
 
-priority_display = '-question_bads'
+priority_display = 'question_grades'
 acls = { 'Author': ('executable',) }
 
 def H(x):
@@ -119,5 +119,6 @@ graph[charset="UTF-8", orientation="P",ranksep=0.5,sep=0,nodesep=0.05];
     f.close()
     p = subprocess.Popen(["dot", "-Tsvg", "xxx.dot"], stdout=subprocess.PIPE)
     svg = p.communicate()[0].decode("utf-8")
+    svg = re.sub(' (width|height)="[0-9]*pt"', '', svg)
     
-    return '<div style="text-align:left; width:100%">' + svg + '</div>'
+    return '<div style="text-align:left; width: 20em" onclick="this.style.width = this.offsetWidth * 1.5 + \'px\'">' + svg + '</div>'
