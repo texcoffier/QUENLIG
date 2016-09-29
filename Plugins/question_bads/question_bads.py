@@ -65,8 +65,7 @@ def execute(state, plugin, argument):
                     c = "***!!!" + c + "!!!***"
                 else:
                     c = '<a class="tips"><SPAN style="white-space: normal">%s</SPAN>%s</a>' %(commented,c)
-                    
-                name = s.a_href()
+                name = s.a_href(body='\n\n' + rand + '\n\n' + answer)
                 if not a.answered:
                     name = "<b>" + name + "</b>"
                 if a.indice != -1:

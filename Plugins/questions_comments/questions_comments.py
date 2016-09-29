@@ -45,7 +45,7 @@ def execute(state, plugin, argument):
                 comments.append( [
                     q,
                     cgi.escape(c[1]),
-                    s.a_href(),
+                    s.a_href(body=c[1]),
                     utilities.date_format(c[0]).replace(' ','&nbsp;')])
 
 

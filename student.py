@@ -165,9 +165,11 @@ class Student:
                 del students[k]
                 break
         
-    def a_href(self):
-        return "<A HREF=\"?answered_other=%s\">%s</A>" % (
-            self.filename, self.name )
+    def a_href(self, body="", subject=None):
+        return "<A HREF=\"?answered_other=%s\">%s</A>%s" % (
+            self.filename, self.name,
+            self.mailto(body=body, subject=None, link='@')
+        )
             
     def answer(self, question):
         """Returns the answer from the question, create one the first time"""
@@ -528,14 +530,16 @@ class Student:
         self.init_seed(state.question.name)
         return questions.questions[question_name].answer_commented(answer,state)
 
-    def mailto(self, subject=None, body=""):
-        if subject == None:
+    def mailto(self, subject=None, body="", link=None):
+        if subject is None:
             subject = configuration.questions
+        if link is None:
+            link = self.name
         return "<A HREF=\"mailto:%s?subject=%s&body=%s\">%s</A>" % (
             self.informations.get('mail', self.filename),
             subject.replace("\"",'%27'),
             body.replace("\"",'%27').replace('\n','%0A'),
-            self.name
+            link
             )
 
 
