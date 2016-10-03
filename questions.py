@@ -1834,10 +1834,7 @@ class Choice(TestExpression):
     def source(self, state=None, format=None):
         s = []
         for arg in self.args:
-            if isinstance(arg[0], TestExpression):
-                question = arg[0](state, format)
-            else:
-                question = arg[0](None)
+            question = arg[0](state)
             t = [pf(question, format)]
             for a in arg[1:]:
                 t.append(a.source(state, format))
