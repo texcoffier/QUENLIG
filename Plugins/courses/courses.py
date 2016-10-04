@@ -52,8 +52,7 @@ function add_courses_index()
    {
      if ( t[i].className == 'course_question' )
         {
-          var qs = t[i].childNodes ;
-          var q = qs[0].textContent ;
+          var q = t[i].getElementsByTagName('A')[0].textContent ;
           var tt = t[i].getElementsByTagName('KEY') ;
           for(var k=0; k < tt.length; k++)
                keys.push([tt[k].textContent, q]) ;
@@ -77,7 +76,8 @@ function add_courses_index()
   var s = [] ;
   keys.sort() ;
   for(var j in keys)
-      s.push('<a href="?question='+escape2(keys[j][1])+'">' + keys[j][0]) ;
+      s.push('<a href="?question='+escape2(keys[j][1])+'">'
+                + keys[j][0] + '</a>') ;
   if ( s.length || toc.length )
        course_menu.innerHTML = '<br>' + toc.join("<br>") + '<br>'
                         + 'Index:</br>'
