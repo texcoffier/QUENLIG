@@ -528,18 +528,18 @@ function patch_title()
       }
       var more = document.createElement("DIV") ;
       more.style.marginTop = "1em" ;
+      more.className = "competences" ;
       more.innerHTML = '<div class="question_good" style="display:inline">'
 	+ '<a class="tips key_enter">'
 	+ '<button onclick="click_on_next_button()"><p></p></button>'
 	+ (state === 'done' || state == "good" ? '<span></span>' : '')
 	+ '</a></div>'
         + s
-	+ '<div class="question_redo" style="display:inline">'
-	+ '<a class="tips question_redo">'
-	+ '<button onclick="question_redo()" style="background:#FEE"'
-	+ (questions[current_question].nr_versions < 1 ? " disabled" : "")
-	+ '><p></p></button>'
-	+ '<span></span></a></div>' ;
+	+ '<div class="' + (questions[current_question].nr_versions < 2
+			    ? 'question_erase' : 'question_redo')
+	+ '" style="display:inline"><a class="tips question_redo">'
+	+ '<button onclick="question_redo()" style="background:#FEE">'
+	+ '<p></p></button><span></span></a></div>' ;
 
       heart.appendChild(more) ;
 

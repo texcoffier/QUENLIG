@@ -15,5 +15,6 @@ translations = {
     'not_seen>SPAN' : "Never read question",
     'question_given>SPAN' : "Never answered",
     'resigned>SPAN' : "Never answered",
+    'question_erase P': "Erase your answer"
     }
 
