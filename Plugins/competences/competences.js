@@ -270,9 +270,14 @@ MyRand.prototype.get = function(max)
   return  Math.floor(Math.abs(n * max * 10000)) % max ;
 }
 
+function html(txt)
+{
+  return txt.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;");
+}
+
 Question.prototype.display_name = function()
 {
-  var name = this.name ;
+  var name = html(this.name) ;
   var short_name = name.split(":") ;
   if ( isNaN(short_name[1]) )
     return name ;
