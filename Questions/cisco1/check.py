@@ -708,8 +708,8 @@ class Network:
             if isinstance(h, Cloud):
                 return
         # compute network list and create link
-        for h in self.hosts.values():
-            for link in h.interfaces.values():
+        for h in list(self.hosts.values()):
+            for link in list(h.interfaces.values()):
                 if link.mask and link.port.ip:
                     n = "%s/%d" % (str(link.network),
                                    link.mask.nr_bits_netmask())
@@ -752,7 +752,7 @@ class Network:
             links_type = []
             t = Dot('dot', label=' ')
             self.append([t])
-            for h in self.hosts.values():
+            for h in list(self.hosts.values()):
                 for link in h.interfaces.values():
                     if link.__class__ not in links_type:
                         links_type.append(link.__class__)
@@ -804,7 +804,7 @@ mv %s.svg %s.png %s
 
     def html(self, from_node):
         hosts = list(self.hosts.values())
-        hosts.sort(lambda x,y: cmp(x.name, y.name))
+        hosts.sort(key=lambda x: x.name)
         if self.display_eth1:
             x = '<td>Host eth1</td>'
         else:
