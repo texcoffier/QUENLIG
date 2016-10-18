@@ -14,7 +14,7 @@ cd QUENLIG
 
 if [ "" != "$LDAP" ]
 then
-    LDAP="ldap $1"
+    LDAP="ldap $LDAP"
 fi
 
 for TP in 1 2
