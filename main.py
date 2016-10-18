@@ -178,7 +178,7 @@ class Session:
         self.init()
         os.chdir(self.dir)
         utilities.write(os.path.join('HTML', 'simple.html'),
-                        statistics.html_simple(None).encode('utf-8'))
+                        statistics.html_simple(None))
         statistics.graph_dot()
         statistics.graph2_dot()
         sys.exit(0)

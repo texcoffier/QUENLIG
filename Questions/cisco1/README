@@ -1,13 +1,21 @@
 #!/bin/sh
-# Ce script est à lancer une fois en début de semestre :
+# Ce script est Ã  lancer une fois en dÃ©but de semestre :
 #   * Il archive les anciens TP
-#   * Il crée les nouveaux : cisco1 et cisco2
+#   * Il crÃ©e les nouveaux : cisco1 et cisco2
 #   * Il lance les nouveaux : cisco1 et cisco2
 # NE PAS LE LANCER DEUX FOIS !
 # Le nom des admins est en dur dans le code
+#
+# Il tient compte de la variable shell LDAP:
+# LDAP="('ldap.domain.org',636,'login','password')"
 
 cd
 cd QUENLIG
+
+if [ "" != "$LDAP" ]
+then
+    LDAP="ldap $1"
+fi
 
 for TP in 1 2
 do
@@ -36,7 +44,8 @@ do
 	admin yves.caniou \
 	admin jacques.bonneville \
 	admin olivier.gluck \
-	url "http://demo710.univ-lyon1.fr/LIF8TP$TP"
+	url "http://demo710.univ-lyon1.fr/LIF8TP$TP" \
+        $LDAP
     echo 16 >Students/$SESSION/nr_hosts
     (cd Questions/cisco$TP/HTML ; make)
     if [ ! -d Students/$SESSION/Logs/Default ]
@@ -57,12 +66,12 @@ do
 " >Students/$SESSION/Logs/Student/acls
     echo "
 ###########################################################################
-# LANCEMENT de la session en arrière plan
+# LANCEMENT de la session en arriÃ¨re plan
 ###########################################################################"
     ./main.py $SESSION start >>Students/$SESSION/log 2>&1 </dev/null &
     echo "
 ###########################################################################
-# Création du sujet de TP (TRES TRES lent)
+# CrÃ©ation du sujet de TP (TRES TRES lent)
 # Normalement FireFox affiche $(pwd)/Questions/cisco1/HTML/sujet.html
 ###########################################################################"
 
