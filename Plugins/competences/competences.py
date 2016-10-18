@@ -107,6 +107,8 @@ def get_levels():
         nr_versions = 0
         nr_total_versions = 0
         answerable_set = set(s.answerables())
+        total_bad = 0
+        total_good = 0
         for q in s.answerables(any=True):
             a = s.answer(q.name)
             nr += 1
@@ -120,6 +122,8 @@ def get_levels():
                 nr_perfect += 1
             if a.nr_good_answer >= q.get_nr_versions():
                 nr_versions += 1
+            total_bad += a.nr_bad_answer
+            total_good += a.nr_good_answer
             
         if nr_accessible < nr:
             level = nr_accessible / nr
@@ -131,8 +135,24 @@ def get_levels():
             level = 3 + nr_versions / nr
         else:
             level = 4 + nr_perfect / nr
-        csv.append("{}\t{:.2f}\t{:.1f}\n".format(s.filename, level,
-                                                 (s.the_time_searching
-                                                  + s.the_time_after)/3600.))
-    return 'text/csv; charset=UTF-8', '\n'.join(csv).encode("utf-8")
+        csv.append((s.filename, level,
+                    (s.the_time_searching + s.the_time_after)/3600.,
+                    total_good / (total_good + total_bad)
+                    if total_good else 0))
+
+    five_stars = [i
+                  for i in csv
+                  if i[1] >= 5
+    ]
+    if len(five_stars) >= 2:
+        bad  = min(i[3] for i in five_stars)
+        good = max(i[3] for i in five_stars)
+        gap = good - bad
+        if gap > 0.1:
+            for student in five_stars:
+                student[1] += (student[2] - bad) / gap
+
+    return 'text/csv; charset=UTF-8', '\n'.join(
+        "{}\t{:.2f}\t{:.1f}\t{:.2f}\n".format(*data)
+        for data in csv).encode("utf-8")
 
