@@ -37,16 +37,18 @@ do
     fi
     echo "
 ###########################################################################
-# CREATION de la session
+# CREATION de la session 'cisco$TP'
 ###########################################################################"
+    [ ! -d Students/$SESSION ] && mkdir Students/$SESSION
+    echo 16 >Students/$SESSION/nr_hosts
     ./main.py $SESSION create Questions/cisco$TP 300$TP \
 	admin thierry.excoffier \
 	admin yves.caniou \
 	admin jacques.bonneville \
 	admin olivier.gluck \
 	url "http://demo710.univ-lyon1.fr/LIF8TP$TP" \
+	plot \
         $LDAP
-    echo 16 >Students/$SESSION/nr_hosts
     (cd Questions/cisco$TP/HTML ; make)
     if [ ! -d Students/$SESSION/Logs/Default ]
     then
@@ -75,7 +77,6 @@ do
 # Normalement FireFox affiche $(pwd)/Questions/cisco1/HTML/sujet.html
 ###########################################################################"
 
-    ./main.py $SESSION plot
     cp Questions/cisco$TP/HTML/sujet.html Students/cisco$TP/HTML
     firefox Students/cisco$TP/HTML/sujet.html
 
