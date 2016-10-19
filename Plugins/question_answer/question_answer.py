@@ -210,7 +210,8 @@ def execute(state, plugin, argument):
             else:
                 checked = ''
             s += '<label><input onchange="check_button(this)" class="checkbox" type="%s" name="%s" value="%s"%s>' % (
-                button_type, plugin.plugin.css_name, j[0], checked
+                button_type, plugin.plugin.css_name,
+                j[0].replace('"', '&#34;'), checked
             ) + j[1] + '</label><br>'
         if nr_checked == 0:
             checked = ' id="2"'
