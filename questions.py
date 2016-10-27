@@ -1111,6 +1111,12 @@ class Contain(TestString):
     def do_test(self, student_answer, dummy_state):
         return self.string_canonized in student_answer, ''
 
+def contains_one_of(expected, comment=None):
+    a = Contain(expected[0], comment)
+    for e in expected[1:]:
+        a = a | Contain(e, comment)
+    return a
+
 class Start(TestString):
     """Returns True the student answer starts by the string in parameter.
 
