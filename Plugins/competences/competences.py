@@ -135,10 +135,10 @@ def get_levels():
             level = 3 + nr_versions / nr
         else:
             level = 4 + nr_perfect / nr
-        csv.append((s.filename, level,
+        csv.append([s.filename, level,
                     (s.the_time_searching + s.the_time_after)/3600.,
                     total_good / (total_good + total_bad)
-                    if total_good else 0))
+                    if total_good else 0])
 
     five_stars = [i
                   for i in csv
