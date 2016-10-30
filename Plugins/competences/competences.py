@@ -150,7 +150,7 @@ def get_levels():
         gap = good - bad
         if gap > 0.1:
             for student in five_stars:
-                student[1] += (student[2] - bad) / gap
+                student[1] += (student[3] - bad) / gap
 
     return 'text/csv; charset=UTF-8', '\n'.join(
         "{}\t{:.2f}\t{:.1f}\t{:.2f}\n".format(*data)
