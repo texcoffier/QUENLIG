@@ -616,6 +616,10 @@ if __name__ == "__main__":
 
             # To have a session snapshot at a fixed time
             # stop-loading "lambda s:s.logs and s.logs[-1][0] > 1393400000"
+
+            # To display competence grades when the student reach 5
+            # questions answered correctly:
+            # stop-loading "lambda s:s.number_of_good_answers() == 5 and (print(1) or True)" execute competence
             from . import student
             student.stop_loading_default = eval(args.pop())
         else:

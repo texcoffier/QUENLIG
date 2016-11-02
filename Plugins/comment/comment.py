@@ -17,11 +17,15 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
+#    Contact: Thierry.EXCOFFIER@univ-lyon1.fr
 
 """Allow the students to leave a comment about the question."""
 
 import cgi
+import traceback
+import smtplib
+import ast
+from QUENLIG import configuration
 
 priority_display = 'analyse'
 css_attributes = (
@@ -88,6 +92,57 @@ PersistentInput.prototype.onsubmit = function()
 } ;
 """
 
+option_name = 'comment'
+option_help = '''("the_teacher@university.org", "smtp.university.org")
+        If defined, on each student comment:
+        a mail is sent to 'the_teacher@university.org'
+        via the 'smtp.university.org' mail server.'''
+option_default = ""
+
+def sendmail(state, plugin, argument, q):
+    teacher_mail, smtp_server = ast.literal_eval(plugin.option)
+    if q == "None":
+        bads = ""
+        before = ""
+        question = ""
+    else:
+        answers = state.student.answer(q)
+        bads = '\n'.join("<li>{}".format(cgi.escape(a))
+                         for a in answers.bad_answers)
+        if state.question.before:
+            state.student.init_seed(q)
+            before = "<hr>" + state.question.before(state)
+        else:
+            before = ""
+        state.student.init_seed(q)
+        question = "<hr>" + state.question.question(state)
+    session = smtplib.SMTP(smtp_server)
+    info = state.student.informations
+    login = state.student.filename
+    mail = info.get("mail", login)
+    sn = info.get("surname", "")
+    fn = info.get("firstname", "")
+    session.sendmail(from_addr=mail, to_addrs=teacher_mail,
+                     msg="""Subject: {}/{} {} {} {}
+To: {}
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+
+<b>{}</b>
+<p>
+{}
+{}
+{}
+<hr>
+<ul>
+{}
+</ul>
+""".format(configuration.session.name, q,
+           login, sn, fn, plugin.option, q,
+           cgi.escape(argument), before, question, bads).encode("utf-8"))
+    session.close()
+
 def execute(state, plugin, argument):
     if argument:
         if state.question:
@@ -95,6 +150,11 @@ def execute(state, plugin, argument):
         else:
             q = "None"
         state.student.add_a_comment(q, argument)
+        if plugin.option:
+            try:
+                sendmail(state, plugin, argument, q)
+            except:
+                traceback.print_exc()
         
         s = '<div class="comment_given">' \
             + cgi.escape(argument) + '</div>'
