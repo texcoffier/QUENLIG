@@ -60,6 +60,11 @@ add(name="route par défaut",
          """Il est plus simple de faire <tt>add default</tt> au lieu
          de spécifier <tt>-net 0.0.0.0...</tt>.""",
          parse_strings=host),    
+    Reject("dev", """Pas la peine d'indiquer le périphérique, en effet
+                     on peut le retrouver à partir de l'adresse IP.
+                     <p>Cette option est seulement utile quand
+                     il y a 2 liaisons IP physiques reliant directement les mêmes
+                     2 machines, ce qui arrive rarement."""), 
     expect('ip route',
            "Sous unix, on définit les routes avec la commande <tt>ip route</tt>"),
     # expect('gw'),

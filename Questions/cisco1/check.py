@@ -597,7 +597,7 @@ class Cisco2800(Cisco):
     interrupteur_on_off = True
     version_bootstrap="12.4(1r)"
     version_IOS = ("12.4(3e)", "12.4(18e)", "12.4(18r)",
-                   "12.4(1c)")
+                   "12.4(1c)", "12.4(24)")
 
 class Cisco2800B(Cisco2800):
     interfaces_name = {'C0': 'console',
@@ -611,12 +611,12 @@ class Cisco1800(Cisco):
                        'E0': 'fastethernet 0/0', 'E1': 'fastethernet 0/1'}
     ram = (1024*128,)
     nvram = (191,)
-    flash = (31360,)
+    flash = (31360, 3612656)
     conf_register = '0x2102'
     conf_register2 = '0x2142'
     interrupteur_on_off = True
     version_bootstrap="12.3(8r)"
-    version_IOS = ("12.4(1c)", "12.4(18e)")
+    version_IOS = ("12.4(1c)", "12.4(18e)", "12.4(22)")
 
 class Cisco1700(Cisco):
     names = ('1700', '1721')
@@ -1052,22 +1052,22 @@ class require_ip(Test):
 require_ping = require('ping',"On utilise la commande <tt>ping</tt>")
 
 postes = (      
-["10.57.19.233", 'A3',Cisco2800],
-["10.57.18.10",  'B3',Cisco1800], # SB3 Cisco2960
-("10.57.30.150", 'C3',Cisco2900),
-("10.57.30.152", 'D3',Cisco1800), # SD3 Cisco2950
-("10.56.145.237",'E3',Cisco2800B),
-("10.57.30.155", 'F3',Cisco1800), # SF3 Cisco2950
-("10.57.30.159", 'G3',Cisco2900),
-("10.57.18.238", 'H3',Cisco1800), # SH3 Cisco2960
-("10.57.30.151", 'I3',Cisco2800),
-("10.57.18.242", 'J3',Cisco1800), # SJ3 Cisco2960
-("10.57.30.162", 'K3',Cisco2900),
-("10.57.18.250", 'L3',Cisco1800), # SL3 Cisco2950
-("10.57.30.156", 'M3',Cisco2800B),
-("10.57.30.165", 'N3',Cisco1800), # SN3 Cisco2950
-("10.57.30.164", 'O3',Cisco2900),
-("10.57.30.160", 'P3',Cisco1800), # SP3 Cisco2950
+["10.250.0.90", 'A3',Cisco2800],
+["10.250.0.91", 'B3',Cisco1800], # SB3 Cisco2960
+("10.250.0.92", 'C3',Cisco2900),
+("10.250.0.93", 'D3',Cisco1800), # SD3 Cisco2950
+("10.250.0.94", 'E3',Cisco2800B),
+("10.250.0.95", 'F3',Cisco1800), # SF3 Cisco2950
+("10.250.0.96", 'G3',Cisco2900),
+("10.250.0.97", 'H3',Cisco1800), # SH3 Cisco2960
+("10.250.0.98", 'I3',Cisco2800),
+("10.250.0.99", 'J3',Cisco1800), # SJ3 Cisco2960
+("10.250.0.100",'K3',Cisco2900),
+("10.250.0.101",'L3',Cisco1800), # SL3 Cisco2950
+("10.250.0.102",'M3',Cisco2800B),
+("10.250.0.103",'N3',Cisco1800), # SN3 Cisco2950
+("10.250.0.104",'O3',Cisco2900),
+("10.250.0.105",'P3',Cisco1800), # SP3 Cisco2950
 )
 
 # When the system is debugged, the server change the IP address

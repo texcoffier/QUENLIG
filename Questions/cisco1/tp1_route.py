@@ -45,12 +45,17 @@ add(name="defaut pc",
     require("{E0.remote_port.ip}",
             "Je ne vois pas l'adresse IP du routeur connecté à votre machine",
             parse_strings=host),
+    Reject("dev", """Pas la peine d'indiquer le périphérique, en effet
+                     on peut le retrouver à partir de l'adresse IP.
+                     <p>Cette option est seulement utile quand
+                     il y a 2 liaisons IP physiques reliant directement les mêmes
+                     2 machines, ce qui arrive rarement."""), 
 #    require("gw", "Je ne vois pas le mot clef obligatoire <tt>gw</tt>"),
     good("route add default gw {E0.remote_port.ip}", parse_strings=host),
     ),
     good_answer="Exécutez la commande",
     indices = (
-    """Tapez <tt>man route</tt>""",
+    """Tapez <tt>man ip-route</tt>""",
     ),
     )
 
@@ -92,7 +97,7 @@ add(name="machine>routeur s1",
     tests = (
     require_ping,
     require("{E0.remote_port.host.S1.remote_port.ip}",
-            "Je ne vois pas l'adresse IP du port série 1 de votre routeur",
+            "Je ne vois pas l'adresse IP du port série du routeur distant",
             parse_strings=host),
     good("ping {E0.remote_port.host.S1.remote_port.ip}",
          parse_strings=host),

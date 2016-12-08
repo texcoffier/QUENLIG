@@ -12,24 +12,24 @@
     <h1>Lancement de Quenlig pour les TP CISCO</h1>
 
     <p>
-      Voici les opérations qui doivent être faites :
+      Voici les opÃ©rations qui doivent Ãªtre faites :
     <ul>
       <li> Se connecter sous <tt>exco</tt> sur la machine FAI.
-      <li> Si la version Quenlig a changé :
+      <li> Si la version Quenlig a changÃ© :
 	lancer <tt>Shell/install_tp_cisco_lif8</tt>
-	(cette commande génère aussi les sessions de TP)
-      <li> Si c'est la première fois que le groupe est en TP
+	(cette commande gÃ©nÃ¨re aussi les sessions de TP)
+      <li> Si c'est la premiÃ¨re fois que le groupe est en TP
 	alors indiquer le nombre de personnes (machines) dans le fichier&nbsp;:
 	<br>
 	<tt>Students/cisco[12]/nr_hosts</tt>
 	<ul>
-	  <li> <tt>[12]</tt> indique le numéro du sujet de TP.
+	  <li> <tt>[12]</tt> indique le numÃ©ro du sujet de TP.
 	</ul>
       <li> Lancer QUENLIG :
 	<tt>cd QUENLIG ; ./main.py cisco[12] start</tt>
       <li> Le sujet du TP est dans :
 	<tt>QUENLIG/Questions/cisco[12]/HTML/sujet.html</tt>
-      <li> Pour être administrateur Quenlig, utilisez le nom <tt>exco</tt>
+      <li> Pour Ãªtre administrateur Quenlig, utilisez le nom <tt>exco</tt>
 	dans <tt>guest.html</tt>
     </ul>
 
@@ -37,29 +37,29 @@
       ATTENTION :
     <ul>
       <li> Les outils graphiques (graphviz, inkscape)
-	n'étant pas installé sur FAI
-	le graphique du réseau n'est pas généré.
+	n'Ã©tant pas installÃ© sur FAI
+	le graphique du rÃ©seau n'est pas gÃ©nÃ©rÃ©.
 	C'est donc moi qui le fait pour vous sur une autre machine.
 
-      <li> Ne pas changer le nombre d'étudiants du groupe
-	d'une séance à l'autre.
-	Sinon il ne peuvent pas réutiliser leur travail.
+      <li> Ne pas changer le nombre d'Ã©tudiants du groupe
+	d'une sÃ©ance Ã  l'autre.
+	Sinon il ne peuvent pas rÃ©utiliser leur travail.
 
-      <li> Le sujet de TP devrait être généré dans
+      <li> Le sujet de TP devrait Ãªtre gÃ©nÃ©rÃ© dans
 	<tt>Students/cisco[12]/HTML</tt>
-	car il dépend de la session.
+	car il dÃ©pend de la session.
 	C'est promis, je le corrigerai.
     </ul>
 
     <p>
       Si cela ne fonctionne pas :
     <ul>
-      <li> L'étudiant n'a pas tapé l'URL complète
-	(il a oublié le numéro de port ou bien <tt>guest.html</tt>)
-      <li> L'étudiant utilise un navigateur autre que <em>firefox</em>
-	dans lequel le <em>proxy</em> n'est pas configuré.
-      <li> L'étudiant se trompe de routeur.
-      <li> Les câbles routeur/PC ne sont pas branchés sur la
+      <li> L'Ã©tudiant n'a pas tapÃ© l'URL complÃ¨te
+	(il a oubliÃ© le numÃ©ro de port ou bien <tt>guest.html</tt>)
+      <li> L'Ã©tudiant utilise un navigateur autre que <em>firefox</em>
+	dans lequel le <em>proxy</em> n'est pas configurÃ©.
+      <li> L'Ã©tudiant se trompe de routeur.
+      <li> Les cÃ¢bles routeur/PC ne sont pas branchÃ©s sur la
 	bonne paire de machine.
     </ul>
 
