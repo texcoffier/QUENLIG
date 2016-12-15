@@ -52,7 +52,10 @@ class Stats:
             return
         self.last_time = t
 
-        self.all_students = student.all_students()
+        if student.students:
+            self.all_students = tuple(student.students.values())
+        else:
+            self.all_students = student.all_students()
 
         for question in questions.questions.values():
             question.student_time_searching = 0

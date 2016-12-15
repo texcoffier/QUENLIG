@@ -81,6 +81,19 @@ def translate_log(filename):
 def static_hash(txt):
     return int(hashlib.md5(txt.encode('utf-8')).hexdigest(), 16)
 
+def log_age(name):
+    if name[0].isupper():
+        return 0 # For roles
+    log = os.path.join(log_directory(),
+                       name.translate(utilities.safe_ascii),
+                       'log.py')
+    if os.path.exists(log):
+        return time.time() - os.path.getmtime(log)
+    log = log[:-3]
+    if os.path.exists(log):
+        return time.time() - os.path.getmtime(log)
+    return 999999 # No file, so do not try to load
+
 class Student:
     """Student work log"""
     writable = True
@@ -555,7 +568,9 @@ def student(name):
 def all_students():
     """Read the directory content in order to return the student list"""
     return [student(student_name)
-            for student_name in os.listdir(log_directory())]
+            for student_name in os.listdir(log_directory())
+            if log_age(student_name) < configuration.log_age * 86400
+    ]
 
 
 def dump():
