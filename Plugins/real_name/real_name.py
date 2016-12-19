@@ -33,11 +33,18 @@ except:
 
 
 def option_set(plugin, value):
-    (plugin.state.ldap_host,
-     plugin.state.ldap_port,
-     plugin.state.ldap_login,
-     plugin.state.ldap_password) = ast.literal_eval(value)
-
+    try:
+        (plugin.state.ldap_host,
+         plugin.state.ldap_port,
+         plugin.state.ldap_login,
+         plugin.state.ldap_password) = ast.literal_eval(value)
+    except SyntaxError:
+        import sys
+        print("*"*77)
+        print("Invalid LDAP configuration: {}".format(repr(value)))
+        print("*"*77)
+        plugin.state.ldap_host = None
+        
 option_name = 'ldap'
 option_help = '''"('ldap.domain.org', 636, 'login', 'password')"
         Set the LDAP connection information to retrieve student name and mail.
@@ -103,7 +110,7 @@ def get_info(state, student_ids):
     return d
 
 def execute(state, dummy_plugin, dummy_argument):
-    if not ldap_is_here:
+    if not ldap_is_here or not state.ldap_host:
         return ''
 
     answered_other = state.form.get('answered_other')
