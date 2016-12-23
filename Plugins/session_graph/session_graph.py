@@ -36,7 +36,10 @@ server.do_not_cache.add('xxx_graphe.png')
 def execute(state, plugin, argument):
     if argument:
         statistics.graph_dot_minimal(True)
-        plugin.heart_content = server.get_file('xxx_graphe.svg').content.decode("utf-8")
+        try:
+            plugin.heart_content = server.get_file('xxx_graphe.svg').content.decode("utf-8")
+        except:
+            plugin.heart_content = ""
         state.question = None
     return ''
 
