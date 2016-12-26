@@ -75,6 +75,17 @@ if javascript == '':
     javascript = utilities.read(configuration.root
                                 + "/Plugins/competences/competences.js")
 
+
+def option_set(plugin, value):
+    configuration.erasable_after = int(value)
+
+option_name = 'erasable_after'
+option_help = '''#seconds
+        The student can erase its answer and try another question version
+	if the last answer is older than this time.
+        It is to not have students retrying to many times.'''
+option_default = str(configuration.erasable_after)
+
 def execute(state, plugin, dummy_argument):
     if not hasattr(state, 'question'):
         return get_levels()
@@ -116,7 +127,7 @@ def get_levels():
             for student in five_stars:
                 student[1] += (student[3] - bad) / gap
 
-    return 'text/csv; charset=UTF-8', '\n'.join(
+    return 'text/csv; charset=UTF-8', ''.join(
         "{}\t{:.2f}\t{:.1f}\t{:.2f}\n".format(*data)
         for data in csv).encode("utf-8")
 

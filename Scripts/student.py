@@ -115,7 +115,8 @@ class Student:
 
     def check_question_link(self, name, current=False, viewed=False,
                             max_descendants=False, default=False,
-                            resigned=False, bad_answer_given=False):
+                            resigned=False, bad_answer_given=False,
+                            erasable=False):
         s = '<A'
         if default:
             s += ' ID="1"'
@@ -130,6 +131,8 @@ class Student:
             s += 'resigned '
         if not viewed:
             s += 'not_seen '
+        if erasable:
+            s += 'erasable '
         if max_descendants:
             s += ' max_descendants'
         s += '">' + name + '</A>'

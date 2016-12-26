@@ -142,8 +142,7 @@ student: %s
                 q.student_time_after += answer.time_after
                 q.student_good += answer.nr_good_answer != 0
                 q.student_nr_comment += len(answer.comments)
-                # Not the first good answer because it is very long to find
-                q.student_good_time += answer.good_answer_times[1:]
+                q.student_good_time += answer.good_answer_times
 
 
         for q in questions.questions.values():

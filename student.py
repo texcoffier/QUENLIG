@@ -267,7 +267,6 @@ class Student:
     def answerables(self, any=False):
         if any or self.answerable_any:
             return list(questions.questions.values())
-
         if self.answerables_cache:
             return self.answerables_cache
 
@@ -278,6 +277,7 @@ class Student:
     def answerables_typed(self, any=False):
         tt = []
         answerable_set = set(self.answerables())
+        now = time.time()
         for i in self.answerables(any=any):
             a = self.answer(i.name)
             info = (
@@ -290,6 +290,7 @@ class Student:
                 ("", "resigned ")[ a.resign ] +
                 (i not in answerable_set and a.nr_good_answer == 0
                  and "not_answerable " or "") +
+                ("", "erasable ")[ int(a.erasable(now)) ] +
                 ("", " answered ")[int(a.answered != False)]
                 )
             tt.append( (i, info, a.nr_bad_answer, a.nr_good_answer,
@@ -386,6 +387,7 @@ class Student:
                 level = 3 + nr_versions / nr
             else:
                 level = 4 + nr_perfect / nr
+            del q, a
         return Level
 
     def grading_teachers(self):

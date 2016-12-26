@@ -44,7 +44,8 @@ def minimal_tests(student, good=0, bad=0, indice=0, title=''):
 
 def test_0000_initial_display(student):
     minimal_tests(student, title='Guest0000_Initial_Display')
-    student.check_question_link('a:a', default=True, max_descendants=True)
+    student.check_question_link('a:a', default=True, max_descendants=True,
+                                erasable=True)
     student.expect(
         '<span class="statmenu_time0"></span></em>0:00:00',
         )
@@ -53,7 +54,8 @@ def test_0010_goto_question(student):
     student.goto_question('a:a')
     minimal_tests(student, title='a:a')
     student.check_question_link('a:a', default=True, current=True,
-                                viewed=True, max_descendants=True)
+                                viewed=True, max_descendants=True,
+                                erasable=True)
     student.expect(
         '<table class="box_content"><tbody><tr><td>\nquestion_a\n</td></tr></tbody></table>',
         '<FORM CLASS="questionanswer"',
@@ -64,8 +66,9 @@ def test_0020_give_good_answer(student):
     student.goto_question('a:a')
     student.give_answer('a')
     minimal_tests(student, good=1, title='a:a')
-    student.check_question_link('a:b', default=True, max_descendants=True)
-    student.check_question_link('a:c')
+    student.check_question_link('a:b', default=True, max_descendants=True,
+                                erasable=True)
+    student.check_question_link('a:c', erasable=True)
     student.expect("good_answer__a", "good_answer_comment")
 
 def test_0030_goto_b(student):
@@ -73,15 +76,16 @@ def test_0030_goto_b(student):
     student.goto_question('a:b')
     minimal_tests(student, good=1, title='a:b')
     student.check_question_link('a:b', default=True, max_descendants=True,
-                                current=True, viewed=True)
-    student.check_question_link('a:c')
+                                current=True, viewed=True, erasable=True)
+    student.check_question_link('a:c', erasable=True)
 
 def test_0040_goto_c(student):
     test_0020_give_good_answer(student)
     student.goto_question('a:c')
     minimal_tests(student, good=1, title='a:c')
-    student.check_question_link('a:b', default=True, max_descendants=True)
-    student.check_question_link('a:c', current=True, viewed=True)
+    student.check_question_link('a:b', default=True, max_descendants=True,
+                                erasable=True)
+    student.check_question_link('a:c', current=True, viewed=True, erasable=True)
 
 def test_0050_goto_b_c(student):
     # Resigned questions are not 'default' ones.
@@ -90,8 +94,10 @@ def test_0050_goto_b_c(student):
     student.goto_question('a:c')
     minimal_tests(student, good=1, title='a:c')
     student.check_question_link('a:b', viewed=True,
-                                max_descendants=True, resigned=True)
-    student.check_question_link('a:c', default=True, current=True, viewed=True)
+                                max_descendants=True, resigned=True,
+                                erasable=True)
+    student.check_question_link('a:c', default=True, current=True, viewed=True,
+                                erasable=True)
 
 def test_0060_give_bad_answer(student):
     student.goto_question('a:a')
@@ -109,7 +115,8 @@ def test_0070_give_bad_answer_c(student):
     minimal_tests(student, title='a:c', good=1, bad=1)
     student.check_question_link('a:c', viewed=True, bad_answer_given=True,
                                 current=True)
-    student.check_question_link('a:b', default=True, max_descendants=True)
+    student.check_question_link('a:b', default=True, max_descendants=True,
+                                erasable=True)
 
 def test_0080_give_bad_answer_c_bad_b(student):
     test_0070_give_bad_answer_c(student)
@@ -130,8 +137,10 @@ def test_0090_all_resign(student):
     minimal_tests(student, good=1, title='a:b')
     # The default question become the first one
     student.check_question_link('a:b', default=True, max_descendants=True,
-                                current=True, viewed=True, resigned=True)
-    student.check_question_link('a:c', viewed=True, resigned=True)
+                                current=True, viewed=True, resigned=True,
+                                erasable=True)
+    student.check_question_link('a:c', viewed=True, resigned=True,
+                                erasable=True)
 
 def test_0100_reload_bad_answer(student):
     test_0060_give_bad_answer(student)
@@ -148,7 +157,8 @@ def test_0110_comment_question(student):
     student.give_comment('MyComment')
     minimal_tests(student, title='a:a')
     student.check_question_link('a:a', viewed=True, current=True,
-                                default=True, max_descendants=True)
+                                default=True, max_descendants=True,
+                                erasable=True)
     student.expect('<div class="comment_given">MyComment</div>')
     student.old_url = student.url
     page = student.get_answered()
@@ -169,7 +179,8 @@ def test_0120_comment_no_question(student):
     student.old_base = student.base # For reload
     student.give_comment('MyNoComment')
     student.old_url = student.url
-    student.check_question_link('a:a', default=True, max_descendants=True)
+    student.check_question_link('a:a', default=True, max_descendants=True,
+                                erasable=True)
     student.expect('<div class="comment_given">MyNoComment</div>')
     student.old_url = student.url
     page = student.get_answered()
@@ -336,7 +347,8 @@ def test_0260_require_simple(student):
     student.give_answer('c')
     student.reject_questions('b:A', 'b:B')
     minimal_tests(student, title='a:c', good=3)
-    student.check_question_link('b:C', default=True, max_descendants=True)
+    student.check_question_link('b:C', default=True, max_descendants=True,
+                                erasable=True)
 
     student.goto_question('b:A')
     minimal_tests(student, title='b:A', good=3)
@@ -351,8 +363,9 @@ def test_0270_require_test(student):
     student.goto_question('a:b')
     student.give_answer('b')
     student.reject_questions('b:A', 'b:C')
-    student.check_question_link('a:c', default=True, max_descendants=True)
-    student.check_question_link('b:B')
+    student.check_question_link('a:c', default=True, max_descendants=True,
+                                erasable=True)
+    student.check_question_link('b:B', erasable=True)
 
 def test_0280_require_test_regexp(student):
     student.goto_question('a:a')
@@ -360,12 +373,14 @@ def test_0280_require_test_regexp(student):
     student.goto_question('a:b')
     student.give_answer('B')
     student.reject_questions('b:C')
-    student.check_question_link('a:c', default=True, max_descendants=True)
-    student.check_question_link('b:B')
-    student.check_question_link('b:A')
+    student.check_question_link('a:c', default=True, max_descendants=True,
+                                erasable=True)
+    student.check_question_link('b:B', erasable=True)
+    student.check_question_link('b:A', erasable=True)
 
 def test_0290_root_minimal(student):
-    student.check_question_link('a:a', default=True, max_descendants=True)
+    student.check_question_link('a:a', default=True, max_descendants=True,
+                                erasable=True)
     student.expect('<option >Teacher</option>',
                    # '<option selected>Default</option>',
                    '?role=',
@@ -380,11 +395,12 @@ def test_0290_root_minimal(student):
                    )
     
     student.see_all_questions()
-    student.check_question_link('a:a', default=True, max_descendants=True)
-    student.check_question_link('a:b')
-    student.check_question_link('a:c')
-    student.check_question_link('b:B')
-    student.check_question_link('b:A')
+    student.check_question_link('a:a', default=True, max_descendants=True,
+                                erasable=True)
+    student.check_question_link('a:b', erasable=True)
+    student.check_question_link('a:c', erasable=True)
+    student.check_question_link('b:B', erasable=True)
+    student.check_question_link('b:A', erasable=True)
 
 def test_0300_reload_static(student):
     filename = os.path.join('Students', name, 'HTML', 'foobar.html')
@@ -475,7 +491,7 @@ def test_0360_root_question_reload(student):
         student.expect('<DIV class="reload_questions">')
         student.get('?reload_questions=1')
         student.expect('question__a')
-        student.check_question_link('a:d')
+        student.check_question_link('a:d', erasable=True)
     finally:
         os.rename(name + '.old', name)
 

@@ -26,6 +26,8 @@ from QUENLIG import student
 
 container = 'action'
 link_to_self = True
+priority_execute = 'competences' # Need configuration.erasable_after
+
 
 acls = { 'Admin': ('executable',), 'Grader': ('executable',) }
 

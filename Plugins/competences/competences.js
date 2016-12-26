@@ -120,7 +120,9 @@ Question.prototype.weight = function()
 {
   var weight ;
   
-  if ( this.classes.indexOf("not_answerable") != -1 )
+  if ( this.classes.indexOf("not_answerable") != -1
+       || this.classes.indexOf("erasable") == -1
+     )
     weight = 0 ;
   else if ( this.classes.indexOf("question_given") == -1 ) // NOT GIVEN
     weight = 1000000 ;
@@ -143,6 +145,8 @@ Question.prototype.weight = function()
 Question.prototype.jump = function(recycle)
 {
   var erase = '' ;
+  if ( this.classes.indexOf("erasable") == -1 )
+    recycle = false ;
   if ( recycle )
     erase = '&erase=1' ;
   window.location = "?question=" + escape2(this.name) + erase ;
@@ -526,6 +530,14 @@ function patch_title()
 	  + '\'].choose_question()"><p> ∈ ' + competence
 	  + '</p></button></a></div>' ;
       }
+      s += '<div class="' + (questions[current_question].nr_versions < 2
+			     ? 'question_erase' : 'question_redo')
+	+ '" style="display:inline"><a class="tips question_redo">'
+	+ '<button onclick="question_redo()" style="background:#FEE"'
+	+ (questions[current_question].classes.indexOf("erasable") != -1
+	   ? '' : ' disabled')
+	+ '><p></p></button><span></span></a></div>' ;
+
       var more = document.createElement("DIV") ;
       more.style.marginTop = "1em" ;
       more.className = "competences" ;
@@ -534,12 +546,7 @@ function patch_title()
 	+ '<button onclick="click_on_next_button()"><p></p></button>'
 	+ (state === 'done' || state == "good" ? '<span></span>' : '')
 	+ '</a></div>'
-        + s
-	+ '<div class="' + (questions[current_question].nr_versions < 2
-			    ? 'question_erase' : 'question_redo')
-	+ '" style="display:inline"><a class="tips question_redo">'
-	+ '<button onclick="question_redo()" style="background:#FEE">'
-	+ '<p></p></button><span></span></a></div>' ;
+        + s ;
 
       heart.appendChild(more) ;
 

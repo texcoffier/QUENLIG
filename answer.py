@@ -51,12 +51,19 @@ class Answer:
         self.why = {}             # The teachers comments on answer
         self.nr_erase = 0         # #erase to change the question parameters
         self.erase_time = 0       # Last erase time
+        self.was_erasable = True
         self.persistent_random = {} # For Random and Choice
         self.random_history = []
         self.random_max = {}
         self.random_next = {}
         self.answer_times = []
         self.good_answer_times = []
+
+    def erasable(self, action_time):
+        return (len(self.answer_times) == 0
+                or action_time - self.answer_times[-1]
+                    > configuration.erasable_after
+                )
 
     def __str__(self):
         return "%d %d %d %d %g %s %d" % (self.answered != False, self.nr_asked, self.nr_bad_answer, self.indice, self.time_searching+self.time_after, self.question, len(self.comments))
@@ -92,12 +99,15 @@ class Command(object, metaclass=CreateInstance):
 class Command_good(Command):
     def parse(self, student, action_time, question_name, answer, value):
         answer.answered = value
-        t = questions.questions[question_name].perfect_time
         answer.nr_good_answer += 1
-        answer.good_answer_times.append(action_time - student.last_time
-                                        + answer.current_time_searching)
-        if answer.good_answer_times[-1] < t:
-            answer.nr_perfect_answer += 1
+        if answer.was_erasable:
+            # It is possible to be here if the 'erasable_after' value
+            # has been augmented after the students started to work
+            answer.good_answer_times.append(action_time - student.last_time
+                                            + answer.current_time_searching)
+            t = questions.questions[question_name].perfect_time
+            if answer.good_answer_times[-1] < t:
+                answer.nr_perfect_answer += 1
         answer.answer_times.append(action_time)
 
 class Command_bad(Command):
@@ -149,6 +159,7 @@ class Command_asked(Command_indice):
 
 class Command_erase(Command_indice):
     def parse(self, student, action_time, question_name, answer, dummy_value):
+        answer.was_erasable = answer.erasable(action_time)
         answer.answered = False
         answer.indice = -1
         answer.last_answer = ''

@@ -23,4 +23,6 @@ nr_columns = 60
 # It is useful for 'Grade' tests.
 explain_grade = {}
 
+# For 'competences' plugin: minimum time before question erasing is allowed
+erasable_after = 3600 # seconds
 
