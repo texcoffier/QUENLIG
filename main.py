@@ -595,9 +595,9 @@ if __name__ == "__main__":
             os.chdir(session.dir)
             from . import student
             import pstats
-
             print("\n\n\nLoading students profiling\n\n")
-            cProfile.run("student.all_students()", 'xxx.stats')
+            cProfile.run('state.State(FakeServer(), "noticket", "Default")',
+                         'xxx.stats')
             p = pstats.Stats('xxx.stats')
             p.sort_stats('cumulative').print_stats()
 

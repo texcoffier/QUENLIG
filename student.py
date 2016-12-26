@@ -81,6 +81,13 @@ def translate_log(filename):
 def static_hash(txt):
     return int(hashlib.md5(txt.encode('utf-8')).hexdigest(), 16)
 
+secs_cache = {}
+def secs(txt):
+    day = secs_cache.get(txt[:8], None)
+    if day is None:
+        day = secs_cache[txt[:8]] = time.mktime(time.strptime(txt[:8],"%Y%m%d"))
+    return day + int(txt[8:10])*3600 + int(txt[10:12])*60 + int(txt[12:])
+
 def log_age(name):
     if name[0].isupper():
         return 0 # For roles
@@ -142,7 +149,7 @@ class Student:
 
     def eval_line(self, line):
         line = [v for v in ast.literal_eval(line)]
-        action_time = time.mktime(time.strptime(line[0], "%Y%m%d%H%M%S"))
+        action_time = secs(line[0])
         command = answer.commands[line[1]]
         if command.question:
             question_name = line[2]
