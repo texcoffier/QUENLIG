@@ -33,8 +33,8 @@ def execute(state, plugin, argument):
         return
     
     stats = statistics.question_stats()
-    if state.question.student_given > 2:
-        t = state.question.student_time / state.question.student_given
+    if state.question.stats.given > 2:
+        t = state.question.student_time / state.question.stats.given
         return utilities.duration(t)
 
 

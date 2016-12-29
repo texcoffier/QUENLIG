@@ -221,21 +221,22 @@ def plot_svg(url_base):
             y += height + y_spacing
             level = q.level
 
-        opacity = (q.student_given+1.) / (len(stats.all_students)+1)
+        opacity = (q.stats.given+1.) / (len(stats.all_students)+1)
         barplot.opacity = "opacity:%5.3f;fill-opacity:%5.3f;" % (
             opacity, opacity)
 
         svg.g_start(x, y)
         barplot.background(border_width)
 
-        if q.student_given:
-            barplot.bar(0,q.student_good, q.student_given, svg_class='good')
-            barplot.bar(1,q.student_bad, q.student_given, svg_class='bad', pixel=2)
-            barplot.bar(2,q.student_indices, q.student_given, svg_class='indice')
-            barplot.bar(3,int(q.student_time_searching/q.student_given),300,svg_class='time', pixel=2)
+        if q.stats.given:
+            barplot.bar(0,q.stats.good, q.stats.given, svg_class='good')
+            barplot.bar(1,q.stats.bad, q.stats.given, svg_class='bad', pixel=2)
+            barplot.bar(2,q.stats.indices, q.stats.given, svg_class='indice')
+            barplot.bar(3,int(q.stats.time_searching/q.stats.given), 300,
+                        svg_class='time', pixel=2)
 
-        if q.student_nr_comment:
-            barplot.nr_comments(q.student_nr_comment)
+        if q.stats.nr_comment:
+            barplot.nr_comments(q.stats.nr_comment)
             
         t = [q.world] + split_text(q.short_name)
         barplot.textes(t, line_decal, url=q.url())

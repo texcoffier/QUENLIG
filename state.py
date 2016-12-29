@@ -359,6 +359,7 @@ class State(object):
 
 states = {}
 
+@utilities.add_a_lock
 def get_state(server, ticket):
     if (configuration.only_from
         and server.client_address[0] != configuration.only_from):
@@ -398,7 +399,9 @@ def get_state(server, ticket):
     try:
         student_name = casauth.get_name(ticket, service)
     except IOError:
-        return get_state(server, "") # Invalid ticket, ask a new one
+        print('Invalid ticket, ask a new one')
+        casauth.redirect(server, service)
+        return None
     
     if getattr(plugins.Plugin.plugins_dict['role'], 'single_session', False):
         # Search if it is a new ticket for an existing student

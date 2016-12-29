@@ -21,6 +21,7 @@
 
 import socket
 import http.server
+import socketserver
 import time
 import cgi
 import urllib.request, urllib.parse, urllib.error
@@ -206,8 +207,9 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
             return
         # Execute and return page
         sys.stdout.flush() # To really log into the file for 'regtests'
-        session.server = self # To retrieve POST data
-        mime, content = session.execute(form)
+        with session.student.lock:
+            session.server = self # To retrieve POST data
+            mime, content = session.execute(form)
         if mime in ('application/x-javascript', 'text/html', 'text/css'):
             content = content.encode("utf-8")
         sys.stdout.flush()
@@ -226,6 +228,8 @@ def function_to_profile(nr_requests):
     for i in range(nr_requests):
         server.handle_request()
 
+class ThreadingServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
+    pass
 
 def run(nr_requests, the_cache):
     f = open("pid", "w")
@@ -236,8 +240,8 @@ def run(nr_requests, the_cache):
     cache = the_cache
 
     global server
-    server = http.server.HTTPServer(("0.0.0.0", configuration.port)
-                                       , MyRequestBroker)
+    server = ThreadingServer(("0.0.0.0", configuration.port)
+                             , MyRequestBroker)
 
     print("\nServer Ready on\n\thttp://%s:%d/guest.html\n\t%s/guest.html" % (
         socket.getfqdn(), configuration.port, configuration.url))

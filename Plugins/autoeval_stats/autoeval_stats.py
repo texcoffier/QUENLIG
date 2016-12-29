@@ -107,7 +107,9 @@ def execute(state, dummy_plugin, dummy_argument):
     for q in questions.questions.values():
         if not hasattr(q, 'autoeval_level'):
             continue
-        if not getattr(q, 'student_given', False):
+        if not getattr(q, 'stats', False):
+            continue
+        if q.stats.given == 0:
             continue
         if q.student_time:
             d = 'x'
@@ -123,7 +125,7 @@ def execute(state, dummy_plugin, dummy_argument):
                     if a.nr_asked:
                         d = '<var class="bad">x</var>'
             t.append((q.autoeval_level_average,
-                      math.log(1 + q.student_time / q.student_given),
+                      math.log(1 + q.student_time / q.stats.given),
                       d, q.name
                       + '<script>histogram('
                       + repr(q.autoeval_level)

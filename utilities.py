@@ -22,6 +22,7 @@ import time
 import cgi
 import types
 import os
+import threading
 
 def time_format(t):
     return "%d:%02d:%02d" % (t/3600, (t/60)%60, t%60)
@@ -314,3 +315,20 @@ def get_encoding(v):
         return str(v, 'utf-8'), 'utf-8'
     except UnicodeError:
         return str(v, 'latin-1'), 'latin-1' # LATIN-1: OK
+
+def add_a_lock(fct):
+    """Add a lock to a function to forbid simultaneous call"""
+    def f(*arg, **keys):
+        f.the_lock.acquire()
+        try:
+            r = f.fct(*arg, **keys)
+        finally:
+            f.the_lock.release()
+        return r
+    f.fct = fct
+    f.the_lock = threading.Lock()
+    f.the_lock.name = fct.__name__
+    f.__doc__ = fct.__doc__
+    f.__name__ = fct.__name__
+    f.__module__ = fct.__module__
+    return f

@@ -42,18 +42,18 @@ def execute(state, plugin, argument):
 
     s = []
     for question in questions.questions.values():
-        norme = float(question.student_given)
-        if question.student_given == 0:
+        norme = float(question.stats.given)
+        if question.stats.given == 0:
             continue
         s.append([
             question.a_href(),
-            "%6.3f" % (question.student_given  / nr_students),
-            "%6.3f" % (question.student_view   / norme),
-            "%6.3f" % (question.student_good   / norme),
-            "%6.3f" % (question.student_bad    / norme),
-            "%6.3f" % (question.student_indice / norme),
+            "%6.3f" % (question.stats.given  / nr_students),
+            "%6.3f" % (question.stats.view   / norme),
+            "%6.3f" % (question.stats.good   / norme),
+            "%6.3f" % (question.stats.bad    / norme),
+            "%6.3f" % (question.stats.indice / norme),
             utilities.time_format(question.student_time  / norme),
-            "%6.3f" % (question.student_nr_comment/ norme),
+            "%6.3f" % (question.stats.nr_comment/ norme),
             "%d" % question.perfect_time,
             ])
 

@@ -32,6 +32,11 @@ sys.modules["QUENLIG"] = __import__(os.getcwd().split(os.path.sep)[-1])
 sys.path.pop(0)
 sys.modules["QUENLIG"].__name__ = 'QUENLIG'
 
+# This import check if deadlock are possible.
+# It slow down every lock/unlock calls.
+# Comment it once 'threaded Quenlig' is stable
+from . import deadlock
+
 from . import statistics
 from . import configuration
 from . import questions

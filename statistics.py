@@ -39,6 +39,20 @@ def select(value, mean, coef):
         i += 1
     return i
 
+class QuestionStat:
+    time_searching = 0
+    time_after = 0
+    given = 0
+    view = 0
+    bad = 0
+    good = 0
+    indice = 0
+    nr_comment = 0
+    def __init__(self, question):
+        self.question = question
+        self.good_time = [] # Times to give a good answer
+        self.indices = [0] * len(question.indices)
+
 class Stats:
     def __init__(self):
         self.last_time = 0
@@ -58,16 +72,7 @@ class Stats:
             self.all_students = student.all_students()
 
         for question in questions.questions.values():
-            question.student_time_searching = 0
-            question.student_time_after = 0
-            question.student_given = 0
-            question.student_view = 0
-            question.student_bad = 0
-            question.student_good = 0
-            question.student_indice = 0
-            question.student_indices = [0] * len(question.indices)
-            question.student_nr_comment = 0
-            question.student_good_time = [] # Times to give a good answer
+            question.NS = QuestionStat(question)
 
         self.nr_good_answers = 0
         self.nr_bad_answers = 0
@@ -80,16 +85,16 @@ class Stats:
 
         normed_count = 0
         for s in self.all_students:
-            s.the_number_of_good_answers = s.number_of_good_answers()
+            s.the_number_of_good_answers    = s.number_of_good_answers()
             s.the_number_of_given_questions = s.number_of_given_questions()
-            s.the_number_of_bad_answers = s.number_of_bad_answers()
-            s.the_number_of_given_indices = s.number_of_given_indices()
-            s.the_number_of_comment = s.number_of_comment()
-            s.the_time_searching = s.time_searching()
-            s.the_time_after = s.time_after()
-            s.the_time_first = s.time_first()
-            s.the_time_last = s.time_last()
-            s.the_time_variance = s.time_variance()
+            s.the_number_of_bad_answers     = s.number_of_bad_answers()
+            s.the_number_of_given_indices   = s.number_of_given_indices()
+            s.the_number_of_comment         = s.number_of_comment()
+            s.the_time_searching            = s.time_searching()
+            s.the_time_after                = s.time_after()
+            s.the_time_first                = s.time_first()
+            s.the_time_last                 = s.time_last()
+            s.the_time_variance             = s.time_variance()
 
             if s.the_number_of_good_answers:
                 normed_count += 1
@@ -101,11 +106,11 @@ class Stats:
                 s.the_number_of_given_indices_normed = None
                 s.the_time_after_normed = None
 
-            self.nr_good_answers += s.the_number_of_good_answers
-            self.nr_bad_answers += s.the_number_of_bad_answers
+            self.nr_good_answers  += s.the_number_of_good_answers
+            self.nr_bad_answers   += s.the_number_of_bad_answers
             self.nr_given_indices += s.the_number_of_given_indices
             self.nr_given_comment += s.the_number_of_comment
-            self.time_after += s.the_time_after
+            self.time_after       += s.the_time_after
 
             if s.the_number_of_good_answers:
                 self.nr_bad_answers_normed += s.the_number_of_bad_answers_normed
@@ -120,14 +125,14 @@ class Stats:
                     continue
                 if answer.nr_asked == 0:
                     continue
-                q.student_given += 1
-                q.student_view += answer.nr_asked
-                q.student_bad += answer.nr_bad_answer
-                q.student_indice += answer.indice + 1
+                q.NS.given += 1
+                q.NS.view += answer.nr_asked
+                q.NS.bad += answer.nr_bad_answer
+                q.NS.indice += answer.indice + 1
                 if answer.indice >= 0:
                     try:
                         for i in range(answer.indice+1):                    
-                            q.student_indices[i] += 1
+                            q.NS.indices[i] += 1
                     except IndexError:
                         import sys
                         sys.stderr.write("""Problem indice overflow
@@ -135,23 +140,24 @@ question: %s
 student: %s
 """ % (q, s.filename))
                 if answer.nr_good_answer:
-                    q.student_time_searching += (answer.time_searching
-                                                 / answer.nr_good_answer)
+                    q.NS.time_searching += (answer.time_searching
+                                            / answer.nr_good_answer)
                 else:
-                    q.student_time_searching += answer.time_searching
-                q.student_time_after += answer.time_after
-                q.student_good += answer.nr_good_answer != 0
-                q.student_nr_comment += len(answer.comments)
-                q.student_good_time += answer.good_answer_times
+                    q.NS.time_searching += answer.time_searching
+                q.NS.time_after += answer.time_after
+                q.NS.good       += answer.nr_good_answer != 0
+                q.NS.nr_comment += len(answer.comments)
+                q.NS.good_time  += answer.good_answer_times
 
 
         for q in questions.questions.values():
-            q.student_time = q.student_time_searching + q.student_time_after
-            nr_good_times = len(q.student_good_time)
+            q.student_time = q.NS.time_searching + q.NS.time_after
+            nr_good_times = len(q.NS.good_time)
             if nr_good_times > 5:
                 q.perfect_time = max(
-                    sorted(q.student_good_time)[nr_good_times//2],
+                    sorted(q.NS.good_time)[nr_good_times//2],
                     q.perfect_time)
+            q.stats = q.NS
 
         # Recompute the number of perfect time answer
         for s in self.all_students:
@@ -183,7 +189,8 @@ student: %s
                 t[j][3].nr_answer_same_time[t[i][3].name][1] += 1
                 j -= 1
         for s in self.all_students:
-            s.nr_of_same_time = sum(sum( list(s.nr_answer_same_time.values()), []))
+            s.nr_of_same_time = sum(sum(list(s.nr_answer_same_time.values()),
+                                        []))
             if s.the_number_of_given_questions:
                 s.nr_of_same_time_normed = (
                     s.nr_of_same_time
@@ -218,46 +225,44 @@ student: %s
         # -1 : bad
         # -2 : very bad
         for s in self.all_students:
-            s.warning_nr_good_answers = 0
-            s.warning_nr_bad_answers = 0
-            s.warning_nr_given_indices = 0
-            s.warning_time_after = 0
-    
-        if self.nr_good_answers > 10:
-            for s in self.all_students:
-                if s.the_number_of_good_answers == 0:
-                    continue ;
+            if (s.the_number_of_good_answers == 0
+                or self.nr_good_answers < 10):
+                s.warning_nr_good_answers = 0
+                s.warning_nr_bad_answers = 0
+                s.warning_nr_given_indices = 0
+                s.warning_time_after = 0
+                continue
 
-                s.warning_nr_good_answers = select(
-                    s.the_number_of_good_answers,
-                    self.nr_good_answers,
-                    (0.7, 0.8, 1.3, 1.5)
-                    )
+            s.warning_nr_good_answers = select(
+                s.the_number_of_good_answers,
+                self.nr_good_answers,
+                (0.7, 0.8, 1.3, 1.5)
+                )
 
-                s.warning_nr_bad_answers = - select(
-                    s.the_number_of_bad_answers_normed,
-                    self.nr_bad_answers_normed,
-                    (0.5, 0.6, 1.5, 2)
-                    )
+            s.warning_nr_bad_answers = - select(
+                s.the_number_of_bad_answers_normed,
+                self.nr_bad_answers_normed,
+                (0.5, 0.6, 1.5, 2)
+                )
 
-                s.warning_nr_given_indices = - select(
-                    s.the_number_of_given_indices_normed,
-                    self.nr_given_indices_normed,
-                    (0.5, 0.6, 1.5, 2)
-                    )
+            s.warning_nr_given_indices = - select(
+                s.the_number_of_given_indices_normed,
+                self.nr_given_indices_normed,
+                (0.5, 0.6, 1.5, 2)
+                )
 
-                s.warning_time_after = - select(
-                    s.the_time_after_normed,
-                    self.time_after_normed,
-                    (0.4, 0.6, 1.6, 1.8)
-                    )
+            s.warning_time_after = - select(
+                s.the_time_after_normed,
+                self.time_after_normed,
+                (0.4, 0.6, 1.6, 1.8)
+                )
         if self.all_students:
-            self.max_good_answers  = max([s.the_number_of_good_answers
-                                          for s in self.all_students])
-            self.max_bad_answers   = max([s.the_number_of_bad_answers
-                                          for s in self.all_students])
-            self.max_given_indices = max([s.the_number_of_given_indices
-                                          for s in self.all_students])
+            self.max_good_answers  = max(s.the_number_of_good_answers
+                                         for s in self.all_students)
+            self.max_bad_answers   = max(s.the_number_of_bad_answers
+                                         for s in self.all_students)
+            self.max_given_indices = max(s.the_number_of_given_indices
+                                         for s in self.all_students)
         else:
             self.max_good_answers  = 0
             self.max_bad_answers  = 0
@@ -276,11 +281,14 @@ _stats = Stats()
 
 
 def histogram_level():
-    histogram = [0]*(questions.sorted_questions[-1].level+1)
+    histogram = []
     for q in questions.sorted_questions:
+        while q.level >= len(histogram):
+            histogram.append(0)
         histogram[q.level] += 1
     return histogram
 
+@utilities.add_a_lock
 def question_stats():
     _stats.update()
     return _stats
@@ -317,18 +325,18 @@ def graph_dot(show_stats=False):
     for q in questions.questions.values():
         name = q.name.translate(utilities.flat)
         color = rvb[ q.name.split(":")[0] ]
-        if q.student_given == 0:
-            q.student_given = 1
+        if q.stats.given == 0:
+            q.stats.given = 1 # forked, so it is allowed
         if show_stats:
             f.write("""%s [ href="%s",label=<<TABLE BORDER="0" CELLPADDING="0"><TR><TD COLSPAN="3" BGCOLOR="blue" HEIGHT="%d"></TD></TR><TR><TD BGCOLOR="red" WIDTH="%d"></TD><TD BGCOLOR=%s>%s</TD><TD BGCOLOR="green" WIDTH="%d"></TD></TR><TR><TD COLSPAN="3" BGCOLOR="black" HEIGHT="%d"></TD></TR></TABLE>>] ;\n""" % (
                 translate_dot(q.name),
                 q.url(),
-                int(50*q.student_indice/q.student_given),
-                int(50*q.student_bad/n),
+                int(50*q.stats.indice/q.stats.given),
+                int(50*q.stats.bad/n),
                 color,
                 translate_dot_(q.name).replace("\\n", "<BR/>"),
-                int(50*q.student_good/n),
-                int(q.student_time/q.student_given/10),
+                int(50*q.stats.good/n),
+                int(q.student_time/q.stats.given/10),
                 )
                     )
         else:
@@ -391,15 +399,15 @@ def graph2_dot():
             if not q.name.startswith(w + ":"):
                 continue
             name = q.name.translate(utilities.flat)
-            if q.student_given == 0:
-                q.student_given = 1
+            if q.stats.given == 0:
+                q.stats.given = 1
             f.write("""%s [ label=<<TABLE BORDER="0" CELLPADDING="0"><TR><TD COLSPAN="3" BGCOLOR="blue" HEIGHT="%d"></TD></TR><TR><TD BGCOLOR="red" WIDTH="%d"></TD><TD>%s</TD><TD BGCOLOR="green" WIDTH="%d"></TD></TR><TR><TD COLSPAN="3" BGCOLOR="black" HEIGHT="%d"></TD></TR></TABLE>>] ;\n""" % (
                 translate_dot(q.name),
-                int(50*q.student_indice/q.student_given),
-                int(50*q.student_bad/n),
+                int(50*q.stats.indice/q.stats.given),
+                int(50*q.stats.bad/n),
                 translate_dot_(q.name).replace("\\n", "<BR/>"),
-                int(50*q.student_good/n),
-                int(q.student_time/q.student_given/10),
+                int(50*q.stats.good/n),
+                int(q.student_time/q.stats.given/10),
                 )
                     )
         f.write("}\n")

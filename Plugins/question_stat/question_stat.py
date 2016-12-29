@@ -47,28 +47,27 @@ def execute(state, plugin, argument):
         return
 
     statistics.question_stats()
-    if question.student_given == 0:
+    if question.stats.given == 0:
         return
 
     s = '<table><tr><td>'
-    s += '<p class="given">%d</p>' % question.student_given
+    s += '<p class="given">%d</p>' % question.stats.given
     s += '<p class="view">%s</p>' % \
-         absolute_and_relative(question.student_view, question.student_given)
+         absolute_and_relative(question.stats.view, question.stats.given)
     s += '</td><td>'
     s += '<p class="good">%s</p>' % \
-         absolute_and_relative(question.student_good, question.student_given)
+         absolute_and_relative(question.stats.good, question.stats.given)
     s += '<p class="bad">%s</p>' % \
-         absolute_and_relative(question.student_bad, question.student_given)
+         absolute_and_relative(question.stats.bad, question.stats.given)
     s += '</td><td>'
     s += '<p class="indice">%s</p>' % \
-         absolute_and_relative(question.student_indice, question.student_given)
+         absolute_and_relative(question.stats.indice, question.stats.given)
     s += '<p class="time">%s (%s)</p>' % (
         utilities.time_format(question.student_time),
         utilities.time_format(question.student_time/
-                              (0.1 + question.student_given) ) )
+                              (0.1 + question.stats.given) ) )
     s += '<p class="comment">%s</p>' % \
-         absolute_and_relative(question.student_nr_comment,
-                               question.student_given)
+         absolute_and_relative(question.stats.nr_comment, question.stats.given)
     s += '</td></tr></table>'
 
     return s

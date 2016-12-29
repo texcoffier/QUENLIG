@@ -45,11 +45,14 @@ def execute(state, plugin, argument):
 
     me = state.student
     for s in stats.all_students:
-        for a in s.answers.values():
-            if a.answered and a.question in questions.questions:
-                state.student = s
-                state.question = questions.questions[a.question]
-                s.check_answer(a.answered, state)
+        if s is me:
+            continue # No deadlock please
+        with s.lock:
+            for a in s.answers.values():
+                if a.answered and a.question in questions.questions:
+                    state.student = s
+                    state.question = questions.questions[a.question]
+                    s.check_answer(a.answered, state)
     state.student = me
     state.question = None
     plugin.heart_content = '<p class="grade_recompute"></p>'

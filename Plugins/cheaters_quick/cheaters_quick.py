@@ -47,7 +47,7 @@ def execute(state, plugin, argument):
             if not answer.answered:
                 continue
             question = questions.questions[question_name]
-            average_time = question.student_time / question.student_given
+            average_time = question.student_time / question.stats.given
             if answer.time_searching < average_time / 10:
                 too_quick[s] += 1
             if answer.time_searching < average_time / 20:

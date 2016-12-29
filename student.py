@@ -34,6 +34,7 @@ import random
 import ast
 import collections
 import hashlib
+import threading
 from . import questions # Only for nr_indices and any_questions
 from . import utilities
 from . import answer
@@ -130,6 +131,8 @@ class Student:
 
         self.answerables_cache = None
         self.read_log(stop_loading)
+        self.lock = threading.Lock()
+        self.lock.name = self.filename
 
     def read_log(self, stop_loading):
         new_log = os.path.join(self.file, 'log.py')
@@ -610,6 +613,7 @@ class Student:
 students = {}
 stop_loading_default = lambda x: False
 
+@utilities.add_a_lock
 def student(name):
     if name not in students:
         students[name] = Student(name, stop_loading=stop_loading_default)
