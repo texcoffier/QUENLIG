@@ -39,7 +39,9 @@ def option_set(plugin, value):
 option_name = 'log_age'
 option_help = '''"#days"
         Students who have not worked the last #days are not loaded
-        on startup and so not used to compute statistics or export grades.'''
+        on startup and so not used to compute statistics or export grades.
+        If the number of days is negative: it is the number of seconds
+        allowed to read the student list, the most recent firsts.'''
 option_default = "365"
 
 def execute(state, plugin, argument):

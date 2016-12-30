@@ -621,11 +621,25 @@ def student(name):
 
 def all_students():
     """Read the directory content in order to return the student list"""
-    return [student(student_name)
-            for student_name in os.listdir(log_directory())
-            if log_age(student_name) < configuration.log_age * 86400
+    age_and_name = [
+        (log_age(student_name), student_name)
+        for student_name in os.listdir(log_directory())
     ]
-
+    if configuration.log_age >= 0:
+        return [student(name)
+                for age, name in age_and_name
+                if age < configuration.log_age * 86400
+        ]
+    # Load active student firsts
+    age_and_name.sort()
+    s = []
+    t = time.time()
+    for age, name in age_and_name:
+        s.append(student(name))
+        if time.time() - t > -configuration.log_age:
+            break
+    print("{} students loaded in {} seconds".format(len(s), time.time() - t))
+    return s
 
 def dump():
     t = []
