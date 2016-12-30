@@ -92,6 +92,13 @@ PersistentInput.prototype.onsubmit = function()
 } ;
 """
 
+def option_set(plugin, value):
+    if value:
+        value = ast.literal_eval(value)
+    else:
+        value = (None, None)
+    (configuration.teacher_mail, configuration.smtp_server) = value
+
 option_name = 'comment'
 option_help = '''("the_teacher@university.org", "smtp.university.org")
         If defined, on each student comment:
@@ -100,7 +107,6 @@ option_help = '''("the_teacher@university.org", "smtp.university.org")
 option_default = ""
 
 def sendmail(state, plugin, argument, q):
-    teacher_mail, smtp_server = ast.literal_eval(plugin.option)
     if q == "None":
         bads = ""
         before = ""
@@ -116,13 +122,13 @@ def sendmail(state, plugin, argument, q):
             before = ""
         state.student.init_seed(q)
         question = "<hr>" + state.question.question(state)
-    session = smtplib.SMTP(smtp_server)
+    session = smtplib.SMTP(configuration.smtp_server)
     info = state.student.informations
     login = state.student.filename
     mail = info.get("mail", login)
     sn = info.get("surname", "")
     fn = info.get("firstname", "")
-    session.sendmail(from_addr=mail, to_addrs=teacher_mail,
+    session.sendmail(from_addr=mail, to_addrs=configuration.teacher_mail,
                      msg="""Subject: {}/{} {} {} {}
 To: {}
 Content-Type: text/html; charset="utf-8"
@@ -150,7 +156,7 @@ def execute(state, plugin, argument):
         else:
             q = "None"
         state.student.add_a_comment(q, argument)
-        if plugin.option:
+        if configuration.teacher_mail:
             try:
                 sendmail(state, plugin, argument, q)
             except:

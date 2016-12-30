@@ -335,6 +335,26 @@ class State(object):
                                      + [sys.exc_info()[1]]
                                                          )
                                  ])
+                if configuration.teacher_mail:
+                    import smtplib
+                    session = smtplib.SMTP(configuration.smtp_server)
+                    session.sendmail(from_addr=configuration.teacher_mail,
+                                     to_addrs=configuration.teacher_mail,
+                                     msg="""Subject: QUENLIG TraceBack
+To: {}
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+
+""".format(configuration.teacher_mail)
+                                     + ''.join([str(i)
+                                                for i in (
+                                                        traceback.format_tb(sys.exc_info()[2])
+                                                        + [sys.exc_info()[0]]
+                                                        + [sys.exc_info()[1]]
+                                                )
+                                     ]))
+                    print("sendmail end")
                 print('*'*80, v)
                 v = '<div style="font-size:70%;text-align:left;position:relative;background:#FBB">' + v + '</div>'
                 
