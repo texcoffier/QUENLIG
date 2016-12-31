@@ -101,7 +101,7 @@ class Command_good(Command):
         answer.answered = value
         answer.nr_good_answer += 1
         if answer.was_erasable:
-            # It is possible to be here if the 'erasable_after' value
+            # It is possible to NOT be here if the 'erasable_after' value
             # has been augmented after the students started to work
             answer.good_answer_times.append(action_time - student.last_time
                                             + answer.current_time_searching)

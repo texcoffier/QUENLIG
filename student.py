@@ -35,6 +35,7 @@ import ast
 import collections
 import hashlib
 import threading
+import sys
 from . import questions # Only for nr_indices and any_questions
 from . import utilities
 from . import answer
@@ -626,8 +627,8 @@ def all_students():
         for student_name in os.listdir(log_directory())
     ]
     if configuration.log_age >= 0:
-        print("Load students active the last {} seconds".format(
-            configuration.log_age))
+        print("Load students active the last {} days".format(
+            configuration.log_age), file=sys.stderr)
         return [student(name)
                 for age, name in age_and_name
                 if age < configuration.log_age * 86400
@@ -640,7 +641,8 @@ def all_students():
         s.append(student(name))
         if time.time() - t > -configuration.log_age:
             break
-    print("{} students loaded in {} seconds".format(len(s), time.time() - t))
+    print("{} students loaded in {} seconds".format(len(s), time.time() - t),
+          file=sys.stderr)
     return s
 
 def dump():

@@ -60,7 +60,6 @@ class Stats:
         
     def update(self):
         """Compute statistics about questions and students"""
-
         t = time.time()
         if t - self.last_time < self.ttl:
             return
@@ -163,6 +162,9 @@ student: %s
         # Recompute the number of perfect time answer
         for s in self.all_students:
             for answer in s.answers.values():
+                q = questions.questions.get(answer.question, None)
+                if q is None:
+                    continue
                 answer.nr_perfect_answer = len(tuple(
                     x
                     for x in answer.good_answer_times
