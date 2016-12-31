@@ -626,6 +626,8 @@ def all_students():
         for student_name in os.listdir(log_directory())
     ]
     if configuration.log_age >= 0:
+        print("Load students active the last {} seconds".format(
+            configuration.log_age))
         return [student(name)
                 for age, name in age_and_name
                 if age < configuration.log_age * 86400

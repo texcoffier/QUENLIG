@@ -147,8 +147,9 @@ student: %s
                 q.NS.time_after += answer.time_after
                 q.NS.good       += answer.nr_good_answer != 0
                 q.NS.nr_comment += len(answer.comments)
-                q.NS.good_time  += answer.good_answer_times
-
+                if answer.good_answer_times:
+                    q.NS.good_time.append(max(answer.good_answer_times))
+                    # q.NS.good_time += answer.good_answer_times
 
         for q in questions.questions.values():
             q.student_time = q.NS.time_searching + q.NS.time_after
