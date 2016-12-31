@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2005-2015 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -204,9 +204,9 @@ class Question:
     def check_answer(self, answer, state):
         answer = answer.strip(" \n\t\r").replace("\r\n", "\n")
         if self.nr_lines == 1 and answer.find("\n") != -1:
-            return False, "VOTRE REPONSE CONTIENT DES RETOURS A LA LIGNE"
-        if '�' in answer:
-            return False, "VOTRE REPONSE CONTIENT UN ESPACE INS�CABLE"
+            return False, "<p class='answer_with_linefeed'></p>"
+        if ' ' in answer:
+            return False, "<p class='answer_with_nbsp'></p>"
         if self.evaluate_answer:
             answer = self.evaluate_answer(answer, state)
 
@@ -308,10 +308,10 @@ def add(**arg):
     "bad_answer": "Texte a afficher si l'etudiant donne une mauvaise reponse",
     "nr_lines": "Nombre de lignes pour la reponse",
     "default_answer": "Reponse par defaut",
-    "highlight": "Question � mettre en �vidence",
-    "maximum_bad_answer": "Nombre maximum de mauvaises r�ponse",
-    "maximum_time": "Temps maximum pour r�pondre en secondes",
-    "perfect_time": "Si on r�pond plus vite : on ma�trise la question",
+    "highlight": "Question à mettre en évidence",
+    "maximum_bad_answer": "Nombre maximum de mauvaises réponse",
+    "maximum_time": "Temps maximum pour répondre en secondes",
+    "perfect_time": "Si on répond plus vite : on maîtrise la question",
     "courses": "Position ('H1', 'H2'...) dans le support de cours",
     "nr_versions": "Nombre de versions pour la question",
     }
@@ -658,8 +658,7 @@ class require_endswith(Test):
 class expect(require):
     def test(self, student_answer, string):
         if student_answer.find(string) == -1:
-            return False, \
-                   "Je devrais trouver '<tt>%s</tt>' dans la r�ponse" % string
+            return False, "<p class='string_expected'>«<b>%s</b>»</p>" % string
 class reject(Test):
     html_class = 'test_string test_bad test_reject'
     def test(self, student_answer, string):
@@ -727,8 +726,8 @@ def yesno(student_answer, yes_is_good):
         else:
             return True, ""
         
-    return False, "Je ne comprend pas votre r�ponse. C'est OUI ou NON."
-    
+    return False, "<p class='yes_or_no'></p>"
+
 class yes(TestWithoutStrings):
     html_class = 'test_string test_bad test_is'
     strings = ('yes',)
@@ -1348,7 +1347,7 @@ class Expect(TestString):
             if self.comment:
                 return False, self.comment_canonized
             else:
-                return False, '<p class="string_expected">\'<b>' + self.string_canonized + '</b>\'</p>'
+                return False, '<p class="string_expected">«<b>' + self.string_canonized + '</b>»</p>'
 
 def expects(expected, comment=None):
     a = Expect(expected[0], comment)
@@ -1373,8 +1372,8 @@ class Reject(Expect):
             if self.comment:
                 return False, self.comment_canonized
             else:
-                return False, '<p class="string_rejected">\'<b>' + self.string + '</b>\'</p>'
-    
+                return False, '<p class="string_rejected">«<b>' + self.string + '</b>»</p>'
+
 
 def rejects(expected, comment=None):
     a = Reject(expected[0], comment)
@@ -1567,11 +1566,15 @@ class TestDictionary(TestExpression):
     The class is easely derivable by specifying a dictionnary containing
     all the allowed answers and how they are canonized.
     """
+    def error_message(self):
+        return ('<p class="possible_answers">'
+                + ' '.join('«<b>' + i + '</b>»' for i in self.dict)
+                + '</p>')
     def do_test(self, student_answer, state=None):
         if self.uppercase:
             student_answer = student_answer.upper()
         if student_answer not in self.dict:
-            return False, 'Possible answers are:' + str(list(self.dict.keys()))
+            return False, self.error_message()
         r = self.dict[student_answer]
         if r == self.good:
             return True, ''
@@ -1580,6 +1583,8 @@ class TestDictionary(TestExpression):
 
 class YesNo(TestDictionary):
     """Base class for yes/no tests."""
+    def error_message(self):
+        return '<p class="yes_or_no"></p>'
     uppercase = True
     dict = {'OUI': 'O', 'Y': 'O', 'YES': 'O', 'O': 'O',
             'NON': 'N', 'NO': 'N', 'N': 'N',
@@ -2158,7 +2163,7 @@ def regression_tests():
 
     a = create("Random({'$a$': ('x', 'x')},Expect('[$a$]'))")
     assert( a('x', st)
-            == (False, '<p class="string_expected">\'<b>[x]</b>\'</p>') )
+            == (False, '<p class="string_expected">«<b>[x]</b>»</p>') )
 
     a = create("Good(And(Contain('x'),Or(Grade(Contain('y'),'point',2),Grade(Contain(''),'point',1))))")
     assert(a('z', st) == (None, ''))
@@ -2246,8 +2251,8 @@ def regression_tests():
             a = create(
                 "Random({'F': ('1', '2')},%s(Expect('F'),Reject('X'),%s,%s))"
                  % (operator, x, y))
-            assert( a('3',st)==(False,'<p class="string_expected">\'<b>1</b>\'</p>'))
-            assert( a('X1',st)==(False,'<p class="string_rejected">\'<b>X</b>\'</p>'))
+            assert( a('3',st)==(False,'<p class="string_expected">«<b>1</b>»</p>'))
+            assert( a('X1',st)==(False,'<p class="string_rejected">«<b>X</b>»</p>'))
             assert( a('A1',st)==(True, ''))
             assert( a('Z1',st)==(False, 'BaD'))
             assert( a('Y1',st)==(None, ''))
