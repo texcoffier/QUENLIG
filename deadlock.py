@@ -20,84 +20,85 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 """
-To activate deadlock check, call before any lock creation :
-
-         start_check_deadlock()
+To activate deadlock check, import this module
 """
 
 
 import threading
+import inspect
+import weakref
 
 origLock = None
 
+locks = []
+
+def callers(n=2):
+    s = []
+    for f in inspect.stack()[n:]:
+        s.append(f[3])
+        if f[3] == 'process_request' or f[3] == 'do_GET':
+            break
+    return '/'.join(s)
+
 class Lock(object):
     name = ''
-    my_lock = threading.Lock()
-    lock_stacks = {}                    # Key : Thread, Item : heap of Lock
-    all_the_locks = []
+    by = ''
 
     def __init__(self):
         self.lock = origLock()
-        self.locked_after = {}
-        self.all_the_locks.append(self)
+        for x in tuple(locks):
+            if x.name == '':
+                locks.remove(x)
+        locks.append(self)
         
     def acquire(self, *args):
-        threading.Lock = origLock
-        # print('ACQUIRE', self)
-        self.my_lock.acquire()
-        t = threading.currentThread()
-        threading.Lock = Lock
-        if t in self.lock_stacks:
-            lock_stack = self.lock_stacks[t]
-        else:
-            lock_stack = self.lock_stacks[t] = []
-        for lock in lock_stack:
-            if self is not lock:
-                self.locked_after[lock] = True
-                if self in lock.locked_after:
-                    print('SELF:', self)
-                    print('LOCK:', lock)
-                    self.debug()
-                    raise ValueError("Possible deadlock")
-        lock_stack.append(self)
-        self.my_lock.release()
+        # print('ACQUIRE', self, callers())
+        self.by = callers()
         return self.lock.acquire(*args)
 
     def release(self):
-        # print('RELEASE', self)
-        self.my_lock.acquire()
-        self.lock_stacks[threading.currentThread()].pop()
-        self.my_lock.release()
+        # print('RELEASE', self, callers())
         self.lock.release()
 
     def locked(self):
         return self.lock.locked()
 
-    def debug(self):
-        import pprint
-        print('=============================== lock stacks:')
-        print(pprint.pformat(self.lock_stacks))
-        print('=============================== the locks:')
-        for i in self.all_the_locks:
-            print('LOCK:', i, 'IS LOCKED AFTER:')
-            print(pprint.pformat(i.locked_after))
-
-    def __repr__(self):
-        if self.name:
-            return self.name
-        else:
-            return repr(self.lock)
+    def __str__(self):
+        name = self.name or repr(self.lock)
+        locked = self.lock.locked() and "Locked" or "Unlocked"
+        by = self.lock.locked() and (' by: ' + self.by) or ''
+        return locked + ' ' + name  
 
     def __enter__(self):
-        self.acquire()
+        return self.acquire()
 
     def __exit__(self, type, value, tb):
-        self.release()
+        return self.release()
+
+def lock_list():
+    print("*"*79)
+    print("LOCK LIST", callers())
+    print("*"*79)
+    for i in locks:
+        print(i, flush=True)
+    print("*"*79)
+    print("THREADS")
+    print("*"*79)
+    import traceback
+    for t in threading.enumerate():
+        try:
+            print(traceback.format_stack(t), flush="True")
+        except:
+            pass
 
 def start_check_deadlock():
     global origLock
     origLock = threading.Lock
     threading.Lock = Lock
+    import atexit
+    atexit.register(lock_list)
+    import signal
+    signal.signal(signal.SIGUSR1, lambda x, y: lock_list())
 
 start_check_deadlock()
 
