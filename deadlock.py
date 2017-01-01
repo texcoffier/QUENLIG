@@ -87,7 +87,7 @@ def lock_list():
     import traceback
     for t in threading.enumerate():
         try:
-            print(traceback.format_stack(t), flush="True")
+            print(traceback.format_stack(t), flush=True)
         except:
             pass
 
