@@ -42,6 +42,8 @@ def execute(state, plugin, argument):
 
     s = []
     for question in questions.questions.values():
+        if not hasattr(question, "stats"):
+            continue
         norme = float(question.stats.given)
         if question.stats.given == 0:
             continue
