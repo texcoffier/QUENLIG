@@ -38,6 +38,8 @@ style = {
 def execute(state, plugin, argument):
 
     me = state.student
+    if not hasattr(me, 'warning_nr_good_answers'):
+        return ''
 
     where = {
         'statmenu_good':(

@@ -504,8 +504,11 @@ class Student:
     def classement(self):
         from . import statistics
         stats = statistics.question_stats()
-        return "%d/%d" % (stats.sorted_students.index(self)+1,
-                          len(stats.sorted_students))
+        if self in stats.sorted_students:
+            return "%d/%d" % (stats.sorted_students.index(self)+1,
+                              len(stats.sorted_students))
+        else:
+            return '?/%d' % len(stats.sorted_students)
 
     # Modify data structures and log actions
 
