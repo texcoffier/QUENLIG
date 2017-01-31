@@ -45,14 +45,11 @@ def execute(state, dummy_plugin, dummy_argument):
     stats = statistics.question_stats()
 
     uncanonize = {}
-    save = state.student
     arcs = collections.defaultdict(lambda: collections.defaultdict(int))
     for s in stats.all_students:
         if state.question.name not in s.answers:
             continue
-        s.writable = False
-        state.student = s
-        try:
+        with s.steal(state):
             a = s.answers[state.question.name]
             last_comment = is_first + state.question.question(state)
             for c_orig in a.bad_answers:
@@ -72,9 +69,6 @@ def execute(state, dummy_plugin, dummy_argument):
                 uncanonize[c] = is_good + a.answered
             else:
                 arcs[last_comment][a.answered] += 1
-        finally:
-            s.writable = True
-            state.student = save
 
     s = '''digraph "%s" {
 node[height="0.2",width="0.2",shape=rectangle, margin="0.025", label="",style="filled", fillcolor="white", fontsize="8"];

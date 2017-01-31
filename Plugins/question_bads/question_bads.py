@@ -47,16 +47,9 @@ def execute(state, plugin, argument):
             if a.question != state.question.name:
                 continue
             for rand, answer in a.full_bad_answers:
-                save = (state.student, a.persistent_random)
-                a.persistent_random = rand
-                state.student = s
-                s.writable = False
-                try:
+                with s.steal(state, a, rand):
                     commented = s.answer_commented(a.question, answer, state)
                     rand = state.question.question(state)
-                finally:
-                    s.writable = True
-                    (state.student, a.persistent_random) = save
                 c = utilities.answer_format(answer)
                 if not commented:
                     # Uppercase in order to display them first when sorted

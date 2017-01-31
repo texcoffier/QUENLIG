@@ -36,6 +36,7 @@ import collections
 import hashlib
 import threading
 import sys
+import contextlib
 from . import questions # Only for nr_indices and any_questions
 from . import utilities
 from . import answer
@@ -612,7 +613,40 @@ class Student:
             link
             )
 
+    ####################################################
+    # Steal the identity of a student
+    ####################################################
+    def steal_enter(self, state, answer, rand):
+        self.writable = False
+        save = []
+        if state:
+            save.append(state.student)
+            state.student = self
+        if answer and rand:
+            save.append(answer.persistent_random)
+            answer.persistent_random = rand
+        self.writable = False
+        return save
 
+    def steal_exit(self, state, answer, rand, save):
+        if answer and rand:
+            answer.persistent_random = save.pop()
+        if state:
+            state.student = save.pop()
+        self.writable = True
+
+    @contextlib.contextmanager
+    def steal(self, state=None, answer=None, rand=None):
+        if state and state.student is self:
+            save = self.steal_enter(state, answer, rand)
+            yield # yet locked
+            self.steal_exit(save)
+            return
+        # XXX Possible deadlock if 2 Authors roles browse the questions
+        with self.lock:
+            save = self.steal_enter(state, answer, rand)
+            yield
+            self.steal_exit(state, answer, rand, save)
             
 students = {}
 stop_loading_default = lambda x: False
