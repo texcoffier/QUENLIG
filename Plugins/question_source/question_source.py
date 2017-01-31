@@ -89,7 +89,7 @@ def replace_question(c, question, source, state, encoding):
 def edit_python(source):
     return (
         '<FORM action="?question_source=save" method="POST">' +
-        '<TEXTAREA name="src" style="width:100%%; height: %sem">' % (
+        '<TEXTAREA name="src" style="font-size:130%%; width:100%%; height: %sem">' % (
             1.3 * source.count('\n'))
         + cgi.escape(source)
         + '</TEXTAREA><BUTTON class="save_source"></BUTTON></FORM>')
