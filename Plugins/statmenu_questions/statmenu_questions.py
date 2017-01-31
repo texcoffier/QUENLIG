@@ -56,7 +56,7 @@ def execute(state, plugin, argument):
             "%6.3f" % (question.stats.indice / norme),
             utilities.time_format(question.student_time  / norme),
             "%6.3f" % (question.stats.nr_comment/ norme),
-            "%d" % question.perfect_time,
+            "%5d" % question.perfect_time,
             ])
 
     if s:
