@@ -154,6 +154,7 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
         self.do_GET()
 
     def do_GET(self):
+        self.wfile.write = self.wfile._sock.sendall
         # The 'path' is in the form :
         #                               /prefix/Ticket/number/?action=qu
         #                                         0        1       2
