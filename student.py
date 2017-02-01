@@ -619,19 +619,19 @@ class Student:
     def steal_enter(self, state, answer, rand):
         self.writable = False
         save = []
-        if state:
+        if state is not None:
             save.append(state.student)
             state.student = self
-        if answer and rand:
+        if answer is not None and rand is not None:
             save.append(answer.persistent_random)
             answer.persistent_random = rand
         self.writable = False
         return save
 
     def steal_exit(self, state, answer, rand, save):
-        if answer and rand:
+        if answer is not None and rand is not None:
             answer.persistent_random = save.pop()
-        if state:
+        if state is not None:
             state.student = save.pop()
         self.writable = True
 
@@ -640,7 +640,7 @@ class Student:
         if state and state.student is self:
             save = self.steal_enter(state, answer, rand)
             yield # yet locked
-            self.steal_exit(save)
+            self.steal_exit(state, answer, rand, save)
             return
         # XXX Possible deadlock if 2 Authors roles browse the questions
         with self.lock:
