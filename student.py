@@ -645,8 +645,10 @@ class Student:
         # XXX Possible deadlock if 2 Authors roles browse the questions
         with self.lock:
             save = self.steal_enter(state, answer, rand)
-            yield
-            self.steal_exit(state, answer, rand, save)
+            try:
+                yield
+            finally:
+                self.steal_exit(state, answer, rand, save)
             
 students = {}
 stop_loading_default = lambda x: False
