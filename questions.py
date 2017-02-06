@@ -1545,18 +1545,29 @@ class NumberOfIs(TestExpression):
        Bad(Comment(~NumberOfIs("x", 3) | ~NumberOfIs("y", 2),
                    "Your answer must contain 3 'x' and 2 'y'"))
     """
-    def __init__(self, string, number):
+    def __init__(self, string, number, canonize=False):
         if not isinstance(number, int):
             raise ValueError("Expect an integer")
         self.string = string
         self.number = number
+        self.do_canonize = canonize
 
     def source(self, state=None, format=None):
+        if self.do_canonize:
+            canonize = ',canonize=True'
+        else:
+            canonize = ''
         return self.test_name(format) + '(' + pf(self.string,format) + ',' + \
-               str(self.number) + ')'
+               str(self.number) + canonize + ')'
 
     def do_test(self, student_answer, state=None):
         return student_answer.count(self.string) == self.number, ''
+
+    def canonize_test(self, parser, state):
+        if self.do_canonize:
+            self.string_canonized = parser(self.string, state)
+        else:
+            self.string_canonized = self.string
 
 
 # Should apply the parser on all the dict items
