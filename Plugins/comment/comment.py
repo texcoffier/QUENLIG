@@ -145,7 +145,7 @@ MIME-Version: 1.0
 {}
 </ul>
 """.format(configuration.session.name, q,
-           login, sn, fn, plugin.option, q,
+           login, sn, fn, configuration.teacher_mail, q,
            cgi.escape(argument), before, question, bads).encode("utf-8"))
     session.close()
 
