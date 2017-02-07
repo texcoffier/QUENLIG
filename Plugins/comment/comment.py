@@ -61,33 +61,48 @@ function PersistentInput(element_id, name)
    if ( this.input.onkeypress )
       this.old_onkeypress = this.input.onkeypress.bind(this) ;
    this.input.onkeypress = this.onkeypress.bind(this) ;
+   this.input.persistent = this ;
 }
 
+PersistentInput.prototype.debug = function(txt)
+{
+   if ( false )
+      console.log(this.key + " " + txt + " " + this.input.value) ;
+} ;
 PersistentInput.prototype.get_persistent = function()
 {
+   this.debug("GET") ;
    return localStorage[this.key] || '' ;
 } ;
 PersistentInput.prototype.set_persistent = function(txt)
 {
+   this.debug("SET") ;
    localStorage[this.key] = txt ;
    this.show() ;
 } ;
 PersistentInput.prototype.show = function()
 {
+   this.debug("SHOW") ;
    this.form.className = this.input.value != '' ? "highlight" : '' ;
 } ;
 PersistentInput.prototype.onkeypress_real = function()
 {
+   this.debug("KEYREAL") ;
    this.set_persistent(this.input.value) ;
 } ;
 PersistentInput.prototype.onkeypress = function(event)
-{  // Needed because INPUT.value is modified after the keypress
+{
+   this.debug("KEY (" + event.char + ") code=" + event.keyCode) ;
+   if ( event.char === '' && event.keyCode != 9 )
+      return ;
+   // Needed because INPUT.value is modified after the keypress
    setTimeout(this.onkeypress_real.bind(this), 100) ;
    if ( this.old_onkeypress )
       this.old_onkeypress(event) ;
 } ;
 PersistentInput.prototype.onsubmit = function()
 {
+   this.debug("SUBMIT") ;
    this.set_persistent("") ;
 } ;
 """
