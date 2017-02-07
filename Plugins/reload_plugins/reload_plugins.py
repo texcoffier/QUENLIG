@@ -52,7 +52,8 @@ def execute(state, plugin, argument):
         ['%s=%s' % (k,
                     v.replace("+","%2B")
                     .replace("?","%3F")
-                    .replace("&","%26"))
+                    .replace("&","%26")
+                    .replace('"',"%22"))
          for k, v in state.form.items()
          if k not in ('number', 'ticket', 'reload_plugins')
          ])
