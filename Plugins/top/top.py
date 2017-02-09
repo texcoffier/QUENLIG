@@ -177,10 +177,10 @@ def css_cached(state):
         return css_cached.cache[state.localization]
     except KeyError:
         pass
-    css_cached.cache[state.localization] = css(state)
+    css_cached.cache[state.localization] = the_css = css(state)
     utilities.write(os.path.join('HTML', ','.join(state.localization) + '.css'),
-                    css_cached.cache[state.localization])
-    return css_cached.cache[state.localization]
+                    the_css)
+    return the_css # The cache may have been cleared
 
 css_cached.cache = {}
                    

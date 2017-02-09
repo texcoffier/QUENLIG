@@ -144,15 +144,17 @@ class State(object):
         self.student = self.student_real = student.student(student_name)
         self.current_role = self.role_real = 'Student'
         self.old_role = ''
+        self.need_update_login = True
+        self.need_update_language = True
+        self.need_update_plugin = True
         self.ticket = ticket
         statistics.forget_stats()
         self.history = []
         self.client_ip = None
         self.client_browser = None
-        self.update(server)
         self.option = None
-        self.update_language(server)
-        self.update_plugins()
+        self.time_creation = time.time()
+        self.lang = ''
 
     def update_language(self, server):
         self.lang = lang = server.headers.get('accept-language','')
@@ -244,7 +246,7 @@ class State(object):
 
     # The user call the service with a different name (via an apache proxy)
     # Must be called on each page loading to have no problems.
-    def update(self, server):
+    def update_login(self, server):
         self.time_creation = time.time()
 
         login = False
@@ -382,6 +384,22 @@ MIME-Version: 1.0
         self.old_role = None
         del states[self.ticket]
 
+    def update_state(self, server):
+        assert(self.student.lock.locked)
+        self.server = self # To retrieve POST data
+        if self.lang != server.headers.get('accept-language',''):
+            self.old_role = ''
+            self.need_update_language = True
+            self.need_update_plugin = True
+        if self.need_update_login:
+            self.update_login(server)
+            self.need_update_login = False
+        if self.need_update_language:
+            self.update_language(server)
+            self.need_update_language = False
+        if self.need_update_plugin:
+            self.update_plugins()
+            self.need_update_plugin = False
 
 states = {}
 
@@ -393,15 +411,15 @@ def get_state(server, ticket):
 
     service = urllib.parse.quote(the_service(server))
 
-    if ticket == "": # No ticket, so redirect to the CAS service
+    if ticket == "":
         print('No ticket, redirect to authentication service')
         casauth.redirect(server, service)
         return None
 
-    if ticket.startswith("guest"): # Case of the 'guest' ticket
+    if ticket.startswith("guest"):
         if ticket in states:
             if not states[ticket].ticket_valid(server):
-                states[ticket].update(server)
+                states[ticket].need_update_login = True
         else:
             print('New guest ticket for', ticket)
             student_name = ticket
@@ -410,15 +428,9 @@ def get_state(server, ticket):
 
     if ticket in states: # The ticket is known
         if states[ticket].ticket_valid(server): # The ticket is valid
-            if states[ticket].lang != server.headers.get('accept-language',''):
-                states[ticket].update_language(server)
-                states[ticket].old_role = ''
-                states[ticket].update_plugins()
             return states[ticket]
         print('Ticket no more valid (too old or other changes), forget it.')
-        # del states[ticket]
         casauth.redirect(server, service)
-        # return get_state(server, "")
         return None
 
     print('Ticket unknown:', ticket)
@@ -437,7 +449,7 @@ def get_state(server, ticket):
                 del states[s.ticket]
                 states[ticket] = s
                 s.ticket = ticket
-                s.update(server)
+                s.need_update_login = True
                 return s
 
     print('Session created for ticket', ticket)

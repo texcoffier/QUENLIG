@@ -209,7 +209,7 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
         # Execute and return page
         sys.stdout.flush() # To really log into the file for 'regtests'
         with session.student.lock:
-            session.server = self # To retrieve POST data
+            session.update_state(self)
             mime, content = session.execute(form)
         if mime in ('application/x-javascript', 'text/html', 'text/css'):
             content = content.encode("utf-8")

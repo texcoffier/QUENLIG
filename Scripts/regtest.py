@@ -315,12 +315,14 @@ def test_0240_work_done(student):
                    '<li>Indice X</li>',
                    '<li>Indice Y</li>',
                    )
-    
-def test_0250_threading(student):
-    import threading
-    import random
-    class User(threading.Thread):
-        def run(self):
+
+error = False
+
+import threading
+import random
+class User(threading.Thread):
+    def run(self):
+        try:
             student = Student(the_server, 'user%d' % id(self))
             while True:
                 student.goto_question('a:a')
@@ -332,10 +334,18 @@ def test_0250_threading(student):
                     sys.stdout.write('*')
                     sys.stdout.flush()
                     break
+        except:
+            global error
+            error = True
+            raise
+
+def test_0250_threading(student):
     for i in range(20):
         User().start()
     while threading.activeCount() != 1:
         time.sleep(0.1)
+    if error:
+        raise ValueError("Thread error")
 
 def test_0260_require_simple(student):
     student.goto_question('a:a')
@@ -587,12 +597,15 @@ def test_0410_CHOICE(student):
 # TODO
 ############
 
+exit_value = 1
 try:
     the_server = Server(questions='Questions/regtest', name=name)
     tests = sorted(globals())
     if len(sys.argv) > 1:
-        if sys.argv[1] in tests:
-            tests = tests[tests.index(sys.argv[1]):]
+        tests = [t
+                 for t in tests
+                 if t in sys.argv
+                 ]
     for test in tests:
         if not test.startswith('test_'):
             continue
@@ -607,10 +620,10 @@ try:
                                 roles=roles,
                                 ))
         print('OK')
+    exit_value = 0
 finally:
     the_server.stop()
-    pass
 
-    
+sys.exit(exit_value)
 
 

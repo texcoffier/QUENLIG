@@ -38,7 +38,7 @@ class Server:
         self.stats = stats.Stats()
         self.base = 'http://localhost:%d' % self.port
         shutil.rmtree("/tmp/Students%s" % self.name, True)
-        os.remove("Students/%s" % self.name)
+        os.remove("Students/%s" % self.name) # Symlink
         os.mkdir("/tmp/Students%s" % self.name)
         os.symlink("/tmp/Students%s" % self.name, "Students/%s" % self.name)
         if profiling:
@@ -74,7 +74,7 @@ class Server:
     def stop(self):
         print('Stop server')
         os.system('./main.py %s stop >>xxx.log 2>&1' % self.name)
-        print('Server stopped')
+        print('Server stopped, log are in "xxx.log"')
 
     def get(self, url, trace=False):
         if trace:
