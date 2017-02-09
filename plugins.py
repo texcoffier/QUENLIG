@@ -180,6 +180,14 @@ Attribute('prototype'
           , '''A plugin name from which all the default attributes values
             will be taken.'''
           )
+Attribute('not_threaded'
+          , '''If set to True,
+          the page is created in a non threaded environment.
+          For example the 'reload_question' plugin.
+          Slow plugin must disable themselve when running in a
+          non threaded page, for exemple the 'question_bads' plugin.
+          ''',
+          False)
 
 def set_option(plugin, value):
     plugin.option = value

@@ -30,6 +30,7 @@ container = 'heart'
 priority_display = 10000000
 acls = { 'Author': ('executable',) }
 priority_execute = '-reload_questions'
+not_threaded = True
 
 javascript = r'''
 function encode_uri(t)

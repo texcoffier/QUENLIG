@@ -321,9 +321,13 @@ error = False
 import threading
 import random
 class User(threading.Thread):
+    i = 1000000
+    def __init__(self):
+        threading.Thread.__init__(self)
+        User.i += 1
     def run(self):
         try:
-            student = Student(the_server, 'user%d' % id(self))
+            student = Student(the_server, 'user%d' % User.i)
             while True:
                 student.goto_question('a:a')
                 minimal_tests(student, title='a:a')
@@ -592,6 +596,29 @@ def test_0410_CHOICE(student):
     root.get('?answered_other=guest' + student.name)
     assert('Question ' + q in root.page)
     assert('class="an_answer">' + q + '<' in root.page)
+
+def test_0420_not_threaded(student):
+    for i in range(20):
+        User().start()
+    root = Student(
+        the_server, 'root_0420',
+        roles="['Default','Teacher','Author','Grader', 'Developer','Admin']")
+    root.goto_question('b:z')
+    root.goto_question('a:b')
+    root.select_role('Teacher')
+    while threading.activeCount() != 1:
+        root.goto_question('a:a')
+        os.system("touch Questions/regtest/a.py")
+        root.get('?reload_questions=1')
+        root.get('?statmenu_questions=1')
+        root.expect('>b:z<')
+        root.expect('>a:b<')
+        os.system("touch Plugins/question_answer/question_answer.py")
+        root.get('?reload_plugins=1')
+        time.sleep(0.1)
+    if error:
+        raise ValueError("Regression tests thread error")
+
 
 ############
 # TODO

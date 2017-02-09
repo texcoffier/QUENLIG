@@ -38,6 +38,8 @@ sort_column = 0
 def execute(state, plugin, argument):
     if state.question == None:
         return
+    if not state.threaded_run:
+        return # To be fast
 
     stats = statistics.question_stats()
     

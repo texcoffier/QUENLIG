@@ -47,8 +47,6 @@ def execute(state, plugin, argument):
         return
 
     statistics.question_stats()
-    if not hasattr(question, "stats"):
-        return # The question has been reloaded
     if question.stats.given == 0:
         return
 

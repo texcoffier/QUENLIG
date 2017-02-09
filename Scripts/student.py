@@ -38,9 +38,10 @@ class Student:
     def get(self, url, trace=False, base=None):
         if base is None:
             base = self.base
+        # print(base + url)
         self.page = page = self.server.get(base + url, trace)
         self.url = url
-        # print base + url
+        # print("content length:", len(self.page))
         try:
             if page.find('<base href='):
                 self.base = page.split('<base href="')[1].split('"')[0]

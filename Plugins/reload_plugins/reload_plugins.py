@@ -32,6 +32,7 @@ from QUENLIG import utilities
 priority_execute = 1000000000
 container = 'action'
 permanent_acl = True
+not_threaded = True
 
 # link_to_self = True
 

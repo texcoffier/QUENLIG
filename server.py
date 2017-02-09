@@ -203,14 +203,23 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
 
         # Get the session state
         print(form['ticket'])
-        session = state.get_state(self, form['ticket'].translate(utilities.safe_ascii))
+        session = state.get_state(
+            self,
+            form['ticket'].translate(utilities.safe_ascii),
+            form
+        )
         if session == None:
             return
+        # The session is locked for the student or for all students
+        # if a 'not_threaded' plugin is going to run
         # Execute and return page
         sys.stdout.flush() # To really log into the file for 'regtests'
-        with session.student.lock:
+        try:
             session.update_state(self)
             mime, content = session.execute(form)
+        finally:
+            session.release()
+
         if mime in ('application/x-javascript', 'text/html', 'text/css'):
             content = content.encode("utf-8")
         sys.stdout.flush()

@@ -32,12 +32,10 @@ from QUENLIG import statistics
 from QUENLIG import student
 
 priority_execute = '-question_before'
-
 container = 'action'
-
 permanent_acl = True
-
 link_to_self = True
+not_threaded = True
 
 acls = { 'Author': ('executable',) }
 

@@ -23,6 +23,7 @@ import time
 import re
 import sys
 import os
+import threading
 from . import casauth
 from . import questions
 from . import student
@@ -305,7 +306,6 @@ class State(object):
             self.plugins_dict[sort_column[1]].sort_column = int(sort_column[0])
 
     def execute(self, form):
-        self.start = time.time()
         self.analyse_form(form)
 
         self.url_base_full = "%s/%s/%d/" % (self.url_base,
@@ -385,7 +385,6 @@ MIME-Version: 1.0
         del states[self.ticket]
 
     def update_state(self, server):
-        assert(self.student.lock.locked)
         self.server = self # To retrieve POST data
         if self.lang != server.headers.get('accept-language',''):
             self.old_role = ''
@@ -401,10 +400,31 @@ MIME-Version: 1.0
             self.update_plugins()
             self.need_update_plugin = False
 
+    def not_threaded(self, form):
+        for plugin in plugins.Plugin.plugins_dict.values():
+            if plugin['fr','not_threaded'] and form.get(plugin.css_name, None):
+                return True
+
+    def lock(self, form):
+        if self.not_threaded(form):
+            for s in student.students.values():
+                while s.lock.locked():
+                    time.sleep(0.1)
+            # All page loading are terminated.
+            self.to_unlock = state_lock
+            self.threaded_run = False
+        else:
+            self.to_unlock = self.student.lock
+            self.student.lock.acquire()
+            state_lock.release()
+            self.threaded_run = True
+
+    def release(self):
+        self.to_unlock.release()
+
 states = {}
 
-@utilities.add_a_lock
-def get_state(server, ticket):
+def get_state_(server, ticket):
     if (configuration.only_from
         and server.client_address[0] != configuration.only_from):
         return None
@@ -457,3 +477,20 @@ def get_state(server, ticket):
     states[ticket] = State(server, ticket, student_name)
     return states[ticket]
 
+
+state_lock = threading.Lock()
+
+def get_state(server, ticket, form):
+    state_lock.acquire()
+    try:
+        s = get_state_(server, ticket)
+        if s is None:
+            state_lock.release()
+            return s
+    except:
+        state_lock.release()
+        raise
+
+    s.lock(form) # May release state_lock
+    s.start = time.time()
+    return s

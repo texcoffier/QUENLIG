@@ -134,7 +134,6 @@ class Student:
         self.answerables_cache = None
         self.read_log(stop_loading)
         self.lock = threading.Lock()
-        self.lock.name = self.filename
 
     def read_log(self, stop_loading):
         new_log = os.path.join(self.file, 'log.py')

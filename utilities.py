@@ -327,7 +327,6 @@ def add_a_lock(fct):
         return r
     f.fct = fct
     f.the_lock = threading.Lock()
-    f.the_lock.name = fct.__name__
     f.__doc__ = fct.__doc__
     f.__name__ = fct.__name__
     f.__module__ = fct.__module__

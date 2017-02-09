@@ -27,7 +27,6 @@ from . import questions
 from . import utilities
 from . import student
 from . import configuration
-import types
 
 _stats = None
 
@@ -60,10 +59,10 @@ class Stats:
         
     def update(self):
         """Compute statistics about questions and students"""
-        t = time.time()
-        if t - self.last_time < self.ttl:
+        start_time = time.time()
+        if start_time - self.last_time < self.ttl:
             return
-        self.last_time = t
+        self.last_time = start_time
 
         if student.students:
             self.all_students = tuple(student.students.values())
@@ -275,7 +274,7 @@ student: %s
         # If we compute statistics in one second and we want
         # to allocate 1% of time to statistics computing.
         # then we must compute statistics every 100 seconds.
-        self.ttl = (101-configuration.statistics_cpu_allocation)*(time.time() - self.last_time)
+        self.ttl = (101-configuration.statistics_cpu_allocation)*(time.time() - start_time)
 
 
 

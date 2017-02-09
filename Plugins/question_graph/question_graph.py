@@ -41,6 +41,8 @@ re_comment = re.compile('    *')
 def execute(state, dummy_plugin, dummy_argument):
     if state.question == None:
         return
+    if not state.threaded_run:
+        return # To be fast
 
     stats = statistics.question_stats()
 

@@ -33,8 +33,6 @@ def execute(state, plugin, argument):
         return
     
     stats = statistics.question_stats()
-    if not hasattr(state.question, "stats"):
-        return # The question has been reloaded
 
     if state.question.stats.given > 2:
         t = state.question.student_time / state.question.stats.given
