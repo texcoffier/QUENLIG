@@ -51,7 +51,7 @@ def execute(state, dummy_plugin, dummy_argument):
     for s in stats.all_students:
         if state.question.name not in s.answers:
             continue
-        with s.steal(state):
+        for dummy in state.steal_identity([s]):
             a = s.answers[state.question.name]
             last_comment = is_first + state.question.question(state)
             for c_orig in a.bad_answers:

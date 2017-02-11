@@ -422,6 +422,17 @@ MIME-Version: 1.0
     def release(self):
         self.to_unlock.release()
 
+    def steal_identity(self, students, answer=None, rand=None):
+        """It will not iterate on locked student in order to avoid deadlock"""
+        for student in students:
+            if student.lock.acquire(False):
+                save = student.steal_enter(self, answer, rand)
+                try:
+                    yield student
+                finally:
+                    student.steal_exit(self, answer, rand, save)
+                    student.lock.release()
+
 states = {}
 
 def get_state_(server, ticket):

@@ -37,7 +37,7 @@ def execute(state, plugin, argument):
     if argument not in student.students:
         return
 
-    with student.students[argument].steal(state):
+    for dummy in state.steal_identity([student.students[argument]]):
         saved_role = state.current_role
         try:
             Plugins.answered.answered.execute(state, plugin, argument)

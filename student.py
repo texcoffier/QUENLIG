@@ -624,7 +624,6 @@ class Student:
         if answer is not None and rand is not None:
             save.append(answer.persistent_random)
             answer.persistent_random = rand
-        self.writable = False
         return save
 
     def steal_exit(self, state, answer, rand, save):
@@ -633,21 +632,6 @@ class Student:
         if state is not None:
             state.student = save.pop()
         self.writable = True
-
-    @contextlib.contextmanager
-    def steal(self, state=None, answer=None, rand=None):
-        if state and state.student is self:
-            save = self.steal_enter(state, answer, rand)
-            yield # yet locked
-            self.steal_exit(state, answer, rand, save)
-            return
-        # XXX Possible deadlock if 2 Authors roles browse the questions
-        with self.lock:
-            save = self.steal_enter(state, answer, rand)
-            try:
-                yield
-            finally:
-                self.steal_exit(state, answer, rand, save)
             
 students = {}
 stop_loading_default = lambda x: False
