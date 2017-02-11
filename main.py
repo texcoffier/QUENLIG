@@ -337,6 +337,10 @@ DIV.title A:visited { color: white }
 <h1>Plugins display tree</h1>
 Click on plugin names to see the details.
 ''')
+    class FakeServer:
+        headers = {'accept-language': 'en', 'User-Agent': ""}
+        client_address = '127.0.0.1'
+    s.update_state(FakeServer)
     for p in s.roots:
         display_TOC(f, p)
 
