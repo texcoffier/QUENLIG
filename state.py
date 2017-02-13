@@ -385,7 +385,7 @@ MIME-Version: 1.0
         del states[self.ticket]
 
     def update_state(self, server):
-        self.server = self # To retrieve POST data
+        self.server = server # To retrieve POST data
         if self.lang != server.headers.get('accept-language',''):
             self.old_role = ''
             self.need_update_language = True
