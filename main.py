@@ -585,6 +585,7 @@ if __name__ == "__main__":
             session.init()
             os.chdir(session.dir)
             s = state.State(FakeServer(), "noticket", "Default")
+            s.update_state(FakeServer())
             p = s.plugins_dict[args.pop()]
             out = p.plugin.plugin.execute(s, p, '1')
             if isinstance(out, tuple):
