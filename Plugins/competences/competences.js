@@ -68,25 +68,14 @@ function stop_event(event)
 
 function random_jump(question_list)
 {
-  var weight = 0 ;
-  for(var question in question_list)
-    if ( question_list[question].name !== current_question )
-      weight += question_list[question].weight() ;
-  var random = Math.random() * weight ;
-  weight = 0 ;
+  var q = [] ;
   for(var question in question_list)
   {
-    question = question_list[question] ;
-    if ( question.name !== current_question )
-    {
-      weight += question.weight() ;
-      if ( weight >= random )
-      {
-	question.jump() ;
-	return ;
-      }
-    }
+    q.push(question_list[question]) ;
+    question_list[question].the_weight = question_list[question].weight() ;
   }
+  q.sort(function(a, b) { return b.the_weight - a.the_weight ; }) ;
+  q[0].jump() ;
 }
 
 function question_redo()
@@ -123,22 +112,24 @@ Question.prototype.weight = function()
   if ( this.classes.indexOf("not_answerable") != -1
        || this.classes.indexOf("erasable") == -1
      )
-    weight = 0 ;
+    weight = -2 ;
   else if ( this.classes.indexOf("question_given") == -1 ) // NOT GIVEN
-    weight = 1000000 ;
+    weight = 14 ;
   else if ( this.nr_bad + this.nr_good == 0 )
-    weight = 100000 ;
+    weight = 12 ;
   else if ( this.nr_good == 0 )
-    weight = 10000 ;
+    weight = 10 ;
   else if ( ! this.is_answered() )
-    weight = 1000 ;
+    weight = 8 ;
   else if ( this.nr_good < this.nr_versions )
-    weight = 100 ;
+    weight = 6 ;
+  else if ( this.nr_perfect == 0 )
+    weight = 4 + Math.log( (this.nr_bad+1) / this.nr_good ) / 10 ;
   else
-    weight = Math.pow(this.nr_versions / (this.nr_perfect + 1), 2) ;
+    weight = 2 - this.nr_perfect / this.nr_versions ;
   if ( this.current )
-    weight *= 0.9 ;
-  weight += Math.random() / 1000 ;
+    weight -= 1 ;
+  weight += Math.pow(Math.random(), 2) ;
   return weight ;
 } ;
 
@@ -933,7 +924,12 @@ function get_level()
     if ( question.nr_good >= question.nr_versions )
       nr_versions++ ;
     nr_total_versions += question.nr_versions ;
+    if ( false )
+    {
+      console.log(question) ;
+      console.log(question.name + ' ' + question.weight()) ;
     }
+  }
   if ( nr_accessible < nr )
     level = nr_accessible / nr ;
   else if ( nr_view < nr )
