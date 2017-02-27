@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2017 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
+#    Contact: Thierry.EXCOFFIER@univ-lyon1.fr
 
 """Display the informations about the required questions."""
 
@@ -29,18 +29,45 @@ priority_execute = 'question_answer' # We need to know if the answer was answere
 acls = { 'Default': ('executable',) }
 
 css_attributes = (
-    "/DIV.an_answer { }",
-    ".answer { background: #FFF ; margin-bottom: 1em; border-bottom: 1px solid black}",
-    """.course {
-    opacity: 0.3 ;
-    max-height: 2em ;
-    overflow: hidden ;
-    transition: max-height 2s, opacity 2s ;
-    webkit-transition: max-height 2s, opacity 2s ;
- }""",
-    ".course:hover { max-height: 100em ; opacity:1 ; border-bottom: 1px solid black }",
-    "DIV.question_required .course:hover { opacity:1 }"
+    ".box_content { padding: 0.5em }",
+    "DIV.tabs { height: 1.1em; }",
+    "DIV.tabs DIV.content { display: none }",
+    "DIV.tabs DIV.answer { display: none }",
+    "DIV.tab { display: inline ; }",
+    """#display_tab { height: 9em;
+         overflow: auto;
+         background: #FFF ;
+         padding-top: 0.4em ;
+    }""",
+    """DIV.name { border: 1px solid #BBB ;
+    display: inline ;
+    border-top-right-radius: 0.4em ;
+    border-top-left-radius: 0.4em ;
+    border-bottom: 0px ;
+    margin-right: 0.2em ;
+    }""",
+    "DIV.content { position: relative; }",
+    "DIV.before { position: absolute;top: 0px; left: 50% ; }",
+    "DIV.question { position: absolute; top: 0px; left: 0px ; right: 50% ; }",
     )
+
+javascript = """
+function goto_tab(t)
+{
+  while ( t.className != "tab" )
+      t = t.parentNode ;
+  var selected = t ;
+  while ( t.className != "tabs" )
+      t = t.parentNode ;
+  for(var i = 0 ; i < t.childNodes.length; i++)
+    {
+     var e = t.childNodes[i] ;
+     e.childNodes[0].style.background = ( e === selected ? "#FFF" : "#CCC") ;
+    }
+  document.getElementById("display_tab").innerHTML = selected.childNodes[1].outerHTML ;
+  document.getElementById("display_answer").innerHTML = selected.childNodes[2].outerHTML ;
+}
+"""
 
 def execute(state, dummy_plugin, dummy_argument):
     if state.question == None:
@@ -48,12 +75,12 @@ def execute(state, dummy_plugin, dummy_argument):
     if state.student.answered_question(state.question.name):
         return
         
-    s = []
+    s = ['<div class="tabs">']
     for p in state.question.required:
         if p.hidden:
             continue
         if p.hide:
-            return
+            continue
         q = questions.questions[p.name]
         question = q.question(state)
         try:
@@ -68,17 +95,26 @@ def execute(state, dummy_plugin, dummy_argument):
             before = q.before(state)
         else:
             before = ""
-        if before and question:
-            s.append('<div class="course">')
-            s.append(before)
-            s.append("</div>")
-            s.append('<div class="question">')
-            s.append(question)
-            s.append("</div>")
-        else:
-            s.append(before)
-            s.append(question)
+        s.append('<div class="tab"')
+        if len(s) == 2:
+            s.append(' id="first_tab"')
+        s.append('><div class="name" onclick="goto_tab((event||window.event).target)">')
+        s.append(p.name)
+        s.append("</div>")
+        s.append('<div class="content">')
+        s.append('<div class="before">')
+        s.append(before)
+        s.append("</div>")
+        s.append('<div class="question">')
+        s.append(question)
+        s.append("</div>")
+        s.append("</div>")
         s.append(answer)
+        s.append("</div>")
+    s.append("</div>")
+    s.append('<div id="display_tab"></div>')
+    s.append('<div id="display_answer"></div>')
+    s.append("<script>goto_tab(document.getElementById('first_tab'))</script>")
     if s:
         return ''.join(s)
 
