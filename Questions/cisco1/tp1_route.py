@@ -92,12 +92,12 @@ add(name="machine>routeur s1",
     à partir de votre PC, mais pouvez-vous pinguer les autres
     routeurs&nbsp;?""",
     question="""Donnez la ligne commande que vous tapez sur votre ordinateur
-    pour <em>pinguer</em> le routeur connecté au port série 1
+    pour <em>pinguer</em> l'interface série du routeur connecté au port série 1
     de votre routeur.""",
     tests = (
     require_ping,
     require("{E0.remote_port.host.S1.remote_port.ip}",
-            "Je ne vois pas l'adresse IP du port série du routeur distant",
+            "Je ne vois pas l'adresse IP du port série du routeur",
             parse_strings=host),
     good("ping {E0.remote_port.host.S1.remote_port.ip}",
          parse_strings=host),
