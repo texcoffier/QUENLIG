@@ -28,21 +28,16 @@ add(name="intro",
     <ul>
     <li> Brancher physiquement un réseau complexe.
     <li> Configurer les liaisons.
-    <li> Mettre en place un routage dynamique le réseau.
-    <li> Mettre en place un routage statique le réseau.
+    <li> Mettre en place un routage dynamique.
+    <li> Mettre en place un routage statique.
     <li> Effacer les configurations et ranger les cables.
     </ul>
     <p>
     Le plan du réseau à monter est dans le menu de gauche&nbsp;:
     <em>Aide/Explications</em>
     <p>
-    Faites en priorité les questions en caractères <b>gras</b>.
-    <p>
-    <b>Soit les variables 'bonnes', 'mauvaises', 'indices' entre 0 et 1.
-    La note de TP est égale à : bonnes<sup>2</sup>*(20-6*mauvaises<sup>0.3</sup>-2*indices<sup>0.3</sup>).</b>
-    En répondant à toutes les questions vous avez donc 12/20 au minimum.
-    En répondant à la moitié des questions sans faire aucune erreur
-    et sans demander d'indice, vous avez au mieux 5/20.
+    Faites en priorité les questions en blanc sur noir et celles en caractères <b>gras</b>.
+ 
     """,
     question="Êtes-vous prêt pour l'aventure&nbsp;?",
     tests = ( yes("Répondez OUI s'il vous plais"), ),
@@ -279,7 +274,7 @@ add(name="encore plus loin",
     required=["démontage"],
     question="""Quelle est la plus longue route pour aller d'un routeur
     à un autre en nombre de routeurs traversés
-    si tout le monde a enlevé les cables qui traversent le cercle&nbsp;?""",
+    si tout le monde a enlevé les cables qui traversent le cercle central&nbsp;?""",
     tests = (
     require_int(),
     HalfNode(),
