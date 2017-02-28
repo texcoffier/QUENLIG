@@ -54,8 +54,10 @@ css_attributes = (
 javascript = """
 function goto_tab(t)
 {
-  while ( t.className != "tab" )
+  while ( t && t.className != "tab" )
       t = t.parentNode ;
+  if ( ! t )
+    return ;
   var selected = t ;
   while ( t.className != "tabs" )
       t = t.parentNode ;
@@ -75,7 +77,7 @@ def execute(state, dummy_plugin, dummy_argument):
     if state.student.answered_question(state.question.name):
         return
         
-    s = ['<div class="tabs">']
+    s = []
     for p in state.question.required:
         if p.hidden:
             continue
@@ -111,14 +113,10 @@ def execute(state, dummy_plugin, dummy_argument):
         s.append("</div>")
         s.append(answer)
         s.append("</div>")
-    s.append("</div>")
-    s.append('<div id="display_tab"></div>')
-    s.append('<div id="display_answer"></div>')
-    s.append("<script>goto_tab(document.getElementById('first_tab'))</script>")
     if s:
-        return ''.join(s)
-
-
-
-
-
+        return ('<div class="tabs">'
+                + ''.join(s)
+                + """</div>"
+<div id="display_tab"></div>
+<div id="display_answer"></div>
+<script>goto_tab(document.getElementById('first_tab'))</script>""")
