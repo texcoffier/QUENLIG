@@ -10,6 +10,7 @@ translations = {
     'nice_results>SPAN': "Rouge : Mauvais, Bleu : Bon, Vert : Super\\A Cliquez pour essayer une autre version de la question.\\A Bord complet : toutes les versions ont été vues.",
       'bad_answer_given>SPAN' : 'Vous avez donné une mauvaise réponse',
       'answered>SPAN' : 'Vous avez bien répondu',
+      'suspended_until>SPAN' : "Question bloquée car vous avez trop fait d'essai",
       'perfect_answer>SPAN' : "Réponse parfaite, prêt pour l'examen",
       'not_answerable>SPAN' : "Vous ne l'avez pas encore débloquée",
       'not_seen>SPAN' : "Vous ne l'avez jamais lue",

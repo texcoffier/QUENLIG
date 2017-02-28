@@ -10,5 +10,6 @@ translations = {
     'maximum_bad_answer' : "Vous ne pouvez plus répondre à cette question, choisissez en une autre",
     'nr_try': "Nombre d'essais que vous pouvez encore faire : ",
     'missing_required': "Vous devez avancer dans le questionnaire avant de pouvoir répondre à cette question",
+    'suspended_until': "Vous avez fait trop de mauvaises réponses, vous devez maintenant attendre avant de faire une autre proposition. Attention le temps d'attente augmente à chaque mauvaise réponse :",
 }
 

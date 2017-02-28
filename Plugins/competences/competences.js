@@ -38,6 +38,7 @@ var open_close_is_stats = true ;
 var nr_questions = 0 ;
 
 var ordered = [
+  'suspended_until',
   'perfect_answer',
   'answered',
   'bad_answer_given',
@@ -390,6 +391,8 @@ Competence.prototype.classe = function()
       info = 'not_seen' ;
     else if ( keys['resigned'] )
       info = 'question_given' ;
+    else if ( keys['suspended_until'] )
+      info = 'suspended_until' ;
     else if ( keys['bad_answer_given'] )
       info = 'bad_answer_given' ;
     else

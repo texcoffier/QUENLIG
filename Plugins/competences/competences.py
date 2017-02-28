@@ -41,6 +41,7 @@ css_attributes = (
     "A.answered        {color:#040;}",
     "A.not_seen        {color:#00F;}",
     "A.perfect_answer  {color:#0A0;}",
+    "A.suspended_until {background:#FDD;}",
     "A.indice_given    {font-style:italic;}",
     "A.current_question{text-decoration:underline;}",
     "A.not_answerable  {color:#DDD;}",
@@ -95,7 +96,6 @@ def execute(state, plugin, dummy_argument):
         info = list(info)
         info.append(tuple(info[0].competences))
         info.append(info[0].priority)
-        info.append(info[0].get_nr_versions())
         info.append(info[0].get_nr_versions())
         info[0] = info[0].name
         q.append(info)

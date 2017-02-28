@@ -24,6 +24,21 @@
 priority_display = 'question_before'
 acls = { 'Default': ('executable',) }
 
+def option_set(plugin, value):
+    from QUENLIG import configuration
+    import ast
+    (configuration.nr_bad_answers_allowed,
+     configuration.multiply_time,
+     configuration.max_suspended_time) = ast.literal_eval(value)
+
+option_name = 'suspend'
+option_help = '''"(nr_bad_answers, multiply, max_suspend)"
+        After 'nr_bad_answers': the student must wait 1 minute
+        before answering again.
+        After each new bad answer, the wait time is multiplied by 'multiply'.
+        The maximum wait time is 'max_suspend' minutes.'''
+option_default = "(5, 2, 60)"
+
 def execute(state, dummy_plugin, dummy_argument):
     q = state.question
 

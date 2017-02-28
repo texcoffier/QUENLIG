@@ -302,6 +302,7 @@ class Student:
                 (i not in answerable_set and a.nr_good_answer == 0
                  and "not_answerable " or "") +
                 ("", "erasable ")[ int(a.erasable(now)) ] +
+                ("", "suspended_until ")[ a.suspended_until() > now ] +
                 ("", " answered ")[int(a.answered != False)]
                 )
             tt.append( (i, info, a.nr_bad_answer, a.nr_good_answer,

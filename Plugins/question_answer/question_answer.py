@@ -27,6 +27,7 @@ before the question list computation.
 """
 
 import random
+import time
 import cgi
 from QUENLIG import configuration
 from QUENLIG import utilities
@@ -78,6 +79,53 @@ function check_button(e)
         }
   button.disabled = true ;
 }
+
+function seconds()
+{
+  var t = new Date() ;
+  return t.getTime() / 1000 ;
+}
+
+var suspended_until_time ;
+
+function change_state(state)
+{
+  var e = document.getElementById("questionanswer") ;
+  var t = e.getElementsByTagName("INPUT") ;
+  for(var i=0; i<t.length; i++)
+     if (state)
+        t[i].setAttribute("disabled", state) ;
+     else
+        t[i].removeAttribute("disabled") ;
+}
+
+function update_suspended_time()
+{
+  var e = document.getElementById("suspended_until") ;
+  if ( ! e )
+     return ;
+  var dt = suspended_until_time - seconds() ;
+  change_state(dt > 0);
+  if ( dt <= 0 )
+     {
+      // Activate
+      e.innerHTML = " GO!" ;
+      e.id = "" ;
+      change_state(false);
+     }
+  else
+      e.innerHTML = " <b>" + duration(dt.toFixed(0)) + '</b>' ;
+}
+
+function suspended_until(t)
+{
+   if ( seconds() > t )
+      return ;
+   document.write('<span id="suspended_until" class="suspended_until"></span>');
+   suspended_until_time = t ;
+   setInterval(update_suspended_time, 1000) ;
+}
+
 """
 
 def option_set(plugin, value):
@@ -109,6 +157,10 @@ def execute(state, plugin, argument):
             or (state.student.answer(state.question.name).nr_good_answer
                 and not state.student.answer(state.question.name).answered)
     ):
+        if time.time() < state.student.answer(state.question.name
+        ).suspended_until():
+            return # Cheater
+
         # Fill 'last_answer' attribute
         state.student.bad_answer_yet_given(state.question.name, argument)
         # Check the answer even if it is a known one because
@@ -157,7 +209,10 @@ def execute(state, plugin, argument):
 
     plugin.value_title = plugin.title[0]
 
-    s = '<FORM CLASS="questionanswer" accept-charset="utf-8" METHOD="GET" ACTION="#">'
+    s = '<FORM CLASS="questionanswer" ID="questionanswer" accept-charset="utf-8" METHOD="GET" ACTION="#">'
+
+    suspend = state.student.answer(state.question.name).suspended_until()
+    s += "<script>suspended_until(" + str(suspend) + ");</script>"
 
     last_answer = state.student.last_answer(state.question.name)
     if last_answer == "":
@@ -235,13 +290,14 @@ def execute(state, plugin, argument):
             last_answer_html)
         s += '<br><button type="submit"><p class="answer_button"></p></button>'
         
-    s += ('<script type="text/javascript">document.getElementById(2).focus();'
-          + 'window.scrollTo(0,0) ;'
-          + 'new PersistentInput("2", "{}") ;'.format(cgi.html.escape(
-              state.question.name))
-          + '</script>'
-          + '</FORM>'
-          )
+    s += '''
+</FORM>
+<script type="text/javascript">
+document.getElementById(2).focus() ;
+window.scrollTo(0,0) ;
+new PersistentInput("2", "{}") ;
+update_suspended_time() ;
+</script>'''.format(cgi.html.escape(state.question.name))
     if state.question.maximum_bad_answer:
         s += '<p class="nr_try">%d</p>' % (
             state.question.maximum_bad_answer

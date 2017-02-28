@@ -65,6 +65,26 @@ class Answer:
                     > configuration.erasable_after
                 )
 
+    def nr_bad_answers_since_erase(self):
+        return len(tuple(t
+                         for t in self.answer_times
+                         if t > self.erase_time
+        ))
+
+    def suspended_until(self):
+        """Time in seconds"""
+        if not configuration.allow_suspend(self):
+            return 0
+        if not self.answer_times:
+            return 0
+        n = self.nr_bad_answers_since_erase()
+        if n < configuration.nr_bad_answers_allowed:
+            return 0
+        minutes = configuration.multiply_time ** (
+            n - configuration.nr_bad_answers_allowed)
+        minutes = min(minutes, configuration.max_suspended_time)
+        return self.answer_times[-1] + 60 * minutes
+
     def __str__(self):
         return "%d %d %d %d %g %s %d" % (self.answered != False, self.nr_asked, self.nr_bad_answer, self.indice, self.time_searching+self.time_after, self.question, len(self.comments))
 
