@@ -541,6 +541,11 @@ mkdir(session.dir + 'Logs' )
 mkdir(session.dir + 'HTML' )
 configuration.root = os.getcwd()
 
+try:
+    import configuration_local
+except ImportError:
+    pass
+
 if __name__ == "__main__":
     while args:
         action = args.pop()
