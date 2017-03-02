@@ -26,5 +26,8 @@ explain_grade = {}
 # For 'competences' plugin: minimum time before question erasing is allowed
 erasable_after = 3600 # seconds
 
+# Which students are loaded
+log_age = 9999
+
 def allow_suspend(answer):
     return True

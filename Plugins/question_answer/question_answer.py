@@ -191,8 +191,7 @@ def execute(state, plugin, argument):
     if not isinstance(plugin.title, tuple):
         plugin.title = (plugin.title, plugin.title)
 
-    state.student.init_seed(state.question.name)
-    question = state.question.question(state)
+    question = state.question.get_question(state)
 
     if state.student.answered_question(state.question.name):
         # Value setted in question_change_answer plugin

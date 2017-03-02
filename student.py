@@ -415,11 +415,6 @@ class Student:
                 summed[teacher] += float(grade)
         return summed
 
-    def init_seed(self, question):
-        """Set the random seed for the question"""
-        random.seed(self.seed + self.answer(question).nr_erase)
-
-
     def answered_page(self, state):
         try:
             state.student.writable = False
@@ -450,8 +445,7 @@ class Student:
             s.append('<div class="question_history">')
             s.append("<em class=\"box_title short\">" + q.name + more +"</em>")
             s.append('<table class="box_content"><tr><td>')
-            self.init_seed(a.question)
-            question_text = q.question(state)
+            question_text = q.get_question(state)
             s.append(question_text.split('{{{')[0])
 
             if a.indice >= 0 and a.indice < len(q.indices):
@@ -594,11 +588,9 @@ class Student:
 
     def check_answer(self, answer, state):
         "'state' is a parameter needed for some questions"
-        self.init_seed(state.question.name)
         return state.question.check_answer(answer, state)
 
     def answer_commented(self, question_name, answer, state):
-        self.init_seed(state.question.name)
         return questions.questions[question_name].answer_commented(answer,state)
 
     def mailto(self, subject=None, body="", link=None):

@@ -45,10 +45,9 @@ def execute(state, dummy_plugin, dummy_argument):
     if q == None:
         return
 
-    state.student.init_seed(q.name)
     state.student.tell_question(q.name)
 
-    return q.question(state).split('{{{')[0]
+    return q.get_question(state).split('{{{')[0]
 
 
 

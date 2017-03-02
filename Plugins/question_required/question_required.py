@@ -84,7 +84,7 @@ def execute(state, dummy_plugin, dummy_argument):
         if p.hide:
             continue
         q = questions.questions[p.name]
-        question = q.question(state)
+        question = q.get_question(state)
         try:
             answer = utilities.answer_format(
                 state.student.answers[p.name].answered,
@@ -94,7 +94,7 @@ def execute(state, dummy_plugin, dummy_argument):
         question = question.split("{{{")[0]
         answer = '<div class="answer">' + answer + '</div>'
         if (q.courses  or  p.before) and q.before:
-            before = q.before(state)
+            before = q.get_before(state)
         else:
             before = ""
         s.append('<div class="tab"')

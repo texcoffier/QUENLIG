@@ -455,7 +455,7 @@ def html_simple(state):
             t.append( '<tr><th colspan="2">' + q.world + '</th></tr>')
             w = q.world
         t.append('<tr><td>' + q.short_name + '</td><td><p>' +
-                 troncate_question(q.question(state)) + '</td></tr>')
+                 troncate_question(q.get_question(state)) + '</td></tr>')
     t.append('</tbody></table>')
            
     return '\n'.join(t)

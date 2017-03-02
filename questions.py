@@ -26,6 +26,8 @@ import inspect
 import cgi
 import urllib.request, urllib.parse, urllib.error
 import re
+import threading
+import random
 from . import configuration
 from . import utilities
 
@@ -124,6 +126,7 @@ class Question:
             def tmp(dummy_state):
                 return question
         tmp.real_question = question
+        tmp.lock = threading.Lock()
         return tmp
 
     def __init__(self, world, arg, previous_question=[]):
@@ -177,57 +180,76 @@ class Question:
         if len(self.competences) == 0:
             self.competences = ("",)
 
+    def init_seed(self, state):
+        if state and state.student:
+            random.seed(state.student.seed
+                        + state.student.answer(self.name).nr_erase)
+
+    def get_question(self, state):
+        with self.question.lock:
+            self.init_seed(state)
+            return self.question(state)
+
+    def get_before(self, state):
+        with self.question.lock:
+            self.init_seed(state)
+            return self.before(state)
+
     def answers_html(self, state):
-        s = ""
-        s += "<table class=\"an_answer\"><caption>" + self.name + "</caption>" +\
-             "<tbody>"
-        if self.before:
-            s += "<tr class=\"test_info\"><td colspan=\"6\">%s</td></tr>" % \
-                 self.before(state)
-        s += "<tr class=\"test_info\"><td colspan=\"6\">%s</td></tr>" % self.question(state)
-        s += "<tr class=\"test_header\">"
-        for i in range(6):
-            s += "<th class=\"c%d\"></th>" % i
-        s += "</tr>"
-        for t in self.tests:
-            s += t.html(state=state).replace('%','%%')
-        for i in self.indices:
-            s += "<tr class=\"test_indice\"><td colspan=\"6\">%s</td></tr>" % i
-        if self.bad_answer:
-            s += "<tr class=\"test_bad_comment\"><td colspan=\"6\">%s</td></tr>" % self.bad_answer
-        if self.good_answer:
-            s += "<tr class=\"test_good_comment\"><td colspan=\"6\">%s</td></tr>" % self.good_answer
-                
-        s += "<tbody></table>"
+        with self.question.lock:
+            self.init_seed(state)
+            s = ""
+            s += "<table class=\"an_answer\"><caption>" + self.name + "</caption>" +\
+                 "<tbody>"
+            if self.before:
+                s += "<tr class=\"test_info\"><td colspan=\"6\">%s</td></tr>" % \
+                     self.before(state)
+            s += "<tr class=\"test_info\"><td colspan=\"6\">%s</td></tr>" % self.question(state)
+            s += "<tr class=\"test_header\">"
+            for i in range(6):
+                s += "<th class=\"c%d\"></th>" % i
+            s += "</tr>"
+            for t in self.tests:
+                s += t.html(state=state).replace('%','%%')
+            for i in self.indices:
+                s += "<tr class=\"test_indice\"><td colspan=\"6\">%s</td></tr>" % i
+            if self.bad_answer:
+                s += "<tr class=\"test_bad_comment\"><td colspan=\"6\">%s</td></tr>" % self.bad_answer
+            if self.good_answer:
+                s += "<tr class=\"test_good_comment\"><td colspan=\"6\">%s</td></tr>" % self.good_answer
+
+            s += "<tbody></table>"
         return s
 
     def check_answer(self, answer, state):
-        answer = answer.strip(" \n\t\r").replace("\r\n", "\n")
-        if self.nr_lines == 1 and answer.find("\n") != -1:
-            return False, "<p class='answer_with_linefeed'></p>"
-        if ' ' in answer:
-            return False, "<p class='answer_with_nbsp'></p>"
-        if self.evaluate_answer:
-            answer = self.evaluate_answer(answer, state)
+        with self.question.lock:
+            self.init_seed(state)
+            answer = answer.strip(" \n\t\r").replace("\r\n", "\n")
+            if self.nr_lines == 1 and answer.find("\n") != -1:
+                return False, "<p class='answer_with_linefeed'></p>"
+            if ' ' in answer:
+                return False, "<p class='answer_with_nbsp'></p>"
+            if self.evaluate_answer:
+                answer = self.evaluate_answer(answer, state)
 
-        full_comment = []
-        for t in self.tests:
-            if isinstance(t, types.FunctionType):
-                if 'state' in t.__code__.co_varnames:
-                    result, comment = t(answer, state=state)
+            full_comment = []
+            for t in self.tests:
+                if isinstance(t, types.FunctionType):
+                    if 'state' in t.__code__.co_varnames:
+                        result, comment = t(answer, state=state)
+                    else:
+                        result, comment = t(answer)
                 else:
-                    result, comment = t(answer)
-            else:
-                result, comment = t(answer, state=state)
-            if comment not in full_comment:
-                full_comment.append(comment)
-            if result != None:
-                if self.eval_after:
-                    full_comment.append(self.eval_after(answer, state))
-                return result, ''.join(full_comment)
+                    result, comment = t(answer, state=state)
+                if comment not in full_comment:
+                    full_comment.append(comment)
+                if result != None:
+                    if self.eval_after:
+                        full_comment.append(self.eval_after(answer, state))
+                    return result, ''.join(full_comment)
 
-        if self.eval_after:
-            full_comment.append(self.eval_after(answer, state))
+            if self.eval_after:
+                full_comment.append(self.eval_after(answer, state))
         return False, ''.join(full_comment)
 
     # Comments starting by a white space are not
@@ -1837,6 +1859,8 @@ class Choice(TestExpression):
                             )
 
     def choice(self, state):
+        if not state:
+            return self.args[0]
         return self.args[state.student.persistent_random(
             state, self._question_.name, len(self.args), "__CHOICE__")]
 

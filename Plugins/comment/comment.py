@@ -131,12 +131,10 @@ def sendmail(state, plugin, argument, q):
         bads = '\n'.join("<li>{}".format(cgi.escape(a))
                          for a in answers.bad_answers)
         if state.question.before:
-            state.student.init_seed(q)
-            before = "<hr>" + state.question.before(state)
+            before = "<hr>" + state.question.get_before(state)
         else:
             before = ""
-        state.student.init_seed(q)
-        question = "<hr>" + state.question.question(state)
+        question = "<hr>" + state.question.get_question(state)
     session = smtplib.SMTP(configuration.smtp_server)
     info = state.student.informations
     login = state.student.filename

@@ -37,14 +37,13 @@ def execute(state, plugin, argument):
         for question in sorted(list(questions.questions.values()),
                                key=lambda q: q.name):
             state.question = question
-            state.student.init_seed(question.name)
             s.append('<strong>' + question.name + '</strong>')
             if question.maximum_time:
                 s.append(' maximum_time:%d' % question.maximum_time)
             if question.maximum_bad_answer:
                 s.append(' maximum_bad_answer:%d'%question.maximum_bad_answer)
             
-            s.append('<br>' + question.question(state))
+            s.append('<br>' + question.get_question(state))
             s.append('<table class="information_table" style="clear:right">')
             for t in question.tests:
                 s.append(t.html(state=state))

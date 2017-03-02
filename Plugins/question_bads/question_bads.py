@@ -51,7 +51,7 @@ def execute(state, plugin, argument):
             for rand, answer in a.full_bad_answers:
                 for dummy in state.steal_identity([s], a, rand):
                     commented = s.answer_commented(a.question, answer, state)
-                    rand = state.question.question(state)
+                    rand = state.question.get_question(state)
                     break
                 else:
                     continue # The student is locked

@@ -28,5 +28,4 @@ def execute(state, plugin, argument):
     if state.question == None or state.question.before == None:
         return None
 
-    state.student.init_seed(state.question.name)
-    return state.question.before(state)
+    return state.question.get_before(state)

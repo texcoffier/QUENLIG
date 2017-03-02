@@ -53,7 +53,7 @@ def execute(state, dummy_plugin, dummy_argument):
             continue
         for dummy in state.steal_identity([s]):
             a = s.answers[state.question.name]
-            last_comment = is_first + state.question.question(state)
+            last_comment = is_first + state.question.get_question(state)
             for c_orig in a.bad_answers:
                 c = state.question.canonize(c_orig, state)
                 uncanonize[c] = c_orig
