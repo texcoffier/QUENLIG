@@ -23,6 +23,7 @@
 
 from QUENLIG import utilities
 from QUENLIG import questions
+import cgi
 
 priority_display = 'question_indices'
 priority_execute = 'question_answer' # We need to know if the answer was answered
@@ -98,10 +99,10 @@ def execute(state, dummy_plugin, dummy_argument):
         else:
             before = ""
         s.append('<div class="tab"')
-        if len(s) == 2:
+        if len(s) == 1:
             s.append(' id="first_tab"')
         s.append('><div class="name" onclick="goto_tab((event||window.event).target)">')
-        s.append(p.name)
+        s.append(cgi.escape(p.name))
         s.append("</div>")
         s.append('<div class="content">')
         s.append('<div class="before">')
@@ -116,7 +117,7 @@ def execute(state, dummy_plugin, dummy_argument):
     if s:
         return ('<div class="tabs">'
                 + ''.join(s)
-                + """</div>"
+                + """</div>
 <div id="display_tab"></div>
 <div id="display_answer"></div>
 <script>goto_tab(document.getElementById('first_tab'))</script>""")
