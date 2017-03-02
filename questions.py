@@ -195,6 +195,12 @@ class Question:
             self.init_seed(state)
             return self.before(state)
 
+    def get_good_answers(self, state):
+        with self.question.lock:
+            self.init_seed(state)
+            for t in self.tests:
+                yield from t.get_good_answers(state)
+
     def answers_html(self, state):
         with self.question.lock:
             self.init_seed(state)
@@ -927,6 +933,11 @@ class TestExpression(Test):
         else:
             return name + '(' + ','.join(items) + ')'
 
+    def get_good_answers(self, state):
+        for child in self.children:
+            for string in child.get_good_answers(state):
+                yield self.canonize(string, state)
+
 class TestNAry(TestExpression):
     """Base class for tests with a variable number of test as arguments."""
     def __init__(self, *args, **keys):
@@ -1121,6 +1132,9 @@ class Equal(TestString):
     def do_test(self, student_answer, dummy_state):
         return student_answer == self.string_canonized, ''
 
+    def get_good_answers(self, state):
+        yield self.string
+
 class Contain(TestString):
     """Returns True the student answer contains the string in parameter.
 
@@ -1212,6 +1226,9 @@ class Bad(TestUnary):
         if a_bool == True:
             return False, a_comment
         return None, a_comment
+
+    def get_good_answers(self, state):
+        yield from ()
 
 class UpperCase(TestUnary):
     """The student answer is uppercased, and the child test value
@@ -1892,6 +1909,10 @@ class Choice(TestExpression):
             return self.choice(student_answer)[0](student_answer)
         else:
             return self.do_test(student_answer, state)
+
+    def get_good_answers(self, state):
+        for c in self.choice(state)[1:]:
+            yield from c.get_good_answers(state)
 
 def regression_tests():
     # Regression test on new tests.

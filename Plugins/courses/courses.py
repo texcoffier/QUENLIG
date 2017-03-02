@@ -101,7 +101,7 @@ def execute(state, plugin, argument):
             continue
         if not question.before:
             continue
-        q = question.before(state)
+        q = question.get_before(state)
         if q == '':
             continue
         toc[question.courses].append(question)
@@ -125,7 +125,7 @@ def execute(state, plugin, argument):
             s.append('''
 <div class="course_question">
 <p class="hide_on_print question_title"><b><a href="%s">%s</a></b>
-<p>%s</div>''' % (question.url(), question.name, question.before(state)))
+<p>%s</div>''' % (question.url(), question.name, question.get_before(state)))
 
     plugin.heart_content = '\n'.join(s)
     state.question = None
