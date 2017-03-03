@@ -443,6 +443,10 @@ padding: 0.1em ;
 
 # Analyse command line options
 
+if 'regtest' in sys.argv:
+    questions.regression_tests()
+    sys.exit(0)
+
 name = sys.argv[0]
 args = sys.argv[1:]
 args.reverse()

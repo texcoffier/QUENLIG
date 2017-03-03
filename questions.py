@@ -934,6 +934,7 @@ class TestExpression(Test):
             return name + '(' + ','.join(items) + ')'
 
     def get_good_answers(self, state):
+        self.canonize("", state) # Needed for Random
         for child in self.children:
             for string in child.get_good_answers(state):
                 yield self.canonize(string, state)
@@ -1133,7 +1134,7 @@ class Equal(TestString):
         return student_answer == self.string_canonized, ''
 
     def get_good_answers(self, state):
-        yield self.string
+        yield self.string_canonized
 
 class Contain(TestString):
     """Returns True the student answer contains the string in parameter.
@@ -2318,5 +2319,18 @@ def regression_tests():
             else:
                 assert(a('A1Z1',st)==(True, '' if x == good else 'BaD'))
 
-if True:
-    regression_tests()
+    a = create("Random({'F': ('1', '2', '3')},Good(Equal('(F)')))")
+    s = St()
+    assert( str(tuple(a.get_good_answers(s))) == "('(1)',)")
+    A.nr_erase += 1
+    assert( str(tuple(a.get_good_answers(s))) == "('(2)',)")
+
+    a = create("Random({'F': ('1', '2', '3')},Choice(('F0',Good(Equal('[F]0'))),('Fa',Good(Comment(Equal('(F)a'),'[F]a')),Good(Equal('{F}a'))),('Fb',Good(Comment(Or(Equal('(F)b'),Equal('{F}b')),'[F]b',canonize=True)))))")
+    s = St()
+    A.nr_erase = 0
+    assert( str(tuple(a.get_good_answers(s))) == "('[1]0',)")
+    A.nr_erase += 1
+    assert( str(tuple(a.get_good_answers(s))) == "('(2)a', '{2}a')")
+    A.nr_erase += 1
+    assert( str(tuple(a.get_good_answers(s))) == "('(3)b', '{3}b')")
+    print("Question regression tests are fine")
