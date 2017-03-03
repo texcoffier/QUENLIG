@@ -31,59 +31,132 @@ priority_execute = 'question_answer'
 acls = { 'Default': ('!executable',) }
 
 javascript = """
-var spoil_goods, spoil_min = 1e30, spoil_max = 0 ;
 
-function spoil_canonize(txt)
+var spoil ;
+
+function Spoil(goods)
 {
-   return txt.replace(/ /g, "") ;
+  this.goods = goods ;
+  this.spoil_min = 1e30 ;
+  this.spoil_max = 0 ;
+  for(var i in this.goods)
+   {
+     this.goods[i] = this.canonize(this.goods[i]) ;
+     if ( this.goods[i].length < this.spoil_min )
+        this.spoil_min = this.goods[i].length ;
+     if ( this.goods[i].length > this.spoil_max )
+        this.spoil_max = this.goods[i].length ;
+   }
+ document.write('<div class="spoiler" style="display:inline">'
+                + '<span class="spoil_empty" onmouseover="spoil.length(event)">'
+                + '</span><span></span></div>'
+                + '<div class="spoiler" style="display:inline">'
+                + '<span class="spoil_empty" onmouseover="spoil.diff(event)">'
+                + '</span><span></span></div>'
+               );
 }
 
-function spoil_length(event)
-{
-  var t = (event || window.event).target ;
+Spoil.prototype.canonize = function(txt) {
+   var t = [] ;
+   txt = txt.replace(/ /g, '') ;
+   for(var i=0; i<txt.length; i++)
+      t.push(txt.substr(i, 1)) ;
+   t.sort() ;
+   return t.join('') ;
+} ;
+
+Spoil.prototype.answer = function(txt) {
   var f = document.getElementById('questionanswer') ;
   if ( ! f )
      return ;
   var input = (f.getElementsByTagName("INPUT")
                || f.getElementsByTagName("TEXTAREA"))[0]  ;
+  return this.canonize(input.value) ;
+} ;
+
+Spoil.prototype.feedback = function(event, content, cls_before, cls_after) {
+  var t = (event || window.event).target ;
+  while( t.className != 'spoiler' )
+     t = t.parentNode ;
+  t = t.firstChild ;
   t.parentNode.style.border = "1px solid black" ;
   t.parentNode.style.fontWeight = "normal" ;
   t.parentNode.style.fontSize = "80%" ;
-  var answer = spoil_canonize(input.value)
-  if ( answer.length < spoil_min )
-    {
-     t.innerHTML = ' ' + (spoil_min - answer.length) + ' ' ;
-     t.className = "spoil_less" ;
-     t.nextSibling.className = 'spoil_char' ;
+  t.parentNode.style.marginRight = "0.1em" ;
+  t.innerHTML = ' ' + content + ' ' ;
+  t.className = cls_before ;
+  t.nextSibling.className = cls_after ;
+} ;
+
+Spoil.prototype.distance = function(a, b) {
+  var r1 = 0 ;
+  var r2 = 0 ;
+  var ca, cb, miss_a = "", miss_b = "" ;
+  a += '\uFFFF' ;
+  b += '\uFFFF' ;
+  while( r1 < a.length || r2 < b.length )
+     {
+        ca = a.substr(r1, 1) ;
+        cb = b.substr(r2, 1) ;
+        if ( ca == cb )
+           {
+             r1++ ;
+             r2++ ;
+           }
+        else if ( ca < cb )
+           {
+             miss_b += ca ;
+             r1++ ;
+           }
+        else
+           {
+             miss_a += cb ;
+             r2++ ;
+           }
     }
-  else if ( answer.length > spoil_max )
-    {
-     t.innerHTML = ' ' + (answer.length - spoil_max) + ' ' ;
-     t.className = "spoil_more" ;
-     t.nextSibling.className = 'spoil_char' ;
-    }
-  else
-    {
-     t.innerHTML = ' ' ;
-     t.className = "spoil_ok" ;
-     t.nextSibling.className = '' ;
-    }
+ return [miss_a, miss_b] ;
 }
+
+Spoil.prototype.diff = function(event) {
+  var answer = this.answer() ;
+  if ( answer === undefined )
+     return ;
+  var s = [] ;
+  for(var i in this.goods)
+     {
+       var d = this.distance(answer, this.goods[i]) ;
+       var x = '' ;
+       if ( d[0] !== '' )
+           x += '<b style="color:#0A0">' + html(d[0]) + '</b>' ;
+       if ( d[1] !== '' )
+           x += '<b style="color:#800">' + html(d[1]) + '</b>' ;
+       s.push('«' + x + '» ') ;
+     }
+  if ( s !== "" )
+     this.feedback(event, s.join('&nbsp;&nbsp;&nbsp;'), "spoil_diff", '');
+  else
+     this.feedback(event, "", "", '');
+} ;
+
+Spoil.prototype.length = function(event) {
+  var answer = this.answer() ;
+  if ( answer === undefined )
+     return ;
+  if ( answer.length < this.spoil_min )
+     this.feedback(event, this.spoil_min - answer.length,
+                   "spoil_less",'spoil_char');
+  else if ( answer.length > this.spoil_max )
+     this.feedback(event, answer.length - this.spoil_max,
+                   "spoil_more",'spoil_char');
+  else
+     this.feedback(event, "", "spoil_ok", "");
+} ;
 
 function set_spoiler(goods)
 {
-spoil_goods = goods ;
-if ( goods.length == 0 )
-   return ;
-for(var i in goods)
-   {
-     goods[i] = spoil_canonize(goods[i]) ;
-     if ( goods[i].length < spoil_min )
-        spoil_min = goods[i].length ;
-     if ( goods[i].length > spoil_max )
-        spoil_max = goods[i].length ;
-   }
-document.write('<div class="spoiler" style="display:inline"><span class="spoil_empty" onmouseover="spoil_length(event)"> </span><span></span></div>');
+  if ( goods.length == 0 )
+     return ;
+  spoil = new Spoil(goods) ;
 }
 """
 

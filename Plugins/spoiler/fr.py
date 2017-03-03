@@ -6,4 +6,5 @@ translations = {
     'spoil_empty': '📦',
     'spoil_ok': 'est de la bonne longueur',
     'spoil_char': 'caractères',
+    'spoil_diff': "Pour chaque réponse acceptée, vert manquant, rouge en trop",
 }
