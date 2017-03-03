@@ -35,7 +35,7 @@ var spoil_goods, spoil_min = 1e30, spoil_max = 0 ;
 
 function spoil_canonize(txt)
 {
-   return txt.replace(/ /g, "")
+   return txt.replace(/ /g, "") ;
 }
 
 function spoil_length(event)
@@ -73,6 +73,8 @@ function spoil_length(event)
 function set_spoiler(goods)
 {
 spoil_goods = goods ;
+if ( goods.length == 0 )
+   return ;
 for(var i in goods)
    {
      goods[i] = spoil_canonize(goods[i]) ;
@@ -86,7 +88,7 @@ document.write('<div class="spoiler" style="display:inline"><span class="spoil_e
 """
 
 def execute(state, plugin, argument):
-    if state.question == None or state.question.before == None:
+    if state.question == None:
         return None
     if state.student.answered_question(state.question.name):
         return
