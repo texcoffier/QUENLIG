@@ -57,7 +57,7 @@ def test_0010_goto_question(student):
                                 viewed=True, max_descendants=True,
                                 erasable=True)
     student.expect(
-        '<table class="box_content"><tbody><tr><td>\nquestion_a\n</td></tr></tbody></table>',
+        '<table class="box_content"><tbody><tr><td>\n<p>question_a\n</td></tr></tbody></table>',
         '<FORM CLASS="questionanswer"',
         '<DIV class="title">\n<A class="content tips">\na:a\n<SPAN></SPAN></A>\n</DIV>',
         )

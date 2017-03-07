@@ -28,4 +28,4 @@ def execute(state, plugin, argument):
     if state.question == None or state.question.before == None:
         return None
 
-    return state.question.get_before(state)
+    return '<p>' + state.question.get_before(state)

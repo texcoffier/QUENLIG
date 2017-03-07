@@ -27,7 +27,9 @@ the last one to be executed.
 """
 
 css_attributes = (
-    "> DIV > TABLE { width: 100% ; }",
+    # "> DIV > TABLE { width: 100% ; }",
+    ".heart > DIV P { max-width: 45em ; }",
+    ".heart > DIV UL { max-width: 45em ; }",
     )
 horizontal = True
 acls = { 'Wired': ('executable',) }

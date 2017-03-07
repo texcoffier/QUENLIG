@@ -47,7 +47,7 @@ def execute(state, dummy_plugin, dummy_argument):
 
     state.student.tell_question(q.name)
 
-    return q.get_question(state).split('{{{')[0]
+    return '<p>' + q.get_question(state).split('{{{')[0]
 
 
 
