@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2015 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -96,18 +96,17 @@ def execute(state, plugin, argument):
         return ''
 
     toc = collections.defaultdict(list)
+    needed_by = collections.defaultdict(list)
     for question in questions.sorted_questions:
-        if not question.courses:
-            continue
-        if not question.before:
-            continue
-        q = question.get_before(state)
-        if q == '':
-            continue
-        toc[question.courses].append(question)
+        if question.courses and question.before and question.get_before(state):
+            toc[question.courses].append(question)
+        else:
+            for q in question.required.names():
+                needed_by[q].append(question)
     s = []
     last = ()
     n = 0
+    done = set()
     for where in sorted(toc):
         identical = True
         if where is not True:
@@ -119,13 +118,24 @@ def execute(state, plugin, argument):
                     n += 1
         last = where
         for question in toc[where]:
+            done.add(question.name)
+            exercises = []
+            for e in needed_by[question.name]:
+                for r in e.required.names():
+                    if r not in done:
+                        break
+                else:
+                    exercises.append(e)
             if identical:
                 s.append('<hr class="hide_on_screen">')
             identical = True
             s.append('''
 <div class="course_question">
 <p class="hide_on_print question_title"><b><a href="%s">%s</a></b>
-<p>%s</div>''' % (question.url(), question.name, question.get_before(state)))
+            %s
+<p>%s</div>''' % (question.url(), question.name,
+                  ' '.join('«' + q.a_href() + '»' for q in exercises),
+                  question.get_before(state)))
 
     plugin.heart_content = '\n'.join(s)
     state.question = None

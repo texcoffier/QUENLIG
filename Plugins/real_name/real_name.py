@@ -40,9 +40,8 @@ def option_set(plugin, value):
          plugin.state.ldap_password) = ast.literal_eval(value)
     except SyntaxError:
         import sys
-        print("*"*77)
-        print("Invalid LDAP configuration: {}".format(repr(value)))
-        print("*"*77)
+        print("Invalid LDAP configuration: {}".format(repr(value)),
+              file=sys.stderr)
         plugin.state.ldap_host = None
         
 option_name = 'ldap'
