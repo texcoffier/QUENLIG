@@ -29,6 +29,7 @@ before the question list computation.
 import random
 import time
 import cgi
+import json
 from QUENLIG import configuration
 from QUENLIG import utilities
 from QUENLIG import questions
@@ -294,9 +295,9 @@ def execute(state, plugin, argument):
 <script type="text/javascript">
 document.getElementById(2).focus() ;
 window.scrollTo(0,0) ;
-new PersistentInput("2", "{}") ;
+new PersistentInput("2", {}) ;
 update_suspended_time() ;
-</script>'''.format(cgi.html.escape(state.question.name))
+</script>'''.format(json.dumps(state.question.name))
     if state.question.maximum_bad_answer:
         s += '<p class="nr_try">%d</p>' % (
             state.question.maximum_bad_answer
