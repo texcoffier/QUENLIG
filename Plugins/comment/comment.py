@@ -162,8 +162,12 @@ MIME-Version: 1.0
            cgi.escape(argument), before, question, bads).encode("utf-8"))
     session.close()
 
+done = set()
+
 def execute(state, plugin, argument):
-    if argument:
+    print("COMMENT", argument, flush=True)
+    if argument and argument not in done:
+        done.add(argument)
         if state.question:
             q = state.question.name
         else:

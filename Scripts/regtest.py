@@ -151,88 +151,88 @@ def test_0100_reload_bad_answer(student):
                                 current=True,
                                 default=True, max_descendants=True)
 
-def test_0110_comment_question(student):
+def test_0110_comment_question(student, comment="MyComment"):
     student.goto_question('a:a')
     student.old_base = student.base
-    student.give_comment('MyComment')
+    student.give_comment(comment)
     minimal_tests(student, title='a:a')
     student.check_question_link('a:a', viewed=True, current=True,
                                 default=True, max_descendants=True,
                                 erasable=True)
-    student.expect('<div class="comment_given">MyComment</div>')
+    student.expect('<div class="comment_given">' + comment + '</div>')
     student.old_url = student.url
     page = student.get_answered()
-    assert(page.count("<PRE>MyComment</PRE>") == 1)
+    assert(page.count("<PRE>" + comment + "</PRE>") == 1)
 
 def test_0110_comment_question_reload(student):
-    test_0110_comment_question(student)
+    test_0110_comment_question(student, "MyComment2")
 
     # Reload last page
     student.get(student.old_url, base=student.old_base)
-    student.expect('<div class="comment_given">MyComment</div>')
+    student.reject('<div class="comment_given">MyComment2</div>')
 
     page = student.get_answered()
-    assert(page.count("<PRE>MyComment</PRE>") == 1)
+    assert(page.count("<PRE>MyComment2</PRE>") == 1)
 
-def test_0120_comment_no_question(student):
+def test_0120_comment_no_question(student, comment='MyNoComment'):
     student.get_answered()
     student.old_base = student.base # For reload
-    student.give_comment('MyNoComment')
+    student.give_comment(comment)
     student.old_url = student.url
     student.check_question_link('a:a', default=True, max_descendants=True,
                                 erasable=True)
-    student.expect('<div class="comment_given">MyNoComment</div>')
+    student.expect('<div class="comment_given">' + comment + '</div>')
     student.old_url = student.url
     page = student.get_answered()
-    assert(page.count("<PRE>MyNoComment</PRE>") == 1)
+    assert(page.count("<PRE>" + comment + "</PRE>") == 1)
 
-def test_0130_comment_no_question_reload(student):
-    test_0120_comment_no_question(student)
+def test_0130_comment_no_question_reload(student, comment='MyNoComment2'):
+    test_0120_comment_no_question(student, 'MyNoComment2')
     # Reload last page
     student.get(student.old_url, base=student.old_base)
-    student.expect('<div class="comment_given">MyNoComment</div>')
+    student.reject('<div class="comment_given">MyNoComment2</div>')
     page = student.get_answered()
-    assert(page.count("<PRE>MyNoComment</PRE>") == 1)
+    assert(page.count("<PRE>MyNoComment</PRE>") == 0)
 
-def test_0140_comment_after_good_answer(student):
+def test_0140_comment_after_good_answer(student, comment='My-Comment'):
     test_0020_give_good_answer(student)
     student.old_base = student.base # For reload
-    student.give_comment('My-Comment')
+    student.give_comment(comment)
     minimal_tests(student, title='a:a', good=1)
-    student.expect('<div class="comment_given">My-Comment</div>')
+    student.expect('<div class="comment_given">' + comment + '</div>')
     student.old_url = student.url
     page = student.get_answered()
-    assert(page.count("<PRE>My-Comment</PRE>") == 1)
+    assert(page.count("<PRE>" + comment + "</PRE>") == 1)
     
 def test_0150_comment_after_good_answer_reload(student):
-    test_0140_comment_after_good_answer(student)
+    test_0140_comment_after_good_answer(student, 'My-Comment2')
     # Reload last page
     student.get(student.old_url, base=student.old_base)
     minimal_tests(student, title='a:a', good=1)
-    student.expect('<div class="comment_given">My-Comment</div>')
+    student.reject('<div class="comment_given">My-Comment2</div>')
     student.old_url = student.url
     page = student.get_answered()
-    assert(page.count("<PRE>My-Comment</PRE>") == 1)
+    assert(page.count("<PRE>My-Comment2</PRE>") == 1)
 
-def test_0160_comment_after_bad_answer(student):
+def test_0160_comment_after_bad_answer(student, comment='My+Comment'):
     test_0060_give_bad_answer(student)
     student.old_base = student.base # For reload
-    student.give_comment('My+Comment')
+    student.give_comment(comment)
     minimal_tests(student, title='a:a', bad=1)
-    student.expect('<div class="comment_given">My+Comment</div>')
+    student.expect('<div class="comment_given">' + comment + '</div>')
     student.old_url = student.url
     page = student.get_answered()
-    assert(page.count("<PRE>My+Comment</PRE>") == 1)
+    assert(page.count("<PRE>" + comment + "</PRE>") == 1)
     
 def test_0170_comment_after_bad_answer_reload(student):
-    test_0160_comment_after_bad_answer(student)
+    test_0160_comment_after_bad_answer(student, "My+Comment2")
     # Reload last page
     student.get(student.old_url, base=student.old_base)
     minimal_tests(student, title='a:a', bad=1)
-    student.expect('<div class="comment_given">My+Comment</div>')
+    student.reject('<div class="comment_given">My+Comment2</div>')
     student.old_url = student.url
     page = student.get_answered()
-    assert(page.count("<PRE>My+Comment</PRE>") == 1)
+    assert(page.count("<PRE>My+Comment2</PRE>") == 1)
     
 def test_0180_ask_one_indice(student):
     test_0010_goto_question(student)
