@@ -30,7 +30,7 @@ priority_display = 'question_indices'
 priority_execute = 'question_answer'
 acls = { 'Default': ('!executable',) }
 
-javascript = """
+javascript = r"""
 
 var spoil ;
 

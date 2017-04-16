@@ -639,6 +639,14 @@ if __name__ == "__main__":
             # stop-loading "lambda s:s.number_of_good_answers() == 5 and (print(1) or True)" execute competence
             from . import student
             student.stop_loading_default = eval(args.pop())
+        elif action == 'good-answers':
+            print("*"*99)
+            session.init()
+            for q in sorted(questions.questions):
+                q = questions.questions[q]
+                print(q.name)
+                for good in q.get_good_answers(None):
+                    print('\t' + good)
         else:
             if not session.set_option(action, args):
                 sys.stderr.write("""Unknown action : %s\n""" % action)

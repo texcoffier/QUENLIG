@@ -165,7 +165,6 @@ MIME-Version: 1.0
 done = set()
 
 def execute(state, plugin, argument):
-    print("COMMENT", argument, flush=True)
     if argument and argument not in done:
         done.add(argument)
         if state.question:
