@@ -34,6 +34,7 @@ css_attributes = (
     ".line CANVAS { height: 1em ; opacity: 0.6 }",
     ".line:hover CANVAS { opacity: 1 }",
     ".line:hover A { color: #000 }",
+    ".line { overflow: hidden }",
 #    "A:hover { text-decoration: underline; }",
     "A.max_descendants { font-weight: bold; }",
     "A.question_given  {color:#888;}",
