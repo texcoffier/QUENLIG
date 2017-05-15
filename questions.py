@@ -936,8 +936,7 @@ class TestExpression(Test):
     def get_good_answers(self, state):
         self.canonize("", state) # Needed for Random
         for child in self.children:
-            for string in child.get_good_answers(state):
-                yield self.canonize(string, state)
+            yield from child.get_good_answers(state)
 
 class TestNAry(TestExpression):
     """Base class for tests with a variable number of test as arguments."""
@@ -2333,4 +2332,15 @@ def regression_tests():
     assert( str(tuple(a.get_good_answers(s))) == "('(2)a', '{2}a')")
     A.nr_erase += 1
     assert( str(tuple(a.get_good_answers(s))) == "('(3)b', '{3}b')")
+
+    a = create("Good(Replace((('a', 'xb'),),Or(Equal('a'),Equal('b'))))")
+    s = St()
+    assert( str(tuple(a.get_good_answers(s))) == "('xb', 'b')")
+
+    a = create("Good(Replace((('a', 'xa'),),Or(Equal('a'),Equal('b'))))")
+    s = St()
+    assert( str(tuple(a.get_good_answers(s))) == "('xa', 'b')")
+
+
+
     print("Question regression tests are fine")
