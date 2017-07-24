@@ -686,7 +686,7 @@ class require_endswith(Test):
 class expect(require):
     def test(self, student_answer, string):
         if student_answer.find(string) == -1:
-            return False, "<p class='string_expected'>«<b>%s</b>»</p>" % string
+            return False, "<p class='string_expected'><tt>%s</tt></p>" % string
 class reject(Test):
     html_class = 'test_string test_bad test_reject'
     def test(self, student_answer, string):
@@ -1386,7 +1386,7 @@ class Expect(TestString):
             if self.comment:
                 return False, self.comment_canonized
             else:
-                return False, '<p class="string_expected">«<b>' + self.string_canonized + '</b>»</p>'
+                return False, '<p class="string_expected"><tt>' + self.string_canonized + '</tt></p>'
 
 def expects(expected, comment=None):
     a = Expect(expected[0], comment)
@@ -1411,7 +1411,7 @@ class Reject(Expect):
             if self.comment:
                 return False, self.comment_canonized
             else:
-                return False, '<p class="string_rejected">«<b>' + self.string + '</b>»</p>'
+                return False, '<p class="string_rejected"><tt>' + self.string + '</tt></p>'
 
 
 def rejects(expected, comment=None):
@@ -2219,7 +2219,7 @@ def regression_tests():
 
     a = create("Random({'$a$': ('x', 'x')},Expect('[$a$]'))")
     assert( a('x', st)
-            == (False, '<p class="string_expected">«<b>[x]</b>»</p>') )
+            == (False, '<p class="string_expected"><tt>[x]</tt></p>') )
 
     a = create("Good(And(Contain('x'),Or(Grade(Contain('y'),'point',2),Grade(Contain(''),'point',1))))")
     assert(a('z', st) == (None, ''))
@@ -2307,8 +2307,8 @@ def regression_tests():
             a = create(
                 "Random({'F': ('1', '2')},%s(Expect('F'),Reject('X'),%s,%s))"
                  % (operator, x, y))
-            assert( a('3',st)==(False,'<p class="string_expected">«<b>1</b>»</p>'))
-            assert( a('X1',st)==(False,'<p class="string_rejected">«<b>X</b>»</p>'))
+            assert( a('3',st)==(False,'<p class="string_expected"><tt>1</tt></p>'))
+            assert( a('X1',st)==(False,'<p class="string_rejected"><tt>X</tt></p>'))
             assert( a('A1',st)==(True, ''))
             assert( a('Z1',st)==(False, 'BaD'))
             assert( a('Y1',st)==(None, ''))
