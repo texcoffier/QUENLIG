@@ -47,12 +47,12 @@ function Spoil(goods)
      if ( this.goods[i].length > this.spoil_max )
         this.spoil_max = this.goods[i].length ;
    }
- document.write('<div class="spoiler" style="display:inline">'
-                + '<span class="spoil_empty" onmouseover="spoil.length(event)">'
-                + '</span><span></span></div>'
-                + '<div class="spoiler" style="display:inline">'
-                + '<span class="spoil_empty" onmouseover="spoil.diff(event)">'
-                + '</span><span></span></div>'
+ document.write('<div class="spoiler">'
+                + '<div class="spoil" onmouseover="spoil.length(event)">'
+                + '<span class="spoil_tip"></span></div>'
+                + '<div class="spoil" onmouseover="spoil.diff(event)">'
+                + '<span class="spoil_tip"></span></div>'
+                + '</div>'
                );
 }
 
@@ -74,18 +74,11 @@ Spoil.prototype.answer = function(txt) {
   return this.canonize(input.value) ;
 } ;
 
-Spoil.prototype.feedback = function(event, content, cls_before, cls_after) {
+Spoil.prototype.feedback = function(event, content) {
   var t = (event || window.event).target ;
-  while( t.className != 'spoiler' )
-     t = t.parentNode ;
-  t = t.firstChild ;
-  t.parentNode.style.border = "1px solid black" ;
-  t.parentNode.style.fontWeight = "normal" ;
-  t.parentNode.style.fontSize = "80%" ;
-  t.parentNode.style.marginRight = "0.1em" ;
-  t.innerHTML = ' ' + content + ' ' ;
-  t.className = cls_before ;
-  t.nextSibling.className = cls_after ;
+  if ( t.className != 'spoil' )
+    return ;
+  t.firstChild.innerHTML = content ;
 } ;
 
 Spoil.prototype.distance = function(a, b) {
@@ -130,12 +123,18 @@ Spoil.prototype.diff = function(event) {
            x += '<b style="color:#0A0">' + html(d[0]) + '</b>' ;
        if ( d[1] !== '' )
            x += '<b style="color:#800">' + html(d[1]) + '</b>' ;
-       s.push('«' + x + '» ') ;
+       if ( x !== '' )
+           s.push('<tr><td>' + d[0] + '<td>' + d[1] + '</tr>') ;
      }
-  if ( s !== "" )
-     this.feedback(event, s.join('&nbsp;&nbsp;&nbsp;'), "spoil_diff", '');
+  if ( s.length )
+     this.feedback(event,
+             '<p class="spoil_diff"></p>'
+             + '<table class="information_table" style="display:inline">'
+              + '<tr><th><p class="spoil_miss"><th><p class="spoil_unexpected"></tr>'
+              + s.join('')
+              + '</table><p>');
   else
-     this.feedback(event, "", "", '');
+     this.feedback(event, '<p class="spoil_diff_ok"></p>');
 } ;
 
 Spoil.prototype.length = function(event) {
@@ -143,13 +142,15 @@ Spoil.prototype.length = function(event) {
   if ( answer === undefined )
      return ;
   if ( answer.length < this.spoil_min )
-     this.feedback(event, this.spoil_min - answer.length,
-                   "spoil_less",'spoil_char');
+     this.feedback(event,
+                 '<p class="spoil_less"> ' + (this.spoil_min - answer.length)
+                 + ' <span class="spoil_char"></span>') ;
   else if ( answer.length > this.spoil_max )
-     this.feedback(event, answer.length - this.spoil_max,
-                   "spoil_more",'spoil_char');
+     this.feedback(event,
+                 '<p class="spoil_more"> ' + (answer.length - this.spoil_max)
+                 + ' <span class="spoil_char"></span>') ;
   else
-     this.feedback(event, "", "spoil_ok", "");
+     this.feedback(event, '<p class="spoil_ok"></p>');
 } ;
 
 function set_spoiler(goods)
@@ -159,6 +160,14 @@ function set_spoiler(goods)
   spoil = new Spoil(goods) ;
 }
 """
+
+css_attributes = (
+    "{ display: inline }",
+    ".spoil { display: inline ; position: relative; margin-left: 1em }",
+    ".spoil:hover .spoil_tip { opacity: 1 ; transition: opacity 8s; webkit-transition: opacity 8s;  }",
+    ".spoil_tip { opacity: 0; pointer-events: none ; position:absolute; bottom:1.5em; left: 0px; padding-right: 1em; transition: opacity 0.5s; webkit-transition: opacity 0.5s;  }",
+    ".spoil_tip *, .spoil_tip { background: #FFE ; }",
+)
 
 def execute(state, plugin, argument):
     if state.question == None:
