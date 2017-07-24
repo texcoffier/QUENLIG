@@ -91,13 +91,11 @@ var suspended_until_time ;
 
 function change_state(state)
 {
-  var e = document.getElementById("questionanswer") ;
-  var t = e.getElementsByTagName("INPUT") ;
-  for(var i=0; i<t.length; i++)
-     if (state)
-        t[i].setAttribute("disabled", state) ;
-     else
-        t[i].removeAttribute("disabled") ;
+  var t = document.getElementById("questionanswer") ;
+if (state)
+  t.action = "javascript: alert('⏱' + duration((suspended_until_time - seconds()).toFixed(0)))" ;
+else
+  t.action = "#" ;
 }
 
 function update_suspended_time()
