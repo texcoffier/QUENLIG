@@ -174,6 +174,8 @@ def execute(state, plugin, argument):
         return None
     if state.student.answered_question(state.question.name):
         return
+    if '{{{' in state.question.get_question(state):
+        return
 
     goods = [''.join(sorted(good))
              for good in state.question.get_good_answers(state)
