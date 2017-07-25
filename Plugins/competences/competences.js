@@ -491,7 +491,6 @@ function patch_title()
 	tr.insertBefore(icon, tr.childNodes[1]) ;
 	draw_nice_results(0) ;
       }
-      title.style.position = "relative" ;
       display_sunburst(title, -300, -300) ;
       heart = d[i].parentNode ;
     }
@@ -845,12 +844,11 @@ function display_sunburst(d, width, height, x, y)
 	+ _("competences:star" + Math.ceil(level))
 	+ '</span></a>' ;
       d.innerHTML = s ;
-
       height = -height ;
       width = -width ;
       c.style.position = "absolute" ;
-      c.style.right = "0px" ;
-      c.style.top = "0px" ;
+      c.style.left = "0px" ;
+      c.style.top = d.offsetHeight + "px" ;
       c.style.width = d.offsetHeight ;
       c.style.height = d.offsetHeight ;
       c.onclick = zoom_me ;

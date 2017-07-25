@@ -34,7 +34,6 @@ css_attributes = (
     ".line CANVAS { height: 1em ; opacity: 0.6 }",
     ".line:hover CANVAS { opacity: 1 }",
     ".line:hover A { color: #000 }",
-    "/.competences { overflow: hidden }",
 #    "A:hover { text-decoration: underline; }",
     "A.max_descendants { font-weight: bold; }",
     "A.question_given  {color:#888;}",
@@ -66,7 +65,6 @@ css_attributes = (
     ".nice_results .good    { background: #00F ; }",
     ".nice_results .bad     { background: #F00 ; }",
     ".nice_results .perfect { background: #0F0 ; }",
-    "#competences { width: 15em }",
     '.box_title TT { font-weight: normal; font-size: 80% }',
     '.box_title { padding-top: 0.5em; padding-bottom: 0.5em; }',
     )
