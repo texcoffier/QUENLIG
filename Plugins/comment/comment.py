@@ -40,7 +40,7 @@ css_attributes = (
     "FORM.highlight { max-height: initial ; }",
     "FORM.highlight BUTTON P { background: #CFC ; }",
     ":hover FORM { max-height: 20em }",
-    "BUTTON { width: 100% ; }",
+    "BUTTON { width: 100% ; white-space: normal }",
     ".comment_given { white-space: normal;}",
     )
 acls = { 'Student': ('executable',) }

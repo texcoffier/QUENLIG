@@ -89,6 +89,8 @@ body {
    margin: 0px ;
 }
 
+DIV.top > TABLE { width: 100%; table-layout: fixed ; }
+
 TT { font-weight: bold ; }
 
 /* BOXES */

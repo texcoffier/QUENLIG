@@ -22,7 +22,7 @@
 """The heart of the web page."""
 
 priority_display = 'menu'
-width = '100%'
+width = '80%'
 acls = { 'Wired': ('executable',) }
 
 css_attributes = (

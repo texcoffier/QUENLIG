@@ -196,9 +196,8 @@ Attribute('option_help', 'Explanation of the option usage', 'No help')
 Attribute('option_name', 'The option name used on the command line')
 Attribute('option_set', 'A function parsing the option value', set_option)
 
-AttributeCSS('width'
-             , 'CSS width of the plugin display DIV'
-             )
+Attribute('width', 'Column width for horizontal plugin')
+
 AttributeCSS('color'
              , 'Text color of the plugin content.'
              , selector='>A')

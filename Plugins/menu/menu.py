@@ -22,6 +22,7 @@
 """The left column in the page."""
 
 container = 'top'
+width = "20%"
 
 css_attributes = (
     "> DIV > TABLE > TBODY > TR > TD { white-space: nowrap ; }",
