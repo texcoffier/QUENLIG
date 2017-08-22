@@ -59,7 +59,7 @@ def execute(state, plugin, argument):
             except AttributeError:
                 pass
             
-        s = '<tt class="tips">*<span>' + '\n'.join(s) + '</span></tt>'
+        s = '<tt class="tips">*<span style="z-index:1000">' + '\n'.join(s) + '</span></tt>'
 
         if a_plugin.boxed():
             if a_plugin.value_title == None:
