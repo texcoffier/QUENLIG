@@ -24,10 +24,13 @@
 container = 'top'
 width = "20%"
 
+transition_hover = "max-width 0.5s"
+transition_nhover = "max-width 2s"
+
 css_attributes = (
-    "{ position: relative }",
-    "> DIV { overflow: hidden; max-width: 100%; min-width:100%; transition: max-width 0.5s ; webkit-transition: max-width 0.5s ; display: inline-block }",
-    "> DIV:hover { max-width: 25em; transition: max-width 2s ; webkit-transition: max-width 2s ;  }",
+    # "{ position: relative }",
+    "> DIV { overflow: hidden; max-width: 100%; min-width:100%; transition: " + transition_hover + "; webkit-transition: " + transition_hover + "; display: inline-block; z-index: 10 ; position: relative }",
+    "> DIV:hover { max-width: 25em; transition: " + transition_nhover + "; webkit-transition: " + transition_nhover + " ; overflow: visible  }",
     "> DIV > TABLE > TBODY > TR > TD { white-space: nowrap ; }",
     ".box_title { display: block ; }",
     "/@media print { DIV.menu { display: none ; } ; }"

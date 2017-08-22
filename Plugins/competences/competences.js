@@ -693,6 +693,7 @@ function zoom_me(event)
   e.style.right = "0%" ;
   e.style.top = "0%" ;
   e.style.bottom = "0%" ;
+  e.style.zIndex = 11 ;
   e.id = "competences_zoomed" ;
   e.onmousemove = zoom_me_move ;
   e.addEventListener("touchmove", zoom_me_move, false);
@@ -848,7 +849,7 @@ function display_sunburst(d, width, height, x, y)
       width = -width ;
       c.style.position = "absolute" ;
       c.style.left = "0px" ;
-      c.style.top = d.offsetHeight + "px" ;
+      c.style.top = "0px" ;
       c.style.width = d.offsetHeight ;
       c.style.height = d.offsetHeight ;
       c.onclick = zoom_me ;
