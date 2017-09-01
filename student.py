@@ -181,7 +181,7 @@ class Student:
     def destroy(self):
         import shutil
         try:
-            shutil.rmtree(self.file)
+            os.rename(self.file, self.file + "~")
         except OSError:
             pass
         for k in students:
@@ -640,6 +640,7 @@ def all_students():
     age_and_name = [
         (log_age(student_name), student_name)
         for student_name in os.listdir(log_directory())
+        if not student_name.endswith("~")
     ]
     if configuration.log_age >= 0:
         print("Load students active the last {} days".format(

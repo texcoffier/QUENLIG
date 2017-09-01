@@ -414,7 +414,7 @@ add(name="identique",
             l'expression pourra correspondre à une suite de caractères
             identiques en plein milieu"""),
     Reject("\\(", """Dans une expression régulière étendue, quand
-           vous mettez un backslash avant la parenthèse, cela annulle
+           vous mettez un backslash avant la parenthèse, cela annule
            sa signification"""),
     require('\\1', """Vous devez utiliser les caractères trouvés par le groupe
             pour indiquer que le reste de la ligne est identique"""),

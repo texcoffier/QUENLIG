@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2017 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,15 +23,23 @@
 
 from QUENLIG import statistics
 from QUENLIG import utilities
+from QUENLIG import student
 
 container = 'action'
 link_to_self = True
-priority_execute = '-question_answer'
+priority_execute = 'statmenu_students'
 
 acls = { 'Admin': ('executable',) }
 
 def execute(state, plugin, argument):
     if not argument:
+        p = state.plugins_dict['answered_other']
+        if p.heart_content is not None:
+            p.heart_content = (
+                '<p><a class="delete_one" href="?action_destroy_student='
+                + state.form['answered_other'] + '">&nbsp;</a>'
+                + p.heart_content
+            )
         return ''
     
     stats = statistics.question_stats()
@@ -44,15 +52,21 @@ def execute(state, plugin, argument):
         except:
             pass
 
+    if argument == '1':
+        students = [e
+                    for e in stats.all_students
+                    if e.the_number_of_good_answers < 2
+                    ]
+    else:
+        students = [student.student(argument)]
     s = []
-    for e in stats.all_students:
+    for e in students:
         if e == state.student:
             continue
         if e.filename in roles:
             continue
-        if e.the_number_of_good_answers < 2:
-            s.append('%s(%s)' %(e.name, e.the_number_of_good_answers))
-            e.destroy()
+        s.append('%s(%s)' %(e.name, e.the_number_of_good_answers))
+        e.destroy()
             
     plugin.heart_content = ('<p class="deleted"><br>' +
                                   '<br>\n'.join(s)
