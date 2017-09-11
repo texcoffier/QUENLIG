@@ -111,7 +111,8 @@ Question.prototype.weight = function()
   var weight ;
   
   if ( this.classes.indexOf("not_answerable") != -1
-       || this.classes.indexOf("erasable") == -1
+       || ( this.classes.indexOf("erasable") == -1
+	    && this.classes.indexOf("answered") != -1 )
      )
     weight = -2 ;
   else if ( this.classes.indexOf("question_given") == -1 ) // NOT GIVEN
