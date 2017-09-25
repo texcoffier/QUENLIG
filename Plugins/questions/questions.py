@@ -106,7 +106,7 @@ def execute(state, plugin, dummy_argument):
                     s += "</select><br>"
                 s += "<select OnChange=\"f(value);\">"
                 s += "<option selected=\"1\">%s</option>" % world
-            s += "<option>%s</option>\n" % q.name
+            s += "<option>%s</option>\n" % cgi.escape(q.name)
         s += "</select></form>"
 
     return s
