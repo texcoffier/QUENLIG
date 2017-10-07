@@ -30,6 +30,7 @@ import sys
 from . import state
 from . import configuration
 from . import utilities
+from . import statistics
 
 cache = None # Do not cache files
 cache = {}   # Allow file caching
@@ -242,6 +243,11 @@ def run(nr_requests, the_cache):
     f = open("pid", "w")
     f.write(str(os.getpid()))
     f.close()
+
+    # Load students before starting server.
+    # If it is not done here, it will be on the first student connexion,
+    # and it will fail because it will took too much time.
+    statistics.question_stats()
 
     global cache
     cache = the_cache
