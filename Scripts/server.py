@@ -38,7 +38,10 @@ class Server:
         self.stats = stats.Stats()
         self.base = 'http://localhost:%d' % self.port
         shutil.rmtree("/tmp/Students%s" % self.name, True)
-        os.remove("Students/%s" % self.name) # Symlink
+        try:
+            os.remove("Students/%s" % self.name) # Symlink
+        except FileNotFoundError:
+            pass
         os.mkdir("/tmp/Students%s" % self.name)
         os.symlink("/tmp/Students%s" % self.name, "Students/%s" % self.name)
         if profiling:
