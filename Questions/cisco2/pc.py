@@ -261,6 +261,7 @@ add(name="table routage",
     la liste des routes""",
     tests = (
     good(("ip route", "netstat -r")),
+    Bad(Comment(Equal("ip route show"), "Le 'show' est inutile et la commande n'affiche pas joliment.")),
     reject('show', 'Sous UNIX, pas sur le CISCO'),
     reject('netstat', 'Il y a une commande plus courte et plus logique'),
     ),

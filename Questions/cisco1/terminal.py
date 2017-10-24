@@ -106,7 +106,7 @@ add(name="password enable",
     before = """La documentation concernant les mots de passe
     est dans le module 1 chapitre 11.
     <p>""" + en_mode_config,
-    question="""Quelle commande tapez-vous pour assigner le mot de passe
+    question="""Quelle commande tapez-vous pour assigner le mot de passe (chiffré)
     <tt>cisco</tt> au passage en mode privilégié
     avec <tt>enable</tt>&nbsp;?""",
     tests = (

@@ -35,8 +35,8 @@ add(name="cable console",
     La première sortie RS232C s'appelle <tt>/dev/ttyS0</tt> sous Linux
     et <tt>COM1</tt> sous windows.
     <p>
-    <b>S'il y a 2 connecteurs RS232C à l'arrière du PC,
-    alors utilisez celui qui a une étiquette CE.</b>
+    <b>Il y a 2 connecteurs RS232C à l'arrière du PC,
+    utilisez celui qui est sur la carte mère.</b>
     </li>
     <li> Sur le routeur CISCO, il est branché sur la RS232C,
     qui est une prise RJ45 <b>à ne pas confondre avec une prise Ethernet</b>.
@@ -87,7 +87,7 @@ add(name="minicom",
     <b>En cas d'interdiction d'accès, passez <tt>root</tt>
        avant de lancer minicom</b>
     """,
-    question = """Ouvrez un terminal et lancez <tt>minicom -D /dev/ttyS1</tt>.
+    question = """Ouvrez un terminal et lancez <tt>minicom -D /dev/ttyS0</tt>.
     Que devez-vous taper pour avoir l'aide sur <tt>minicom</tt>&nbsp;?
     <p>
     Attention : ne lancez pas <tt>minicom</tt> en arrière plan,
