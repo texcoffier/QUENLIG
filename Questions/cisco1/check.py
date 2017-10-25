@@ -504,7 +504,7 @@ class Node:
                          os.path.join(dirname, 'HTML', self.dot_shape_file),
                          "r")
             try:
-                w, h = [int(x) for x in f.read()[:-1].split(' ')[0:2]]
+                w, h = [int(x) for x in f.read().split(' ')[0:2]]
             except:
                 w, h = (1,1)
 
