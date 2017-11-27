@@ -19,7 +19,7 @@ add_messages('en', {
   "competences:center_after":  "\nClick to pick an adapted question",
   "competences:recycle": "Click on the disc to answer another version of the question",
   "competences:star1": "You have access to all the questions",
-  "competences:star2": "You readed all the questions",
+  "competences:star2": "You have read all the questions",
   "competences:star3": "You correctly answered all the questions",
   "competences:star4": "You saw all the questions alternatives",
   "competences:star5": "You answered quickly to all the questions"

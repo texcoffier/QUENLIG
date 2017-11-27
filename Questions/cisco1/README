@@ -46,6 +46,7 @@ do
 	admin yves.caniou \
 	admin jacques.bonneville \
 	admin olivier.gluck \
+	suspend "(50, 2, 60)" \
 	url "http://demo710.univ-lyon1.fr/LIF8TP$TP" \
 	plot \
         $LDAP
