@@ -206,7 +206,8 @@ function add_messages(lang, dict)
 function _(message)
 {
   for(var lang in languages)
-    if ( messages[languages[lang]][message] !== undefined )
+    if ( messages[languages[lang]] !== undefined
+      && messages[languages[lang]][message] !== undefined )
        return messages[languages[lang]][message] ;
   return message ;
 }
