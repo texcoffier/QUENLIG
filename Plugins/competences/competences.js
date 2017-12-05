@@ -243,7 +243,7 @@ Question.prototype.icons = function(left_to_right, classe)
   if ( classe === undefined )
     classe = "nice_results" ;
   canvas_question[c] = this ;
-  return '<div class="competences" style="display:inline">'
+  return '<div class="competences">'
     + '<a class="tips ' + classe + '" onclick="'
     + (questions[this.name] ? 'questions' : 'competences')
     + '[' + js(this.name) + '].click()"><canvas id="C_'
@@ -449,9 +449,12 @@ function update_competences()
   for(var competence in competence_names)
   {
     competence = competences[competence_names[competence]] ;
-    s.push('<div class="line">') ;
-    s.push(competence.html()) ;
-    s.push('</div>') ;
+    if ( competence.name !== '' )
+    {
+      s.push('<div class="line">') ;
+      s.push(competence.html()) ;
+      s.push('</div>') ;
+    }
     if ( competence.is_open() || competence.name === '' )
     {
       for(var question in competence.questions)

@@ -162,7 +162,6 @@ A.tips > SPAN:hover, TT.tips > SPAN:hover , DIV.tips > TT:hover {
   visibility: hidden ;
 }
 
-
 A { text-decoration: none ; }
 A[href]:hover { text-decoration: underline ; }
 A.tips:hover { text-decoration: none ; }

@@ -31,10 +31,14 @@ priority_display = 'identity'
 priority_execute = 'question' # In order to emphasis current question
 css_attributes = (
     "/.competences .box_title { position: relative ; }",
-    "/.competences CANVAS { height: 1em ; }",
+    "/.competences CANVAS { height: 1em ; width: 1em }",
+    "/.competences .competences { display: inline-block ; height: 1em ; width: 1em }",
     ".line CANVAS { height: 1em ; opacity: 0.6 }",
     ".line:hover CANVAS { opacity: 1 }",
     ".line:hover A { color: #000 }",
+    ".line * { vertical-align: top }",
+    ".line { height: 1.1em ; }",
+    ".line:hover A { position: absolute ; background: #FFF }",
 #    "A:hover { text-decoration: underline; }",
     "A.max_descendants { font-weight: bold; }",
     "A.question_given  {color:#888;}",
