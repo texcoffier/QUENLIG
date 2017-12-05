@@ -30,6 +30,7 @@ from QUENLIG import configuration
 priority_display = 'identity'
 priority_execute = 'question' # In order to emphasis current question
 css_attributes = (
+    "/.competences .box_title { position: relative ; }",
     "/.competences CANVAS { height: 1em ; }",
     ".line CANVAS { height: 1em ; opacity: 0.6 }",
     ".line:hover CANVAS { opacity: 1 }",
