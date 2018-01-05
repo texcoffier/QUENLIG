@@ -34,7 +34,7 @@ option_help = '''"true" or "false"
 option_default = "false"
 
 def execute(state, plugin, argument):
-    if argument or (state.question is None
+    if argument or (state.form["number"] == '-1'
                     and plugin.option == 'true'):
         plugin.heart_content = '''
         <OBJECT type="text/html" data="help.html" width="100%" height="2000px">
