@@ -443,7 +443,7 @@ class Student:
             from QUENLIG.Plugins.question_change_answer.question_change_answer import add_a_link
             more = add_a_link(state, q)
             s.append('<div class="question_history">')
-            s.append("<em class=\"box_title short\">" + q.name + more +"</em>")
+            s.append("<em class=\"box_title short\">" + q.a_href() + more +"</em>")
             s.append('<table class="box_content"><tr><td>')
             question_text = q.get_question(state)
             s.append(question_text.split('{{{')[0])
