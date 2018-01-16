@@ -85,7 +85,7 @@ add(name="extensions",
     
     reject( ('(', ')'), "On a pas besoin des parenthèses pour répondre"),
     require('~', "Je ne vois pas le répertoire de connexion"),
-    reject('~/', "Mettez <tt>~</tt> au lieu de <tt>~/</tt> s'il vous plais"),
+    reject('~/', "Mettez <tt>~</tt> au lieu de <tt>~/</tt> s'il vous plait"),
     
     shell_good(("find ~ -name '*.*' | sed 's/.*\\.//' | sort -u",
                 "find ~ -name '[!.]*.*' | sed 's/.*\\.//' | sort -u",

@@ -26,7 +26,7 @@ reject_space = reject((" =", "= "),
            """S'il y a des blancs autour du <tt>=</tt> le shell
            va croire qu'il faut exécuter une commande et non
            faire une affectation.
-           Testez votre commande en vrai s'il vous plais.""")
+           Testez votre commande en vrai s'il vous plait.""")
 
 require_dollar = require("$",
                          """Pour changer le contenu de la variable
@@ -172,7 +172,7 @@ C=""",
          replace=((' ',''),('\n\n', '\n'),('"',''),("'",''))),
     require("Je", "Je ne vois pas le mot <tt>Je</tt>"),
     require('phrase',
-            """S'il vous plais, essayez la commande pour voir ce qu'elle
+            """S'il vous plait, essayez la commande pour voir ce qu'elle
             fait réellement plutôt que de répondre au hasard."""),
     ),
     )

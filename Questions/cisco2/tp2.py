@@ -40,7 +40,7 @@ add(name="intro",
  
     """,
     question="Êtes-vous prêt pour l'aventure&nbsp;?",
-    tests = ( yes("Répondez OUI s'il vous plais"), ),
+    tests = ( yes("Répondez OUI s'il vous plait"), ),
     )
 
 add(name="console",

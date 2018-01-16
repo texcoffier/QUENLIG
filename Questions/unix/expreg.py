@@ -246,7 +246,7 @@ add(name="négation",
     good("[^a-z0-9]"),
     good("[^0-9a-z]",
          """J'attendais <tt>[^a-z0-9]</tt>, j'accepte votre
-         solution car elle fonctionne mais s'il vous plais
+         solution car elle fonctionne mais s'il vous plait
          ne changez pas l'ordre de ce qui es demandé dans l'énoncé."""),
     expect('a-z0-9'),
     ),

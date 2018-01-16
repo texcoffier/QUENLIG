@@ -159,7 +159,7 @@ add(name="point",
             ni <tt>TOTO</tt> ni <tt>ToTo</tt> ni ..."""),
     require(("home", "p0123456", "Toto"),
             "Il manque des noms courts dans votre chemin"),
-    reject('~', """N'utilisez pas le tilde s'il vous plais"""),
+    reject('~', """N'utilisez pas le tilde s'il vous plait"""),
     require_absolute_name,
     ),
     )
