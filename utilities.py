@@ -70,7 +70,7 @@ def answer_format(t, space=False, escape=True, question=''):
         found = []
         for choice in question.split('{{{')[1:]:
             button, text = choice.split('}}}')
-            if button.lstrip('↑ !') in lines:
+            if button.lstrip('↑ !$') in lines:
                 found.append(text)
         if found:
             escape = False

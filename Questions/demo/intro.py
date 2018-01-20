@@ -135,3 +135,16 @@ add(name='requis majuscule',
     question = '?',
     tests = (good('?'), ),
     )
+
+add(name='text à trou',
+    required = ['première'],
+    question = """Remplir les trous :
+{{{$}}}
+2 + 2 = {{{$2+2}}}
+2 * 3 = {{{$$2*3}}}
+10 * 10 = {{{$$$$10*10}}}
+""",
+    tests = (
+        Good(SortLines(Equal("10*10=100\n2+2=4\n2*3=6"))),
+        )
+)

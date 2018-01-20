@@ -1,5 +1,5 @@
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2005-2012 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2005-2018 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -280,6 +280,11 @@ class State(object):
         self.form = {}
         for k, v in form.items():
             k = k.split('.')[0]
+            if '$' in k: # Manage the case {{{$key}}} in questions
+                k, name = k.split("$", 1)
+                v = name + '=' + v
+            if k in self.form:
+                v = self.form[k] + '\n' + v
             self.form[k] = v
 
         if self.form["number"] == None:

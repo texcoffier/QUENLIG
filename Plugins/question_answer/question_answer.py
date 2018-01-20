@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
-#    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
+#    Copyright (C) 2007-2018 Thierry EXCOFFIER, Universite Claude Bernard
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ function check_button(e)
   var input = e.getElementsByTagName("INPUT") ;
   var button = e.getElementsByTagName("BUTTON")[0] ;
   for(var i in input)
-     if ( input[i].checked )
+     if ( input[i].checked || input[i].type == "text" )
         {
           button.disabled = false ;
           return ;
@@ -243,29 +243,52 @@ def execute(state, plugin, argument):
         nr_checked = 0
         for i in t:
             j = i.split('}}}')
-            if j[0].startswith('↑'):
-                j[0] = j[0][1:]
-                if s.endswith("<br>"):
-                    s = s[:-4]
-            if j[0].startswith('!'):
-                j[0] = j[0][1:]
-                button_type = "radio"
-            else:
-                button_type = "checkbox"
-            if j[0] == '':
-                s += j[1] + '<br>'
+            if j[0] == '$':
+                s += j[1]
                 continue
-            if j[0] in last_answer:
-                checked = ' checked'
-                if nr_checked == 0:
-                    checked += ' id="2"'
-                    nr_checked = 1
+            if j[0].startswith('$'):
+                key = j[0].lstrip('$')
+                columns = len(j[0]) - len(key)
+                if columns == 1:
+                    columns = 10
+                value = ''
+                for k in last_answer.split('\n'):
+                    if k.startswith(key + '='):
+                        value = k[len(key)+1:]
+                s += '<input onkeypress="check_button(this)" class="checkbox" name="%s$%s.%s.%s" value="%s" size="%s">' % (
+                    plugin.plugin.css_name, key.replace('"', '&#34;'),
+                    configuration.session.name,
+                    cgi.html.escape(state.question.name),
+                    value.replace('"', '&#34;'), columns
+                    )
+                s += j[1]
             else:
-                checked = ''
-            s += '<label><input onchange="check_button(this)" class="checkbox" type="%s" name="%s" value="%s"%s>' % (
-                button_type, plugin.plugin.css_name,
-                j[0].replace('"', '&#34;'), checked
-            ) + j[1] + '</label><br>'
+                if j[0].startswith('↑'):
+                    j[0] = j[0][1:]
+                    if s.endswith("<br>"):
+                        s = s[:-4]
+                if j[0].startswith('!'):
+                    j[0] = j[0][1:]
+                    button_type = "radio"
+                elif j[0].startswith('$'):
+                    j[0] = j[0][1:]
+                    button_type = "text"
+                else:
+                    button_type = "checkbox"
+                if j[0] == '':
+                    s += j[1] + '<br>'
+                    continue
+                if j[0] in last_answer:
+                    checked = ' checked'
+                    if nr_checked == 0:
+                        checked += ' id="2"'
+                        nr_checked = 1
+                else:
+                    checked = ''
+                s += '<label><input onchange="check_button(this)" class="checkbox" type="%s" name="%s" value="%s"%s>' % (
+                    button_type, plugin.plugin.css_name,
+                    j[0].replace('"', '&#34;'), checked
+                ) + j[1] + '</label><br>'
         if nr_checked == 0:
             checked = ' id="2"'
         else:

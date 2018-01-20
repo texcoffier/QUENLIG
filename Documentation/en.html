@@ -551,6 +551,23 @@ content: "Good! Press «Enter» to choose a random question." ;
       <pre>{{{}}} If you are sure: {{{↑Y}}} Yes, or {{{↑N}}} No
 {{}}} If you hesitate: {{{↑None}}} not Y nor N, or {{{↑B}}} bad question</pre>
     </p>
+    <p>
+      It is also possible to define multiple inputs in the same question.
+      For example:
+    </p>
+    <pre>Fill the missing values:
+{{{$}}}
+The surname of the first president is {{{$surname}}} and
+its firstname is {{{$firstname}}}.
+He died at the age of {{{$$age_of_death}}} years.</pre>
+<p>
+The number of '$' indicates the displayed width of the input,
+if there is only one, then the default width is 10 characters.
+The student answer to analyse will be for example:
+<tt>surname=Washington\nfirstname=George\nage_of_death=67</tt>
+Do not assume that the line order will not change,
+if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
+</p>
 
     <h3><a name="tests">Parameter: <tt>tests</tt></a></h3>
 
