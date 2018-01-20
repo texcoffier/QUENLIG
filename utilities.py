@@ -66,16 +66,15 @@ def answer_format(t, space=False, escape=True, question=''):
         t = ''
     t = str(t)
     if '{{{' in question:
-        for i in question.split('{{{')[1:]:
-            j = i.split('}}}')
-            if j[0] == '':
-                continue
-            if j[0][0] in '!↑':
-                j[0] = j[0][1:]
-            if j[0] == t:
-                t = j[1]
-                escape = False
-                break
+        lines = t.split('\n')
+        found = []
+        for choice in question.split('{{{')[1:]:
+            button, text = choice.split('}}}')
+            if button.lstrip('↑ !') in lines:
+                found.append(text)
+        if found:
+            escape = False
+            t = '<br>' + ' '.join(found)
     if escape:
         t = cgi.escape(t)
     t = t.replace("\n","<br>")
