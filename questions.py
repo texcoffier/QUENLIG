@@ -150,7 +150,10 @@ class Question:
         self.bad_answer = arg.get("bad_answer", "")
         if not isinstance(self.bad_answer, str):
             raise ValueError("bad_answer must be a string")
-        self.nr_lines = int(arg.get("nr_lines", "1"))
+        if '{{{' in self.question(None):
+            self.nr_lines = 2 # To not raise \n in answer error
+        else:
+            self.nr_lines = int(arg.get("nr_lines", "1"))
         self.comment = []
         self.required = arg.get("required", previous_question)
         self.required = Requireds([Required(world, i)

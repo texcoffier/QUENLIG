@@ -181,7 +181,7 @@ class MyRequestBroker(http.server.BaseHTTPRequestHandler):
         f = urllib.parse.parse_qs(path[-1].split('?')[-1])
         form = {}
         for i in f:
-            form[i] = ''.join(f[i])
+            form[i] = '\n'.join(f[i])
 
         if 'guest' in form:
             path[0] = 'guest' + form['guest']
