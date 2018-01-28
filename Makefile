@@ -32,6 +32,7 @@ plots:
 	done
 
 regtest:
+	./main.py regtest
 	Scripts/regtest.py
 
 check-questions:

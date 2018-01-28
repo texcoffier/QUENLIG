@@ -1193,12 +1193,20 @@ class Good(TestUnary):
         Good(Equal('5'))
         Good(Contain('6'))
         Good(~ Start('x'))
+        Good() # Always good. Must be the last test after all the Bad()
     """
     def do_test(self, student_answer, state):
-        a_bool, a_comment = self.children[0](student_answer, state)
-        if a_bool == True:
-            return a_bool, a_comment
-        return None, a_comment
+        if self.children:
+            a_bool, a_comment = self.children[0](student_answer, state)
+            if a_bool == True:
+                return a_bool, a_comment
+            return None, a_comment
+        return True, ''
+
+    def source(self, state=None, format=None):
+        if self.children:
+            return super().source(state, format)
+        return self.test_name(format) + "()"
 
 class Bad(TestUnary):
     """If the child test returns True then the student answer is bad.
@@ -2344,6 +2352,7 @@ def regression_tests():
     s = St()
     assert( str(tuple(a.get_good_answers(s))) == "('xa', 'b')")
 
-
+    a = create("Good()")
+    assert( a('N') == (True, '') )
 
     print("Question regression tests are fine")
