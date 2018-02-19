@@ -39,7 +39,7 @@ class C_stdout(TestUnary):
 
       Examples:
          # Good answer if the student program write 'Hello world !'
-         Good(C_stdout(Uppercase(Start('HELLO WORLD'))))
+         Good(C_stdout(UpperCase(Start('HELLO WORLD'))))
          #
          Good(C_stdout(Start('HELLO WORLD'),
                        c_input = "Text put in the process stdin",

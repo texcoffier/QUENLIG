@@ -807,8 +807,8 @@ class no(TestWithoutStrings):
 # Bad(~ Contain('B'))                  'require' equivalent
 # Good(Contain('A') & ~ Contain('B'))
 
-## Uppercase change the Equal.string
-# Good(Uppercase(Equal("a")))
+## UpperCase change the Equal.string
+# Good(UpperCase(Equal("a")))
 ## ShellParse change the Equal.string to parse it
 # Good(Shell(Equal("ls a")))
 ## ShellParse does not parse Contain.string
@@ -820,7 +820,7 @@ class no(TestWithoutStrings):
 
 # Good(Host(Equal('{E0.port}'))
 # Host needs to look its 'uppercase' flag.
-# Good(Uppercase(Host(Equal('{E0.port}'))))
+# Good(UpperCase(Host(Equal('{E0.port}'))))
 # Good(Host(UpperCase(Equal('{E0.port}')))) ######## BAD #############
 
 
