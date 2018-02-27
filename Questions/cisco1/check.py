@@ -139,7 +139,9 @@ erase startup-config
 <em>Quand le prompt revient et <b>pas avant</b>, éteignez le routeur</em>
 </pre>
 <p>
-<li> Éteignez l'ordinateur avec la commande <tt>halt</tt> sous <tt>root</tt>.
+<li> Éteignez l'ordinateur en appuyant rapidement sur le bouton
+     marche arrêt. Cliquez sur la popup qui est apparu pour dire
+     d'arrêter le système.
 <li> Éteignez l'écran.
 <li> Ranger les cables.
 </ul>
@@ -147,9 +149,9 @@ erase startup-config
 
 
 conf = {
-    "proxy_ip": "10.0.0.1",
+    "proxy_ip": "10.250.101.2",
     "proxy_port": "3128",
-    "cours_ccna": "http://10.0.0.1/CCNA/",
+    "cours_ccna": "http://10.250.101.2/CCNA/",
     }
 
 conf["proxy"] = "%(proxy_ip)s:%(proxy_port)s" % conf
@@ -611,7 +613,7 @@ class Cisco1800(Cisco):
                        'E0': 'fastethernet 0/0', 'E1': 'fastethernet 0/1'}
     ram = (1024*128,)
     nvram = (191,)
-    flash = (31360, 3612656)
+    flash = (31360, 3612656, 3903480)
     conf_register = '0x2102'
     conf_register2 = '0x2142'
     interrupteur_on_off = True
@@ -1060,7 +1062,7 @@ postes = (
 ("10.250.101.95", 'F3',Cisco1800), # SF3 Cisco2950
 ("10.250.101.96", 'G3',Cisco2900),
 ("10.250.101.97", 'H3',Cisco1800), # SH3 Cisco2960
-("10.250.101.98", 'I3',Cisco2800),
+("10.250.101.98", 'I3',Cisco1800), # Le Cisco2800 est casse :-(
 ("10.250.101.99", 'J3',Cisco1800), # SJ3 Cisco2960
 ("10.250.101.100",'K3',Cisco2900),
 ("10.250.101.101",'L3',Cisco1800), # SL3 Cisco2950

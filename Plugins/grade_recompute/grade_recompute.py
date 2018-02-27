@@ -46,8 +46,11 @@ def execute(state, plugin, argument):
     for s in state.steal_identity(tuple(stats.all_students)):
         for a in s.answers.values():
             if a.answered and a.question in questions.questions:
+                s.writable = True # Want to change the log
                 state.question = questions.questions[a.question]
                 s.check_answer(a.answered, state)
     state.question = None
     plugin.heart_content = '<p class="grade_recompute"></p>'
     return ''
+
+

@@ -23,6 +23,7 @@ from QUENLIG.questions import *
 from .check import *
 from .configuration_salles import *
 
+# Edited by Thierry.Excoffier (Fri Oct 27 18:34:30 2017)
 add(name="cable ethernet",
     required=["tp1:nom routeur"],
     before = """Le cables ethernet 'normaux' servent à relier une machine
@@ -40,7 +41,10 @@ add(name="cable ethernet",
     que celui-ci est inversé.""",
     question = """Branchez le cable ethernet entre&nbsp;:
     <ul>
-    <li> le port ethernet qui est sur la carte mère de votre PC.
+    <li> Le port ethernet qui est sur une carte d'extension de votre PC.
+         Il y en a deux, choisissez celui qui correspond à <tt>eth0</tt>,
+         Normalement c'est celui du haut, mais sans garantit.
+         <b>Ne touchez pas au câble ethernet qui est sur la carte mère.</b>
     <li> le premier port ethernet de votre routeur.
     </ul>
     <p>
