@@ -43,7 +43,7 @@ function encode_uri(t)
 
 def question_lines(c, question):
     start = question.f_lineno
-    while not c[start].startswith('add('):
+    while not c[start].startswith(question.f_name + '('):
         start -= 1
     while start > 0 and c[start].strip() != '':
         start -= 1

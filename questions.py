@@ -326,7 +326,20 @@ questions = {}
 previous_question = ""
 
 def add(**arg):
-    """Add a question to the question base"""
+    """Add a question to the question base.
+
+    For normal uses, arguments are in the list specified as
+    'attributs' in the source code.
+
+    When writing wrappers around this function, the wrapper shall pass
+    an extra function_name argument that specifies the name of the
+    function called by the end-user to add questions.
+
+    For example:
+
+    def add_foo(**arg):
+        add(function_name='add_foo', **arg)
+    """
 
     attributs = {
     "name": "Nom court de la question. Ne pas donner la reponse dans le nom de la question.",
@@ -349,7 +362,21 @@ def add(**arg):
 
     # sys.stdout.write("*")
     # sys.stdout.flush()
-    world = inspect.currentframe().f_back.f_globals["__name__"].split(".")
+    frame = None
+    if 'function_name' in arg:
+        function_name = arg['function_name']
+        del arg['function_name']
+        # Search for function_name in the stack
+        for f in inspect.stack():
+            if f.frame.f_code.co_name == function_name:
+                frame = f.frame
+                break
+    else:
+        function_name = 'add'
+    if frame is None:
+        frame = inspect.currentframe()
+    world = frame.f_back.f_globals["__name__"].split(".")
+
     for a, v in arg.items():
         if a not in attributs.keys():
             print("'%s' n'est pas un attribut de question" % a)
@@ -368,7 +395,8 @@ def add(**arg):
         pq = []
     new_question = Question(world, arg, previous_question=pq)
     questions[arg["name"]] = new_question
-    new_question.f_lineno = inspect.currentframe().f_back.f_lineno
+    new_question.f_lineno = frame.f_back.f_lineno
+    new_question.f_name = function_name
     previous_question = arg["name"]
 
 def answerable(answered, student):
