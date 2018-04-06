@@ -330,3 +330,41 @@ def add_a_lock(fct):
     f.__name__ = fct.__name__
     f.__module__ = fct.__module__
     return f
+
+def report_bug(form, student_name='', exc_info=None):
+    """Send an email to the teacher to report a bug.
+
+    Does nothing if the teacher's email is not set in the
+    configuration.
+
+    """
+    if configuration.teacher_mail:
+        import smtplib
+        import traceback
+        msg = """Subject: QUENLIG bug {} {}
+To: {}
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+
+{}
+
+""".format(configuration.session.name,
+           student_name,
+           configuration.teacher_mail,
+           form,
+           )
+        if exc_info is not None:
+            msg += ''.join([str(i) for i in (
+                traceback.format_tb(exc_info[2])
+                + [exc_info[0]]
+                + [exc_info[1]]
+            )])
+        # session = smtplib.SMTP(configuration.smtp_server)
+        # session.sendmail(from_addr=configuration.teacher_mail,
+        #                  to_addrs=configuration.teacher_mail,
+        #                  msg=msg)
+        print(msg)
+        print("sendmail to", configuration.teacher_mail, " end")
+    else:
+        print("Teacher's email not set, cannot send email")
