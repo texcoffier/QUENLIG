@@ -71,7 +71,7 @@ keys = ('samaccountname', 'sn', 'givenName', 'mail')
 def get_info(state, student_ids):
     try:
         s = ldap3.Server(state.ldap_host, state.ldap_port,
-                         use_ssl = state.ldap_port == 636)
+                         use_ssl = state.ldap_port in (636, 6360))
         c = ldap3.Connection(
             s,
             user = state.ldap_login,

@@ -24,7 +24,10 @@
 import cgi
 import traceback
 import smtplib
+import email.header
 import ast
+import time
+import threading
 from QUENLIG import configuration
 
 priority_display = 'analyse'
@@ -121,7 +124,59 @@ option_help = '''("the_teacher@university.org", "smtp.university.org")
         via the 'smtp.university.org' mail server.'''
 option_default = ""
 
-def sendmail(state, plugin, argument, q):
+def encode(x):
+    return email.header.Header(x).encode()
+
+def mail_real(mail_from, mail_to, subject, message):
+    e_mail_to = encode(mail_to)
+    e_mail_from = encode(mail_from)
+    e_subject = encode(subject)
+    content = [
+        'Subject: ' + e_subject,
+        'To: '      + e_mail_to,
+        'From: '    + e_mail_from,
+        'Content-Transfer-Encoding: 8bit',
+        'MIME-Version: 1.0',
+        ]
+    if message.startswith('<'):
+        content.append('Content-Type: text/html; charset="utf-8"')
+    else:
+        content.append('Content-Type: text/plain; charset="utf-8"')
+    content.append('')
+    content.append(message)
+
+    session = smtplib.SMTP(configuration.smtp_server)
+    session.sendmail(from_addr = e_mail_from,
+                     to_addrs = e_mail_to,
+                     msg = '\r\n'.join(content).encode('utf-8'))
+    session.close()
+
+def mail_with_retry(mail_from, mail_to, subject, message):
+    for i in range(8):
+        try:
+            mail_real(mail_from, mail_to, subject, message)
+            return
+        except:
+            traceback.print_exc()
+            time.sleep(2 ** i)
+    return "Can't send mail"
+
+class MailThread(threading.Thread):
+    to_send = []
+
+    def run(self):
+        while self.to_send:
+            mail_with_retry(*self.to_send.pop(0))
+            time.sleep(60)
+
+def sendmail(mail_from, mail_to, subject, message):
+    MailThread.to_send.append((mail_from, mail_to, subject, message))
+    if len(MailThread.to_send) <= 1:
+        MailThread().start()
+
+configuration.sendmail = sendmail
+
+def send_comment(state, plugin, argument, q):
     if q == "None":
         bads = ""
         before = ""
@@ -138,17 +193,12 @@ def sendmail(state, plugin, argument, q):
     session = smtplib.SMTP(configuration.smtp_server)
     info = state.student.informations
     login = state.student.filename
-    mail = info.get("mail", login)
+    student_mail = info.get("mail", login)
     sn = info.get("surname", "")
     fn = info.get("firstname", "")
-    session.sendmail(from_addr=mail, to_addrs=configuration.teacher_mail,
-                     msg="""Subject: {}/{} {} {} {}
-To: {}
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-
-<b>{}</b>
+    mail(student_mail, configuration.teacher_mail,
+         '{}/{} {} {} {}'.format(configuration.session.name, q, login, sn, fn),
+         """<html><b>{}</b>
 <p>
 {}
 {}
@@ -157,10 +207,7 @@ MIME-Version: 1.0
 <ul>
 {}
 </ul>
-""".format(configuration.session.name, q,
-           login, sn, fn, configuration.teacher_mail, q,
-           cgi.escape(argument), before, question, bads).encode("utf-8"))
-    session.close()
+""".format(q, cgi.escape(argument), before, question, bads))
 
 done = set()
 
@@ -174,7 +221,7 @@ def execute(state, plugin, argument):
         state.student.add_a_comment(q, argument)
         if configuration.teacher_mail:
             try:
-                sendmail(state, plugin, argument, q)
+                send_comment(state, plugin, argument, q)
             except:
                 traceback.print_exc()
         
