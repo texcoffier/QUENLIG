@@ -196,7 +196,7 @@ def send_comment(state, plugin, argument, q):
     student_mail = info.get("mail", login)
     sn = info.get("surname", "")
     fn = info.get("firstname", "")
-    mail(student_mail, configuration.teacher_mail,
+    sendmail(student_mail, configuration.teacher_mail,
          '{}/{} {} {} {}'.format(configuration.session.name, q, login, sn, fn),
          """<html><b>{}</b>
 <p>
