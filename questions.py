@@ -130,6 +130,12 @@ class Question:
         return tmp
 
     def __init__(self, world, arg, previous_question=[]):
+        self.preprocesses = arg.get("preprocesses", ())
+        if not isinstance(self.preprocesses, (list, tuple)):
+            self.preprocesses = (self.preprocesses,)
+        for preprocess in self.preprocesses:
+            preprocess(arg)
+
         self.name = arg["name"]
         self.path = world
         world = world[-1]
@@ -358,8 +364,8 @@ def add(**arg):
     "perfect_time": "Si on répond plus vite : on maîtrise la question",
     "courses": "Position ('H1', 'H2'...) dans le support de cours",
     "nr_versions": "Nombre de versions pour la question",
+    "preprocesses": "Une liste de fonctions modifiant sur place les arguments du 'add'",
     }
-
     # sys.stdout.write("*")
     # sys.stdout.flush()
     frame = None

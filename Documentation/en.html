@@ -34,6 +34,7 @@
       <li> <a href="#bad_answer"><tt>bad_answer</tt></a></li>
       <li> <a href="#courses"><tt>courses</tt></a></li>
       <li> <a href="#perfect_time"><tt>perfect_time</tt></a></li>
+      <li> <a href="#preprocesses"><tt>preprocesses</tt></a></li>
       </ul>
       </li>
       <li> <a href="#session_management">Session Management</a></li>
@@ -549,7 +550,7 @@ content: "Good! Press «Enter» to choose a random question." ;
     <p>
       If you want to put a text without a button, use '{{{}}}':
       <pre>{{{}}} If you are sure: {{{↑Y}}} Yes, or {{{↑N}}} No
-{{}}} If you hesitate: {{{↑None}}} not Y nor N, or {{{↑B}}} bad question</pre>
+{{{}}} If you hesitate: {{{↑None}}} not Y nor N, or {{{↑B}}} bad question</pre>
     </p>
     <p>
       It is also possible to define multiple inputs in the same question.
@@ -763,6 +764,24 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
       The time of the first good answer is not taken into account
       because it is far more longer than the next ones.
     </p>
+
+    <h3><a name="preprocesses">Parameter: <tt>preprocesses</tt></a></h3>
+
+    <p>
+      A function or list of functions modifying in place the dictionnary
+      containing the <tt>add</tt> arguments.
+      The question is really added after the modifications had been done.
+    </p>
+    <p>
+      It is needed for example to define MCQ because in most cases
+      the <tt>test</tt> and <tt>question</tt> arguments can be
+      computed from the MCQ definition.
+    </p>
+    <p>A stupid example:</p>
+    <pre>def transform(keys):
+    keys['question'] = keys['question'].upper() + '!!!'
+    keys['tests'] += (Good(Equal('I resign!')), )</pre>
+      
 
     <h2><a name="session_management">Session Management</a></h2>
 
