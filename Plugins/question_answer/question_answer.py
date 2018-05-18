@@ -234,12 +234,35 @@ def execute(state, plugin, argument):
 
     if '{{{' in question:
         t = question.split('{{{')[1:]
-        if '{{{ shuffle}}}' in question:
-            for i in t:
-                if i.startswith(" shuffle}}}"):
-                    t.remove(i)
+        if '{{{ shuffle' in question:
+            for i, line in enumerate(t):
+                if line.startswith(" shuffle"):
+                    line = line.split('}}}')
+                    shuffle = line[0]
+                    t[i] = '}}}' + line[1]
                     break
-            random.shuffle(t)
+            if shuffle == " shuffle lines":
+                add_br = []
+                for i in t:
+                    if i.startswith('}}}'):
+                        if add_br:
+                            add_br[-1] += '\n<br>\n'
+                    else:
+                        add_br.append(i)
+                tt = [i.split('\n', 1) for i in add_br]
+                lines = list(tuple(zip(*tt))[0])
+                random.shuffle(lines)
+                if t[0].startswith('}}}'):
+                    t = [t[0]] # To not lost the first text
+                else:
+                    t = []
+                for line, more in zip(lines, tt):
+                    if len(more) == 1:
+                        t.append(line)
+                    else:
+                        t.append(line + '\n' + more[1])
+            else:
+                random.shuffle(t)
         nr_checked = 0
         for i in t:
             j = i.split('}}}')

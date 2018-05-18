@@ -2048,11 +2048,13 @@ class MCQ(Preprocessor):
         self.exam = exam
 
     def __call__(self, kargs):
-        question = [kargs.get('question', ''), '{{{}}}']
+        question = [kargs.get('question', '')]
         grades = []
         tests = []
         if self.shuffle:
-            question.append('{{{ shuffle}}}')
+            question.append('{{{ shuffle lines}}}')
+        else:
+            question.append('{{{}}}') # start of answer cases
         code_id = 0
         good = Good()
         nr_to_check = 0
@@ -2566,7 +2568,7 @@ def regression_tests():
                 print("Unexpected:", test.source())
             failed
     check_mcq("a\n+ b\n- c",
-              "X\n{{{}}}\n{{{ shuffle}}}\na\n{{{_0_}}} b\n{{{_1_}}} c",
+              "X\n{{{ shuffle lines}}}\na\n{{{_0_}}} b\n{{{_1_}}} c",
               ("Bad(~Contain('_0_'))",
                "Bad(Contain('_1_'))",
                "Good()",

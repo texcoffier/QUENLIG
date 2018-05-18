@@ -544,6 +544,21 @@ content: "Good! Press «Enter» to choose a random question." ;
       Beware: ' M F' and ' F M' are possible when shuffling.
     </p>
     <p>
+      If the choices must be shuffled but not the texts between choices,
+      put each choice on a separate line and use <tt>{{{ shuffle <em>lines</em>}}}</tt>:
+      <pre>{{{ shuffle <em>lines</em>}}}
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+{{{A}}} A
+{{{B}}} B
+&lt;td&gt;
+{{{C}}} C
+{{{D}}} D
+&lt;/tr&gt;
+&lt;/table&gt;</pre>
+    </p>
+    <p>
       If you want to put a choice on the same line than the previous one,
       use '↑': <tt>{{{Y}}} Yes or {{{↑N}}} No</tt>.
     </p>
@@ -812,7 +827,8 @@ add(name="mcq",
 + 2 * 2 = 4
 + 2 ** 2 = 4
 - 2 ! = 4
-&lt;p&gt;More than one is true, more than one is false..."""))</pre>
+&lt;p&gt;More than one is true, more than one is false..."""),
+                       shuffle=True, exam=False)</pre>
      </ul>
 
     <h2><a name="session_management">Session Management</a></h2>
