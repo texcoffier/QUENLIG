@@ -1777,7 +1777,7 @@ def GRADE(*args):
        # If 'fast and hot' is answered, 2 grades will be made.
        GRADE(Contain("fast", "understand speed", 1)),
        GRADE(Contain("hot", "understand energy", 1)),
-       Good(Contain("")),    
+       Good(),
     """
     return Continue(Grade(*args))
 
@@ -1962,6 +1962,159 @@ class Choice(TestExpression):
     def get_good_answers(self, state):
         for c in self.choice(state)[1:]:
             yield from c.get_good_answers(state)
+
+##############################################################################
+##############################################################################
+# Preprocessors
+##############################################################################
+##############################################################################
+
+class Preprocessor:
+    def __call__(self):
+        raise ValueError("The transformation function is not defined")
+
+class MCQ(Preprocessor):
+    """MCQ(description, shuffle=False, exam=False)
+
+    The description lines contains the texts displayed to the student
+    in the answer box.
+
+    If the line starts by a + or - then it is a choice (good or bad).
+    In this case, the rest of the line may contain:
+
+       An answer ID without spaces.
+       It is recommended to use one to allow questionnary modifications.
+       The user defined is put between (), auto generated ones between __
+
+       [a list of competence/teacher] to indicate the grades to increase
+       or decrease if the choice is checked.
+       Only CHECKED choices modify the grade.
+
+       A space to make the source code lisible.
+
+       The text associated to the choice.
+
+       A final {{{...}}} to indicates a comment for bad choice
+
+    A ^[] or {{{...}}}$ elsewhere indicates a grade or comment
+    for a good global answer.
+
+
+    If shuffle is True, the choices order is random.
+
+    If 'exam' is False (the default value) then the student
+    see if its answer is good or not.
+    In the other cases, the student answer is always accepted.
+    The 'exam' is a string indicating where the point is to be added.
+    The grading is done with Grade().
+
+
+    The simple description can be for example:
+
+        + 2 + 2 = 4
+        + 2 - -2 = 4
+        - 2 / 2 = 4
+        + 2 * 2 = 4
+        + 2 ** 2 = 4
+        - 2 ! = 4
+
+    A complex one with grades and comments:
+
+        [even] {{{Congratulation! it is a perfect answer}}}
+
+        <table><tr><td>
+        Can be defined as:
+
+        +A               is not an odd integer
+        +B[double,even]  is the double of another integer
+        +G[odd,add]      is an odd integer + 1
+
+        <td>
+        When written, its last digit is?
+
+        +C[decimal]      0 2 4 6 8 in decimal
+        +D[binary]       0 in binary
+        -E[octal]        0 2 4 6 8 in octal {{{10 is not a digit in decimal system}}}
+        -F[hexa]         0 2 4 6 8 A C in hexadecimal
+
+        </tr></table>
+
+        Do not forget to check a box!
+
+"""
+    def __init__(self, description, shuffle=False, exam=False):
+        self.description = description
+        self.shuffle = shuffle
+        self.exam = exam
+
+    def __call__(self, kargs):
+        question = [kargs.get('question', ''), '{{{}}}']
+        grades = []
+        tests = []
+        if self.shuffle:
+            question.append('{{{ shuffle}}}')
+        code_id = 0
+        good = Good()
+        nr_to_check = 0
+        for line in self.description.split('\n'):
+            parsed = re.match(
+                r'^([-+]([^[ ]+)?)?(\[[^]]+])? *(.*[^}])({{{.*}}})?$', line)
+            if parsed is None:
+                question.append(line)
+                continue
+            good_bad = parsed[1]
+            code     = parsed[2]
+            grade    = parsed[3]
+            choice   = parsed[4]
+            comment  = parsed[5]
+            if choice:
+                choice = choice.strip()
+            if comment:
+                comment = comment[3:-3]
+            if grade:
+                grade = grade[1:-1]
+            if good_bad is None:
+                if comment:
+                    good = Comment(good, comment)
+                if grade:
+                    good = Grade(good, grade.split(','), 1)
+                question.append(choice)
+                continue
+
+            if code is None:
+                code = '_{}_'.format(code_id)
+                code_id += 1
+            else:
+                code = '({})'.format(code)
+            question.append('{{{' + code + '}}} ' + choice)
+            test = Contain(code)
+            if grade:
+                if good_bad[0] == '+':
+                    point = 1
+                else:
+                    point = -1
+                grades.append(GRADE(test, grade.split(','), point))
+            test = Contain(code)
+            if good_bad[0] == '+':
+                nr_to_check += 1
+                test = ~ test
+            if self.exam is False:
+                if comment:
+                    test = Comment(test, comment)
+                test = Bad(test)
+            tests.append(test)
+        if self.exam is False:
+            tests.append(good)
+        else:
+            # No comment: always good
+            tests = [ GRADE(~ Or(*tests), self.exam, 1) ]
+            tests.append(Good())
+        if nr_to_check == 0:
+            raise ValueError("An MCQ must have one box to check")
+        kargs['question'] = '\n'.join(question)
+        kargs['tests'] = list(kargs.get('tests', ())) + grades + tests
+
+##############################################################################
 
 def regression_tests():
     # Regression test on new tests.
@@ -2392,5 +2545,58 @@ def regression_tests():
 
     a = create("Good()")
     assert( a('N') == (True, '') )
+
+    def check_mcq(description, question, tests, shuffle=False, exam=False):
+        d = {'question': 'X'}
+        MCQ(description, shuffle=shuffle, exam=exam)(d)
+        if d['question'] != question:
+            print("MCQ bad question")
+            print("Expected:", repr(question))
+            print("Computed:", repr(d['question']))
+            failed
+        for computed, expected in zip(d['tests'], tests):
+            computed = computed.source()
+            if computed != expected:
+                print("MCQ bad test")
+                print("Expected:", expected)
+                print("Computed:", computed)
+                failed
+        if len(d['tests']) > len(tests):
+            for test in d['tests'][len(tests):]:
+                print("Unexpected:", test.source())
+            failed
+    check_mcq("a\n+ b\n- c",
+              "X\n{{{}}}\n{{{ shuffle}}}\na\n{{{_0_}}} b\n{{{_1_}}} c",
+              ("Bad(~Contain('_0_'))",
+               "Bad(Contain('_1_'))",
+               "Good()",
+               ), shuffle=True)
+    check_mcq("a {{{A}}}\n+B b{{{BB}}}\n-C c {{{CC}}}\n+D d",
+              "X\n{{{}}}\na\n{{{(B)}}} b\n{{{(C)}}} c\n{{{(D)}}} d",
+              ("Bad(Comment(~Contain('(B)'),'BB'))",
+               "Bad(Comment(Contain('(C)'),'CC'))",
+               "Bad(~Contain('(D)'))",
+               "Comment(Good(),'A')",
+               ))
+    check_mcq("+A[G1] a{{{CA}}}\n-[G1,G2] b",
+            "X\n{{{}}}\n{{{(A)}}} a\n{{{_0_}}} b",
+            ("Continue(Grade(Contain('(A)'),['G1'],1))",
+             "Continue(Grade(Contain('_0_'),['G1', 'G2'],-1))",
+             "Bad(Comment(~Contain('(A)'),'CA'))",
+             "Bad(Contain('_0_'))",
+             "Good()",
+            ))
+    check_mcq("+A[G1] a{{{CA}}}\n-[G1,G2] b",
+            "X\n{{{}}}\n{{{(A)}}} a\n{{{_0_}}} b",
+            ("Continue(Grade(Contain('(A)'),['G1'],1))",
+             "Continue(Grade(Contain('_0_'),['G1', 'G2'],-1))",
+             "Continue(Grade(~Or(~Contain('(A)'),Contain('_0_')),'good',1))",
+             "Good()",
+            ), exam="good")
+    try:
+        check_mcq("- x", "", ())
+        exception_not_raised
+    except ValueError:
+        pass
 
     print("Question regression tests are fine")

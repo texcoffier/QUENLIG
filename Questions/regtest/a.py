@@ -26,6 +26,7 @@ add(name="a",
     tests=(
     good("a", "good_answer__a"),
     Good(Equal("unlockCHOICES")),
+    Good(Equal("mcq")),
     bad("a0", "bad_answer__a0"),
     bad("a1", "bad_a1"),
     bad(("a2", "a3"), "bad_a3"),
@@ -52,4 +53,14 @@ add(name="c",
     ),
     bad_answer = "bad_c",
     good_answer = "good_c",
+    )
+
+add(name="mcq",
+    required = ['a(mcq)'],
+    preprocesses = MCQ("""
+question_d
+-id_a[GA] choice a
+-id_b[GB] choice b {{{bad b}}}
++id_c[GC] choice c
+""")
     )

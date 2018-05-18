@@ -98,6 +98,21 @@ class Student:
     def see_all_questions(self):
         return self.get('?questions_all=all')
 
+    def grades(self):
+        self.get('?exportcsv=1')
+        d = {}
+        csv = self.page.split('\n')
+        header = csv[0].split(',')[1:]
+        for line in csv[1:]:
+            line = line.split(',')
+            if line[0] == '':
+                continue
+            d[line[0]] = {
+                k: int(float(v))
+                for k, v in zip(header, line[1:])
+                }
+        return d
+
     def expect(self, *values):
         for value in values:
             if value in self.page:

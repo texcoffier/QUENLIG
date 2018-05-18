@@ -617,13 +617,18 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
        Beware, the transformation is applied to the 'Equal' parameter
        but not to the 'Replace' string list because it has little sense.
        Example of canonizers:
-	    <a href="tests.html#RemoveSpace">RemoveSpaces</a>,
+	    <a href="tests.html#RemoveSpaces">RemoveSpaces</a>,
+	    <a href="tests.html#RMS">RMS</a> (Remove Multiple Spaces),
 	    <a href="tests.html#Replace">Replace</a>,
 	    <a href="tests.html#SortLines">SortLines</a>,
-	    <a href="tests.html#UpperCase">UpperCase</a>,
-	    <a href="tests.html#Random">Random</a>.
+	    <a href="tests.html#UpperCase">UpperCase</a>.
 	    Specific canonizers are defined in the questionnaries
 	    for specific languages: Shell, Python, C, Cisco...
+
+    <li> It it possible to choose randomly an alternative
+      for the question and the test :
+	    <a href="tests.html#Random">Random</a>,
+	    <a href="tests.html#Choice">Choice</a>,
 
      <li> Boolean operation:
        <a href="tests.html#And">And</a> '&amp;',
@@ -639,10 +644,12 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
 	 <tr><td>False <td>False <td>False <td>False <td>True  </tr>
        </table>
 
-      <li> The <tt>Comment</tt> operator adds a comment if its parameter
-	   is <b>True</b>: <a href="tests.html#Comment">Comment</a>
+      <li> The <tt>Comment</tt> operator adds a comment
+	   if its parameter is <b>True</b>:
+	   <a href="tests.html#Comment">Comment</a>
 
-      <li> The <tt>Grade</tt> operator add points to the question if its parameter is <b>True</b>
+      <li> The <tt>Grade</tt> operator add points to the question
+           if its parameter is <b>True</b>:
 	   <a href="tests.html#Grade">Grade</a>
 
       <li> The <tt>Continue</tt> operator returns <b>None</b> to not stop
@@ -789,7 +796,24 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
     <pre>def transform(keys):
     keys['question'] = keys['question'].upper() + '!!!'
     keys['tests'] += (Good(Equal('I resign!')), )</pre>
-      
+
+   <p>
+     Provided preprocessors, the documentation is in <tt>questions.py</tt> :
+     <ul>
+       <li> <tt>MCQ</tt>: Multiple Choice Question.
+            It is a class whose instances are callables.
+<pre>
+add(name="mcq",
+    question = "Check correct statements:",
+    preprocesses = MCQ("""
++ 2 + 2 = 4
++ 2 - -2 = 4
+- 2 / 2 = 4
++ 2 * 2 = 4
++ 2 ** 2 = 4
+- 2 ! = 4
+&lt;p&gt;More than one is true, more than one is false..."""))</pre>
+     </ul>
 
     <h2><a name="session_management">Session Management</a></h2>
 

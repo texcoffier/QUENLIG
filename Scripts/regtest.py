@@ -619,6 +619,33 @@ def test_0420_not_threaded(student):
     if error:
         raise ValueError("Regression tests thread error")
 
+def test_0500_preprocesses(student):
+    grader = Student(the_server, 'grader_0500',
+        roles="['Default','Teacher','Author','Grader', 'Developer','Admin']")
+    grader.select_role('Grader')
+    student.goto_question('a:a')
+    student.give_answer('mcq')
+    student.goto_question('a:mcq')
+    minimal_tests(student, title='a:mcq', good=1)
+    student.expect('value="(id_a)"')
+    student.expect('value="(id_b)"')
+    student.expect('value="(id_c)"')
+    student.expect('choice a')
+    student.expect('choice b')
+    student.expect('choice c')
+    student.give_answer('(id_a)')
+    minimal_tests(student, title='a:mcq', good=1, bad=1)
+    g = grader.grades()['guest0500_preprocesses']
+    assert(g['GA'] == -1 and g['GB'] == 0 and g['GC'] == 0)
+    student.give_answer('(id_b)')
+    minimal_tests(student, title='a:mcq', good=1, bad=2)
+    g = grader.grades()['guest0500_preprocesses']
+    assert(g['GA'] == 0 and g['GB'] == -1 and g['GC'] == 0)
+    student.expect('bad b')
+    student.give_answer('(id_c)')
+    minimal_tests(student, title='a:mcq', good=2, bad=2)
+    g = grader.grades()['guest0500_preprocesses']
+    assert(g['GA'] == 0 and g['GB'] == 0 and g['GC'] == 1)
 
 ############
 # TODO
@@ -647,6 +674,7 @@ try:
                                 roles=roles,
                                 ))
         print('OK')
+    print('All tests are fine')
     exit_value = 0
 finally:
     the_server.stop()
