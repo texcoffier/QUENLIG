@@ -1740,7 +1740,6 @@ class Grade(TestUnary):
                )
            ),
     """
-    stop_eval = True
     def __init__(self, expression, teacher, grade):
         self.teacher = teacher
         self.grade = grade
@@ -1761,13 +1760,17 @@ class Grade(TestUnary):
             teachers = self.teacher
         for teacher in teachers:
             state.student.set_grade(state.question.name, teacher, grade)
-        if self.stop_eval:
-            return goodbad, a_comment
-        else:
-            return None, a_comment
+        return goodbad, a_comment
 
-class GRADE(Grade):
-    """As Grade, but return None to not stop the tests after the first grade.
+class Continue(TestUnary):
+    def do_test(self, student_answer, state=None):
+        goodbad, a_comment = self.children[0](student_answer, state)
+        return None, a_comment
+
+def GRADE(*args):
+    """DEPRECATED, you must use: Continue(Grade(...))
+
+    As Grade, but return None to not stop the tests after the first grade.
 
     Examples:
        # Every answer is good, but grades are stored.
@@ -1776,7 +1779,8 @@ class GRADE(Grade):
        GRADE(Contain("hot", "understand energy", 1)),
        Good(Contain("")),    
     """
-    stop_eval = False
+    return Continue(Grade(*args))
+
 
 def random_chooser(state, question, key, values):
     if state:

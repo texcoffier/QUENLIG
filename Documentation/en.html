@@ -639,8 +639,16 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
 	 <tr><td>False <td>False <td>False <td>False <td>True  </tr>
        </table>
 
-	 <li> The comment operator that add a comment if its parameter
-	   is True: <a href="tests.html#Comment">Comment</a>
+      <li> The <tt>Comment</tt> operator adds a comment if its parameter
+	   is <b>True</b>: <a href="tests.html#Comment">Comment</a>
+
+      <li> The <tt>Grade</tt> operator add points to the question if its parameter is <b>True</b>
+	   <a href="tests.html#Grade">Grade</a>
+
+      <li> The <tt>Continue</tt> operator returns <b>None</b> to not stop
+           the evaluation, it is useful with <tt>Comment</tt> and <tt>Grade</tt>
+	   in order to add other comments or grades:
+	   <a href="tests.html#Continue">Continue</a>
 
     </ul>
 
