@@ -546,6 +546,7 @@ content: "Good! Press «Enter» to choose a random question." ;
     <p>
       If the choices must be shuffled but not the texts between choices,
       put each choice on a separate line and use <tt>{{{ shuffle <em>lines</em>}}}</tt>:
+    </p>
       <pre>{{{ shuffle <em>lines</em>}}}
 &lt;table&gt;
 &lt;tr&gt;
@@ -557,7 +558,31 @@ content: "Good! Press «Enter» to choose a random question." ;
 {{{D}}} D
 &lt;/tr&gt;
 &lt;/table&gt;</pre>
+    <p>
+      It is possible to shuffle choices by bloc,
+      an empty line defines the blocs
+      put each choice on a separate line and use <tt>{{{ shuffle <em>blocs</em>}}}</tt>:
     </p>
+      <pre>{{{ shuffle <em>blocs</em>}}}
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+A and B can be swapped
+{{{A}}} A
+{{{B}}} B
+
+&lt;td&gt;
+C and D can be swapped
+{{{C}}} C
+{{{D}}} D
+
+&lt;td&gt;
+E and F order is untouched because each one is in a bloc.
+{{{E}}} E
+
+{{{F}}} F
+&lt;/tr&gt;
+&lt;/table&gt;</pre>
     <p>
       If you want to put a choice on the same line than the previous one,
       use '↑': <tt>{{{Y}}} Yes or {{{↑N}}} No</tt>.

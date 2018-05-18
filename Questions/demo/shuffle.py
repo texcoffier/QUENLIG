@@ -39,3 +39,28 @@ add(name="mcq shuffled",
 <br>===END===
 """, shuffle="lines"),
 )
+
+add(name="mcq bloc shuffled",
+    required = [],
+    question = "A question",
+    preprocesses = MCQ("""
+===BLOC 1===
++ A1
+- B1
+- C1
+
+<br>===BLOC 2===
+- D2
+- E2
+- F2
+
+<br>===BLOC 3 unshuffled ===
+- G3
+
+- H3
+
+- I3
+
+<br>===END===
+""", shuffle="blocs"),
+)

@@ -2044,6 +2044,9 @@ class MCQ(Preprocessor):
 """
     def __init__(self, description, shuffle=False, exam=False):
         self.description = description
+        if shuffle is True:
+            shuffle = 'lines'
+        assert(shuffle in (False, 'lines', 'blocs'))
         self.shuffle = shuffle
         self.exam = exam
 
@@ -2052,7 +2055,7 @@ class MCQ(Preprocessor):
         grades = []
         tests = []
         if self.shuffle:
-            question.append('{{{ shuffle lines}}}')
+            question.append('{{{ shuffle %s}}}' % self.shuffle)
         else:
             question.append('{{{}}}') # start of answer cases
         code_id = 0

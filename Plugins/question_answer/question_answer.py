@@ -142,6 +142,31 @@ option_help = '''"always" or "hover"
 option_default = "always"
 
 
+def shuffle_lines(t):
+    if len(t) < 2:
+        return t
+    add_br = []
+    for i in t:
+        if i.startswith('}}}'):
+            if add_br:
+                add_br[-1] += '\n<br>\n'
+        else:
+            add_br.append(i)
+    tt = [i.split('\n', 1) for i in add_br]
+    lines = list(tuple(zip(*tt))[0])
+    random.shuffle(lines)
+    if t[0].startswith('}}}'):
+        t = [t[0]] # To not lost the first text
+    else:
+        t = []
+    for line, more in zip(lines, tt):
+        if len(more) == 1:
+            t.append(line)
+        else:
+            t.append(line + '\n' + more[1])
+    return t
+
+
 def execute(state, plugin, argument):
     if state.question == None:
         return
@@ -242,25 +267,16 @@ def execute(state, plugin, argument):
                     t[i] = '}}}' + line[1]
                     break
             if shuffle == " shuffle lines":
-                add_br = []
-                for i in t:
-                    if i.startswith('}}}'):
-                        if add_br:
-                            add_br[-1] += '\n<br>\n'
-                    else:
-                        add_br.append(i)
-                tt = [i.split('\n', 1) for i in add_br]
-                lines = list(tuple(zip(*tt))[0])
-                random.shuffle(lines)
-                if t[0].startswith('}}}'):
-                    t = [t[0]] # To not lost the first text
-                else:
-                    t = []
-                for line, more in zip(lines, tt):
-                    if len(more) == 1:
-                        t.append(line)
-                    else:
-                        t.append(line + '\n' + more[1])
+                t = shuffle_lines(t)
+            elif shuffle == " shuffle blocs":
+                last = 0
+                newt = []
+                t[-1] += '\n\n'
+                for i, line in enumerate(t):
+                    if '\n\n' in line:
+                        newt += shuffle_lines(t[last: i+1])
+                        last = i+1
+                t = newt
             else:
                 random.shuffle(t)
         nr_checked = 0
