@@ -1,2 +1,2 @@
 # -*- coding: latin-1 -*-
-tip = "The questionnary is in this directory"
+tip = "The questionary is in this directory"

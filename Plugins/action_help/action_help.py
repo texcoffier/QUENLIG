@@ -20,7 +20,7 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 """Display the file 'help.html' in a frame.
-Any questionnary can redefine its own page.
+Any questionary can redefine its own page.
 """
 
 container = 'action'

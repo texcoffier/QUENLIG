@@ -1788,7 +1788,7 @@ def random_chooser(state, question, key, values):
             return values[state.student.persistent_random(
                 state, question, len(values), key)]
         except IndexError:
-            # The question has been removed from questionnary
+            # The question has been removed from questionary
             return values[0]
     else:
         return values[0]
@@ -1983,7 +1983,7 @@ class MCQ(Preprocessor):
     In this case, the rest of the line may contain:
 
        An answer ID without spaces.
-       It is recommended to use one to allow questionnary modifications.
+       It is recommended to use one to allow questionary modifications.
        The user defined is put between (), auto generated ones between __
 
        [a list of competence/teacher] to indicate the grades to increase

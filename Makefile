@@ -37,7 +37,7 @@ regtest:
 
 check-questions:
 	@-mkdir Students/check-questions
-	# For the cisco questionnary
+	# For the cisco questionary
 	echo 4 >Students/check-questions/nr_hosts
 	for I in Questions/*/ ; \
         do \

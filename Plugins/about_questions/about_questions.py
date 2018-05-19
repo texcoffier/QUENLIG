@@ -19,7 +19,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-"""Display the directory name containing the questionnary"""
+"""Display the directory name containing the questionary"""
 
 from QUENLIG import configuration
 

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>Quenlig: Online Questionnary</title>
+    <title>Quenlig: Online Questionary</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link href="doc.css" rel="stylesheet">
     <link REL="icon" HREF="../HTML/favicon.ico">
@@ -15,7 +15,7 @@
     <ul>
       <li> <a href="#quoi">What's Quenlig?</a></li>
       <li> <a href="#run">Running Quenlig</a></li>
-      <li> <a href="#create">Questionnary Creation</a></li>
+      <li> <a href="#create">Questionary Creation</a></li>
       <li> <a href="#question_creation">Question Creation</a></li>
       <li> <a href="#question_reference">Question Reference</a>
       <ul>
@@ -56,25 +56,25 @@
       </ul>
       </li>
 
-      <li> <a href="#developper_tools">Developper tools</a></li>
+      <li> <a href="#developer_tools">Developer tools</a></li>
     </ul>
     </div>
 
     <div class="texte">
-    <h1>Quenlig: Online Questionnary</h1>
+    <h1>Quenlig: Online Questionary</h1>
 
     <p>
       This documentation can be read from begin to end,
       it starts with the most common pattern usages
       and also contains links to full technical references.
-      As the system is easely extensible in many ways
+      As the system is easily extensible in many ways
       it is adaptable to any usage case.
     </p>
 
     <h2><a name="quoi">What's Quenlig?</a></h2>
 
     <p>
-      Quenlig allow to create interactive "free text" questionnaries
+      Quenlig allow to create interactive "free text" questionaries
       on the web.
     </p>
     <ul>
@@ -89,12 +89,12 @@
 	    as fragments of the courses, things to be prepared before
 	    answering.
 	  <li> The question text.
-	  <li> The place where the student enter its answer.
+	  <li> The place where the student enter the answer.
 	  <li> A link allowing to get a tip to answer the question.
 	</ul>
       </li>
-      <li> When the student answer, Quenlig may display additionnal information
-	to explain its bad answer, to guide the student to the good answer
+      <li> When the student answer, Quenlig may display additional information
+	to explain the bad answer, to guide the student to the good answer
 	or to a better answer,
 	or to give additional information contextual to the student answer.
 
@@ -103,22 +103,23 @@
 	the number of tips asked and the rank of the student in the class.
       </li>
       
-      <li> Quenlig allows the student to see all its answers,
+      <li> Quenlig allows the student to see (eventually modify)
+        all the answers entered,
 	to leave a comment for the teacher about the question,
-	to see an help page about the questionnary.
+	to see an help page about the questionary.
       </li>
 
       <li> Quenlig allows the teachers to locate students with problems
 	or cheaters.
-	It provides questionnary author with analysis tools in order to
-	enhances the questionnary.
+	It provides questionary author with analysis tools in order to
+	enhances the questionary.
 	</li>
     </ul>
 
     
     <h2><a name="run">Running Quenlig</a></h2>
 
-    <p>You can try a french unix questionnary at this place (you need
+    <p>You can try a french unix questionary at this place (you need
       to enter an alias):
       <a href="http://demo710.univ-lyon1.fr/-quenlig-/guest.html">
         http://demo710.univ-lyon1.fr/-quenlig-/guest.html
@@ -127,7 +128,7 @@
     <p>To run your own server, use the following suite of commands:
     </p>
     <pre>
-# Create in 'Students' directory a new questionnary session.
+# Create in 'Students' directory a new questionary session.
 # The questions are in the directory 'Questions/unix'
 # When running the server will be listening on TCP port 9999
 ./main.py Unix2010Spring create Questions/unix 9999
@@ -140,18 +141,18 @@
       configure Quenlig to use it.
       </p>
 
-    <h2><a name="create">Questionnary creation</a></h2>
+    <h2><a name="create">Questionary creation</a></h2>
     <p>
-      The questionnaries are not defined as data structures
+      The questionaries are not defined as data structures
       but as Python programs.
       This is much more flexible approach,
       it allows to have algorithms creating the question and checking
       the answers.
     </p>
     <p>
-      The questionnaries are defined in 'Questions' directory.
-      The 'C_variable' directory contains a small commented questionnary.
-      The questionnary directory must contain an empty <tt>__init__.py</tt>
+      The questionaries are defined in 'Questions' directory.
+      The 'C_variable' directory contains a small commented questionary.
+      The questionary directory must contain an empty <tt>__init__.py</tt>
       file to please Python.
     </p>
     <p>
@@ -171,9 +172,9 @@
     </p>
     <p>
       When Quenlig displays a question, it displays the information
-      about the required questions.
+      about the required questions (except the hiddens).
       This will give the student a context to answer the current question.
-      It will see its old answers and may reuses parts of them to answer.
+      They will see the old answers and may reuses parts of them to answer.
     </p>
 
     <h2><a name="question_creation">Question creation</a></h2>
@@ -209,7 +210,7 @@ add(name="hello",
     <p>
       This question requires that the student answer exactly 'yes'
       and not 'Yes' or 'YES'.
-      To turn arround this problem, the student answer can be uppercased.
+      To turn around this problem, the student answer can be uppercased.
     <pre>
 add(name="hello",
     question="Are you ready?",
@@ -260,8 +261,9 @@ add(name="hello",
     )
 </pre>
     <p>
-      If a student answer 'Yes I am' its answer will be rejected,
-      we should not test equality, but only that its answer contains 'yes'.
+      If a student answer 'Yes I am' the answer will be rejected,
+      we should not test strict equality,
+      but only that the answer contains 'yes'.
     </p>
     <pre>
 add(name="hello",
@@ -274,7 +276,7 @@ add(name="hello",
     <p>
       There is no help if the students answers 'foobar',
       it is not nice for the student.
-      The tilda indicates the negation, so the student answer
+      The tilde indicates the negation, so the student answer
       does not contain 'yes'.      
     </p>
     <pre>
@@ -367,7 +369,7 @@ add(name="age",
 </pre>   
     <p>
       An another problem is that students may append 'years' to their answer.
-      It is possible to get ride of it by using a replacement.
+      It is possible to get rid of it by using a replacement.
       The 'Replace' operator apply all the string substitutions to
       the student answer before continuing the testing.
    </p>
@@ -453,11 +455,11 @@ add(name="affectation",
       <b>It is a bad idea to do so because a change in the questions order
 	will break the dependencies tree.</b>
       If there is not preceding question, then there is no dependencies
-      and the question will be visible immediatly.
+      and the question will be visible immediately.
     </p>
     <p>
       If a question name contains <tt>:</tt>
-      then it references a question in another file of the questionnary.
+      then it references a question in another file of the questionary.
       The left part is the filename without the <tt>.py</tt> extension.
     </p>
     <p>
@@ -491,36 +493,36 @@ add(name="affectation",
       The value of this parameter can be an HTML string or a function
       returning an HTML string.
       The function may have a 'state' parameter allowing to get
-      information about the student or the IP address of its computer.
+      information about the student or the IP address of their computer.
     </p>
     <p>
       If in the function, random function are used, it will always
-      return the same random serie. Each student will have a
-      different random serie.
+      return the same random series. Each student will have a
+      different random series.
     </p>
     <p>
       To put 'my_picture' in the HTML, store the file in
-      'Questions/YourQuestionnary/HTML/my_picture.png'
+      'Questions/YourQuestionary/HTML/my_picture.png'
       and give the link: <tt>&lt;IMG SRC='my_picture.png'&gt;</tt>
     </p>
     <p>
-      If you want to add a CSS style to your questionnary,
-      put it in 'Questions/YourQuestionnary/HTML/questions.css'<br>
+      If you want to add a CSS style to your questionary,
+      put it in 'Questions/YourQuestionary/HTML/questions.css'<br>
       You can also redefine existing translations, for example :
     </p>
     <pre>DIV.question_good > A:first-child.content > .box_title:before {
 content: "Good! Press «Enter» to choose a random question." ;
 }</pre>
     <p>
-      If you want to add JS to your questionnary,
-      put it in 'Questions/YourQuestionnary/HTML/questions.js'
+      If you want to add JS to your questionary,
+      put it in 'Questions/YourQuestionary/HTML/questions.js'
     </p>
     
     <h3><a name="question">Parameter: <tt>question</tt></a></h3>
 
     <p>
       It is the question text, it is defined exactly as the 'before'
-      parameter and so it may be generated specificaly for each student.
+      parameter and so it may be generated specifically for each student.
     </p>
     <p>
       It is possible to display check buttons in place
@@ -599,12 +601,12 @@ E and F order is untouched because each one is in a bloc.
     <pre>Fill the missing values:
 {{{$}}}
 The surname of the first president is {{{$surname}}} and
-its firstname is {{{$firstname}}}.
+his firstname is {{{$firstname}}}.
 He died at the age of {{{$$age_of_death}}} years.</pre>
 <p>
 The number of '$' indicates the displayed width of the input,
 if there is only one, then the default width is 10 characters.
-The student answer to analyse will be for example:
+The student answer to analyze will be for example:
 <tt>surname=Washington\nfirstname=George\nage_of_death=67</tt>
 Do not assume that the line order will not change,
 if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
@@ -615,7 +617,7 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
     <p>
       The list of tests to be done on the student answer.
       If this parameter is not defined then the student will see
-      the question but will not have a way to enter its answer.
+      the question but will not have a way to enter the answer.
     </p>
     <p>
       There is many tests in the
@@ -662,7 +664,7 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
 	    <a href="tests.html#Replace">Replace</a>,
 	    <a href="tests.html#SortLines">SortLines</a>,
 	    <a href="tests.html#UpperCase">UpperCase</a>.
-	    Specific canonizers are defined in the questionnaries
+	    Specific canonizers are defined in the questionaries
 	    for specific languages: Shell, Python, C, Cisco...
 
     <li> It it possible to choose randomly an alternative
@@ -732,10 +734,10 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
     <h3><a name="highlight">Parameter: <tt>highlight</tt></a></h3>
 
     <p>
-      If this parameter is True then the question is highlighted
+      If this parameter is <b>True</b> then the question is highlighted
       in the questions list.
       The student should answer to this question quickly because
-      it is very contextual with its last answer.
+      it is very contextual with the last answer.
     </p>
 
 
@@ -761,7 +763,7 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
 
     <p>
       This HTML text will be displayed to the student
-      when it answers correctly.
+      if the answer is correct.
     </p>
 
     <h3><a name="bad_answer">Parameter: <tt>bad_answer</tt></a></h3>
@@ -813,7 +815,7 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
       The default value is 10 seconds
     </p>
     <p>
-      If this time is too short, QUENLIG will automaticaly <b>increase</b> it
+      If this time is too short, QUENLIG will automatically <b>increase</b> it
       to the median value of the time to make a good answer by
       the current session students.
       The time of the first good answer is not taken into account
@@ -823,7 +825,7 @@ if necessary, use the <a href="tests.html#SortLines">SortLines</a> canonizer.
     <h3><a name="preprocesses">Parameter: <tt>preprocesses</tt></a></h3>
 
     <p>
-      A function or list of functions modifying in place the dictionnary
+      A function or list of functions modifying in place the dictionary
       containing the <tt>add</tt> arguments.
       The question is really added after the modifications had been done.
     </p>
@@ -862,7 +864,7 @@ add(name="mcq",
       Quenlig management is done with the <tt>./main.py</tt> command.
       If you run it without parameter,
       it will display the help about the command line parameters
-      and the list of sessions with the questionnary name,
+      and the list of sessions with the questionary name,
       the TCP port used, the process and computer running it,
       the session start date and duration.
     </p>
@@ -870,7 +872,7 @@ add(name="mcq",
       The first parameter of <tt>./main.py</tt> is the session name.
       It is the name of the sub directory of 'Students' that
       contains all the informations about the session and the students.
-      The following parameters defines actions and may be concatened.
+      The following parameters defines actions and may be concatenated.
       The most useful actions are:
     </p>
     <ul>
@@ -907,7 +909,7 @@ add(name="mcq",
     <p>
       The ACLS (access rights and much more)
       define the things the user is allowed to do
-      when it is using Quenlig.
+      when using Quenlig.
       The ACLS of an user is defined by the ACLS of the current
       role of the user and then by the ACLS specifics to the user.
     </p>
@@ -915,7 +917,7 @@ add(name="mcq",
       The roles are defined exactly the same way than users,
       there is no difference, a user name can be used as a role name.
       You can add as many roles as you want.
-      Two roles are hardcoded into Quenlig:
+      Two roles are hard coded into Quenlig:
     </p>
     <ul>
       <li> <tt>Wired</tt> role is defined recursively because
@@ -925,7 +927,7 @@ add(name="mcq",
 	It is the default user role and so define what the students can do.
       <li> <tt>Teacher</tt> is defined from <tt>Default</tt> role.
 	It adds (and remove) ACLS in order to be used
-	by the session managers and questionnary authors.
+	by the session managers and questionary authors.
     </ul>
       You can edit ACLS and role directly in files.
       For each student and role there is a directory named
@@ -935,7 +937,7 @@ add(name="mcq",
     <ul>
       <li> <tt>log</tt> : all the logged data about the student.
       <li> <tt>roles</tt> : a Python list of possible roles for the user.
-      <li> <tt>acls</tt> : a Python dictionnary whose keys are Quenlig plugin
+      <li> <tt>acls</tt> : a Python dictionary whose keys are Quenlig plugin
 	names and the values define in which ways the plugin can be used.
     </ul>
     <p>
@@ -998,11 +1000,11 @@ add(name="mcq",
       <h2><a name="author_work">Author work</a></h2>
 
       <p>
-	The questionnary creation takes a long time,
+	The questionary creation takes a long time,
 	about one hour per question if you want to help the students.
 	It is recommended to put a minimal amount of time for
 	the question creation but to take more time after each session
-	to analyse the bad student answers.
+	to analyze the bad student answers.
       </p>
       <p>
 	With the teacher role, for each question 
@@ -1025,11 +1027,11 @@ add(name="mcq",
 	If there is many Good tests, it is easy to miss the problem.
       </p>
       <p>
-	The questionnary author can modify the Python source
+	The questionary author can modify the Python source
 	defining the question and then clicks on « Reload question »
-	to update its page with the new question.
-	It will verify the behaviour of the updated question.
-	It will see the comments given to the students have
+	to update the page with the new question, so it is possible
+	to verify the behavior of the updated question,
+	to see the if the comments given to the students have
 	been correctly updated.
       </p>
       <p>
@@ -1103,7 +1105,7 @@ class UpperCase(TestUnary):
         return string.upper()
 </pre>
       <p>
-	The canonizers are automaticaly applied to student answers.
+	The canonizers are automatically applied to student answers.
 	They are applied on most tests parameters (<tt>Replace</tt>
 	is an exception).
 	In rare case a canonizer must apply <tt>canonize_test</tt>
@@ -1152,7 +1154,7 @@ class UpperCase(TestUnary):
       <h2><a name="plugin_creation">Plugin creation</a></h2>
 
       <p>
-	Each GUI element and Quenlig functionnality is defined
+	Each GUI element and Quenlig functionality is defined
 	by a plugin.
 	You can find the plugin names
 	in the <a href="plugins.html">plugin reference page</a>,
@@ -1163,7 +1165,7 @@ class UpperCase(TestUnary):
       </p>
       <p>
 	There is currently 69 plugins, their average size is about 40 lines.
-	The mediane size is only 25 lines without the messages.
+	The median size is only 25 lines without the messages.
 	It is really easy to create plugins,
 	the most simple way is to start from a copy of simple existing
 	plugin and modify it.
@@ -1180,14 +1182,14 @@ class UpperCase(TestUnary):
    plugin_name/
       __init__.py      # To please Python
       plugin_name.py   # Language independent attributes
-      en.py            # English specialisation
-      fr.py            # French specialisation
+      en.py            # English specialization
+      fr.py            # French specialization
       ...
 </pre>
       <p>
 	The reference contains all the attributes and plugins with their
 	documentation.
-	Most of the plugins are really short piece of code easely
+	Most of the plugins are really short piece of code easily
 	understandable.
 	There is some things needing some explanation.
       </p>
@@ -1210,7 +1212,7 @@ class UpperCase(TestUnary):
       <p>
 	If the plugin contains other plugins then it is a
 	container box with all the contained plugin stacked
-	verticaly is the <a href="plugins.html#attr_horizontal">horizontal</a>
+	vertically is the <a href="plugins.html#attr_horizontal">horizontal</a>
 	attribute is not True.
 	The box <a href="plugins.html#attr_title">title</a>
 	is defined in the CSS or by the	plugin evaluation if the
@@ -1270,7 +1272,7 @@ class UpperCase(TestUnary):
 	<li>
 	  The <a href="plugins.html#question_answer">question_answer</a>
 	  plugin displays the entry where the user
-	  type its answer.
+	  type the answer.
 	  If the user enter an answer, the plugin will check it,
 	  in the other case it will display the entry with the
 	  last bad answer given.
@@ -1302,7 +1304,7 @@ class UpperCase(TestUnary):
 	The <a href="plugins.html#page">page</a> and
 	<a href="plugins.html#debug">debug</a> plugins are such plugins.
 	But there is a catch, as the plugin modifying the other must
-	be evaluated last, 2 plugins can not mutualy modify themselves.
+	be evaluated last, 2 plugins can not mutually modify themselves.
       </p>
 
       <h3><a name="option">Plugin option</a></h3>
@@ -1326,21 +1328,21 @@ option_default = "false"</pre>
     plugin.option = int(value)</pre>
 
        
-      <h2><a name="developper_tools">Developper tools</a></h2>
+      <h2><a name="developer_tools">Developer tools</a></h2>
 
       <p>
-	The developper tools are launchable using a Makefile goal.
+	The developer tools are launchable using a Makefile goal.
 	The parameters are defined in the Makefile.
       </p>
       <ul>
 	<li> <tt>plot</tt>: launches Quenlig on every <b>session</b>
 	  to compute the necessary graphics for the session.
 	  The default graphic is the question graph, but the Cisco
-	  questionnary computes a network graphic.
+	  questionary computes a network graphic.
 
 	<li> <tt>regtest</tt>: run the regression tests.
 	  
-	<li> <tt>check-questions</tt>: run sanity test on every questionnary.
+	<li> <tt>check-questions</tt>: run sanity test on every questionary.
 	  
 	<li> <tt>load_simulator</tt>: run a load simulator to see if
 	  how many users the server can manage.
@@ -1363,7 +1365,7 @@ option_default = "false"</pre>
 	<li> <tt>clean</tt>: remove recursively garbage file.
 	  
 	<li> <tt>figures</tt>: run the make command without goal on the
-	  HTML directory of every questionnary.
+	  HTML directory of every questionary.
 
 	<li> <tt>tags</tt>: compute the index of functions.
 

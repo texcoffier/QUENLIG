@@ -19,7 +19,7 @@ When an HTTP request come the plugins are called from the first to the last.
 If the user do not have the access right to the plugin, it is not executed.
 
 A question directory can have its own 'Plugins' directory in order
-to have a specific display for the questionnary. NOT YET IMPLEMENTED
+to have a specific display for the questionary. NOT YET IMPLEMENTED
 
 
 
