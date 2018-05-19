@@ -2067,11 +2067,7 @@ class MCQ(Preprocessor):
             if parsed is None:
                 question.append(line)
                 continue
-            good_bad = parsed[1]
-            code     = parsed[2]
-            grade    = parsed[3]
-            choice   = parsed[4]
-            comment  = parsed[5]
+            good_bad, code, grade, choice, comment = parsed.groups()
             if choice:
                 choice = choice.strip()
             if comment:
