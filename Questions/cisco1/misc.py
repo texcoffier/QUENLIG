@@ -148,7 +148,7 @@ add(name="max",
 
 
 def taille_adresse(state):
-    if state is None:
+    if not state:
         return 0
     try:
         return state.taille_adresse
@@ -179,7 +179,7 @@ add(name="taille",
     )
 
 def sous_adresse(state):
-    if state is None:
+    if not state:
         return (0, 0)
     try:
         return state.sous_adresse
