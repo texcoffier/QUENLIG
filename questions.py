@@ -156,7 +156,7 @@ class Question:
         self.bad_answer = arg.get("bad_answer", "")
         if not isinstance(self.bad_answer, str):
             raise ValueError("bad_answer must be a string")
-        if '{{{' in self.question(None):
+        if '{{{' in self.question(False):
             self.nr_lines = 2 # To not raise \n in answer error
         else:
             self.nr_lines = int(arg.get("nr_lines", "1"))
@@ -1800,8 +1800,12 @@ def random_replace(state, question, string, values):
         #   {'A':(0,2,4,6,8),'B':("even",)}
         # )
         # A random dict is chosen
-        values = values[state.student.persistent_random(
-            state, question, len(values), "__RD__")]
+        if state:
+            k = state.student.persistent_random(
+                state, question, len(values), "__RD__")
+        else:
+            k = 0
+        values = values[k]
     for k, v in values.items():
         if k in string:
             string = string.replace(k, random_chooser(state, question, k, v))
