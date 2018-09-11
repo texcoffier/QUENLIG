@@ -264,7 +264,10 @@ def execute(state, plugin, argument):
                 if line.startswith(" shuffle"):
                     line = line.split('}}}')
                     shuffle = line[0]
-                    t[i] = '}}}' + line[1]
+                    if line[1].strip():
+                        t[i] = '}}}' + line[1]
+                    else:
+                        del t[i]
                     break
             if shuffle == " shuffle lines":
                 t = shuffle_lines(t)

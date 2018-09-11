@@ -2027,7 +2027,7 @@ class MCQ(Preprocessor):
         [even] {{{Congratulation! it is a perfect answer}}}
 
         <table><tr><td>
-        Can be defined as:
+        An even integer can be defined as:
 
         +A               is not an odd integer
         +B[double,even]  is the double of another integer
