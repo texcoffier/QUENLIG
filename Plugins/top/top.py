@@ -85,7 +85,7 @@ def css(state):
 
 body {
    background: #DDD ;
-   font-family: sans ;
+   font-family: sans-serif ;
    margin: 0px ;
 }
 
