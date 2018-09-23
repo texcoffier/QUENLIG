@@ -307,9 +307,10 @@ def execute(state, plugin, argument):
     css_cached(state)
     generate_javascript(state)
 
-    body = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+    body = """<!DOCTYPE html>
 <html>
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>%s</title>
     <base href="%s">
     <link rel="stylesheet" href="%s/%s.css" type="text/css">
