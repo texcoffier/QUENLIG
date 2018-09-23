@@ -81,7 +81,7 @@ function random_jump(question_list)
 
 function question_redo()
 {
-  window.location.search = "?question=" + escape2(current_question)
+  window.location.search = baseTag + "?question=" + escape2(current_question)
    + '&erase=1' ;
 }
 
@@ -135,6 +135,8 @@ Question.prototype.weight = function()
   return weight ;
 } ;
 
+var baseTag = document.getElementsByTagName('base')[0].href ;
+
 Question.prototype.jump = function(recycle)
 {
   var erase = '' ;
@@ -142,7 +144,7 @@ Question.prototype.jump = function(recycle)
     recycle = false ;
   if ( recycle )
     erase = '&erase=1' ;
-  window.location = "?question=" + escape2(this.name) + erase ;
+  window.location = baseTag + "?question=" + escape2(this.name) + erase ;
 } ;
 
 Question.prototype.nice_results = function(left_to_right)
