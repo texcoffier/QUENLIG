@@ -72,7 +72,7 @@ function check_button(e)
      e = e.parentNode ;
   var input = e.getElementsByTagName("INPUT") ;
   var button = e.getElementsByTagName("BUTTON")[0] ;
-  for(var i in input)
+  for(var i=0; i < input.length; i++)
      if ( input[i].checked || input[i].type == "text" )
         {
           button.disabled = false ;

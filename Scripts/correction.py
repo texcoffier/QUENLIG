@@ -63,7 +63,7 @@ table.points { text-align: center ; }
     students.sort(lambda x,y: cmp(x.name, y.name))
 
 
-    f.write("""<script>
+    f.write("""<script><!--
 var win ;
     
 function compute()
@@ -80,7 +80,7 @@ if ( win == undefined || win.closed )
 
 t = document.getElementsByTagName('input') ;
 students = [] ;
-for(i in t)
+for(var i = 0; i < t.length; i++)
    {
    if ( t[i].checked )
        {
@@ -115,7 +115,7 @@ document.write('</tr></table></td><td>' + name +
 }
 
 
-</script>
+--></script>
 """)
     for q in questions.sorted_questions:
         q = q.name

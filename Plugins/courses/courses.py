@@ -48,7 +48,7 @@ function add_courses_index()
 {
   var t = document.getElementsByTagName("DIV") ;
   var course_menu, keys = [] ;
-  for(var i in t)
+  for(var i = 0; i < t.length ; i++)
    {
      if ( t[i].className == 'course_question' )
         {
@@ -63,7 +63,7 @@ function add_courses_index()
    }
   var t = document.getElementsByTagName("A") ;
   var toc = [] ;
-  for(var i in t)
+  for(var i = 0; i < t.length ; i++)
    {
      if ( ! t[i].name )
         continue ;
