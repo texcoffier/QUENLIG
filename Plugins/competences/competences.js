@@ -854,10 +854,10 @@ function display_sunburst(d, width, height, x, y)
       height = -height ;
       width = -width ;
       c.style.position = "absolute" ;
-      c.style.left = "0px" ;
-      c.style.top = "0px" ;
-      c.style.width = d.offsetHeight ;
-      c.style.height = d.offsetHeight ;
+      c.style.left = d.offsetLeft + 'px' ;
+      c.style.top = d.offsetTop + 'px' ;
+      c.style.width = "6em" ;
+      c.style.height = "6em" ;
       c.onclick = zoom_me ;
     }
   var ctx = c.getContext("2d") ;
