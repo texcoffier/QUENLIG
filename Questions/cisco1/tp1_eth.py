@@ -23,7 +23,6 @@ from QUENLIG.questions import *
 from .check import *
 from .configuration_salles import *
 
-# Edited by Thierry.Excoffier (Fri Oct 27 18:34:30 2017)
 add(name="cable ethernet",
     required=["tp1:nom routeur"],
     before = """Le cables ethernet 'normaux' servent à relier une machine
@@ -135,7 +134,7 @@ add(name="config pc eth",
     Si par hasard la liaison ethernet <b>ne fonctionne PAS</b>&nbsp;:
     <ul>
     <li> Utilisez la commande <tt>dmesg</tt> pour savoir quel
-    est le nom de la carte réseau qui est sur la carte mère.
+    est le nom de la carte réseau sur laquelle vous avez branché le cable.
     <li> Vérifiez dans quels connecteurs vous avez branché les cables.
     <li> Changez de cable.
     <li> Appelez l'enseignant.
@@ -173,6 +172,8 @@ add(name="config pc eth",
         "ip a add {E0.port.ip}/{E0.nr_bits_netmask} dev {E0.port.name}"))),
     Good(HostReplace(Equal(
         "ip addr add {E0.port.ip}/{E0.nr_bits_netmask} dev {E0.port.name}"))),
+    Good(HostReplace(Equal(
+        "ip address add {E0.port.ip}/{E0.nr_bits_netmask} dev {E0.port.name}"))),
     #require('ifconfig', "Vous devez utiliser la commande <tt>ifconfig</tt>"),
     Bad(Comment(~Start('ip'), "Vous devez utiliser la commande <tt>ip</tt>")),
     ),

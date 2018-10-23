@@ -30,6 +30,7 @@ add(name="defaut pc",
     défaut à votre ordinateur pour qu'il envoie tout au routeur&nbsp;?""",
     tests = (
     Good(HostReplace(Equal("ip route add default via {E0.remote_port.ip}"))),
+    Good(HostReplace(Equal("ip route add 0.0.0.0/0 via {E0.remote_port.ip}"))),
     require_startswith("ip route",
                        """Vous devez utiliser la commande <tt>ip route</tt>
                        pour indiquer la route par défaut"""

@@ -262,6 +262,7 @@ add(name="table routage",
     tests = (
     good(("ip route", "netstat -r")),
     Bad(Comment(Equal("ip route show"), "Le 'show' est inutile et la commande n'affiche pas joliment.")),
+    Bad(Comment(Equal("route"), "Commande obsolette, on doit maintenant utiliser les commandes 'ip ...'.")),
     reject('show', 'Sous UNIX, pas sur le CISCO'),
     reject('netstat', 'Il y a une commande plus courte et plus logique'),
     ),

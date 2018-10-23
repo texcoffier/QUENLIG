@@ -435,6 +435,10 @@ add(name="fin édition",
                 de nouveau sur l'écran.
                 On veut voir ce qui a déjà été affiché et qui est
                 sorti par le haut...""")),
+    Bad(Comment(UpperCase(Contain('CURSEUR')|Contain('CURSOR')|
+                          Contain('FLECHE')|Contain('FLÈCHE')),
+                """Remonter d'une seule ligne n'est pas efficace,
+                   on veut remonter page par page...""")),
     reject('9', """Le chiffre 9 ne m'intéresse pas. Ce qu'il faut
     indiquer est la fonction associée à la touche."""),
     require(('SHIFT', 'SHFT', 'MAJ'), uppercase=True, all_agree=True),

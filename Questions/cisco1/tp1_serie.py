@@ -24,6 +24,9 @@ from .configuration_salles import *
 
 add(name="genre",
     required=['type série 0'],
+    before="""Les cables réseaux séries sont asymétriques,
+    il y a un coté DCE (C : contrôleur) et un coté DTE.
+    Le contrôleur est le coté femelle.""",
     question="""Le cable que vous devez brancher sur le connecteur
     série zéro du routeur CISCO
     est-il male (M) ou femelle (F)&nbsp;?
