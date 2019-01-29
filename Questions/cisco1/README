@@ -48,8 +48,8 @@ do
 	admin olivier.gluck \
 	suspend "(50, 2, 60)" \
 	url "http://demo710.univ-lyon1.fr/LIF8TP$TP" \
-	plot \
-        $LDAP
+        $LDAP \
+	plot
     (cd Questions/cisco$TP/HTML ; make)
     if [ ! -d Students/$SESSION/Logs/Default ]
     then

@@ -257,7 +257,13 @@ def display(plugin, s):
         s.append('<!-- EMPTY %s -->' % plugin.plugin.css_name)
         return
 
-    s.append('<DIV class="%s">' % plugin.plugin.css_name)
+    if plugin.plugin.css_name == 'heart':
+        role = ' role="main"'
+    elif plugin.plugin.css_name == 'menu':
+        role = ' role="navigation"'
+    else:
+        role = ''
+    s.append('<DIV class="%s"%s>' % (plugin.plugin.css_name, role))
 
     cl = 'content'
     if plugin.tip:
