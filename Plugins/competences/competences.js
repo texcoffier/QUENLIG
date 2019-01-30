@@ -497,7 +497,8 @@ function patch_title()
 	tr.insertBefore(icon, tr.childNodes[1]) ;
 	draw_nice_results(0) ;
       }
-      display_sunburst(title, -300, -300) ;
+      if ( title ) // XXX No sunburst if the menu is on the right
+	display_sunburst(title, -300, -300) ;
       heart = d[i].parentNode ;
     }
     else if ( d[i].className == 'question_bad' )
