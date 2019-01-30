@@ -274,7 +274,7 @@ def display(plugin, s):
         s.append('<A class="%s">' % cl)
 
     if plugin.boxed():
-        s.append('<em class="box_title">')
+        s.append('<em class="box_title" role="heading">')
         if plugin.value_title:
             s.append(plugin.value_title)
         s.append('</em>')
