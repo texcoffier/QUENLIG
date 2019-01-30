@@ -555,7 +555,14 @@ function patch_title()
 	e.style.display = "none" ;
     }
 
-  if ( ! heart )
+  if ( heart )
+    {
+      if ( window.location.toString().indexOf('?') == -1
+           && heart.textContent.trim().length < 100 // No information
+         )
+	random_jump(questions) ;
+    }
+  else
     setTimeout(patch_title, 10) ;
 }
 
