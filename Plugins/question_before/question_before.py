@@ -27,5 +27,7 @@ acls = { 'Default': ('executable',) }
 def execute(state, plugin, argument):
     if state.question == None or state.question.before == None:
         return None
+    if state.yes_it_is_good:
+        return None
 
     return '<p>' + state.question.get_before(state)

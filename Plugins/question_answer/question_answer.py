@@ -168,13 +168,13 @@ def shuffle_lines(t):
 
 
 def execute(state, plugin, argument):
+    state.yes_it_is_good = False
     if state.question == None:
         return
     if state.question.tests == ():
         return
     if state.form.get('erase', False):
         state.student.erase(state.question.name)
-
     if argument and (
             state.question in state.student.answerables()
             or configuration.allowed_to_change_answer(state)
@@ -192,6 +192,7 @@ def execute(state, plugin, argument):
         number, message = state.student.check_answer(argument, state)
         if number:
             state.student.good_answer(state.question.name,argument)
+            state.yes_it_is_good = True
         else:
             # Does not count the same bad answer
             if not state.student.bad_answer_yet_given(state.question.name,

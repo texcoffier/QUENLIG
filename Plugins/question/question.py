@@ -44,6 +44,8 @@ def execute(state, dummy_plugin, dummy_argument):
 
     if q == None:
         return
+    if state.yes_it_is_good:
+        return None
 
     state.student.tell_question(q.name)
 
