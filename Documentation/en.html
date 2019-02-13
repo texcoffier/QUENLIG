@@ -40,6 +40,7 @@
       <li> <a href="#session_management">Session Management</a></li>
       <li> <a href="#student_management">Student Management</a></li>
       <li> <a href="#access_rights">Access rights</a></li>
+      <li> <a href="#accessibility">Accessibility</a></li>
       <li> <a href="#author_work">Author work</a></li>
       <li> <a href="#test_creation">Test creation</a>
       <ul>
@@ -995,6 +996,25 @@ add(name="mcq",
 	by putting the cursor on the star you will find out
 	the name of the plugin displaying the GUI element.
 	</p>
+
+      <h2><a name="accessibility">Accessibility</a></h2>
+      <p>
+	The following plugins should be enabled for the users
+	using a screen reader:
+      </p>
+      <ul>
+	<li> <tt>menuright</tt> in order to start the reading
+	     with the page content and not the navigation menu.
+	<li> <tt>disable_auto_focus</tt> in order to
+	     not jump to the middle of the page when loading a question.
+	<li> <tt>action_help</tt> in order to skip the help page
+	     because it is in a frame and so creates problems.
+	     If the 'competences' plugin is used, it selects a random question.
+      </ul>
+      <p>
+	The navigation between the blocs of the interface can
+	done with the 'H' key if Orca or NVDA are used.
+      </p>
 
       
       <h2><a name="author_work">Author work</a></h2>
