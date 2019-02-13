@@ -557,7 +557,8 @@ function patch_title()
 
   if ( heart )
     {
-      if ( window.location.toString().indexOf('?') == -1
+      if ( window.location.toString().indexOf('?question=') == -1
+           && heart.getElementsByTagName('OBJECT').length == 0
            && heart.textContent.trim().length < 100 // No information
          )
 	random_jump(questions) ;
