@@ -599,7 +599,7 @@ class Cisco2800(Cisco):
     interrupteur_on_off = True
     version_bootstrap="12.4(1r)"
     version_IOS = ("12.4(3e)", "12.4(18e)", "12.4(18r)",
-                   "12.4(1c)", "12.4(24)")
+                   "12.4(1c)", "12.4(22)", "12.4(24)")
 
 class Cisco2800B(Cisco2800):
     interfaces_name = {'C0': 'console',
