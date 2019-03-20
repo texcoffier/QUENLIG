@@ -23,16 +23,9 @@
 So it is more usable with screen readers."""
 
 
-priority_execute = 'debug'
+priority_display = '-question_answer'
 
 acls = { }
 
 def execute(state, plugin, argument):
-    for a_plugin in state.plugins_list:
-        if a_plugin.value and '.focus()' in a_plugin.value:
-            a_plugin.value = '\n'.join(
-                line
-                for line in a_plugin.value.split('\n')
-                if not ('.focus()' in line
-                        and 'document.getElementById(' in line)
-                )
+    return '<script>window.disable_auto_focus = true</script>'

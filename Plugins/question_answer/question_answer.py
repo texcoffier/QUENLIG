@@ -357,7 +357,8 @@ def execute(state, plugin, argument):
     s += '''
 </FORM>
 <script type="text/javascript">
-document.getElementById(2).focus() ;
+if ( ! window.disable_auto_focus )
+    document.getElementById(2).focus() ;
 window.scrollTo(0,0) ;
 new PersistentInput("2", {}) ;
 update_suspended_time() ;
