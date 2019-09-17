@@ -124,13 +124,13 @@ Spoil.prototype.diff = function(event) {
        if ( d[1] !== '' )
            x += '<b style="color:#800">' + html(d[1]) + '</b>' ;
        if ( x !== '' )
-           s.push('<tr><td>' + d[0] + '<td>' + d[1] + '</tr>') ;
+           s.push('<tr><td>' + (Number(i)+1) + '<td>' + d[0] + '<td>' + d[1] + '</tr>') ;
      }
   if ( s.length )
      this.feedback(event,
              '<p class="spoil_diff"></p>'
              + '<table class="information_table" style="display:inline">'
-              + '<tr><th><p class="spoil_miss"><th><p class="spoil_unexpected"></tr>'
+              + '<tr><th><p class="spoil_answer"><th><p class="spoil_miss"><th><p class="spoil_unexpected"></tr>'
               + s.join('')
               + '</table><p>');
   else
