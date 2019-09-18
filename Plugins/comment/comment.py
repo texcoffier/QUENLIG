@@ -62,7 +62,7 @@ function PersistentInput(element_id, name)
       }
    this.form.onsubmit = this.onsubmit.bind(this) ;
    if ( this.input.onkeypress )
-      this.old_onkeypress = this.input.onkeypress.bind(this) ;
+      this.old_onkeypress = this.input.onkeypress ;
    this.input.onkeypress = this.onkeypress.bind(this) ;
    this.input.persistent = this ;
 }
