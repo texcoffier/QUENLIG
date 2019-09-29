@@ -119,12 +119,12 @@ Spoil.prototype.diff = function(event) {
      {
        var d = this.distance(answer, this.goods[i]) ;
        var x = '' ;
-       if ( d[0] !== '' )
-           x += '<b style="color:#0A0">' + html(d[0]) + '</b>' ;
-       if ( d[1] !== '' )
-           x += '<b style="color:#800">' + html(d[1]) + '</b>' ;
-       if ( x !== '' )
-           s.push('<tr><td>' + (Number(i)+1) + '<td>' + d[0] + '<td>' + d[1] + '</tr>') ;
+       if ( d[0] === '' )
+           d[0] = '∅ ☺' ;
+       if ( d[1] === '' )
+           d[1] = '∅ ☺' ;
+       s.push('<tr><td>' + (Number(i)+1) + '<td>' + html(d[0])
+                                         + '<td>' + html(d[1]) + '</tr>') ;
      }
   if ( s.length )
      this.feedback(event,
