@@ -85,7 +85,7 @@ def get_info(state, student_ids):
         c.open()
         c.start_tls()
         c.bind()
-    except ldap3.LDAPException:
+    except: # ldap3.core.exceptions.LDAPException:
         return ['???' for key in keys]
     msg_id = c.search('dc=univ-lyon1,dc=fr',
                       '(|'
