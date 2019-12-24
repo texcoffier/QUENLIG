@@ -247,6 +247,9 @@ def run(nr_requests, the_cache):
     # Load students before starting server.
     # If it is not done here, it will be on the first student connexion,
     # and it will fail because it will took too much time.
+    s = state.State("fakeserver", 'faketicket', 'fakestudent')
+    s.localization = 'fr'
+    s.update_plugins() # To update configuration.log_age
     statistics.question_stats()
 
     global cache
