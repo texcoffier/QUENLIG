@@ -59,6 +59,13 @@ ldap_is_here = False
 
 try:
     import ldap3
+    try:
+        ldap3.AUTH_SIMPLE = ldap3.SIMPLE
+        ldap3.STRATEGY_ASYNC_THREADED = ldap3.ASYNC
+        ldap3.SEARCH_SCOPE_WHOLE_SUBTREE = ldap3.SUBTREE
+    except:
+        pass
+
     import ssl
     ldap_is_here = True
 except ImportError:
@@ -71,7 +78,8 @@ keys = ('samaccountname', 'sn', 'givenName', 'mail')
 def get_info(state, student_ids):
     try:
         s = ldap3.Server(state.ldap_host, state.ldap_port,
-                         use_ssl = state.ldap_port in (636, 6360))
+                         use_ssl = state.ldap_port in (636, 6360),
+                         get_info = None)
         c = ldap3.Connection(
             s,
             user = state.ldap_login,
