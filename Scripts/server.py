@@ -51,7 +51,7 @@ class Server:
         os.system(
             '(./main.py %s stop ;' % name +
             'rm -r %s || true ; ' % self.sessiondir() +
-            './main.py %s create %s %d begin-date "1:1 1/1/1970" end-date "1:1 1/1/2020" url "%s" start &) >xxx.log 2>&1' % (
+            './main.py %s create %s %d begin-date "1:1 1/1/1970" end-date "1:1 1/1/2037" url "%s" start &) >xxx.log 2>&1' % (
             name, questions, port, self.base)
             )
         print('Log file is: xxx.log')
