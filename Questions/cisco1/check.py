@@ -899,7 +899,7 @@ class HostReplace(TestUnary):
         self.children[0].initialize(
             lambda string, a_state: host_substitute(
                 self.parser(string, a_state),
-                Network.hosts.get(a_state.client_ip, postes[0])
+                Network.hosts.get(a_state.client_ip, Network.hosts[postes[0][0]])
                 ),
             state)
         return student_answer
