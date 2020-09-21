@@ -50,7 +50,7 @@ mots_de_passe = "'cisco', 'class', 'classe', 'cisco2', '&lt;cisco&gt;', 'Cisco'.
 
 effacer_password = """
 Pour effacer le mot de passe sans effacer la configuration
-il faut passer en mode ROMMON lors du démarrage et
+il faut passer en mode ROMMON lors du dï¿½marrage et
 taper les commandes suivantes&nbsp;:
 <pre>
 confreg 0x2142
@@ -72,8 +72,8 @@ no
 </pre>
 Remarques&nbsp;:
 <ul>
-<li> Faire un copié/collé de TOUTES les lignes ne fonctionnera pas.
-<li> Un ligne vide veux dire que l'on répond Return à la question.
+<li> Faire un copiï¿½/collï¿½ de TOUTES les lignes ne fonctionnera pas.
+<li> Un ligne vide veux dire que l'on rï¿½pond Return ï¿½ la question.
 <li> Le mot de passe sera <tt>cisco</tt>
 </ul>
 """
@@ -83,9 +83,9 @@ procedure_effacement = """
 
 <pre><b>enable</b> <em>S'il demande un mot de passe, essayez&nbsp;: """ +  mots_de_passe + """
 <b>erase startup-config</b>
-<b>y</b>           <em>LE 'y' N'APPARAÎT PAS ET L'ECRAN SE BLOQUE PENDANT 10 SECONDES</em>
+<b>y</b>           <em>LE 'y' N'APPARAï¿½T PAS ET L'ECRAN SE BLOQUE PENDANT 10 SECONDES</em>
 <b>reload</b>
-                   <em>Tapez return pour confirmer le redémarrage du routeur, attendre longtemps.</em>
+                   <em>Tapez return pour confirmer le redï¿½marrage du routeur, attendre longtemps.</em>
 <b>no</b>          <em>Pas le dialogue de configuration initiale</em>
 <b>y</b>           <em>Terminer l'auto install</em>
 </pre>
@@ -93,17 +93,17 @@ procedure_effacement = """
 
 reinit = """Les mots de passes possibles : """ + mots_de_passe + """
     <p>
-    La procédure de réinitialisation du CISCO :
+    La procï¿½dure de rï¿½initialisation du CISCO :
     """ + procedure_effacement + """
 
 <h2>Si vous NE trouvez PAS le mot de passe :</h2>
 <p>
 Pour effacer le mot de passe.
-Il faut passer en mode ROMMON lors du démarrage et
+Il faut passer en mode ROMMON lors du dï¿½marrage et
 taper les commandes suivantes&nbsp;:
 <pre>
 confreg 0x2142         # On dit au routeur de ne pas lire sa configuration
-reset                  # Le routeur redémarre sans lire la configuration
+reset                  # Le routeur redï¿½marre sans lire la configuration
 no
 
 enable                 # On passe "root" sur le routeur vierge
@@ -112,14 +112,14 @@ erase startup-config   # On efface la configuration
 configure terminal
 config-register 0x2102 # On dit au routeur de lire sa configuration
 exit
-reload                 # On redémarre proprement
+reload                 # On redï¿½marre proprement
 no
 
 </pre>
 Remarques&nbsp;:
 <ul>
-<li> Faire un copié/collé de TOUTES les lignes ne fonctionnera pas.
-<li> Un ligne vide veux dire que l'on répond Return à la question.
+<li> Faire un copiï¿½/collï¿½ de TOUTES les lignes ne fonctionnera pas.
+<li> Un ligne vide veux dire que l'on rï¿½pond Return ï¿½ la question.
 </ul>
         """
 
@@ -127,22 +127,22 @@ avant_de_partir = """Ceci n'est pas une question mais ce que vous devez
     faire avant de partir&nbsp:
 
     <ul>
-    <li> Sauvegarder le résultat de la commande <tt>show running-config</tt>
-    pour pouvoir vous en servir comme référence.
-    Il est conseillé de l'annoter.
+    <li> Sauvegarder le rï¿½sultat de la commande <tt>show running-config</tt>
+    pour pouvoir vous en servir comme rï¿½fï¿½rence.
+    Il est conseillï¿½ de l'annoter.
     <li>
-    Vous devez rénitialiser le routeur avant de partir.
+    Vous devez rï¿½nitialiser le routeur avant de partir.
     Pour cela tapez les commandes&nbsp;:
     <pre>enable
 erase startup-config
 <em>Confirmez l'effacement</em>
-<em>Quand le prompt revient et <b>pas avant</b>, éteignez le routeur</em>
+<em>Quand le prompt revient et <b>pas avant</b>, ï¿½teignez le routeur</em>
 </pre>
 <p>
-<li> Éteignez l'ordinateur en appuyant rapidement sur le bouton
-     marche arrêt. Cliquez sur la popup qui est apparu pour dire
-     d'arrêter le système.
-<li> Éteignez l'écran.
+<li> ï¿½teignez l'ordinateur en appuyant rapidement sur le bouton
+     marche arrï¿½t. Cliquez sur la popup qui est apparu pour dire
+     d'arrï¿½ter le systï¿½me.
+<li> ï¿½teignez l'ï¿½cran.
 <li> Ranger les cables.
 </ul>
 """
@@ -182,12 +182,12 @@ class IP:
         self.ip = ip
         self.bytes = ip.split('.')
         if len(self.bytes) != 4 :
-            raise ValueError("""Une adresse IP est composée de 4 nombres
-            séparés par des points (.).""")
+            raise ValueError("""Une adresse IP est composï¿½e de 4 nombres
+            sï¿½parï¿½s par des points (.).""")
         try:
             self.bytes = [int(i) for i in self.bytes]
         except ValueError:
-            raise ValueError("Les nombres entre les points sont en décimal")
+            raise ValueError("Les nombres entre les points sont en dï¿½cimal")
 
         for i in self.bytes:
             if i<0 or i>255:
@@ -257,7 +257,7 @@ def dce_dte(v):
     elif v == None:
         return None
     else:
-        raise ValueError("Problème with DCT/DTE")
+        raise ValueError("Problï¿½me with DCT/DTE")
 
 class Port:
     def __init__(self, host, ip=None, type=None, key=None):
@@ -353,10 +353,12 @@ class Link:
         if self.length:
             s += ',len="%g"' % self.length
        
-        if not self.hide_port:
+        if self.hide_port == False:
             s += ',taillabel="%s",headlabel="%s"'%(
                 self.tail(showip), self.head(showip),
                 )
+        if self.hide_port is None: # Cache le port destination
+            s += ',taillabel="%s"' % self.tail(showip)
 
         return s + '];\n'
             
@@ -373,7 +375,7 @@ class Link:
 class SerialLink(Link):
     name = "S"
     dot_style = "solid"
-    legend = "Liaison Série"
+    legend = "Liaison Sï¿½rie"
 
 class EthLink(Link):
     dot_style = "bold"
@@ -390,7 +392,7 @@ class ConsoleLink(Link):
 class CloudLink(Link):
     name = "V"
     dot_style = "dotted"
-    legend = "Réseau logique".encode("utf-8")
+    legend = "Rï¿½seau logique".encode("utf-8")
 
     def dot(self, showip):
         return  '%s [ style=%s%s%s];\n' % (
@@ -668,14 +670,14 @@ class Dot(Node):
 ##############################################################################
 
 class Network:
-    def __init__(self, dirname, display_eth1=False):
+    def __init__(self, dirname, display_eth1=False, display_cisco_eth1=False):
         self.dirname = dirname
         self.hosts = {}
         Network.hosts = self.hosts # XXX Horrible XXX
         self.cache_nr_networks = None
         self.display_eth1 = display_eth1
-    
-    
+        self.display_cisco_eth1 = display_cisco_eth1
+
     def append(self, hosts):
         for h in hosts:
             h.network = self
@@ -722,7 +724,7 @@ class Network:
 
     def dot(self, filename, network_nodes=False, showip=False,
             start='x',table=True,zoom=20,legend=True,label_distance=1,
-            from_node=None):
+            from_node=None,how="neato"):
         f = open(os.path.join(self.dirname, 'HTML', filename) + '.dot', "w")
         label_distance = ',labeldistance="%g"' % label_distance
         if showip:
@@ -783,7 +785,7 @@ class Network:
         f.close()
         os.system("""
 cd %s
-neato -oxxx.svg -Tsvg %s.dot
+%s -oxxx.svg -Tsvg %s.dot
 sed <xxx.svg -e 's/font-size:%d\.[0-9]*pt/font-size:4.2pt/g' \\
             -e 's/font-size:%d.[0-9]*pt/font-size:4.0pt/g' \\
             -e 's/font-size:20.[0-9]*pt/font-size:10.0pt/g' \\
@@ -791,7 +793,7 @@ sed <xxx.svg -e 's/font-size:%d\.[0-9]*pt/font-size:4.2pt/g' \\
 make %s.png
 mv %s.svg %s.png %s
 
-""" % (os.path.join(self.dirname, 'HTML'), filename, font1, font2,
+""" % (os.path.join(self.dirname, 'HTML'), how, filename, font1, font2,
        filename, filename, filename, filename,
        os.path.join('..','..','..',configuration.session.dir,'HTML')))
         
@@ -808,13 +810,19 @@ mv %s.svg %s.png %s
         hosts = list(self.hosts.values())
         hosts.sort(key=lambda x: x.name)
         if self.display_eth1:
-            x = '<td>Host eth1</td>'
+            x = '<td>PC eth1</td>'
         else:
             x = ''
+        if self.display_cisco_eth1:
+            xx = "<td>Cisco eth1</td>"
+        else:
+            xx = ''
         s = ['<table>',
-            "<tr><td>Host</td><td>Host eth0</td>",
+            "<tr><td>PC</td><td>PC eth0</td>",
              x,
-             "<td>Cisco</td><td>Cisco eth0</td><td>Cisco serial 0</td>",
+             "<td>Cisco</td><td>Cisco eth0</td>",
+             xx,
+             "<td>Cisco serial 0</td>",
              "<td>Cisco serial 1</td></tr>"
              ]
         for h in hosts:
@@ -838,7 +846,10 @@ mv %s.svg %s.png %s
             x = [h.name, h.E0.port_ip()]
             if self.display_eth1:
                 x.append( h.E1.port_ip() )
-            x += [h.C0.remote_port.host.name, e0, s0, s1]
+            x += [h.C0.remote_port.host.name, e0]
+            if self.display_cisco_eth1:
+                x.append(h.C0.remote_port.host.E1.port_ip())
+            x += [s0, s1]
             for v in x:
                 s.append("<td>%s</td>" % v)
             s.append("</tr>")
@@ -863,7 +874,7 @@ class HostTest(Test):
             host = Network.hosts[state.client_ip]
         except KeyError:
             return False, """Cet ordinateur (%s) ne fait pas parti du TP
-            changez de poste ou prévenez l'enseignant si c'est un bug.""" % \
+            changez de poste ou prï¿½venez l'enseignant si c'est un bug.""" % \
              state.client_ip
         return self.test_host(student_answer, string, state, host)
 
@@ -894,7 +905,7 @@ class HostReplace(TestUnary):
                 state)
         else:
             return False, """Cet ordinateur (%s) ne fait pas parti du TP
-            changez de poste ou prévenez l'enseignant si c'est un bug.""" % \
+            changez de poste ou prï¿½venez l'enseignant si c'est un bug.""" % \
              state.client_ip
         return student_answer
         
@@ -964,10 +975,10 @@ class HostInterfaces(HostTest):
         if host.nr_interfaces == int(student_answer):
             return True
         if host.nr_interfaces < int(student_answer):
-            return False, """Recomptez ou bien vérifiez si le convertisseur
-            USB/ethernet est bien branché"""
+            return False, """Recomptez ou bien vï¿½rifiez si le convertisseur
+            USB/ethernet est bien branchï¿½"""
         return (False,
-                "Ne comptez pas les interfaces réseaux virtuels (lo, sit, ...)"
+                "Ne comptez pas les interfaces rï¿½seaux virtuels (lo, sit, ...)"
                 )
 
 class HostCiscoModele(HostTest):
@@ -998,7 +1009,7 @@ class HostCiscoIOS(HostTest):
             or ')' not in student_answer
             or '.' not in student_answer
             ):
-            return False, "On vous a dit que le numéro de version était de la forme : <b>???.???(???)</b>"
+            return False, "On vous a dit que le numï¿½ro de version ï¿½tait de la forme : <b>???.???(???)</b>"
         student_answer = student_answer.split(')')[0] + ')'
         for ios in host.C0.remote_port.host.version_IOS:
             if ios == student_answer:
@@ -1026,7 +1037,7 @@ class NrInterfacesUsed(HostTest):
         if int(student_answer) == ( len(list(host.C0.remote_port.host.filter('E')))
             + len(list(host.C0.remote_port.host.filter('S'))) ):
             return True
-        return False, "La liaison console n'est pas un interface réseau"
+        return False, "La liaison console n'est pas un interface rï¿½seau"
 
 class MaxDistance(HostTest):
     def test_host(self, student_answer, string, state, host):
