@@ -1,4 +1,4 @@
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 #    QUENLIG: Questionnaire en ligne (Online interactive tutorial)
 #    Copyright (C) 2007-2011 Thierry EXCOFFIER, Universite Claude Bernard
 #
@@ -50,7 +50,7 @@ mots_de_passe = "'cisco', 'class', 'classe', 'cisco2', '&lt;cisco&gt;', 'Cisco'.
 
 effacer_password = """
 Pour effacer le mot de passe sans effacer la configuration
-il faut passer en mode ROMMON lors du d�marrage et
+il faut passer en mode ROMMON lors du démarrage et
 taper les commandes suivantes&nbsp;:
 <pre>
 confreg 0x2142
@@ -72,8 +72,8 @@ no
 </pre>
 Remarques&nbsp;:
 <ul>
-<li> Faire un copi�/coll� de TOUTES les lignes ne fonctionnera pas.
-<li> Un ligne vide veux dire que l'on r�pond Return � la question.
+<li> Faire un copié/collé de TOUTES les lignes ne fonctionnera pas.
+<li> Un ligne vide veux dire que l'on répond Return à la question.
 <li> Le mot de passe sera <tt>cisco</tt>
 </ul>
 """
@@ -83,9 +83,9 @@ procedure_effacement = """
 
 <pre><b>enable</b> <em>S'il demande un mot de passe, essayez&nbsp;: """ +  mots_de_passe + """
 <b>erase startup-config</b>
-<b>y</b>           <em>LE 'y' N'APPARA�T PAS ET L'ECRAN SE BLOQUE PENDANT 10 SECONDES</em>
+<b>y</b>           <em>LE 'y' N'APPARAÎT PAS ET L'ECRAN SE BLOQUE PENDANT 10 SECONDES</em>
 <b>reload</b>
-                   <em>Tapez return pour confirmer le red�marrage du routeur, attendre longtemps.</em>
+                   <em>Tapez return pour confirmer le redémarrage du routeur, attendre longtemps.</em>
 <b>no</b>          <em>Pas le dialogue de configuration initiale</em>
 <b>y</b>           <em>Terminer l'auto install</em>
 </pre>
@@ -93,17 +93,17 @@ procedure_effacement = """
 
 reinit = """Les mots de passes possibles : """ + mots_de_passe + """
     <p>
-    La proc�dure de r�initialisation du CISCO :
+    La procédure de réinitialisation du CISCO :
     """ + procedure_effacement + """
 
 <h2>Si vous NE trouvez PAS le mot de passe :</h2>
 <p>
 Pour effacer le mot de passe.
-Il faut passer en mode ROMMON lors du d�marrage et
+Il faut passer en mode ROMMON lors du démarrage et
 taper les commandes suivantes&nbsp;:
 <pre>
 confreg 0x2142         # On dit au routeur de ne pas lire sa configuration
-reset                  # Le routeur red�marre sans lire la configuration
+reset                  # Le routeur redémarre sans lire la configuration
 no
 
 enable                 # On passe "root" sur le routeur vierge
@@ -112,14 +112,14 @@ erase startup-config   # On efface la configuration
 configure terminal
 config-register 0x2102 # On dit au routeur de lire sa configuration
 exit
-reload                 # On red�marre proprement
+reload                 # On redémarre proprement
 no
 
 </pre>
 Remarques&nbsp;:
 <ul>
-<li> Faire un copi�/coll� de TOUTES les lignes ne fonctionnera pas.
-<li> Un ligne vide veux dire que l'on r�pond Return � la question.
+<li> Faire un copié/collé de TOUTES les lignes ne fonctionnera pas.
+<li> Un ligne vide veux dire que l'on répond Return à la question.
 </ul>
         """
 
@@ -127,23 +127,23 @@ avant_de_partir = """Ceci n'est pas une question mais ce que vous devez
     faire avant de partir&nbsp:
 
     <ul>
-    <li> Sauvegarder le r�sultat de la commande <tt>show running-config</tt>
-    pour pouvoir vous en servir comme r�f�rence.
-    Il est conseill� de l'annoter.
+    <li> Sauvegarder le résultat de la commande <tt>show running-config</tt>
+    pour pouvoir vous en servir comme référence.
+    Il est conseillé de l'annoter.
     <li>
-    Vous devez r�nitialiser le routeur avant de partir.
+    Vous devez rénitialiser le routeur avant de partir.
     Pour cela tapez les commandes&nbsp;:
     <pre>enable
 erase startup-config
 <em>Confirmez l'effacement</em>
-<em>Quand le prompt revient et <b>pas avant</b>, �teignez le routeur</em>
+<em>Quand le prompt revient et <b>pas avant</b>, éteignez le routeur</em>
 </pre>
 <p>
-<li> �teignez l'ordinateur en appuyant rapidement sur le bouton
-     marche arr�t. Cliquez sur la popup qui est apparu pour dire
-     d'arr�ter le syst�me.
-<li> �teignez l'�cran.
-<li> Ranger les cables.
+<li> éteignez l'ordinateur en appuyant rapidement sur le bouton
+     marche arrêt. Cliquez sur la popup qui est apparu pour dire
+     d'arrêter le système.
+<li> éteignez l'écran.
+<li> Ranger les câbles.
 </ul>
 """
 
@@ -182,12 +182,12 @@ class IP:
         self.ip = ip
         self.bytes = ip.split('.')
         if len(self.bytes) != 4 :
-            raise ValueError("""Une adresse IP est compos�e de 4 nombres
-            s�par�s par des points (.).""")
+            raise ValueError("""Une adresse IP est composée de 4 nombres
+            séparés par des points (.).""")
         try:
             self.bytes = [int(i) for i in self.bytes]
         except ValueError:
-            raise ValueError("Les nombres entre les points sont en d�cimal")
+            raise ValueError("Les nombres entre les points sont en décimal")
 
         for i in self.bytes:
             if i<0 or i>255:
@@ -257,7 +257,7 @@ def dce_dte(v):
     elif v == None:
         return None
     else:
-        raise ValueError("Probl�me with DCT/DTE")
+        raise ValueError("Problème with DCT/DTE")
 
 class Port:
     def __init__(self, host, ip=None, type=None, key=None):
@@ -375,7 +375,7 @@ class Link:
 class SerialLink(Link):
     name = "S"
     dot_style = "solid"
-    legend = "Liaison S�rie"
+    legend = "Liaison Série"
 
 class EthLink(Link):
     dot_style = "bold"
@@ -392,7 +392,7 @@ class ConsoleLink(Link):
 class CloudLink(Link):
     name = "V"
     dot_style = "dotted"
-    legend = "R�seau logique".encode("utf-8")
+    legend = "Réseau logique".encode("utf-8")
 
     def dot(self, showip):
         return  '%s [ style=%s%s%s];\n' % (
@@ -874,7 +874,7 @@ class HostTest(Test):
             host = Network.hosts[state.client_ip]
         except KeyError:
             return False, """Cet ordinateur (%s) ne fait pas parti du TP
-            changez de poste ou pr�venez l'enseignant si c'est un bug.""" % \
+            changez de poste ou prévenez l'enseignant si c'est un bug.""" % \
              state.client_ip
         return self.test_host(student_answer, string, state, host)
 
@@ -905,7 +905,7 @@ class HostReplace(TestUnary):
                 state)
         else:
             return False, """Cet ordinateur (%s) ne fait pas parti du TP
-            changez de poste ou pr�venez l'enseignant si c'est un bug.""" % \
+            changez de poste ou prévenez l'enseignant si c'est un bug.""" % \
              state.client_ip
         return student_answer
         
@@ -975,10 +975,10 @@ class HostInterfaces(HostTest):
         if host.nr_interfaces == int(student_answer):
             return True
         if host.nr_interfaces < int(student_answer):
-            return False, """Recomptez ou bien v�rifiez si le convertisseur
-            USB/ethernet est bien branch�"""
+            return False, """Recomptez ou bien vérifiez si le convertisseur
+            USB/ethernet est bien branché"""
         return (False,
-                "Ne comptez pas les interfaces r�seaux virtuels (lo, sit, ...)"
+                "Ne comptez pas les interfaces réseaux virtuels (lo, sit, ...)"
                 )
 
 class HostCiscoModele(HostTest):
@@ -1009,7 +1009,7 @@ class HostCiscoIOS(HostTest):
             or ')' not in student_answer
             or '.' not in student_answer
             ):
-            return False, "On vous a dit que le num�ro de version �tait de la forme : <b>???.???(???)</b>"
+            return False, "On vous a dit que le numéro de version était de la forme : <b>???.???(???)</b>"
         student_answer = student_answer.split(')')[0] + ')'
         for ios in host.C0.remote_port.host.version_IOS:
             if ios == student_answer:
@@ -1037,7 +1037,7 @@ class NrInterfacesUsed(HostTest):
         if int(student_answer) == ( len(list(host.C0.remote_port.host.filter('E')))
             + len(list(host.C0.remote_port.host.filter('S'))) ):
             return True
-        return False, "La liaison console n'est pas un interface r�seau"
+        return False, "La liaison console n'est pas un interface réseau"
 
 class MaxDistance(HostTest):
     def test_host(self, student_answer, string, state, host):
