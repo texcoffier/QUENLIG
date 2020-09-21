@@ -891,24 +891,18 @@ class HostReplace(TestUnary):
        # The following will not work because the {name} is uppercased
        # Good(UpperCase(HostReplace(Equal('hostname {name}'))))
     """
-    
+
     def canonize(self, student_answer, state=None):
         """Do not canonize the student answer, but the tests themselve"""
         if state is None:
             return "?"
-        if state.client_ip in Network.hosts:
-            self.children[0].initialize(
-                lambda string, a_state:host_substitute(
-                    self.parser(string, a_state),
-                    Network.hosts[a_state.client_ip]
-                    ),
-                state)
-        else:
-            return False, """Cet ordinateur (%s) ne fait pas parti du TP
-            changez de poste ou prévenez l'enseignant si c'est un bug.""" % \
-             state.client_ip
+        self.children[0].initialize(
+            lambda string, a_state: host_substitute(
+                self.parser(string, a_state),
+                Network.hosts.get(a_state.client_ip, postes[0])
+                ),
+            state)
         return student_answer
-        
 
 def host_substitute(string, host):
     items = string.split('{')
