@@ -143,6 +143,7 @@ add(name="change nom",
     require('host', 'La commande commence par <tt>host</tt>'),
     good('hostname {C0.remote_port.host.name}', parse_strings=host),
     ),
+    good_answer = "Lancez la commande pour changer le nom.",
     indices = ( """C'est la même commande que sous Unix.""",
                 """En anglais c'est «nom de l'hôte»"""),
     )
@@ -153,7 +154,7 @@ add(name="nouveau prompt",
     question="Quel est le <em>prompt</em>&nbsp;?",
     tests = (
     good('{C0.remote_port.host.name}(config)#', parse_strings=host),
-    good('Router(config)#', "Vous n'avez pas changé le nom du routeur"),
+    good('Router(config)#', "Vous n'aviez pas changé le nom du routeur. Faites-le maintenant !"),
     ),
     highlight = True,
     )
