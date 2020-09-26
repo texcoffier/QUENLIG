@@ -958,8 +958,8 @@ def replace_host(string):
         if state == None:
             return s
         try:
-            host = Network.hosts[state.client_ip] # XXX Horrible XXX
-        except KeyError:
+            host = Network.hosts.get(state.client_ip, Network.hosts[postes[0][0]])
+        except AttributeError:
             return s
         return host_substitute(s, host)
     return replace_host_tmp
