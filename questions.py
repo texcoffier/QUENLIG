@@ -1323,7 +1323,7 @@ class RMS(TestUnary):
     Remove spaces from lines begin and end.
     """
     def canonize(self, string, state):
-        return re.sub('( $|^ )', '', re.sub('[ \t]+', ' ', string))
+        return re.sub('( +$|^ +)', '', re.sub('( +\n|\n +)', '\n', re.sub('[ \t]+', ' ', string)))
 
 class SortLines(TestUnary):
     r"""The lines of the student answer are sorted and child test value
