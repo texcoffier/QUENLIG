@@ -91,7 +91,8 @@ body {
 
 DIV.top > TABLE { width: 100%; table-layout: fixed ; }
 
-TT { font-weight: bold ; }
+TT { font-weight: bold ; font-family: monospace, monospace }
+TEXTAREA { font-family: monospace, monospace }
 
 /* BOXES */
 
