@@ -1645,7 +1645,7 @@ class NumberOfIs(TestExpression):
                str(self.number) + canonize + ')'
 
     def do_test(self, student_answer, state=None):
-        return student_answer.count(self.string) == self.number, ''
+        return student_answer.count(self.string_canonized) == self.number, ''
 
     def canonize_test(self, parser, state):
         if self.do_canonize:
