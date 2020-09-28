@@ -1167,6 +1167,9 @@ class Equal(TestString):
         
     """
     def do_test(self, student_answer, dummy_state):
+        # print('='*99)
+        # print(repr(student_answer ))
+        # print(repr(self.string_canonized))
         return student_answer == self.string_canonized, ''
 
     def get_good_answers(self, state):
@@ -1323,7 +1326,7 @@ class RMS(TestUnary):
     Remove spaces from lines begin and end.
     """
     def canonize(self, string, state):
-        return re.sub('( +$|^ +)', '', re.sub('( +\n|\n +)', '\n', re.sub('[ \t]+', ' ', string)))
+        return re.sub(' *\n+ *', '\n', re.sub('[ \t]+', ' ', string.strip()))
 
 class SortLines(TestUnary):
     r"""The lines of the student answer are sorted and child test value

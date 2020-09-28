@@ -266,8 +266,10 @@ class Port:
         self.key = key
         if type == 'DCE':
             self.clock = 'clock rate 56000'
+            self.no_clock = 'schtroumpf'
         else:
             self.clock = ''
+            self.no_clock = 'clock'
 
 ##############################################################################
 #
