@@ -88,10 +88,10 @@ def question_pixel_map(state):
     m = []
     level = None
     answerables = [q.name for q in state.student.answerables(any=True)]
-    for q in sorted(questions.questions.values(), key=lambda q: q.level_min):
-        if q.level_min != level:
+    for q in sorted(questions.questions.values(), key=lambda q: q.level):
+        if q.level != level:
             m.append([])
-            level = q.level_min
+            level = q.level
         m[-1].append(question_color(q, state, answerables))
     
     width = max([len(x) for x in m])
