@@ -220,7 +220,7 @@ def execute(state, plugin, argument):
 
     if state.student.answered_question(state.question.name):
         # Value setted in question_change_answer plugin
-        if not configuration.allowed_to_change_answer(state):
+        if not configuration.allowed_to_change_answer(state) or argument:
             s = state.student.last_answer(state.question.name)
             plugin.value_title = plugin.title[-1]
 
