@@ -29,7 +29,7 @@ are destroyed and recreated.
 
 import time
 import os
-import cgi
+import html
 import random
 import ast
 import collections
@@ -480,7 +480,7 @@ class Student:
 
             for comment_time, comment_text in a.comments:
                 s.append(utilities.div('comment',"<PRE>" + \
-                                       cgi.escape(comment_text) + "</PRE>"))
+                                       html.escape(comment_text) + "</PRE>"))
 
             from QUENLIG.Plugins.question_correction.question_correction import add_a_link
             s.append(add_a_link(state, q))
@@ -493,7 +493,7 @@ class Student:
             s.append("<h3 class=\"short\">?</h3>")
             for comment_time, comment_text in none.comments:
                 s.append(utilities.div('comment',"<PRE>" + \
-                                       cgi.escape(comment_text) + "</PRE>"))
+                                       html.escape(comment_text) + "</PRE>"))
         return ''.join(s)
 
     def classement(self):

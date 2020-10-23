@@ -26,7 +26,7 @@ from QUENLIG import statistics
 from QUENLIG import questions
 from QUENLIG import configuration
 import types
-import cgi
+import html
 
 container = 'analyse'
 link_to_self = True
@@ -81,7 +81,7 @@ class Svg:
             svg_class = ' class="' + svg_class + '"'
         if style:
             style = ' style="' + style + '"'
-        self.content += '''<text%s%s><tspan x="%d" y="%d">%s</tspan></text>\n''' % (svg_class, style, x,y,cgi.escape(text))
+        self.content += '''<text%s%s><tspan x="%d" y="%d">%s</tspan></text>\n''' % (svg_class, style, x,y,html.escape(text))
     def g_start(self, x, y):
         self.content += """<g onclick=\"mouseclick(this);\" transform=\"translate(%d,%d)\">\n""" % (x, y)
     def g_end(self):

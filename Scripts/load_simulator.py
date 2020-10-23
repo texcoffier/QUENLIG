@@ -46,7 +46,7 @@ import urllib.request, urllib.error, urllib.parse
 import time
 import re
 import sys
-import cgi
+import html
 import urllib.request, urllib.parse, urllib.error
 
 load_map = False # to load te question map picture

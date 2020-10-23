@@ -24,16 +24,13 @@ import sys
 import time
 import socket
 import re
-import imp
+import importlib
 
 # Make it a package
 __package__ = "QUENLIG"
 sys.path.insert(0, os.path.sep.join(os.getcwd().split(os.path.sep)[:-1]))
-the_file, the_filename, the_details = imp.find_module(os.getcwd())
-sys.modules["QUENLIG"] = imp.load_module('QUENLIG',
-                                         the_file, the_filename, the_details)
+sys.modules["QUENLIG"] = importlib.import_module('QUENLIG')
 sys.path.pop(0)
-sys.modules["QUENLIG"].__name__ = 'QUENLIG'
 
 from . import statistics
 from . import configuration

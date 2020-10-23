@@ -23,7 +23,7 @@
 
 from QUENLIG import utilities
 from QUENLIG import statistics
-import cgi
+import html
 
 priority_display = 'question_required'
 sort_column = 3
@@ -42,7 +42,7 @@ def execute(state, plugin, argument):
             if a.question != state.question.name:
                 continue
             for c in a.comments:
-                comments.append( [cgi.escape(c[1]),
+                comments.append( [html.escape(c[1]),
                                   s.mailto(body=str(a.question) + "  " + c[1]),
                                   utilities.date_format(c[0])])
 

@@ -21,7 +21,7 @@
 
 """The questions box, it displays the allowed questions."""
 
-import cgi
+import html
 
 priority_display = 'identity'
 priority_execute = 'question' # In order to emphasis current question
@@ -82,7 +82,7 @@ def execute(state, plugin, dummy_argument):
                 focus,
                 q.url(),
                 info,
-                cgi.escape(q.name),
+                html.escape(q.name),
                 )
         s += '<!--SCRIPT-->'
         if focus_done:
@@ -106,7 +106,7 @@ def execute(state, plugin, dummy_argument):
                     s += "</select><br>"
                 s += "<select OnChange=\"f(value);\">"
                 s += "<option selected=\"1\">%s</option>" % world
-            s += "<option>%s</option>\n" % cgi.escape(q.name)
+            s += "<option>%s</option>\n" % html.escape(q.name)
         s += "</select></form>"
 
     return s

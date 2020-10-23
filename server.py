@@ -23,7 +23,7 @@ import socket
 import http.server
 import socketserver
 import time
-import cgi
+import html
 import urllib.request, urllib.parse, urllib.error
 import os
 import sys

@@ -21,7 +21,7 @@
 
 from QUENLIG.questions import *
 import re
-import cgi
+import html
 import compiler
 import ast
 
@@ -55,7 +55,7 @@ class P(TestUnary):
             compiler.parse(student_answer)
         except SyntaxError as e:
             return (False,
-                    'Message de Python : <b>' + cgi.escape(str(e)) + '</b><br>'
+                    'Message de Python : <b>' + html.escape(str(e)) + '</b><br>'
                     )
         return P_clean(student_answer)
 
@@ -238,13 +238,13 @@ class P_AST(TestUnary):
             ast_tree = ast.parse(student_answer)
         except SyntaxError as e:
             return (False,
-                    'Message de Python : <b>' + cgi.escape(str(e)) + '</b><br>'
+                    'Message de Python : <b>' + html.escape(str(e)) + '</b><br>'
                     )
         return ast.dump(CanonisePython().visit(ast_tree),annotate_fields=False)
         
     
 def python_color(txt):
-    txt = cgi.escape(txt)
+    txt = html.escape(txt)
     if txt[-1] == ':':
         txt = txt[:-1] + '<span style="background:#F88">:</span>'
     txt = re.sub("^( +)", r'<span style="background:#F88">\1</span>', txt)
@@ -265,7 +265,7 @@ def python_html(txt):
             elif line.startswith('... '):
                 s.append('... <b>' + python_color(line[4:]) + '</b>')
             else:
-                s.append('<em>' + cgi.escape(line) + '</em>')
+                s.append('<em>' + html.escape(line) + '</em>')
     else:
         txt = txt.strip('\n').split('\n')
         indent = len(txt[0]) - len(txt[0].lstrip(' '))

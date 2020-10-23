@@ -70,7 +70,7 @@ add(name="commentaires",
     </ul>""",   
     question = """La réponse à cette question est le programme suivant
     sans ses commentaires&nbsp;:   
-    <pre>%s</pre>""" % cgi.escape(prog1),
+    <pre>%s</pre>""" % html.escape(prog1),
     nr_lines = 13,
     default_answer = prog1,
     tests = (

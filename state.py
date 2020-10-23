@@ -17,7 +17,7 @@
 #
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
-import cgi
+import html
 import urllib.request, urllib.parse, urllib.error
 import time
 import re
@@ -335,7 +335,7 @@ class State(object):
                 # print plugin, plugin_argument, v
             except:
                 import traceback
-                v = '<br>'.join([cgi.escape(str(i))
+                v = '<br>'.join([html.escape(str(i))
                                  for i in (
                                      traceback.format_tb(sys.exc_info()[2])
                                      + [sys.exc_info()[0]]

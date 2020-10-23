@@ -45,7 +45,7 @@ import subprocess
 import _thread
 import os
 import urllib.request, urllib.error, urllib.parse
-import cgi
+import html
 from QUENLIG import utilities
 import re
 import tempfile

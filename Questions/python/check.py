@@ -22,7 +22,7 @@ import os
 import sys
 from QUENLIG.questions import *
 from QUENLIG import questions
-import cgi
+import html
 import subprocess
 
 preamble = subprocess.check_output(['pypy-sandbox', '--', '-c', '0'],
@@ -63,7 +63,7 @@ def python_answer(v, comment=''):
         comment = comment + "</p><p>"
     else:
         comment += '<br>'
-    return comment + "Le Python répond : <pre>" + cgi.escape(v).replace('\n', '&nbsp;\n') + '</pre>'
+    return comment + "Le Python répond : <pre>" + html.escape(v).replace('\n', '&nbsp;\n') + '</pre>'
 
 # With this the Python answer good or bad is always displayed.
 questions.current_eval_after = lambda answer, state: python_answer(python_eval(answer))

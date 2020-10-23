@@ -28,7 +28,7 @@ before the question list computation.
 
 import random
 import time
-import cgi
+import html
 import json
 from QUENLIG import configuration
 from QUENLIG import utilities
@@ -253,7 +253,7 @@ def execute(state, plugin, argument):
             # Assume it was a correct answer
             style = ''
 
-    last_answer_html = (cgi.escape(last_answer)
+    last_answer_html = (html.escape(last_answer)
                         .replace("%","&#37;")
                         .replace("'", "&#39;")
                         .replace('"', '&#34;'))
@@ -301,7 +301,7 @@ def execute(state, plugin, argument):
                 s += '<input onkeypress="check_button(this)" class="checkbox" name="%s$%s.%s.%s" value="%s" size="%s">' % (
                     plugin.plugin.css_name, key.replace('"', '&#34;'),
                     configuration.session.name,
-                    cgi.html.escape(state.question.name),
+                    html.escape(state.question.name),
                     value.replace('"', '&#34;'), columns
                     )
                 s += j[1]
@@ -341,7 +341,7 @@ def execute(state, plugin, argument):
         s += '<INPUT TYPE="text" ID="2" NAME="%s.%s.%s" SIZE="%d" VALUE="%s" ALT="%s" onkeyup="if(this.value==this.alt && this.alt!==\'\') this.style.background=\'#FAA\'; else this.style.background=\'white\'" style="%s">'% (
             # INPUT NAME
             plugin.plugin.css_name, configuration.session.name,
-            cgi.html.escape(state.question.name),
+            html.escape(state.question.name),
             #
             configuration.nr_columns, last_answer_html,
             style and last_answer_html or '',

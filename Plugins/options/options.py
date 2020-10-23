@@ -29,7 +29,7 @@ link_to_self = True
 acls = { 'Admin': ('executable',) }
 priority_execute = '-question'
 
-import cgi
+import html
 from QUENLIG import utilities
 
 def the_options(state, m_plugin):
@@ -45,7 +45,7 @@ def the_options(state, m_plugin):
                        hlp,
                        a_plugin[state.localization, "option_default"],
                        '<TEXTAREA name="option__%s">' % a_plugin.css_name
-                       + cgi.escape(plugin.option)
+                       + html.escape(plugin.option)
                        + '</TEXTAREA>',
                        ])
 

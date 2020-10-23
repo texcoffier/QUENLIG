@@ -21,7 +21,7 @@ import collections
 import os
 import colorsys
 import time
-import cgi
+import html
 
 from . import questions
 from . import utilities
@@ -299,7 +299,7 @@ def forget_stats():
     _stats.last_time = 0
 
 def translate_dot_(name):
-    return cgi.escape(name.translate(utilities.flat).replace('\\', 'BS')).replace(':',' ').replace('"',' ').replace(' ', '\\n')
+    return html.escape(name.translate(utilities.flat).replace('\\', 'BS')).replace(':',' ').replace('"',' ').replace(' ', '\\n')
 
 def translate_dot(name):
     return '"' + translate_dot_(name) + '"'
@@ -433,9 +433,9 @@ def troncate_question(q):
     if True:
         q = q.split('<br>')[0]
         q = q[:min(len(q),90)]
-        q = cgi.escape(q)
+        q = html.escape(q)
     else:
-        q = cgi.escape(q)
+        q = html.escape(q)
             
     return q
 

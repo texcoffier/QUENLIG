@@ -21,7 +21,7 @@
 
 """Allow to display plugin definition in tips from the plugin interface"""
 
-import cgi
+import html
 from QUENLIG import plugins
 from QUENLIG import student
 
@@ -47,7 +47,7 @@ def execute(state, plugin, argument):
         for attribute in plugins.Attribute.attributes.keys():
             if a_plugin.__dict__[attribute]:
                 v = str(a_plugin.__dict__[attribute])
-                v = cgi.escape(v)
+                v = html.escape(v)
                 v = v.replace(',', ',<br>&nbsp;&nbsp;&nbsp;&nbsp;')
                 s.append('<b>%s</b> : %s<br>' % (attribute, v))
 

@@ -29,7 +29,7 @@ But they are not fully implemented (users can't change the values)
 from . import utilities
 from . import configuration
 import os
-import cgi
+import html
 
 plugin_dir = 'Plugins'
 
@@ -47,12 +47,12 @@ class Attribute:
 
     def doc_html(self, more=None):
         if more is None:
-            more = '<td>' + cgi.escape(repr(self.default))
+            more = '<td>' + html.escape(repr(self.default))
         return '<tr><th><a name="attr_%s">%s</a>%s<td>%s</tr>' % (
             self.name,
             self.name,
             more,
-            cgi.escape(self.doc))
+            html.escape(self.doc))
 
 class AttributeCSS(Attribute):
     selector = ""
@@ -69,7 +69,7 @@ class AttributeCSS(Attribute):
 
     def doc_html(self):
         return Attribute.doc_html(self, '<td>' + self.css_name + '<td>' +
-                                  cgi.escape(self.selector))
+                                  html.escape(self.selector))
 
     def generate_css(self, name, selector, attribute, value, div='DIV.'):
         if not isinstance(value, str):
@@ -289,13 +289,13 @@ class Plugin:
     def doc_html_item(self, item):
         v = self[('en','fr'), item]
         if isinstance(v, str):
-            r = cgi.escape(v)
+            r = html.escape(v)
         elif isinstance(v, int):
             r = str(v)
         elif v is None:
             r = ''
         else:
-            r = cgi.escape(repr(v))
+            r = html.escape(repr(v))
         return r
 
     def priority_html(self, value, name):
@@ -312,12 +312,12 @@ class Plugin:
              + '">' + name + '</a>'
              + '</caption><tr><th>CSS selector<th>English<th>French</tr>')
         for k in sorted(set(list(d1.keys()) + list(d2.keys()))):
-            v1 = cgi.escape(d1.get(k, '???'))
-            v2 = cgi.escape(d2.get(k, '???'))
+            v1 = html.escape(d1.get(k, '???'))
+            v2 = html.escape(d2.get(k, '???'))
             if v1 != v2:
-                s += '<tr><td>%s<td>%s<td>%s</tr>' % (cgi.escape(k), v1, v2)
+                s += '<tr><td>%s<td>%s<td>%s</tr>' % (html.escape(k), v1, v2)
             else:
-                s += '<tr><td>%s<td colspan="2">%s</tr>' % (cgi.escape(k), v1)
+                s += '<tr><td>%s<td colspan="2">%s</tr>' % (html.escape(k), v1)
         return s + '</table>'
 
     def default_container(self):
@@ -421,7 +421,7 @@ class Plugin:
                 fr = self[('fr',), attr.name]
                 def value_html(x):
                     v = '<td'
-                    x = cgi.escape(str(x)).replace('\\A','\n')
+                    x = html.escape(str(x)).replace('\\A','\n')
                     if '\n' in x:
                         v += ' class="pre"'
                     return v + '>' + x + '</td>'

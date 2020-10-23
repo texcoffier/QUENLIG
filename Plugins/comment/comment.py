@@ -21,7 +21,7 @@
 
 """Allow the students to leave a comment about the question."""
 
-import cgi
+import html
 import traceback
 import smtplib
 import email.header
@@ -183,7 +183,7 @@ def send_comment(state, plugin, argument, q):
         question = ""
     else:
         answers = state.student.answer(q)
-        bads = '\n'.join("<li>{}".format(cgi.escape(a))
+        bads = '\n'.join("<li>{}".format(html.escape(a))
                          for a in answers.bad_answers)
         if state.question.before:
             before = "<hr>" + state.question.get_before(state)
@@ -207,7 +207,7 @@ def send_comment(state, plugin, argument, q):
 <ul>
 {}
 </ul>
-""".format(q, cgi.escape(argument), before, question, bads))
+""".format(q, html.escape(argument), before, question, bads))
 
 done = set()
 
@@ -226,7 +226,7 @@ def execute(state, plugin, argument):
                 traceback.print_exc()
         
         s = '<div class="comment_given">' \
-            + cgi.escape(argument) + '</div>'
+            + html.escape(argument) + '</div>'
     else:
         s = ''
 

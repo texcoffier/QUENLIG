@@ -22,6 +22,7 @@
 """Displays the question Python source."""
 
 import os
+import html
 import cgi
 import time
 from QUENLIG import utilities
@@ -85,14 +86,14 @@ def replace_question(c, question, source, state, encoding):
         os.system("cat " + question.python_file())
         os.rename(question.python_file() + '.old', question.python_file())
         reload_questions.plugin.execute(state, reload_questions, '1')
-        return '<pre class="python_error">' + cgi.escape(str(e)) + '</pre>'
+        return '<pre class="python_error">' + html.escape(str(e)) + '</pre>'
 
 def edit_python(source):
     return (
         '<FORM action="?question_source=save" method="POST">' +
         '<TEXTAREA name="src" style="font-size:130%%; width:100%%; height: %sem">' % (
             1.3 * source.count('\n'))
-        + cgi.escape(source)
+        + html.escape(source)
         + '</TEXTAREA><BUTTON class="save_source"></BUTTON></FORM>')
 
 def execute(state, dummy_plugin, argument):
@@ -116,7 +117,7 @@ def execute(state, dummy_plugin, argument):
             compile(source, 'nofilename', 'exec')
         except SyntaxError as e:
             before = ('<pre class="python_error">' +
-                      cgi.escape(str(e)) + '</pre>')
+                      html.escape(str(e)) + '</pre>')
         if before == '':
             before = replace_question(c, state.question, source, state,
                                       encoding)

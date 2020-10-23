@@ -19,7 +19,7 @@
 #    Contact: Thierry.EXCOFFIER@bat710.univ-lyon1.fr
 
 import time
-import cgi
+import html
 import types
 import os
 import threading
@@ -76,7 +76,7 @@ def answer_format(t, space=False, escape=True, question=''):
             escape = False
             t = '<br>' + ' '.join(found)
     if escape:
-        t = cgi.escape(t)
+        t = html.escape(t)
     t = t.replace("\n","<br>")
     if space:
         t = t.replace(" ","&#9251;")

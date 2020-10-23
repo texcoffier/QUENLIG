@@ -23,7 +23,7 @@
   * Minimum and maximum size in characters of the good answers
 """
 
-import cgi
+import html
 import json
 
 priority_display = 'question_indices'

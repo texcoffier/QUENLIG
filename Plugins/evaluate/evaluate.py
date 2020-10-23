@@ -21,7 +21,7 @@
 
 """Allow to evaluate arbitrary Python code for debugging."""
 
-import cgi
+import html
 
 # To simplify debugging:
 from QUENLIG import configuration
@@ -40,7 +40,7 @@ acls = { 'Developer': ('executable',) }
 def execute(state, plugin, argument):
     if argument:
         plugin.heart_content = ('<div class="evaluate_result"><br>'
-             + cgi.escape(str(eval(argument))).replace("\n", "<br>") + '</div>')
+             + html.escape(str(eval(argument))).replace("\n", "<br>") + '</div>')
     else:
         argument = ''
 
@@ -50,4 +50,4 @@ def execute(state, plugin, argument):
     <script>new PersistentInput('evaluate')</script>
     <button type="submit"><p class="evaluate_button"></p></button>
     </FORM>
-    ''' % (plugin.plugin.css_name, cgi.escape(argument))
+    ''' % (plugin.plugin.css_name, html.escape(argument))

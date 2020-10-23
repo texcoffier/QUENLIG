@@ -23,7 +23,7 @@ import time
 import types
 import os
 import inspect
-import cgi
+import html
 import urllib.request, urllib.parse, urllib.error
 import re
 import threading
@@ -285,7 +285,7 @@ class Question:
         return "?question=%s" % urllib.parse.quote(self.name)
 
     def a_href(self):
-        return "<A HREF=\"%s\">%s</A>" % (self.url(), cgi.escape(self.name))
+        return "<A HREF=\"%s\">%s</A>" % (self.url(), html.escape(self.name))
 
     def nr_indices(self):
         return len(self.indices)
@@ -870,7 +870,7 @@ def pf(txt, format=None):
     if format == None:
         return txt
     if format == 'html':
-        txt = cgi.escape(txt).replace("\\n", " ")
+        txt = html.escape(txt, quote=False).replace("\\n", " ")
         if len(txt) > 20:
             txt = '<div style="display:inline-block;max-width:30em;vertical-align:top">' +txt+ '</div>'
         return txt
@@ -1152,7 +1152,7 @@ class TestFunction(TestExpression):
         name = str(self.fct.__name__)
         if name == '<lambda>':
             name = repr(self.fct.__code__)
-        return self.test_name(format) + '(' + cgi.escape(name) + ')'
+        return self.test_name(format) + '(' + html.escape(name, quote=False) + ')'
 
 
 class Equal(TestString):

@@ -24,7 +24,7 @@
 from QUENLIG import utilities
 from QUENLIG import statistics
 from QUENLIG import questions
-import cgi
+import html
 
 container = 'analyse'
 link_to_self = True
@@ -44,7 +44,7 @@ def execute(state, plugin, argument):
             for c in a.comments:
                 comments.append( [
                     q,
-                    cgi.escape(c[1]),
+                    html.escape(c[1]),
                     s.a_href(body=c[1]),
                     utilities.date_format(c[0]).replace(' ','&nbsp;')])
 

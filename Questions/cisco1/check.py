@@ -917,7 +917,7 @@ def host_substitute(string, host):
                 e = item[0].replace('[', '["').replace(']', '"]')
                 new += str(eval('host.' + e)) + item[1]
     except AttributeError:
-        print('BUG REPLACE', string)
+        print('BUG REPLACE', item)
         return string
     return new
     

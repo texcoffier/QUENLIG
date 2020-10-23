@@ -30,7 +30,7 @@ def generate(name):
     from QUENLIG import configuration
     import main
     from QUENLIG import questions
-    import cgi
+    import html
     
     configuration.session = main.Session(name)
     configuration.root = os.getcwd()
@@ -127,7 +127,7 @@ document.write('</tr></table></td><td>' + name +
             for a in s.answers.values():
                 if a.question == q and a.answered:
                     t.append( (s.name, q,
-                               cgi.escape(a.answered)
+                               html.escape(a.answered)
                                .replace('\r\n','\n')
                                .replace('\n','<br>')
                                .replace('\\','\\\\')

@@ -49,7 +49,7 @@ css_attributes = (
 from QUENLIG import utilities
 from QUENLIG import statistics
 from QUENLIG import student
-import cgi
+import html
 
 def execute(state, plugin, argument):
     if state.question == None:
@@ -86,7 +86,7 @@ def execute(state, plugin, argument):
                       + {0: '', 1: '', 2:'<br>'}[i%3]
                       for i in range(6)
                       ) + '</span>',
-             '<textarea rows="2" cols="40" name="*%s" onchange="question_correction(event)">%s</textarea>' % (s.filename, cgi.escape(why)),
+             '<textarea rows="2" cols="40" name="*%s" onchange="question_correction(event)">%s</textarea>' % (s.filename, html.escape(why)),
              ])
 
     if len(lines) == 0:
@@ -106,7 +106,7 @@ def add_a_link(state, question):
     t = []
     for teacher, why in a.why.items():
         t.append('<p class="question_correction_comment">'
-                 + cgi.escape(teacher) + '</p><pre>'
-                 + cgi.escape(why) + '</pre>')
+                 + html.escape(teacher) + '</p><pre>'
+                 + html.escape(why) + '</pre>')
 
     return '<div class="question_correction">' + '\n'.join(t) + '</div>'
