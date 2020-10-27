@@ -369,13 +369,8 @@ def graph_dot(show_stats=False):
     f.close()
 
     os.system("""
-
-    (
     dot -oHTML/xxx_graphe.png -Tpng HTML/xxx_graphe.dot
-    dot -oHTML/xxx_graphe.svg -Tsvg HTML/xxx_graphe.dot
-    ) &
-
-
+    # dot -oHTML/xxx_graphe.svg -Tsvg HTML/xxx_graphe.dot
     """)
 
 graph_dot_minimal = graph_dot
