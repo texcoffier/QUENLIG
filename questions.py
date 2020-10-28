@@ -78,6 +78,14 @@ class Required:
         else:
             return self.name
 
+    def ok(self, student, answered):
+        if self.unrequired and student.given_question(self.name):
+            return True # The student has seen the unrequired question
+        if answered.get(self.name, False) is False:
+            return False # The student has not answered correctly the required question
+        if self.answer and not re.match(self.answer, answered[self.name]):
+            return False # The student has not given the required pattern
+        return True
 
 class Requireds:
     def __init__(self, requireds):
@@ -87,15 +95,10 @@ class Requireds:
         return self.requireds.__iter__()
 
     def missing(self, answered, student):
-        missings = []
-        for r in self.requireds:
-            if r.unrequired and student.given_question(r.name):
-                continue
-            if answered.get(r.name, False) is False:
-                missings.append(r.name)
-            elif r.answer and not re.match(r.answer, answered[r.name]):
-                missings.append(r.name)
-        return missings
+        return [r.name
+                for r in self.requireds
+                if not r.ok(student, answered)
+               ]
 
     def answered(self, answered, student):
         return not self.missing(answered, student)
