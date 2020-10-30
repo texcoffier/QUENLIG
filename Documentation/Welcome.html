@@ -1,11 +1,13 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <title>Quenlig : Questionnaire en ligne</title>
-    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-    <link href="http://www710.univ-lyon1.fr/batiment/wiki.css" rel="stylesheet">
-    <style type="">
-      PRE {
+
+<head>
+  <title>Quenlig : Questionnaire en ligne</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <link href="http://www710.univ-lyon1.fr/batiment/wiki.css" rel="stylesheet">
+  <style type="">
+    PRE {
       background: #F0F0F0;
       padding: 0.5em;
       border: 4px ridge #00FF00;
@@ -14,213 +16,214 @@
       DIV.texte { margin-left:15em  }
       DIV.menu UL { padding-left: 1em ; margin-left: 0em ; }
     </style>
-  </head>
+</head>
 
-  <body>
-    <div class="menu">
+<body>
+  <div class="menu">
     <p>
       Plan :</p>
     <ul>
       <li> <a href="#quoi">Qu'est ce donc ?</a></li>
       <li> <a href="#test">Essayez-le !</a></li>
       <li> <a href="#graphePython">Les questions Python</a></li>
-      <li> <a href="#definir">Comment définir des exercices</a></li>
+      <li> <a href="#definir">Comment dÃ©finir des exercices</a></li>
       <ul>
-      <li> <a href="#name"><tt>name</tt></a></li>
-      <li> <a href="#required"><tt>required</tt></a></li>
-      <li> <a href="#before"><tt>before</tt></a></li>
-      <li> <a href="#question"><tt>question</tt></a></li>
-      <li> <a href="#nr_lines"><tt>nr_lines</tt></a></li>
-      <li> <a href="#default_answer"><tt>default_answer</tt></a></li>
-      <li> <a href="#bad_answer"><tt>bad_answer</tt></a></li>
-      <li> <a href="#good_answer"><tt>good_answer</tt></a></li>
-      <li> <a href="#highlight"><tt>highlight</tt></a></li>
-      <li> <a href="#indices"><tt>indices</tt></a></li>
-      <li> <a href="#oldtest">Anciens tests</a></li>
-      <li> <a href="#newtest">Nouveaux tests</a></li>
+        <li> <a href="#name"><tt>name</tt></a></li>
+        <li> <a href="#required"><tt>required</tt></a></li>
+        <li> <a href="#before"><tt>before</tt></a></li>
+        <li> <a href="#question"><tt>question</tt></a></li>
+        <li> <a href="#nr_lines"><tt>nr_lines</tt></a></li>
+        <li> <a href="#default_answer"><tt>default_answer</tt></a></li>
+        <li> <a href="#bad_answer"><tt>bad_answer</tt></a></li>
+        <li> <a href="#good_answer"><tt>good_answer</tt></a></li>
+        <li> <a href="#highlight"><tt>highlight</tt></a></li>
+        <li> <a href="#indices"><tt>indices</tt></a></li>
+        <li> <a href="#oldtest">Anciens tests</a></li>
+        <li> <a href="#newtest">Nouveaux tests</a></li>
       </ul>
       <li> <a href="#admin">Administration</a></li>
       <ul>
-      <li> <a href="#lancement">Lancement du système</a></li>
-      <li> <a href="#acl">ACL</a></li>
-      <li> <a href="#outils">Outils de travail</a></li>
-      <li> <a href="#methodes">Méthodes de travail</a></li>
-      <li> <a href="#exploitation">Exploitation des trace</a></li>
+        <li> <a href="#lancement">Lancement du systÃ¨me</a></li>
+        <li> <a href="#acl">ACL</a></li>
+        <li> <a href="#outils">Outils de travail</a></li>
+        <li> <a href="#methodes">MÃ©thodes de travail</a></li>
+        <li> <a href="#exploitation">Exploitation des trace</a></li>
       </ul>
     </ul>
-    </div>
+  </div>
 
-    <div class="texte">
+  <div class="texte">
     <h1>Quenlig : Questionnaire en ligne</h1>
 
     <h2><a name="quoi">Qu'est ce donc ?</a></h2>
 
-    <h3>Il sert à faire des TP interactifs sur le Web</h3>
-    <p>     
+    <h3>Il sert Ã  faire des TP interactifs sur le Web</h3>
+    <p>
       Le fonctionnement est le suivant&nbsp;:</p>
     <ul>
       <li>
-	Le système affiche les questions auxquelles
-	l'étudiant peut répondre car il a validé les
-	questions prérequises.
+        Le systÃ¨me affiche les questions auxquelles
+        l'Ã©tudiant peut rÃ©pondre car il a validÃ© les
+        questions prÃ©requises.
       </li>
       <li>
-	L'étudiant choisit une question parmi celles proposées.
-	Le système affiche alors&nbsp;:
-	<ul>
-	  <li>
-	    Des informations générales sur la question
-	    (rappels de cours, environnement, ...)
-	  </li>
-	  <li>
-	    Le texte de la question.
-	  </li>
-	  <li>
-	    Des liens permettant d'afficher des indices
-	    permettant de répondre à la question
-	  </li>
-	  <li>
-	    Une zone de saisie de la réponse.
-	  </li>
-	</ul>
+        L'Ã©tudiant choisit une question parmi celles proposÃ©es.
+        Le systÃ¨me affiche alors&nbsp;:
+        <ul>
+          <li>
+            Des informations gÃ©nÃ©rales sur la question
+            (rappels de cours, environnement, ...)
+          </li>
+          <li>
+            Le texte de la question.
+          </li>
+          <li>
+            Des liens permettant d'afficher des indices
+            permettant de rÃ©pondre Ã  la question
+          </li>
+          <li>
+            Une zone de saisie de la rÃ©ponse.
+          </li>
+        </ul>
       </li>
       <li>
-	Quand l'étudiant répond bien il ne peut plus modifier
-	sa réponse, sinon il peut proposer une autre réponse.
-	Le système permet d'afficher des informations
-	qui dépendent de la réponse de l'étudiant&nbsp;:
-	<ul>
-	  <li> Pour sa culture personnelle,</li>
-	  <li> Pour le guider vers une bonne réponse,</li>
-	  <li> Pour lui indiquer une réponse encore meilleure.</li>
-	</ul>
+        Quand l'Ã©tudiant rÃ©pond bien il ne peut plus modifier
+        sa rÃ©ponse, sinon il peut proposer une autre rÃ©ponse.
+        Le systÃ¨me permet d'afficher des informations
+        qui dÃ©pendent de la rÃ©ponse de l'Ã©tudiant&nbsp;:
+        <ul>
+          <li> Pour sa culture personnelle,</li>
+          <li> Pour le guider vers une bonne rÃ©ponse,</li>
+          <li> Pour lui indiquer une rÃ©ponse encore meilleure.</li>
+        </ul>
       </li>
     </ul>
 
     <h3>Affichage de sa progression</h3>
     <p>
-      Le système permet d'afficher de multiples informations
-      pendant que l'étudiant travaille&nbsp;:</p>
+      Le systÃ¨me permet d'afficher de multiples informations
+      pendant que l'Ã©tudiant travaille&nbsp;:</p>
     <ul>
       <li>
-	Des statistiques sur son travail&nbsp;:
-	<ul>
-	  <li> Nombre de questions faites et à faire.</li>
-	  <li> Nombre de bonnes/mauvaise réponses faites. </li>
-	  <li> Nombre d'indices vus.</li>
-	  <li> ... </li>
-	</ul>
+        Des statistiques sur son travail&nbsp;:
+        <ul>
+          <li> Nombre de questions faites et Ã  faire.</li>
+          <li> Nombre de bonnes/mauvaise rÃ©ponses faites. </li>
+          <li> Nombre d'indices vus.</li>
+          <li> ... </li>
+        </ul>
       </li>
       <li>
-	Son classement à l'intérieur de l'ensemble des étudiants
-	en train de travailler.
+        Son classement Ã  l'intÃ©rieur de l'ensemble des Ã©tudiants
+        en train de travailler.
       </li>
       <li>
-	Le temps restant pour faire le TP.</li>
+        Le temps restant pour faire le TP.</li>
       <li>
-	La liste des questions donne des indications graphiques
-	sur les questions&nbsp;:
-	<ul>
-	  <li> Une mauvaise réponse a été faite (rouge).</li>
-	  <li> La question a été regardée (grise).</li>
-	  <li> Des indices ont été demandés (italique)</li>
-	</ul>
+        La liste des questions donne des indications graphiques
+        sur les questions&nbsp;:
+        <ul>
+          <li> Une mauvaise rÃ©ponse a Ã©tÃ© faite (rouge).</li>
+          <li> La question a Ã©tÃ© regardÃ©e (grise).</li>
+          <li> Des indices ont Ã©tÃ© demandÃ©s (italique)</li>
+        </ul>
       </li>
     </ul>
 
-    <h3>Actions possibles autre que répondre</h3>
+    <h3>Actions possibles autre que rÃ©pondre</h3>
     <p>
-      Le système permet à l'étudiant de faire différentes actions,
-      généralement on le laisse&nbsp;:</p>
+      Le systÃ¨me permet Ã  l'Ã©tudiant de faire diffÃ©rentes actions,
+      gÃ©nÃ©ralement on le laisse&nbsp;:</p>
     <ul>
       <li>
-	Déposer un commentaire concernant la question affichée ou
-	sur le système lui même.</li>
+        DÃ©poser un commentaire concernant la question affichÃ©e ou
+        sur le systÃ¨me lui mÃªme.</li>
       <li>
-	Se déconnecter.
+        Se dÃ©connecter.
       </li>
       <li>
-	Afficher une page d'explication sur le TP et le système.
+        Afficher une page d'explication sur le TP et le systÃ¨me.
       </li>
       <li>
-	Afficher une page contenant tout ce qu'il a fait.
+        Afficher une page contenant tout ce qu'il a fait.
       </li>
       <li>
-	Afficher une page de statistiques concernant les questions vues.
+        Afficher une page de statistiques concernant les questions vues.
       </li>
     </ul>
 
-    <h3>Administration du système</h3>
+    <h3>Administration du systÃ¨me</h3>
     <p>
-      L'administrateur quand à lui peut modifier les droits
+      L'administrateur quand Ã  lui peut modifier les droits
       et les options&nbsp;:</p>
-      <ul>
-      <li> Par défaut.</li>
-      <li> Des rôles administrateur/enseignant/auteur/étudiant.</li>
+    <ul>
+      <li> Par dÃ©faut.</li>
+      <li> Des rÃ´les administrateur/enseignant/auteur/Ã©tudiant.</li>
       <li> Des individus.</li>
-      </ul>
+    </ul>
     <p>
-      Ces droits et options sont très précis, il y en a une quarantaine.
+      Ces droits et options sont trÃ¨s prÃ©cis, il y en a une quarantaine.
       Ils permettent de modifier les actions qu'il est possible de faire
       ou bien le contenu de la page web.</p>
     <p>
       Les droits permettent notamment&nbsp;:</p>
     <ul>
       <li> De voir ce que font les autres. </li>
-      <li> D'avoir des statistiques globales par question/étudiant </li>
+      <li> D'avoir des statistiques globales par question/Ã©tudiant </li>
       <li> D'afficher histogrammes et autres graphiques </li>
       <li> D'avoir un fichier CSV permettant de calculer les notes. </li>
-      <li> De détecter les étudiants travaillant ensemble</li>
-      <li> Voir toutes les informations concernant la définition
-	de la question, bonnes/mauvaises réponses testées par exemple.</li>
-      <li> Voir les commentaires laissés par les étudiants.</li>
-      <li> Voir les mauvaises réponses imaginées par les étudiants,
-	et notamment les mauvaises réponses que le système
-	n'a pas pu commenter ou bien les bonnes réponses 
-	considérée comme mauvaise par le système.</li>
-      <li> De recharger dynamiquement une question modifiée
-	afin de voir par exemple si les mauvaises réponses
-	restent sans commentaire après mise à jours du questionnaire.</li>
+      <li> De dÃ©tecter les Ã©tudiants travaillant ensemble</li>
+      <li> Voir toutes les informations concernant la dÃ©finition
+        de la question, bonnes/mauvaises rÃ©ponses testÃ©es par exemple.</li>
+      <li> Voir les commentaires laissÃ©s par les Ã©tudiants.</li>
+      <li> Voir les mauvaises rÃ©ponses imaginÃ©es par les Ã©tudiants,
+        et notamment les mauvaises rÃ©ponses que le systÃ¨me
+        n'a pas pu commenter ou bien les bonnes rÃ©ponses
+        considÃ©rÃ©e comme mauvaise par le systÃ¨me.</li>
+      <li> De recharger dynamiquement une question modifiÃ©e
+        afin de voir par exemple si les mauvaises rÃ©ponses
+        restent sans commentaire aprÃ¨s mise Ã  jours du questionnaire.</li>
       <li> ...</li>
     </ul>
 
     <h2><a name="test">Essayez-le !</a></h2>
     <p>
-      Les premières questions du TP unix sont très faciles,
-      elle servent à vérifier que l'étudiant est capable
-      d'utiliser le système.</p>
+      Les premiÃ¨res questions du TP unix sont trÃ¨s faciles,
+      elle servent Ã  vÃ©rifier que l'Ã©tudiant est capable
+      d'utiliser le systÃ¨me.</p>
     <p>
       Voici quelques liens qui vous permettrons de l'utiliser
       sans l'installer&nbsp;:</p>
     <ul>
-      <li> <a href="http://demo710.univ-lyon1.fr/-quenlig-/guest.html">http://demo710.univ-lyon1.fr/-quenlig-/guest.html</a>
-	Utilisez le nom 'admin' pour devenir administrateur.
-	Attention, le système suppose qu'il n'y a qu'une seule
-	connexion simultanée par compte, il peut se passer
-	des choses étranges si plusieurs personnes sont
-	sur le même compte en même temps.</li>
+      <li> <a
+          href="http://demo710.univ-lyon1.fr/-quenlig-/guest.html">http://demo710.univ-lyon1.fr/-quenlig-/guest.html</a>
+        Utilisez le nom 'admin' pour devenir administrateur.
+        Attention, le systÃ¨me suppose qu'il n'y a qu'une seule
+        connexion simultanÃ©e par compte, il peut se passer
+        des choses Ã©tranges si plusieurs personnes sont
+        sur le mÃªme compte en mÃªme temps.</li>
       <!--
       <li> <a href="http://proxy710.univ-lyon1.fr:9877/-quenlig-/guest.html">http://proxy710.univ-lyon1.fr:9877/-quenlig-/guest.html</a> Cours Python
 	accessible seulement sur notre intranet.</p>
 -->
-</li>
+      </li>
     </ul>
 
 
-    <h2><a name="definir">Comment définir des exercices</a></h2>
+    <h2><a name="definir">Comment dÃ©finir des exercices</a></h2>
 
     <p>
-      Les exercices sont définis par les programmes Python
-      stockés dans le répertoire
+      Les exercices sont dÃ©finis par les programmes Python
+      stockÃ©s dans le rÃ©pertoire
       <a href="Questions/unix">Questions/unix</a>
       dans le cas du questionnaire Unix.
-      Chaque programme Python peut définir plusieurs exercices.
+      Chaque programme Python peut dÃ©finir plusieurs exercices.
       Voici un exemple de programme Python.
     </p>
     <pre>
 # -*- coding: utf-8 -*-               # Pour pouvoir mettre des accents
 from questions import *               # Interface avec la base d'exercices
-from check import *                   # Les vérificateurs pour le shell
+from check import *                   # Les vÃ©rificateurs pour le shell
 
 add(name="copie de fichier",
     before = """Regardez dans votre cours, chapitre 2""",
@@ -234,15 +237,15 @@ add(name="copie de fichier",
           ),
    )
 
-add(name="copie de répertoire",
-    required=["cp", "intro:final"], # Exercices à faire avant celui-ci
-    question="""Quelle est l'option de <tt>cp</tt> pour faire une copie récursive ?""",
+add(name="copie de rÃ©pertoire",
+    required=["cp", "intro:final"], # Exercices Ã  faire avant celui-ci
+    question="""Quelle est l'option de <tt>cp</tt> pour faire une copie rÃ©cursive ?""",
     tests=(
            Good( UpperCase(Equal("-R")) | Equal("--recursive") ),
            Good( Comment(Equal("-a"), "Elle fait plus que la copie !") ),
           ),
     indices = ("Il faut ajouter une option",
-               "La première lettre de récursif est...",
+               "La premiÃ¨re lettre de rÃ©cursif est...",
               ),
    )</pre>
     <p>
@@ -251,35 +254,35 @@ add(name="copie de répertoire",
     </p>
     <ul>
       <li> Le nom du langage/norme sur lequel on pose les questions.</li>
-      <li> Un verbe français indiquant ce que fait la commande
-	si c'est à propos d'une commande.
+      <li> Un verbe franÃ§ais indiquant ce que fait la commande
+        si c'est Ã  propos d'une commande.
       </li>
       <li> Le nom du concept si c'est un concept.</li>
     </ul>
 
-    <h3>Les chaînes de caractères</h3>
+    <h3>Les chaÃ®nes de caractÃ¨res</h3>
 
-    <h4>Codage des chaînes de caractères</h4>
+    <h4>Codage des chaÃ®nes de caractÃ¨res</h4>
 
     <p>
       Elle sont en HTML si c'est dans des commentaires.
-      Donc attention aux caractères &lt;, &gt;, &amp;.
+      Donc attention aux caractÃ¨res &lt;, &gt;, &amp;.
     </p>
     <p>
-      De plus un système de remplacement est fait
+      De plus un systÃ¨me de remplacement est fait
       donc si vous voulez afficher un <tt>%</tt>
       il faut le doubler.
     </p>
 
-    <h4>Paramètres remplacés</h4>
+    <h4>ParamÃ¨tres remplacÃ©s</h4>
 
     <p> Tous les textes visibles par l'utilisateur peuvent
-      contenir des marqueurs de la forme '<tt>%(paramètre)s</tt>'
-      Ces marqueurs sont remplacés lors de l'affichage
-      par la valeur du paramètre.
+      contenir des marqueurs de la forme '<tt>%(paramÃ¨tre)s</tt>'
+      Ces marqueurs sont remplacÃ©s lors de l'affichage
+      par la valeur du paramÃ¨tre.
     </p>
     <ul>
-      <li> <tt>student_name</tt> est le nom de l'étudiant.</li>
+      <li> <tt>student_name</tt> est le nom de l'Ã©tudiant.</li>
     </ul>
     <p>
       Il y en a plein d'autres, mais je ne pense pas
@@ -287,213 +290,215 @@ add(name="copie de répertoire",
     </p>
     <p>
       <b>FAUT-IL SUPPRIMER CETTE FONCTIONNALITE DANGEREUSE ?</b>&nbsp;:
-	Oui, la nouvelle manière d'écrire les tests répond
-	à ces problèmes mais ce n'est pas encore implémenté.
-</p>
+      Oui, la nouvelle maniÃ¨re d'Ã©crire les tests rÃ©pond
+      Ã  ces problÃ¨mes mais ce n'est pas encore implÃ©mentÃ©.
+    </p>
 
-    <h4>Longues chaînes de caractères</h4>
+    <h4>Longues chaÃ®nes de caractÃ¨res</h4>
 
     <p>
       Vous pouvez utilisez des triples guillemets au lieu des
-      simples pour pouvoir mettre des retours à la ligne ou
+      simples pour pouvoir mettre des retours Ã  la ligne ou
       des guillemets dans la question.
     </p>
 
-    <h3><a name="name">Paramètre : <tt>name</tt></a></h3>
+    <h3><a name="name">ParamÃ¨tre : <tt>name</tt></a></h3>
 
     <p>
-      C'est lui qui donne un nom à la question.
-      Ce nom est celui qui sera affiché pour que l'étudiant
+      C'est lui qui donne un nom Ã  la question.
+      Ce nom est celui qui sera affichÃ© pour que l'Ã©tudiant
       puisse choisir sa question.
     </p>
     <ul>
-      <li> Il doit être court car il est dans une colonne de menu.</li>
+      <li> Il doit Ãªtre court car il est dans une colonne de menu.</li>
       <li> Il ne doit pas contenir de '<tt>/</tt>' </li>
       <li> S'il ne contient pas de '<tt>:</tt>' alors
-	il est automatiquement préfixé par le nom du fichier courant.</li>
-      <li> Il ne doit pas donner d'indication sur la réponse.</li>
+        il est automatiquement prÃ©fixÃ© par le nom du fichier courant.</li>
+      <li> Il ne doit pas donner d'indication sur la rÃ©ponse.</li>
     </ul>
 
-    <h3><a name="required">Paramètre : <tt>required</tt></a></h3>
+    <h3><a name="required">ParamÃ¨tre : <tt>required</tt></a></h3>
 
     <p>
-      Il contient une liste de noms des questions auxquels l'étudiant
-      doit déjà avoir répondu avant que celle-ci s'affiche.
+      Il contient une liste de noms des questions auxquels l'Ã©tudiant
+      doit dÃ©jÃ  avoir rÃ©pondu avant que celle-ci s'affiche.
     </p>
     <p>
-      Si ce paramètre n'est pas indiqué, alors seule la question
-      précédente est considérée comme requise.
-      Il n'y a donc aucun prérequis pour la première question
+      Si ce paramÃ¨tre n'est pas indiquÃ©, alors seule la question
+      prÃ©cÃ©dente est considÃ©rÃ©e comme requise.
+      Il n'y a donc aucun prÃ©requis pour la premiÃ¨re question
       du fichier dans ce cas.
     </p>
     <p>
-      Si un nom de questions contient le caractère '<tt>:</tt>'
-      alors on ne le touche pas, sinon on le préfixe
+      Si un nom de questions contient le caractÃ¨re '<tt>:</tt>'
+      alors on ne le touche pas, sinon on le prÃ©fixe
       par le nom du fichier courant.
     </p>
     <p>
-      Si le nom est suivie par une expression régulière entre parenthèse
-      alors la réponse de l'étudiant à cette question doit
-      vérifier l'expression régulière.
+      Si le nom est suivie par une expression rÃ©guliÃ¨re entre parenthÃ¨se
+      alors la rÃ©ponse de l'Ã©tudiant Ã  cette question doit
+      vÃ©rifier l'expression rÃ©guliÃ¨re.
       <tt>personnel:sexe([mM])</tt>
-      permet de n'afficher la question que si la réponse <tt>m</tt>
-      ou <tt>M</tt> a été donnée à la question <tt>sexe</tt>
+      permet de n'afficher la question que si la rÃ©ponse <tt>m</tt>
+      ou <tt>M</tt> a Ã©tÃ© donnÃ©e Ã  la question <tt>sexe</tt>
       du fichier <tt>personnel.py</tt>
     </p>
     <p>
       Si le nom contient :
-      <ul>
-	<li> <tt>{unrequired}</tt> : l'étudiant n'a pas besoin
-	  de répondre correctement à la question.
-	  La regarder suffit.
-	<li> <tt>{before}</tt> : dans la liste des questions
-	  déjà faite, affiche le champs <tt>before</tt> de la question.
-	<li> <tt>{hide}</tt> : dans la liste des questions
-	  déjà faite, cache la question et la réponse.
-      </ul>
+    <ul>
+      <li> <tt>{unrequired}</tt> : l'Ã©tudiant n'a pas besoin
+        de rÃ©pondre correctement Ã  la question.
+        La regarder suffit.
+      <li> <tt>{before}</tt> : dans la liste des questions
+        dÃ©jÃ  faite, affiche le champ <tt>before</tt> de la question.
+      <li> <tt>{hide}</tt> : dans la liste des questions
+        dÃ©jÃ  faite, cache la question et la rÃ©ponse.
+      <li> <tt>{|}</tt> : alors il suffit de dÃ©bloquer l'une des alternatives
+        indiquÃ©es pour dÃ©bloquer la question.
+    </ul>
     </p>
 
-    <h3><a name="before">Paramètre : <tt>before</tt></a></h3>
+    <h3><a name="before">ParamÃ¨tre : <tt>before</tt></a></h3>
 
     <p>
-      Ce paramètre contient un texte qui sera affiché avant
-      la question elle-même.
-      Cela pourra être un rappel de cours ou bien une action
-      à faire par l'étudiant pour qu'il puisse répondre à la question.
+      Ce paramÃ¨tre contient un texte qui sera affichÃ© avant
+      la question elle-mÃªme.
+      Cela pourra Ãªtre un rappel de cours ou bien une action
+      Ã  faire par l'Ã©tudiant pour qu'il puisse rÃ©pondre Ã  la question.
     </p>
 
-    <h3><a name="question">Paramètre : <tt>question</tt></a></h3>
+    <h3><a name="question">ParamÃ¨tre : <tt>question</tt></a></h3>
 
     <p>
-      Il peut simplement être le texte de la question.
+      Il peut simplement Ãªtre le texte de la question.
     </p>
     <p>
-      Il peut aussi être une fonction sans paramètres retournant
-      un chaîne de caractères.
-      Avant l'appel de la fonction le système définit
-      la graine de la série aléatoire si la question
-      est aléatoire.
+      Il peut aussi Ãªtre une fonction sans paramÃ¨tres retournant
+      un chaÃ®ne de caractÃ¨res.
+      Avant l'appel de la fonction le systÃ¨me dÃ©finit
+      la graine de la sÃ©rie alÃ©atoire si la question
+      est alÃ©atoire.
     </p>
     <p>
       Pour mettre l'image <tt>toto.png</tt> dans la question :
       <tt>&lt;IMG SRC='toto.png'&gt;</tt>
-      Cette image sera dans le répertoire HTML du répertoire
-      qui contient la définition des questions.
+      Cette image sera dans le rÃ©pertoire HTML du rÃ©pertoire
+      qui contient la dÃ©finition des questions.
     </p>
-      <p>
-	Pour faire une question à choix multiple il suffit
-	de mettre {{{a}}}, {{{b}}}... devant les textes représentant
-	les différents choix possible.
-	La réponse de l'étudiant sera la liste des textes cochés.
+    <p>
+      Pour faire une question Ã  choix multiple il suffit
+      de mettre {{{a}}}, {{{b}}}... devant les textes reprÃ©sentant
+      les diffÃ©rents choix possible.
+      La rÃ©ponse de l'Ã©tudiant sera la liste des textes cochÃ©s.
 
-    <h3><a name="nr_lines">Paramètre : <tt>nr_lines</tt></a></h3>
+    <h3><a name="nr_lines">ParamÃ¨tre : <tt>nr_lines</tt></a></h3>
 
     <p>
       Cet entier indique le nombre de lignes de la zone
-      dans laquelle l'étudiant va répondre.
-      Par défaut 1.
+      dans laquelle l'Ã©tudiant va rÃ©pondre.
+      Par dÃ©faut 1.
     </p>
 
-    <h3><a name="default_answer">Paramètre : <tt>default_answer</tt></a></h3>
+    <h3><a name="default_answer">ParamÃ¨tre : <tt>default_answer</tt></a></h3>
 
     <p>
-      C'est la réponse par défaut proposée quand
-      l'utilisateur arrive sur la question pour la première fois.
+      C'est la rÃ©ponse par dÃ©faut proposÃ©e quand
+      l'utilisateur arrive sur la question pour la premiÃ¨re fois.
     </p>
 
 
-    <h3><a name="bad_answer">Paramètre : <tt>bad_answer</tt></a></h3>
+    <h3><a name="bad_answer">ParamÃ¨tre : <tt>bad_answer</tt></a></h3>
 
     <p>
-      C'est un texte qui sera affiché <b>dans tous les cas</b>
-      si l'étudiant donne une mauvaise réponse.
-      Au dessus de ce texte il sera écrit&nbsp;:
-      ``peut être que ...´´
+      C'est un texte qui sera affichÃ© <b>dans tous les cas</b>
+      si l'Ã©tudiant donne une mauvaise rÃ©ponse.
+      Au dessus de ce texte il sera Ã©crit&nbsp;:
+      ``peut Ãªtre que ...Â´Â´
     </p>
     <p>
-      Il est conseillé d'utiliser le test <tt>comment</tt>
+      Il est conseillÃ© d'utiliser le test <tt>comment</tt>
       qui n'affichera rien si un autre commentaire a
-      déjà été affiché pour l'étudiant.
+      dÃ©jÃ  Ã©tÃ© affichÃ© pour l'Ã©tudiant.
     </p>
 
-    <h3><a name="good_answer">Paramètre : <tt>good_answer</tt></a></h3>
+    <h3><a name="good_answer">ParamÃ¨tre : <tt>good_answer</tt></a></h3>
 
     <p>
-      C'est un texte qui sera affiché dans tous les cas
-      si l'étudiant donne une bonne réponse.
-      Au dessus de ce texte il sera écrit&nbsp;:
-      ``saviez vous que ...´´
+      C'est un texte qui sera affichÃ© dans tous les cas
+      si l'Ã©tudiant donne une bonne rÃ©ponse.
+      Au dessus de ce texte il sera Ã©crit&nbsp;:
+      ``saviez vous que ...Â´Â´
     </p>
 
 
-    <h3><a name="highlight">Paramètre : <tt>highlight</tt></a></h3>
+    <h3><a name="highlight">ParamÃ¨tre : <tt>highlight</tt></a></h3>
 
     <p>
-	Si il est mis à True alors le lien vers la question est
-	mis en évidence pour que l'étudiant y réponde
-	prioritairement (mais il n'est pas forcé).
+      Si il est mis Ã  True alors le lien vers la question est
+      mis en Ã©vidence pour que l'Ã©tudiant y rÃ©ponde
+      prioritairement (mais il n'est pas forcÃ©).
     </p>
 
-    <h3><a name="indices">Paramètre : <tt>indices</tt></a></h3>
+    <h3><a name="indices">ParamÃ¨tre : <tt>indices</tt></a></h3>
 
     <p>
-      Une liste de chaines de caractères contenant
-      des indices pour aider l'étudiant s'il le demande.
-      Les indices sont proposés dans l'ordre, un par un.
+      Une liste de chaines de caractÃ¨res contenant
+      des indices pour aider l'Ã©tudiant s'il le demande.
+      Les indices sont proposÃ©s dans l'ordre, un par un.
     </p>
 
-    <h3><a name="maximum_bad_answer">Paramètre : <tt>maximum_bad_answer</tt></a></h3>
+    <h3><a name="maximum_bad_answer">ParamÃ¨tre : <tt>maximum_bad_answer</tt></a></h3>
 
-      <p>
-	C'est le nombre maximum de réponses que peut donner l'étudiant.
-	Il ne pourra ensuite plus répondre à la question.
-      </p>
+    <p>
+      C'est le nombre maximum de rÃ©ponses que peut donner l'Ã©tudiant.
+      Il ne pourra ensuite plus rÃ©pondre Ã  la question.
+    </p>
 
 
-    <h3><a name="oldtest">Paramètre : <tt>tests</tt> ANCIENNE DOCUMENTATION</a></h3>
-      <p>
-	ATTENTION : cette documentation est obsolète,
-	les tests ne sont plus à définir de cette façon.
+    <h3><a name="oldtest">ParamÃ¨tre : <tt>tests</tt> ANCIENNE DOCUMENTATION</a></h3>
+    <p>
+      ATTENTION : cette documentation est obsolÃ¨te,
+      les tests ne sont plus Ã  dÃ©finir de cette faÃ§on.
 
     <p>
       C'est une liste de tests.
-      Les tests sont effectués dans l'ordre jusqu'à ce qu'un
-      test indique que la réponse est mauvaise ou bonne (True/False).
+      Les tests sont effectuÃ©s dans l'ordre jusqu'Ã  ce qu'un
+      test indique que la rÃ©ponse est mauvaise ou bonne (True/False).
       Si le test retourne None alors il peut ajouter un commentaire
-      qui sera affiché à l'étudiant.
+      qui sera affichÃ© Ã  l'Ã©tudiant.
       Des commentaires successifs peuvent s'afficher.</p>
     <p>
-      Les fonctions de tests suivantes sont définies par défaut.</p>
+      Les fonctions de tests suivantes sont dÃ©finies par dÃ©faut.</p>
 
     <h4>Test : <tt>good</tt></h4>
 
     <p>
-      Si la réponse est exactement identique alors
-      on considère que c'est une bonne réponse et l'on retourne
-      le commentaire associé à la bonne réponse.
+      Si la rÃ©ponse est exactement identique alors
+      on considÃ¨re que c'est une bonne rÃ©ponse et l'on retourne
+      le commentaire associÃ© Ã  la bonne rÃ©ponse.
     </p>
     <pre>good( "a" ),
-good( "A", "Je préfère &lt;tt&gt;a&lt;/tt&gt; comme réponse" ),
+good( "A", "Je prÃ©fÃ¨re &lt;tt&gt;a&lt;/tt&gt; comme rÃ©ponse" ),
 good( ("c", "d") ),
-good( ("C", "D"), "Ok, mais je préfère les minuscules" ),</pre>
+good( ("C", "D"), "Ok, mais je prÃ©fÃ¨re les minuscules" ),</pre>
 
     <h4>Test : <tt>bad</tt></h4>
 
     <p>
-      Si la réponse est exactement identique alors
-      on considère que c'est une mauvaise réponse et l'on retourne
-      le commentaire associé à la mauvaise réponse.
+      Si la rÃ©ponse est exactement identique alors
+      on considÃ¨re que c'est une mauvaise rÃ©ponse et l'on retourne
+      le commentaire associÃ© Ã  la mauvaise rÃ©ponse.
     </p>
     <p>
-      La syntaxe est la même que <tt>good</tt>
+      La syntaxe est la mÃªme que <tt>good</tt>
     </p>
 
     <h4>Test : <tt>require</tt></h4>
 
     <p>
-      Si la réponse ne contient pas la chaine
-      on considère que c'est une mauvaise réponse et l'on retourne
-      le commentaire associé à la bonne réponse.
+      Si la rÃ©ponse ne contient pas la chaine
+      on considÃ¨re que c'est une mauvaise rÃ©ponse et l'on retourne
+      le commentaire associÃ© Ã  la bonne rÃ©ponse.
     </p>
 
     <pre>require( "a" ),
@@ -504,9 +509,9 @@ require( ("C", "D"), "Et C et D ? Ou sont-ils ?" ),</pre>
     <h4>Test : <tt>require_startswith</tt> et <tt>require_endswith</tt></h4>
 
     <p>
-      Si la réponse ne commence ou fini pas par la chaine
-      on considère que c'est une mauvaise réponse et l'on retourne
-      le commentaire associé à la bonne réponse.
+      Si la rÃ©ponse ne commence ou fini pas par la chaine
+      on considÃ¨re que c'est une mauvaise rÃ©ponse et l'on retourne
+      le commentaire associÃ© Ã  la bonne rÃ©ponse.
     </p>
 
     <pre>require_startswith("/", "Un nom absolu commence par /"),
@@ -516,20 +521,20 @@ require_endswith(".html", "Il faut indiquer que c'est du HTML"),
     <h4>Test : <tt>reject</tt></h4>
 
     <p>
-      Si la réponse contient la chaine
-      on considère que c'est une mauvaise réponse et l'on retourne
-      le commentaire associé à la mauvaise réponse.
+      Si la rÃ©ponse contient la chaine
+      on considÃ¨re que c'est une mauvaise rÃ©ponse et l'on retourne
+      le commentaire associÃ© Ã  la mauvaise rÃ©ponse.
     </p>
     <p>
-      La syntaxe est la même que <tt>require</tt>
+      La syntaxe est la mÃªme que <tt>require</tt>
     </p>
 
     <h4>Test : <tt>reject_startswith</tt> et <tt>reject_endswith</tt></h4>
 
     <p>
-      Si la réponse commence ou fini par la chaine
-      on considère que c'est une mauvaise réponse et l'on retourne
-      le commentaire associé à la bonne réponse.
+      Si la rÃ©ponse commence ou fini par la chaine
+      on considÃ¨re que c'est une mauvaise rÃ©ponse et l'on retourne
+      le commentaire associÃ© Ã  la bonne rÃ©ponse.
     </p>
 
     <pre>reject_startswith("/", "Un nom relatif ne commence pas par /"),
@@ -539,148 +544,149 @@ reject_endswith("/", "Le / final est inutile"),
 
 
     <h4>Test : <tt>require_int</tt></h4>
-    
+
     <p>
-      Ce test sans paramètre refuse la réponse
+      Ce test sans paramÃ¨tre refuse la rÃ©ponse
       si ce n'est pas un entier.</p>
 
     <h4>Test : <tt>answer_length_is</tt></h4>
-    
+
     <p>
-      Ce test a pour paramètre la longueur de la réponse
-      attendue et un commentaire à retourner si ce n'est pas la bonne.</p>
+      Ce test a pour paramÃ¨tre la longueur de la rÃ©ponse
+      attendue et un commentaire Ã  retourner si ce n'est pas la bonne.</p>
 
     <h4>Test : <tt>number_of_is</tt></h4>
-    
+
     <p>
-      Ce test a pour paramètres une chaine de caractère
+      Ce test a pour paramÃ¨tres une chaine de caractÃ¨re
       et le nombre requis d'occurrence de cette chaine
-      de caractère dans la réponse de l'étudiant.
-      Le dernier paramètre est le commentaire.
+      de caractÃ¨re dans la rÃ©ponse de l'Ã©tudiant.
+      Le dernier paramÃ¨tre est le commentaire.
     </p>
 
     <h4><tt>comment</tt></h4>
-    
+
     <p>
-      Cette fonction a pour paramètre un commentaire.
-      Dans tous les cas ce commentaire est ajouté
-      à ce que l'étudiant va voir comme indication
-      sur sa réponse.</p>
+      Cette fonction a pour paramÃ¨tre un commentaire.
+      Dans tous les cas ce commentaire est ajoutÃ©
+      Ã  ce que l'Ã©tudiant va voir comme indication
+      sur sa rÃ©ponse.</p>
     <p>
       Son utilisation la plus naturelle est de le mettre en dernier
       dans la liste des tests afin de donner un conseil
-      général à l'étudiant quand on a pas pu lui faire
-      un commentaire lui expliquant pourquoi sa réponse est mauvaise.</p>
+      gÃ©nÃ©ral Ã  l'Ã©tudiant quand on a pas pu lui faire
+      un commentaire lui expliquant pourquoi sa rÃ©ponse est mauvaise.</p>
 
 
 
     <h4>Test : <tt>shell_good</tt>, <tt>shell_bad</tt>, <tt>shell_required</tt>, <tt>shell_reject</tt>, </h4>
 
     <p>
-      Ces tests sont utilisés pour les TP utilisant
+      Ces tests sont utilisÃ©s pour les TP utilisant
       le shell et ne sont pas utiles pour les autres.</p>
 
     <p>
-      Le fonctionnement et la syntaxe sont la même que ceux
+      Le fonctionnement et la syntaxe sont la mÃªme que ceux
       sans <tt>shell_</tt>.
-      Les différences sont&nbsp;:
+      Les diffÃ©rences sont&nbsp;:
     </p>
     <ul>
-      <li> Pour  <tt>shell_good</tt> et <tt>shell_bad</tt>, 
-	on compare les chaines de caractères après qu'elles aient
-	été canonisées par un <em>parser</em> shell.</li>
-      <li> Pour  <tt>shell_require</tt> et <tt>shell_reject</tt>, 
-	on compare les chaines de caractères fournies dans la question
-	à la réponse de l'étudiant <em>parsée</em> et traduite en XML.
-	(le XML généré est visible dans les sources de la page HTML)</li>
-      <li> Ces fonctions supportent le paramètre nommé <tt>dumb_replace</tt>
-	qui permet de faire des substitutions avant de tester.
-	L'exemple suivant décrit 3 substitutions à faire.
-	<pre>dumb_replace = ( ("${HOME}", "$HOME"),  (("~/.", "$HOME/"), "~/") )</pre></li>
-      <li> Ces fonctions supportent le paramètre nommé <tt>replacement</tt>
-	qui travaille sur le XML et qui comprend la syntaxe des options
-	longues et courtes afin de les normaliser en option courte
-	en concaténant le nom de l'option et sa valeur.
-	<pre>replacement=( ("-d", "--directory", 0), ("-w", "--width", 1) )</pre>
-	L'exemple précédent fait les subtitutions&nbsp;:
-	<ul>
-	  <li> <tt>--directory</tt>  --&gt; <tt>-d</tt></li>
-	  <li> <tt>-w 5</tt> --&gt; <tt>-w5</tt></li>
-	  <li> <tt>--width 5</tt> --&gt; <tt>-w5</tt></li>
-	  <li> <tt>--width=5</tt> --&gt; <tt>-w5</tt></li>
-	</ul>
-	Par défaut pas mal de substitutions
-	sont faites par <tt>shellParser.py</tt></li>
+      <li> Pour <tt>shell_good</tt> et <tt>shell_bad</tt>,
+        on compare les chaines de caractÃ¨res aprÃ¨s qu'elles aient
+        Ã©tÃ© canonisÃ©es par un <em>parser</em> shell.</li>
+      <li> Pour <tt>shell_require</tt> et <tt>shell_reject</tt>,
+        on compare les chaines de caractÃ¨res fournies dans la question
+        Ã  la rÃ©ponse de l'Ã©tudiant <em>parsÃ©e</em> et traduite en XML.
+        (le XML gÃ©nÃ©rÃ© est visible dans les sources de la page HTML)</li>
+      <li> Ces fonctions supportent le paramÃ¨tre nommÃ© <tt>dumb_replace</tt>
+        qui permet de faire des substitutions avant de tester.
+        L'exemple suivant dÃ©crit 3 substitutions Ã  faire.
+        <pre>dumb_replace = ( ("${HOME}", "$HOME"),  (("~/.", "$HOME/"), "~/") )</pre>
+      </li>
+      <li> Ces fonctions supportent le paramÃ¨tre nommÃ© <tt>replacement</tt>
+        qui travaille sur le XML et qui comprend la syntaxe des options
+        longues et courtes afin de les normaliser en option courte
+        en concatÃ©nant le nom de l'option et sa valeur.
+        <pre>replacement=( ("-d", "--directory", 0), ("-w", "--width", 1) )</pre>
+        L'exemple prÃ©cÃ©dent fait les subtitutions&nbsp;:
+        <ul>
+          <li> <tt>--directory</tt> --&gt; <tt>-d</tt></li>
+          <li> <tt>-w 5</tt> --&gt; <tt>-w5</tt></li>
+          <li> <tt>--width 5</tt> --&gt; <tt>-w5</tt></li>
+          <li> <tt>--width=5</tt> --&gt; <tt>-w5</tt></li>
+        </ul>
+        Par dÃ©faut pas mal de substitutions
+        sont faites par <tt>shellParser.py</tt></li>
     </ul>
 
 
     <h4>Test : <tt>shell_display</tt></h4>
-    
+
     <p>
-      Ce test sans paramètre affiche simplement l'arbre syntaxique
+      Ce test sans paramÃ¨tre affiche simplement l'arbre syntaxique
       de la commande shell.
-      Il doit être indiqué en dernier sinon il risque
-      d'être affiché deux fois car les autres tests l'affichent
-      quand ils interrompent la vérification .</p>
+      Il doit Ãªtre indiquÃ© en dernier sinon il risque
+      d'Ãªtre affichÃ© deux fois car les autres tests l'affichent
+      quand ils interrompent la vÃ©rification .</p>
 
 
-    <h3><a name="newtest">Paramètre : <tt>tests</tt> NOUVELLE MANIÈRE</a></h3>
+    <h3><a name="newtest">ParamÃ¨tre : <tt>tests</tt> NOUVELLE MANIÃˆRE</a></h3>
 
     <p>
       C'est une liste de tests.
-      Les tests sont effectués dans l'ordre jusqu'à ce qu'un
-      test indique que la réponse est mauvaise ou bonne (True/False).
+      Les tests sont effectuÃ©s dans l'ordre jusqu'Ã  ce qu'un
+      test indique que la rÃ©ponse est mauvaise ou bonne (True/False).
     <p>
-	Un test est une expression algébrique
-	définissant ce qu'il faut répondre à l'étudiant.
+      Un test est une expression algÃ©brique
+      dÃ©finissant ce qu'il faut rÃ©pondre Ã  l'Ã©tudiant.
 
-	<ul>
+    <ul>
 
-	<li> Racine de l'expression&nbsp;:
-	  <ul>
-	      <li> <tt>Good(...)</tt> Bonne réponse si ... est vrai.
-	      <li> <tt>Bad(...)</tt> Mauvaise réponse si ... est vrai.
-	  </ul>
+      <li> Racine de l'expression&nbsp;:
+        <ul>
+          <li> <tt>Good(...)</tt> Bonne rÃ©ponse si ... est vrai.
+          <li> <tt>Bad(...)</tt> Mauvaise rÃ©ponse si ... est vrai.
+        </ul>
 
-	<li> Ajouter un commentaire&nbsp;:
-	  <tt>Comment(..., "texte du commentaire")</tt>
-	  le commentaire est affiché quand ... est vrai.
-	  
-	<li> Les feuilles retourne vrai si la réponse de l'étudiant&nbsp;:
-	  <ul>
-	      <li> <tt>Equal("chaine")</tt> : est égale à "chaine".
-	      <li> <tt>Start("chaine")</tt> : commence par "chaine"
-	      <li> <tt>End("chaine")</tt> : finie par "chaine"
-	      <li> <tt>Contain("chaine")</tt> : contient "chaine"
-	      <li> <tt>Int()</tt> : est un entier
-	      <li> <tt>IntGT(valeur)</tt> : est strictement supérieure à valeur
-	      <li> <tt>IntLT(valeur)</tt> : est strictement inférieure à valeur
-	      <li> <tt>Length(longueur)</tt> : est de la longueur indiquée
-	      <li> <tt>NumberOfIs(chaine,nb)</tt> : contient <em>nb</em>
-	      fois <em>chaine</em>
-	      
-	  </ul>
+      <li> Ajouter un commentaire&nbsp;:
+        <tt>Comment(..., "texte du commentaire")</tt>
+        le commentaire est affichÃ© quand ... est vrai.
 
-	<li> Opérateurs booléen&nbsp;:
-	  <ul>
-	    <li> <tt>... | ...</tt> vrai si l'un des deux est vrai.
-	    <li> <tt>... &amp; ...</tt> vrai si les deux sont vrai.
-	    <li> <tt>~ ...</tt> vrai si ... est faux.
-	  </ul>
+      <li> Les feuilles retourne vrai si la rÃ©ponse de l'Ã©tudiant&nbsp;:
+        <ul>
+          <li> <tt>Equal("chaine")</tt> : est Ã©gale Ã  "chaine".
+          <li> <tt>Start("chaine")</tt> : commence par "chaine"
+          <li> <tt>End("chaine")</tt> : finie par "chaine"
+          <li> <tt>Contain("chaine")</tt> : contient "chaine"
+          <li> <tt>Int()</tt> : est un entier
+          <li> <tt>IntGT(valeur)</tt> : est strictement supÃ©rieure Ã  valeur
+          <li> <tt>IntLT(valeur)</tt> : est strictement infÃ©rieure Ã  valeur
+          <li> <tt>Length(longueur)</tt> : est de la longueur indiquÃ©e
+          <li> <tt>NumberOfIs(chaine,nb)</tt> : contient <em>nb</em>
+            fois <em>chaine</em>
 
-	<li> Modificateurs de réponse&nbsp;:
-	  <ul>
-	    <li> <tt>UpperCase(...)</tt> fait tous les traitements en majuscule
-	    <li> <tt>Replace( ((old1, new1), (old2, new2), ...),
-		...)</tt> fait toutes les substitutions de chaines de
-	      caractères indiquées.
-	    <li> <tt>SortLines(...)</tt> trie les lignes dans tous les traitements.
-	  </ul>
-      </ul>
-	<!--
+        </ul>
+
+      <li> OpÃ©rateurs boolÃ©en&nbsp;:
+        <ul>
+          <li> <tt>... | ...</tt> vrai si l'un des deux est vrai.
+          <li> <tt>... &amp; ...</tt> vrai si les deux sont vrai.
+          <li> <tt>~ ...</tt> vrai si ... est faux.
+        </ul>
+
+      <li> Modificateurs de rÃ©ponse&nbsp;:
+        <ul>
+          <li> <tt>UpperCase(...)</tt> fait tous les traitements en majuscule
+          <li> <tt>Replace( ((old1, new1), (old2, new2), ...),
+              ...)</tt> fait toutes les substitutions de chaines de
+            caractÃ¨res indiquÃ©es.
+          <li> <tt>SortLines(...)</tt> trie les lignes dans tous les traitements.
+        </ul>
+    </ul>
+    <!--
       <p>
-	Par défaut, un étudiant a un seul commentaire pour une mauvaise
-	réponse. On peut concaténer les commentaires en écrivant le test
+	Par dÃ©faut, un Ã©tudiant a un seul commentaire pour une mauvaise
+	rÃ©ponse. On peut concatÃ©ner les commentaires en Ã©crivant le test
 	de la forme&nbsp;:
 	<tt>Bad(...) | Bad(...) | Bad(...)</tt>
 	-->
@@ -688,35 +694,35 @@ reject_endswith("/", "Le / final est inutile"),
     <h4>Ajouter un test</h4>
     <p>
       ATTENTION : ces explications sont pour la version 2 de Quenlig.
-      Dans la version 3 l'écriture de test est simplifiée.
-      <p>
-	Les tests sont simple à réaliser.
-      <ul>
-	<li> <tt>student_answer</tt> est ce que l'étudiant a tapé (après
-	  être passé à travers les modificateurs de réponse)
-	<li> <tt>state</tt> est la session de l'étudiant.
-	  Ceci permet de faire des tests qui dépendent de l'étudiants.
-	<li> <tt>parser</tt> est la fonction à appeler pour
-	  appliquer les modificateurs à la réponses prévue par
-	  celui qui a écrit le test.
-      </ul>
+      Dans la version 3 l'Ã©criture de test est simplifiÃ©e.
+    <p>
+      Les tests sont simple Ã  rÃ©aliser.
+    <ul>
+      <li> <tt>student_answer</tt> est ce que l'Ã©tudiant a tapÃ© (aprÃ¨s
+        Ãªtre passÃ© Ã  travers les modificateurs de rÃ©ponse)
+      <li> <tt>state</tt> est la session de l'Ã©tudiant.
+        Ceci permet de faire des tests qui dÃ©pendent de l'Ã©tudiants.
+      <li> <tt>parser</tt> est la fonction Ã  appeler pour
+        appliquer les modificateurs Ã  la rÃ©ponses prÃ©vue par
+        celui qui a Ã©crit le test.
+    </ul>
 
-      <p>Une feuille de test (elle n'utilise pas <tt>state</tt>),
-	par exemple&nbsp;:
-<pre>
+    <p>Une feuille de test (elle n'utilise pas <tt>state</tt>),
+      par exemple&nbsp;:
+    <pre>
 class Equal(TestString):
     def __call__(self, student_answer, state=None, parser=no_parse):
         return student_answer == parser(self.string, state, self), ""
 </pre>
-      <p>Un modificateur pouvant utiliser <tt>state</tt> pour modifier
-	en fonction de l'étudiant.
-	C'est un peu compliqué car il peut y avoir des modificateurs
-	de modificateur.
-	D'autre part, la modification peut être faite ou non en fonction
-	du <tt>test</tt> réalisé, par exemple le modificateur s'applique
-	à <tt>Equal</tt> mais pas à <tt>Contain</tt>.
-	
-<pre>
+    <p>Un modificateur pouvant utiliser <tt>state</tt> pour modifier
+      en fonction de l'Ã©tudiant.
+      C'est un peu compliquÃ© car il peut y avoir des modificateurs
+      de modificateur.
+      D'autre part, la modification peut Ãªtre faite ou non en fonction
+      du <tt>test</tt> rÃ©alisÃ©, par exemple le modificateur s'applique
+      Ã  <tt>Equal</tt> mais pas Ã  <tt>Contain</tt>.
+
+    <pre>
 class UpperCase(TestUnary):
     def __call__(self, student_answer, state=None, parser=no_parse):
         return self.children[0](
@@ -728,12 +734,12 @@ class UpperCase(TestUnary):
 
     <h3>Variable : <tt>questions.current_evaluate_answer</tt></h3>
     <p>
-      Quand <tt>add</tt> est appelé, il stocke la valeur courante
-      de cette variable dans la question elle même,
-      cela évite de redonner ce paramètre à chaque <tt>add</tt>.
-      <p>
-	Cette fonction transforme systématiquement la réponse
-	de l'étudiant.
+      Quand <tt>add</tt> est appelÃ©, il stocke la valeur courante
+      de cette variable dans la question elle mÃªme,
+      cela Ã©vite de redonner ce paramÃ¨tre Ã  chaque <tt>add</tt>.
+    <p>
+      Cette fonction transforme systÃ©matiquement la rÃ©ponse
+      de l'Ã©tudiant.
     <pre>
 def filter_student_answer(answer, state=None):
     answer = re.sub(' +', ' ', answer)
@@ -741,42 +747,42 @@ def filter_student_answer(answer, state=None):
     answer = re.sub('\n\n*', '\n', answer)
     return answer
  </pre>
-<!--
+    <!--
     <h3>Variable : <tt>questions.current_evaluate_answer</tt></h3>
     <p>
-      Cette variable contient une fonction paramétrée par
-      la réponse de l'utilisateur et <tt>state</tt>.
-      Elle retourne un texte qui sera affiché dans le cadre
-      nommé <em>Ce qui est obtenu</em>.
+      Cette variable contient une fonction paramÃ©trÃ©e par
+      la rÃ©ponse de l'utilisateur et <tt>state</tt>.
+      Elle retourne un texte qui sera affichÃ© dans le cadre
+      nommÃ© <em>Ce qui est obtenu</em>.
     <p>
-      Dans le cas de Python, c'est le résultat de l'évaluation
+      Dans le cas de Python, c'est le rÃ©sultat de l'Ã©valuation
       du code Python.
     <p>
-      Cette implémentation de la fonctionnalité ne me plait
-      pas car elle n'est pas esthétique.
-      Elle va certainement être recodée.
+      Cette implÃ©mentation de la fonctionnalitÃ© ne me plait
+      pas car elle n'est pas esthÃ©tique.
+      Elle va certainement Ãªtre recodÃ©e.
     <p>
-      Cette fonctionnalité n'est pas utilisée dans le questionnaire
+      Cette fonctionnalitÃ© n'est pas utilisÃ©e dans le questionnaire
       <tt>unix</tt> c'est pour cela qu'il y a <tt>shell_display</tt>
-      presque systématiquement à la fin de la liste des tests.
+      presque systÃ©matiquement Ã  la fin de la liste des tests.
 -->
 
-    <h2><a name="admin">Administration du système.</a></h2>
+    <h2><a name="admin">Administration du systÃ¨me.</a></h2>
 
     <p>
-      Le système n'a été testé que sous Linux.
-      Quelque points de détails l'empêcheront de fonctionner
+      Le systÃ¨me n'a Ã©tÃ© testÃ© que sous Linux.
+      Quelque points de dÃ©tails l'empÃªcheront de fonctionner
       sous Windows.
     </p>
-    
+
     <p>
       Le fichier <tt><a href="configuration.py">configuration.py</a></tt>
-      contient quelques paramètres de configuration, notemment
+      contient quelques paramÃ¨tres de configuration, notemment
       l'adresse du serveur CAS pour l'authentification.
     </p>
 
     <p>
-      Le répertoire
+      Le rÃ©pertoire
       <a href="HTML">HTML</a>
       contient le fichier squelette de la page HTML ainsi
       que le fichier CSS qui contient tous les textes de l'interface.
@@ -788,109 +794,110 @@ def filter_student_answer(answer, state=None):
     <ul>
       <li> python</li>
     </ul>
-    Les Packages recommandés&nbsp;:
+    Les Packages recommandÃ©s&nbsp;:
     <ul>
       <li> netpbm ou pbmplus pour <tt>ppmtogif</tt> pour 'question_pixel_map'</li>
-      <li> highlight pour l'affichage du code source python coloré.</li>
+      <li> highlight pour l'affichage du code source python colorÃ©.</li>
     </ul>
     Les Packages optionnels&nbsp;:
     <ul>
       <li> xvcg et graphviz pour l'affichage du graphe des questions.</li>
       <li> gnuplot pour l'affichage des stats de charge.</li>
-      <li> weblint pour les tests de régression</li>
+      <li> weblint pour les tests de rÃ©gression</li>
       <li> kcachegrind et kcachegrind-converters pour le profiling</li>
     </ul>
 
-    <h3><a name="lancement">Lancement du système</a></h3>
+    <h3><a name="lancement">Lancement du systÃ¨me</a></h3>
 
     <p>
       Pas besoin de compiler c'est du Python.<br>
       Pour voir toutes les options de lancement tapez&nbsp;: <tt>main.py</tt><br>
-      Les options de lancements sont concaténables.</p>
+      Les options de lancements sont concatÃ©nables.</p>
     <table border="1">
-	<tbody><tr>
-	  <td>
-	    Création d'une session
-	  </td>
-	  <td>
-	    <tt>main.py NomSession create RépertoireQuestions NumeroPort</tt><br>
-	    Ceci crée les répertoires mais ne lance pas le serveur.
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    Définition de la date de début de TP
-	  </td>
-	  <td>
-	    <tt>main.py NomSession begin_date DateDébut</tt><br>
-	    Les dates sont sous la forme : <tt>"8:30 15/3/2006"</tt>
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    Définition de la date de fin de TP
-	  </td>
-	  <td>
-	    <tt>main.py NomSession end_date DateDébut</tt><br>
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    Désignation de l'administrateur
-	  </td>
-	  <td>
-	    <tt>main.py NomSession admin NomDuCompte</tt>
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    Lancement du serveur
-	  </td>
-	  <td>
-	    <tt>main.py NomSession start</tt><br>
-	    Le serveur vous affiche l'URL qu'il faut utiliser pour l'atteindre.
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    Détection de problèmes
-	  </td>
-	  <td>
-	    <tt>main.py NomSession problems</tt><br>
-	    Indique à l'auteur du questionnaire les bonnes réponses
-	    données par les étudiants durant la session qui
-	    ne sont plus acceptées par le nouveau système.
-	  </td>
-	</tr>
+      <tbody>
+        <tr>
+          <td>
+            CrÃ©ation d'une session
+          </td>
+          <td>
+            <tt>main.py NomSession create RÃ©pertoireQuestions NumeroPort</tt><br>
+            Ceci crÃ©e les rÃ©pertoires mais ne lance pas le serveur.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            DÃ©finition de la date de dÃ©but de TP
+          </td>
+          <td>
+            <tt>main.py NomSession begin_date DateDÃ©but</tt><br>
+            Les dates sont sous la forme : <tt>"8:30 15/3/2006"</tt>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            DÃ©finition de la date de fin de TP
+          </td>
+          <td>
+            <tt>main.py NomSession end_date DateDÃ©but</tt><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            DÃ©signation de l'administrateur
+          </td>
+          <td>
+            <tt>main.py NomSession admin NomDuCompte</tt>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Lancement du serveur
+          </td>
+          <td>
+            <tt>main.py NomSession start</tt><br>
+            Le serveur vous affiche l'URL qu'il faut utiliser pour l'atteindre.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            DÃ©tection de problÃ¨mes
+          </td>
+          <td>
+            <tt>main.py NomSession problems</tt><br>
+            Indique Ã  l'auteur du questionnaire les bonnes rÃ©ponses
+            donnÃ©es par les Ã©tudiants durant la session qui
+            ne sont plus acceptÃ©es par le nouveau systÃ¨me.
+          </td>
+        </tr>
       </tbody>
     </table>
     <p>
 
     <h3><a name="acl">Les ACLs</a></h3>
 
-      <p>
-	Ceci est en développement et instable...
+    <p>
+      Ceci est en dÃ©veloppement et instable...
 
     <p>
-      Chaque fonctionnalité du système a son ACL.
-      Si une ACL est préfixée par <tt>!</tt> alors
-      elle est enlevée même si elle est autorisée
+      Chaque fonctionnalitÃ© du systÃ¨me a son ACL.
+      Si une ACL est prÃ©fixÃ©e par <tt>!</tt> alors
+      elle est enlevÃ©e mÃªme si elle est autorisÃ©e
       pour tout le monde (<tt>question_shuffle</tt> pour les profs par exemple).
-      Ou interdir à un étudiant de répondre aux questions, ...</p>
+      Ou interdir Ã  un Ã©tudiant de rÃ©pondre aux questions, ...</p>
     <p>
-	Les ACLS sont définies dans
-	<tt>Students/???/Logs/Default/acls</tt> pour les étudiants
-	et 
-	<tt>Students/???/Logs/Teacher/acls</tt> pour les enseignants.
-      <p>
-	Les roles sont définis dans 	<tt>Students/???/Logs/???/roles</tt>
+      Les ACLS sont dÃ©finies dans
+      <tt>Students/???/Logs/Default/acls</tt> pour les Ã©tudiants
+      et
+      <tt>Students/???/Logs/Teacher/acls</tt> pour les enseignants.
+    <p>
+      Les roles sont dÃ©finis dans <tt>Students/???/Logs/???/roles</tt>
 
     <p>
-      Le premier administrateur doit être créé avant
-      le lancement du système.</p>
+      Le premier administrateur doit Ãªtre crÃ©Ã© avant
+      le lancement du systÃ¨me.</p>
     <p>
-      Si le serveur est trop lent ou les étudiants trop nombreux,
-      enlevez l'ACL par défaut
+      Si le serveur est trop lent ou les Ã©tudiants trop nombreux,
+      enlevez l'ACL par dÃ©faut
       'question_pixel_map_see' qui consomme beaucoup de ressources.
 
     <h3><a name="outils">Outils</a></h3>
@@ -898,88 +905,88 @@ def filter_student_answer(answer, state=None):
       Taper <tt>make</tt> pour lister les buts possibles.
       Voici les principaux&nbsp;:
     <p>
-      <tt>make regtest</tt> effectue des tests de régression.
-      Il faut le lancer chaque fois que vous modifiez le système.
+      <tt>make regtest</tt> effectue des tests de rÃ©gression.
+      Il faut le lancer chaque fois que vous modifiez le systÃ¨me.
       pour s'assurer qu'il fonctionne toujours correctement.</p>
     <p>
-      <tt>make load_simulator</tt> reprend rejoue en temps réel des sessions
-      d'étudiants qui ont réellement travaillé.
-      Il permet de simuler autant d'étudiant que l'on veut.
-      Il stocke le temps moyens de réponse du serveur au cours du temps.</p>
+      <tt>make load_simulator</tt> reprend rejoue en temps rÃ©el des sessions
+      d'Ã©tudiants qui ont rÃ©ellement travaillÃ©.
+      Il permet de simuler autant d'Ã©tudiant que l'on veut.
+      Il stocke le temps moyens de rÃ©ponse du serveur au cours du temps.</p>
     <p>
       <tt>make simulator_plot</tt> fait un affichage graphique
-      des statistiques générées par <tt>make load_simulator</tt></p>
+      des statistiques gÃ©nÃ©rÃ©es par <tt>make load_simulator</tt></p>
     <p>
       <tt>make profiling</tt> lance le simulateur avec le profiling
       pour voir ou le temps CPU passe.</p>
     <p>
-      <tt>make plots</tt> génère l'affichage graphique
-      du graphe des questions pour les différents questionnaires.
-      Ainsi que de nombreux autres fichiers dans le répertoire
+      <tt>make plots</tt> gÃ©nÃ¨re l'affichage graphique
+      du graphe des questions pour les diffÃ©rents questionnaires.
+      Ainsi que de nombreux autres fichiers dans le rÃ©pertoire
       HTML de chacune des sessions.
     </p>
 
-      
-    <h3><a name="methodes">Améliorer le questionnaire</a></h3>
+
+    <h3><a name="methodes">AmÃ©liorer le questionnaire</a></h3>
 
     <p>
-      Une fois le TP terminé, l'auteur du questionnaire
-      doit l'améliorer pour que les étudiants reçoive un aide
-      quand ils donne une mauvaise réponse.
-      Ou bien pour tenir compte des commentaire des étudiants.
+      Une fois le TP terminÃ©, l'auteur du questionnaire
+      doit l'amÃ©liorer pour que les Ã©tudiants reÃ§oive un aide
+      quand ils donne une mauvaise rÃ©ponse.
+      Ou bien pour tenir compte des commentaire des Ã©tudiants.
     <p>
       Avec vos droit enseignant, vous parcourez chaque question
       en cliquant sur 'question suivante'.
       Pour chaque question vous avez l'ensemble des mauvaises
-      réponses données par le étudiants ainsi que les commentaires.
-      Le fond rouge pour les mauvaises réponses indique
-      que l'étudiant n'a eu aucun commentaire concernant
-      sa mauvaise réponse.
-      Après avoir mis la définition de la question à jour
+      rÃ©ponses donnÃ©es par le Ã©tudiants ainsi que les commentaires.
+      Le fond rouge pour les mauvaises rÃ©ponses indique
+      que l'Ã©tudiant n'a eu aucun commentaire concernant
+      sa mauvaise rÃ©ponse.
+      AprÃ¨s avoir mis la dÃ©finition de la question Ã  jour
       dans le fichier Python
       vous pouvez faire 'Recharge ce module' pour voir
-      combien il reste de mauvaises réponses sur fond rouge.
+      combien il reste de mauvaises rÃ©ponses sur fond rouge.
       Pas besoin de relancer le serveur.
     </p>
 
-    <h3><a name="exploitation">Exploitation de résultats des étudiants</a></h3>
+    <h3><a name="exploitation">Exploitation de rÃ©sultats des Ã©tudiants</a></h3>
     <p>
-      Le système fourni énormément d'informations
+      Le systÃ¨me fourni Ã©normÃ©ment d'informations
       via les pages Web.
-      Si néanmoins elles ne sont pas suffisantes,
+      Si nÃ©anmoins elles ne sont pas suffisantes,
       on peut les extraire des fichiers.</p>
     <p>
       Toutes les informations sont inscrites dans
       <a href="Students/unix/Logs">Students/nom_session/Logs</a>.
-      Il y a un répertoire par étudiant contenant&nbsp;:</p>
+      Il y a un rÃ©pertoire par Ã©tudiant contenant&nbsp;:</p>
     <ul>
-      <li> un fichier <tt>acl</tt> contenant les droits d'accès,</li>
+      <li> un fichier <tt>acl</tt> contenant les droits d'accÃ¨s,</li>
       <li> un fichier <tt>log</tt> contenant
-	un ensemble d'enregistrement commençant toujours par&nbsp;:
-	<ul>
-	  <li> le nom de la question</li>
-	  <li> le nombre de secondes depuis 1970</li>
-	</ul>
-	<p>
-	  Les champs de l'enregistrement sont séparés par control A (^A).
-	  La suite de la ligne peut être&nbsp;:
-	</p>
-	<ul>
-	  <li> "<tt>asked</tt>" pour indiquer que l'on a posé la question à
-	    l'étudiant.
-	    Il y a autant de lignes que de fois que l'on a affiché
-	    la question à l'étudiant.
-	  </li>
-	  <li> "<tt>question_indice_see</tt>" pour indiquer que l'étudiant
-	    demande un nouvel indice.
-	  </li>
-	  <li> "<tt>good #</tt>" texte complet de la bonne réponse donnée
-	    par l'étudiant.
-	  </li>
-	  <li> "<tt>bad ...</tt>" texte complet de la mauvaise
-	    réponse donnée par l'étudiant.
-	  </li>
-	</ul>
+        un ensemble d'enregistrement commenÃ§ant toujours par&nbsp;:
+        <ul>
+          <li> le nom de la question</li>
+          <li> le nombre de secondes depuis 1970</li>
+        </ul>
+        <p>
+          Les champs de l'enregistrement sont sÃ©parÃ©s par control A (^A).
+          La suite de la ligne peut Ãªtre&nbsp;:
+        </p>
+        <ul>
+          <li> "<tt>asked</tt>" pour indiquer que l'on a posÃ© la question Ã 
+            l'Ã©tudiant.
+            Il y a autant de lignes que de fois que l'on a affichÃ©
+            la question Ã  l'Ã©tudiant.
+          </li>
+          <li> "<tt>question_indice_see</tt>" pour indiquer que l'Ã©tudiant
+            demande un nouvel indice.
+          </li>
+          <li> "<tt>good #</tt>" texte complet de la bonne rÃ©ponse donnÃ©e
+            par l'Ã©tudiant.
+          </li>
+          <li> "<tt>bad ...</tt>" texte complet de la mauvaise
+            rÃ©ponse donnÃ©e par l'Ã©tudiant.
+          </li>
+        </ul>
       </li>
     </ul>
 
@@ -990,7 +997,8 @@ def filter_student_answer(answer, state=None):
     <address><a href="mailto:exco@@liris.univ-lyon1.fr">Thierry EXCOFFIER</a></address>
     <!-- Created: Sun Jul 24 15:23:19 CEST 2005 -->
     <!-- hhmts start -->
-Last modified: Wed Apr 20 13:22:36 CEST 2011
-<!-- hhmts end -->
-  </body>
+    Last modified: Wed Apr 20 13:22:36 CEST 2011
+    <!-- hhmts end -->
+</body>
+
 </html>

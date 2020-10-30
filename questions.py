@@ -35,15 +35,17 @@ current_evaluate_answer = None
 current_eval_after = None
 
 class Required:
-    unrequired = False
-    before = False
-    hide = False
-    def __init__(self, world, string):
+    def __init__(self, world, string, in_or=False):
+        self.in_or = in_or
+        ored = string.split('{|}')
+        if len(ored) > 1:
+            self.ored = [Required(world, i, True) for i in ored]
+            return
+        self.ored = False
         for k in ('unrequired', 'before', 'hide'):
             kk = '{' + k + '}'
-            if kk in string:
-                self.__dict__[k] = True
-                string = string.replace(kk, '')
+            self.__dict__[k] = kk in string
+            string = string.replace(kk, '')
         # An unrequired question must not be displayed in requireds
         self.hidden = self.unrequired or (not self.before and self.hide)
         w = string.split(":")
@@ -59,33 +61,32 @@ class Required:
         q = self.question_name.split('(')
         if len(q) != 1:
             self.question_name = q[0]
+            self.question_test = q[1][:-1]
             
             if q[1][-1] != ')':
                 raise ValueError("Bad required name: " + string)
                         
-            self.answer = re.compile(q[1][:-1])
+            self.answer = re.compile(self.question_test)
         else:
             self.answer = False
 
         self.name = self.world + ":" + self.question_name
 
-    def question(self):
-        return questions[self.name]
-
-    def full_name(self):
-        if self.answer:
-            return self.name + '(' + self.answer + ')'
-        else:
-            return self.name
-
     def ok(self, student, answered):
+        if self.ored:
+            for required in self.ored:
+                ok = required.ok(student, answered)
+                if ok:
+                    return ok
+            return False
+
         if self.unrequired and student.given_question(self.name):
-            return True # The student has seen the unrequired question
+            return self.name # The student has seen the unrequired question
         if answered.get(self.name, False) is False:
             return False # The student has not answered correctly the required question
         if self.answer and not re.match(self.answer, answered[self.name]):
             return False # The student has not given the required pattern
-        return True
+        return self.name
 
 class Requireds:
     def __init__(self, requireds):
@@ -94,20 +95,32 @@ class Requireds:
     def __iter__(self):
         return self.requireds.__iter__()
 
+    def get_requireds(self, only_visible=False):
+        for required in self.requireds:
+            if required.ored:
+                for r in required.ored:
+                    if not only_visible or not r.hidden:
+                        yield r
+            else:
+                if not only_visible or not required.hidden:
+                    yield required
+
     def missing(self, answered, student):
-        return [r.name
-                for r in self.requireds
-                if not r.ok(student, answered)
-               ]
+        missing = []
+        for required in self.requireds:
+            ok = required.ok(student, answered)
+            if not ok:
+                if required.ored:
+                    missing.append(required.ored[0].name)
+                else:
+                    missing.append(required.name)
+        return missing
 
     def answered(self, answered, student):
         return not self.missing(answered, student)
 
     def names(self, only_visible=False):
-        return [r.name
-                for r in self.requireds
-                if not only_visible or not r.hidden
-            ]
+        return [required.name for required in self.get_requireds()]
 
 class Question:
     def transform_question(self, question):

@@ -350,19 +350,24 @@ def graph_dot(show_stats=False):
                     )
 
     for q in questions.questions.values():
-        for qq in q.required.requireds:
+        for qq in q.required.get_requireds():
             if qq.name not in questions.questions:
                 print("%s est requis par %s" % (qq.name, q))
                 raise ValueError
+            style = []
+            if qq.in_or:
+                style.append('color="#00FF00"')
+            if qq.answer:
+                style.append('penwidth=3 headlabel="{}\\n{}"'.format(
+                    qq.name.replace('"', '\\"').replace(':', '\\n'), qq.question_test))
+
             if qq.unrequired:
-                style = "[ style=dotted ]"
+                style.append("style=dotted")
             elif qq.hidden:
-                style = "[ style=dashed ]"
-            else:
-                style = ""
+                style.append("style=dashed")
             f.write("%s -> %s%s;\n" % (translate_dot(qq.name),
                                        translate_dot(q.name),
-                                       style
+                                       '[' + ' '.join(style) + ']'
                                      ))
 
     f.write("}\n")

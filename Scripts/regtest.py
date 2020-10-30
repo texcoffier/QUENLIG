@@ -370,7 +370,31 @@ def test_0260_require_simple(student):
     minimal_tests(student, title='b:B', good=3)
     student.goto_question('b:C')
     minimal_tests(student, title='b:C', good=3)
-    
+
+def test_0265_required_or(student):
+    student.goto_question('a:a')
+    student.give_answer('unlockC')
+    student.check_question_link('c:Q1', erasable=True)
+    student.goto_question('c:Q1')
+    student.give_answer('answer1')
+    student.check_question_link('c:Q2.1', erasable=True)
+    student.reject_questions('c:Q2.2', 'c:Q3')
+    student.goto_question('c:Q2.1')
+    student.give_answer('any')
+    student.check_question_link('c:Q3', erasable=True)
+
+def test_0266_required_or(student):
+    student.goto_question('a:a')
+    student.give_answer('unlockC')
+    student.check_question_link('c:Q1', erasable=True)
+    student.goto_question('c:Q1')
+    student.give_answer('answer2')
+    student.check_question_link('c:Q2.2', erasable=True)
+    student.reject_questions('c:Q2.1', 'c:Q3')
+    student.goto_question('c:Q2.2')
+    student.give_answer('any')
+    student.check_question_link('c:Q3', erasable=True)
+
 def test_0270_require_test(student):
     student.goto_question('a:a')
     student.give_answer('a')
@@ -646,6 +670,37 @@ def test_0500_preprocesses(student):
     minimal_tests(student, title='a:mcq', good=2, bad=2)
     g = grader.grades()['guest0500_preprocesses']
     assert(g['GA'] == 0 and g['GB'] == 0 and g['GC'] == 1)
+
+def test_0510_root_session_graph(student):
+    dot = 'Students/test/HTML/xxx_graphe.dot'
+    student.get('/?session_graph=1')
+    assert not os.path.exists(dot)
+    student.reject('xxx_graphe.png')
+    student.select_role('Author')
+    student.get('/?session_graph=1')
+    student.expect('xxx_graphe.png')
+    student.reject('File "') # Backtrace
+    with open(dot, "r") as f:
+        content = f.readlines()
+    for line in r'''"a\na" -> "a\nb"[];
+"a\na" -> "a\nc"[];
+"a\na" -> "a\nmcq"[penwidth=3 headlabel="a\na\nmcq"];
+"a\na" -> "b\nA"[];
+"a\nb" -> "b\nA"[penwidth=3 headlabel="a\nb\nB"];
+"a\na" -> "b\nB"[];
+"a\nb" -> "b\nB"[penwidth=3 headlabel="a\nb\n[bB]"];
+"a\nc" -> "b\nC"[];
+"a\nb" -> "b\nC"[];
+"a\na" -> "b\nchoice"[];
+"a\nb" -> "b\nchoice"[];
+"a\na" -> "b\nz"[penwidth=3 headlabel="a\na\nunlockCHOICES"];
+"a\na" -> "c\nQ1"[penwidth=3 headlabel="a\na\nunlockC"];
+"c\nQ1" -> "c\nQ2.1"[penwidth=3 headlabel="c\nQ1\nanswer1"];
+"c\nQ1" -> "c\nQ2.2"[penwidth=3 headlabel="c\nQ1\nanswer2"];
+"c\nQ2.1" -> "c\nQ3"[color="#00FF00" style=dashed];
+"c\nQ2.2" -> "c\nQ3"[color="#00FF00"];'''.split('\n'):
+        if line + '\n' not in content:
+            raise ValueError(content)
 
 ############
 # TODO
