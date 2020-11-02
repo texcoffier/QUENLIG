@@ -79,11 +79,7 @@ def execute(state, dummy_plugin, dummy_argument):
         return
         
     s = []
-    for p in state.question.required:
-        if p.hidden:
-            continue
-        if p.hide:
-            continue
+    for p in state.question.required.get_requireds(only_visible=True):
         q = questions.questions[p.name]
         question = q.get_question(state)
         try:

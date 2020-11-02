@@ -382,6 +382,8 @@ def test_0265_required_or(student):
     student.goto_question('c:Q2.1')
     student.give_answer('any')
     student.check_question_link('c:Q3', erasable=True)
+    student.goto_question('c:Q3')
+    student.reject(' File ') # Backtrace
 
 def test_0266_required_or(student):
     student.goto_question('a:a')
