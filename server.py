@@ -86,7 +86,7 @@ class CachedFile:
             self.mime_type = 'application/x-javascript'
         elif filename.endswith(".tar"):
             self.mime_type = 'application/x-tar'
-        else:
+        elif '.' in filename:
             self.mime_type = 'application/octet-stream'
 
         self.load()
