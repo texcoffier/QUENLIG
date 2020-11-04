@@ -38,7 +38,7 @@ def execute(state, plugin, argument):
         statistics.graph_dot_minimal(True)
         try:
             # plugin.heart_content = server.get_file('xxx_graphe.svg').content.decode("utf-8")
-            plugin.heart_content = '<img src="/xxx_graphe.png">'
+            plugin.heart_content = '<img src="xxx_graphe.png">'
         except:
             plugin.heart_content = ""
         state.question = None
