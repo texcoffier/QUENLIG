@@ -109,6 +109,7 @@ table.box_content {
    border: 1px solid black ;
    width: 100% ;
    border-spacing: 0px ;
+   table-layout: fixed ;
 }
 
 TABLE.information_table {
