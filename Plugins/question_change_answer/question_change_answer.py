@@ -74,4 +74,6 @@ def add_a_link(state, question):
         return '' # Too late to change the answer
     return  '<A HREF="%s" CLASS="question_change_answer"></A>' % (
                question.url(),
+               ) + '<A HREF="%s" CLASS="question_erase_answer"></A>' % (
+               question.url() + '&erase=1',
                )
