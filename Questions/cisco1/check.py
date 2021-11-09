@@ -811,7 +811,7 @@ mv %s.svg %s.png %s
         hosts = list(self.hosts.values())
         hosts.sort(key=lambda x: x.name)
         if self.display_eth1:
-            x = '<td>PC eth1</td>'
+            x = '<td>PC eth1<br>enp5s0</td>'
         else:
             x = ''
         if self.display_cisco_eth1:
@@ -819,7 +819,7 @@ mv %s.svg %s.png %s
         else:
             xx = ''
         s = ['<table>',
-            "<tr><td>PC</td><td>PC eth0</td>",
+            "<tr><td>PC</td><td>PC eth0<br>enp1s0</td>",
              x,
              "<td>Cisco</td><td>Cisco eth0</td>",
              xx,
@@ -1062,22 +1062,40 @@ class require_ip(Test):
 require_ping = require('ping',"On utilise la commande <tt>ping</tt>")
 
 postes = (      
-["10.250.101.90", 'A3',Cisco2800],
-["10.250.101.91", 'B3',Cisco1800], # SB3 Cisco2960
-("10.250.101.92", 'C3',Cisco2900),
-("10.250.101.93", 'D3',Cisco1800), # SD3 Cisco2950
-("10.250.101.94", 'E3',Cisco2800B),
-("10.250.101.95", 'F3',Cisco1800), # SF3 Cisco2950
-("10.250.101.96", 'G3',Cisco2900),
-("10.250.101.97", 'H3',Cisco1800), # SH3 Cisco2960
-("10.250.101.98", 'I3',Cisco2800),
-("10.250.101.99", 'J3',Cisco1800), # SJ3 Cisco2960
-("10.250.101.100",'K3',Cisco2900),
-("10.250.101.101",'L3',Cisco1800), # SL3 Cisco2950
-("10.250.101.102",'M3',Cisco2800B),
-("10.250.101.103",'N3',Cisco1800), # SN3 Cisco2950
-("10.250.101.104",'O3',Cisco2900),
-("10.250.101.105",'P3',Cisco1800), # SP3 Cisco2950
+["10.246.127.101", 'A3',Cisco2800],
+["10.246.127.102", 'B3',Cisco1800], # SB3 Cisco2960
+("10.246.127.103", 'C3',Cisco2900),
+("10.246.127.104", 'D3',Cisco1800), # SD3 Cisco2950
+("10.246.127.105", 'E3',Cisco2800B),
+("10.246.127.106", 'F3',Cisco1800), # SF3 Cisco2950
+("10.246.127.107", 'G3',Cisco2900),
+("10.246.127.108", 'H3',Cisco1800), # SH3 Cisco2960
+("10.246.127.109", 'I3',Cisco2800),
+("10.246.127.110", 'J3',Cisco1800), # SJ3 Cisco2960
+("10.246.127.111", 'K3',Cisco2900),
+("10.246.127.112", 'L3',Cisco1800), # SL3 Cisco2950
+("10.246.127.113", 'M3',Cisco2800B),
+("10.246.127.114", 'N3',Cisco1800), # SN3 Cisco2950
+("10.246.127.115", 'O3',Cisco2900),
+("10.246.127.116", 'P3',Cisco1800), # SP3 Cisco2950
+)
+postes = (
+["10.246.127.101", 'A-1',Cisco2800],
+["10.246.127.102", 'A-2',Cisco1800], # SB3 Cisco2960
+("10.246.127.103", 'A-3',Cisco2900),
+("10.246.127.104", 'A-4',Cisco1800), # SD3 Cisco2950
+("10.246.127.105", 'B-05',Cisco2800B),
+("10.246.127.106", 'B-06',Cisco1800), # SF3 Cisco2950
+("10.246.127.107", 'B-07',Cisco2900),
+("10.246.127.108", 'B-08',Cisco1800), # SH3 Cisco2960
+("10.246.127.109", 'C-09',Cisco2800),
+("10.246.127.110", 'C-10',Cisco1800), # SJ3 Cisco2960
+("10.246.127.111", 'C-11',Cisco2900),
+("10.246.127.112", 'C-12',Cisco1800), # SL3 Cisco2950
+("10.246.127.113", 'D-13',Cisco2800B),
+("10.246.127.114", 'D-14',Cisco1800), # SN3 Cisco2950
+("10.246.127.115", 'D-15',Cisco2900),
+("10.246.127.116", 'D-16',Cisco1800), # SP3 Cisco2950
 )
 
 # When the system is debugged, the server change the IP address
