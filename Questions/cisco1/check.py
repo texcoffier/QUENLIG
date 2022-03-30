@@ -811,7 +811,7 @@ mv %s.svg %s.png %s
         hosts = list(self.hosts.values())
         hosts.sort(key=lambda x: x.name)
         if self.display_eth1:
-            x = '<td>PC eth1<br>enp5s0</td>'
+            x = '<td>PC enp5s0</td>'
         else:
             x = ''
         if self.display_cisco_eth1:
@@ -819,7 +819,7 @@ mv %s.svg %s.png %s
         else:
             xx = ''
         s = ['<table>',
-            "<tr><td>PC</td><td>PC eth0<br>enp1s0</td>",
+            "<tr><td>PC</td><td>PC enp1s0</td>",
              x,
              "<td>Cisco</td><td>Cisco eth0</td>",
              xx,
@@ -1080,10 +1080,10 @@ postes = (
 ("10.246.127.116", 'P3',Cisco1800), # SP3 Cisco2950
 )
 postes = (
-["10.246.127.101", 'A-1',Cisco2800],
-["10.246.127.102", 'A-2',Cisco1800], # SB3 Cisco2960
-("10.246.127.103", 'A-3',Cisco2900),
-("10.246.127.104", 'A-4',Cisco1800), # SD3 Cisco2950
+["10.246.127.101", 'A-01',Cisco2800],
+["10.246.127.102", 'A-02',Cisco1800], # SB3 Cisco2960
+("10.246.127.103", 'A-03',Cisco2900),
+("10.246.127.104", 'A-04',Cisco1800), # SD3 Cisco2950
 ("10.246.127.105", 'B-05',Cisco2800B),
 ("10.246.127.106", 'B-06',Cisco1800), # SF3 Cisco2950
 ("10.246.127.107", 'B-07',Cisco2900),
