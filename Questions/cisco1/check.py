@@ -339,8 +339,8 @@ class Link:
         return self.invert.tail(showip)
 
     def from_to(self):
-        return '%s -> %s' % ( self.port.host.port_name(),
-            self.remote_port.host.port_name() )
+        return '%s -> %s' % ( self.port.host.port_name().replace('-', '_'),
+            self.remote_port.host.port_name().replace('-', '_') )
 
     def dot(self, showip):
         s = '%s [fontcolor="#444444",style=%s%s%s'%(
@@ -423,7 +423,7 @@ class Node:
         self.pos = pos
         self.nr_interfaces = nr_interfaces
         self.interfaces = {}
-        self.dot_name = 'n' + name.replace('.','_').replace('/','_')
+        self.dot_name = 'n' + name.replace('.', '_').replace('/', '_').replace('-', '_')
         if label:
             self.name = label
 
@@ -815,16 +815,16 @@ mv %s.svg %s.png %s
         else:
             x = ''
         if self.display_cisco_eth1:
-            xx = "<td>Cisco eth1</td>"
+            xx = "<td>Cisco deuxième Ethernet</td>"
         else:
             xx = ''
         s = ['<table>',
             "<tr><td>PC</td><td>PC enp1s0</td>",
              x,
-             "<td>Cisco</td><td>Cisco eth0</td>",
+             "<td>Cisco</td><td>Cisco premier Ethernet</td>",
              xx,
-             "<td>Cisco serial 0</td>",
-             "<td>Cisco serial 1</td></tr>"
+             "<td>Cisco premier serial</td>",
+             "<td>Cisco deuxième serial</td></tr>"
              ]
         for h in hosts:
             if not isinstance(h, Host):
