@@ -26,7 +26,7 @@ It is not totally safe, if you introduce a syntax error in the module,
 the server will need a restart to restore the question file.
 """
 
-import imp
+import importlib
 from QUENLIG import questions
 from QUENLIG import statistics
 from QUENLIG import student
@@ -52,7 +52,7 @@ def execute(state, plugin, argument):
         questions.questions = q
         questions.previous_question = ""
         # Reload !
-        imp.reload(questions.modules[module_name])
+        importlib.reload(questions.modules[module_name])
         state.question = questions.questions[state.question.name]
         statistics.forget_stats()
         for s in student.all_students():

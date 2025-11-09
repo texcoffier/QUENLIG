@@ -346,7 +346,7 @@ class User(threading.Thread):
 def test_0250_threading(student):
     for i in range(20):
         User().start()
-    while threading.activeCount() != 1:
+    while threading.active_count() != 1:
         time.sleep(0.1)
     if error:
         raise ValueError("Thread error")
@@ -632,7 +632,7 @@ def test_0420_not_threaded(student):
     root.goto_question('b:z')
     root.goto_question('a:b')
     root.select_role('Teacher')
-    while threading.activeCount() != 1:
+    while threading.active_count() != 1:
         root.goto_question('a:a')
         os.system("touch Questions/regtest/a.py")
         root.get('?reload_questions=1')

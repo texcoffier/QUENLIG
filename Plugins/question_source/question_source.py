@@ -23,8 +23,8 @@
 
 import os
 import html
-import cgi
 import time
+import multipart
 from QUENLIG import utilities
 
 container = 'heart'
@@ -41,6 +41,20 @@ function encode_uri(t)
     .replace(/\//g, "%2F").replace(/,/g, "%2C").replace(/[+]/g, '%2B') ;
 }
 '''
+
+def getfirst(self, attr, default=None):
+    part = self.get(attr)
+    if part:
+        return part.value
+    return default
+multipart.MultipartParser.getfirst = getfirst
+
+def get_field_storage(server):
+    boundary = multipart.parse_options_header(server.headers.get('Content-Type'))[1]['boundary']
+    size = int(server.headers.get('Content-Length', 0))
+    if sys.version_info < (3, 13):
+        return multipart.MultipartParser(io.BytesIO(server.rfile.read(size)), boundary, size)
+    return multipart.MultipartParser(server.rfile, boundary, size)
 
 def question_lines(c, question):
     start = question.f_lineno
@@ -107,9 +121,7 @@ def execute(state, dummy_plugin, argument):
 
     before = ''
     if argument == "save":
-        data = cgi.FieldStorage(fp=state.server.rfile,
-                                headers=state.server.headers,
-                                environ={'REQUEST_METHOD' : 'POST'})
+        data = get_field_storage(state.server)
         argument = data.getfirst('src').replace("\r\n", "\n")
         source = ("# Edited by %s (%s)\n"
                   % (state.student.name, time.ctime()) + argument)
