@@ -25,6 +25,7 @@ import os
 import html
 import time
 import multipart
+import sys
 from QUENLIG import utilities
 
 container = 'heart'
@@ -104,7 +105,7 @@ def replace_question(c, question, source, state, encoding):
 
 def edit_python(source):
     return (
-        '<FORM action="?question_source=save" method="POST">' +
+        '<FORM action="?question_source=save" method="POST" enctype="multipart/form-data">' +
         '<TEXTAREA name="src" style="font-size:130%%; width:100%%; height: %sem">' % (
             1.3 * source.count('\n'))
         + html.escape(source)
